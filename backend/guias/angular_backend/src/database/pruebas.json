@@ -1,0 +1,51 @@
+[
+  {
+    "id_persona": 1,
+    "nombre": "Test",
+    "apellido": "User",
+    "tipo_identificacion": "CC",
+    "nuip": 123456,
+    "email": "test@test.com",
+    "clave": "password",
+    "salario": 1000.50,
+    "activo": true,
+    "fecha_registro": "2025-06-16",
+    "imagen": null
+  },
+  {
+    "id_persona": 2,
+    "nombre": "Laura",
+    "apellido": "Gómez",
+    "tipo_identificacion": "TI",
+    "nuip": 987654,
+    "email": "laura.gomez@example.com",
+    "clave": "clave123",
+    "salario": 2500.00,
+    "activo": true,
+    "fecha_registro": "2025-06-15",
+    "imagen": null
+  },
+  {
+    "id_persona": 3,
+    "nombre": "Carlos",
+    "apellido": "Ramírez",
+    "tipo_identificacion": "CC",
+    "nuip": 456789,
+    "email": "carlos.ramirez@example.com",
+    "clave": "123456",
+    "salario": 3200.75,
+    "activo": false,
+    "fecha_registro": "2025-06-10",
+    "imagen": null
+  },
+  {
+    "id_usuario": 1,
+    "nombre": "Administrador",
+    "email": "admin@correo.com"
+  },
+  {
+    "id_usuario": 2,
+    "nombre": "Invitado",
+    "email": "invitado@correo.com"
+  }
+]

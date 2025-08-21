@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"my-mcp-server-12b9285a": {
+			"url": "http://127.0.0.1:3845/sse",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}

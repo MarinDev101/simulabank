@@ -1,28 +1,131 @@
-# Angular specific
-/dist/
-/out-tsc/
-/tmp/
-/coverage/
-/e2e/test-output/
-/.angular/
-.angular/
+# ===============================
+# .gitignore para simulabank
+# ===============================
 
-# Node modules and dependency files
-/node_modules/
-/package-lock.json
-/yarn.lock
+# Archivos de lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# Environment files
-/.env
+# Archivos de caché y empaquetadores
+*.eslintcache
+*.tgz
+.npm/
+.yarn-cache/
+.pnpm-store/
+.webpack-cache/
 
-# Angular CLI and build artefacts
-/.angular-cli.json
-/.ng/
+pnpm-debug.log*
 
-# TypeScript cache
-*.tsbuildinfo
+# ======== FRONTEND =============
+
+# Angular
+/frontend/dist/
+/frontend/out-tsc/
+/frontend/tmp/
+/frontend/coverage/
+/frontend/e2e/test-output/
+/frontend/.angular/
+/frontend/.angular-cli.json
+/frontend/.ng/
+/frontend/.angular/cache
+/frontend/.sass-cache/
+/frontend/connect.lock
+/frontend/libpeerconnection.log
+/frontend/testem.log
+/frontend/typings
+
+# Node modules y dependencias
+/frontend/node_modules/
+
+# Archivos de entorno
+/frontend/.env
+
+# TypeScript
+/frontend/*.tsbuildinfo
 
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# IDEs y editores
+/frontend/.idea/
+/frontend/.project
+/frontend/.classpath
+/frontend/.c9/
+/frontend/*.launch
+/frontend/.settings/
+/frontend/*.sublime-workspace
+
+# Visual Studio Code
+/frontend/.vscode/*
+!/frontend/.vscode/settings.json
+!/frontend/.vscode/tasks.json
+!/frontend/.vscode/launch.json
+!/frontend/.vscode/extensions.json
+!/frontend/.vscode/mcp.json
+/frontend/.history/*
+
+# Archivos del sistema
+/frontend/.DS_Store
+/frontend/Thumbs.db
+
+# ===============================
+# ======== BACKEND ==============
+# ===============================
+
+# Dependencias
+/backend/node_modules/
+
+# Archivos de entorno
+/backend/.env
+/backend/.env.local
+/backend/.env.*.local
+
+# Logs
+/backend/logs/
+/backend/*.log
+/backend/npm-debug.log*
+/backend/yarn-debug.log*
+/backend/yarn-error.log*
+/backend/pnpm-debug.log*
+
+# Build y runtime
+/backend/dist/
+/backend/build/
+/backend/out/
+/backend/tmp/
+/backend/temp/
+
+# Archivos temporales y sistema
+/backend/*.tmp
+/backend/*.swp
+/backend/*.swo
+/backend/*.swn
+/backend/*.bak
+/backend/.DS_Store
+/backend/Thumbs.db
+
+# Debug
+/backend/.debug
+/backend/debug.log
+
+# Cobertura de pruebas
+/backend/coverage/
+/backend/.nyc_output/
+
+# IDEs y editores
+/backend/.idea/
+/backend/.history/
+
+# Archivos y carpetas personalizadas
+# Ignora todos los archivos en backend/uploads excepto .gitkeep
+/backend/uploads/*
+!/backend/uploads/.gitkeep
+
+# Archivos varios
+/backend/*.local
+/backend/*.pid
+/backend/*.pid.lock
+/backend/*.seed

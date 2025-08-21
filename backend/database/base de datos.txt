@@ -1,0 +1,31 @@
+-- Tabla: roles
+CREATE TABLE roles (
+    id_rol INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50)
+);
+
+-- Tabla: permisos
+CREATE TABLE permisos (
+    id_permiso INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50),
+    descripcion TEXT
+);
+
+-- Tabla intermedia: rol_permiso
+CREATE TABLE rol_permiso (
+    id_rol_permiso INT AUTO_INCREMENT PRIMARY KEY,
+    rol_id INT,
+    permiso_id INT,
+    FOREIGN KEY (rol_id) REFERENCES roles(id_rol),
+    FOREIGN KEY (permiso_id) REFERENCES permisos(id_permiso)
+);
+
+-- Tabla: usuarios
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    email VARCHAR(100),
+    contraseña VARCHAR(255),
+    rol_id INT,
+    FOREIGN KEY (rol_id) REFERENCES roles(id_rol)
+);

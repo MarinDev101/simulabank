@@ -1,0 +1,80 @@
+@import 'tailwindcss';
+@plugin "@iconify/tailwind4";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+@plugin 'tailwind-scrollbar';
+@plugin 'tailwindcss-animated';
+/*
+Para iconos que no estan escritos en html sino en typescript
+
+Iconos individuales
+@source inline("icon-[mdi--delete]");
+@source inline("icon-[mdi--pencil]");
+@source inline("icon-[mdi--plus]");
+
+Grupo de iconos de un paquete
+@source inline("icon-[mdi--{delete,pencil,plus}]");
+*/
+
+@theme {
+  --color-money-50: hsl(131.5, 100%, 90.8%);
+  --color-money-100: hsl(133.3, 100%, 82.4%);
+  --color-money-200: hsl(147, 100%, 47.8%);
+  --color-money-300: hsl(147, 100%, 43.5%);
+  --color-money-400: hsl(146.7, 100%, 39.2%);
+  --color-money-500: hsl(146.3, 100%, 32.2%);
+  --color-money-600: hsl(145.6, 100%, 25.3%);
+  --color-money-700: hsl(144.4, 100%, 18.8%);
+  --color-money-800: hsl(142.4, 100%, 13.1%);
+  --color-money-900: hsl(137.4, 100%, 7.5%);
+  --color-money-950: hsl(132.5, 100%, 4.7%);
+  --color-calm-50: hsl(221.2, 100%, 96.9%);
+  --color-calm-100: hsl(222.9, 94.6%, 92.7%);
+  --color-calm-200: hsl(221.1, 97.3%, 85.3%);
+  --color-calm-300: hsl(218.1, 96.6%, 76.7%);
+  --color-calm-400: hsl(214.1, 96.6%, 65.7%);
+  --color-calm-500: hsl(208.6, 87.1%, 51.4%);
+  --color-calm-600: hsl(208.7, 83.5%, 42.7%);
+  --color-calm-700: hsl(208.8, 86.2%, 34.1%);
+  --color-calm-800: hsl(208.7, 89.5%, 26.1%);
+  --color-calm-900: hsl(210.4, 94.5%, 14.3%);
+  --color-calm-950: hsl(212, 95.7%, 9.2%);
+  --color-elegant-50: hsl(0, 0%, 98%);
+  --color-elegant-100: hsl(240, 5%, 96%);
+  --color-elegant-200: hsl(240, 6%, 89%);
+  --color-elegant-300: hsl(240, 5%, 82%);
+  --color-elegant-400: hsl(240, 5%, 65%);
+  --color-elegant-500: hsl(240, 4%, 47%);
+  --color-elegant-600: hsl(240, 5%, 33%);
+  --color-elegant-700: hsl(240, 6%, 26%);
+  --color-elegant-800: hsl(240, 6%, 15%);
+  --color-elegant-900: hsl(240, 6%, 10%);
+  --color-elegant-950: hsl(240, 11%, 6%);
+  --color-success: hsl(152, 65%, 33%);
+  --color-danger: hsl(354, 70%, 53%);
+  --color-warning: hsl(45, 100%, 50%);
+  --color-info: hsl(191, 89%, 50%);
+
+  --font-nunito: 'Nunito Sans', sans-serif;
+}
+
+.social-button {
+  @apply inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 p-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none;
+}
+
+/* Clase personalizada para títulos */
+.nunito-sans-title {
+  @apply font-[--font-nunito] font-extrabold not-italic;
+}
+
+/* Clase personalizada para párrafos */
+.nunito-sans-body {
+  @apply font-[--font-nunito] font-normal not-italic;
+}
+
+/* Clase personalizada para texto ligero */
+.nunito-sans-light {
+  @apply font-[--font-nunito] font-light not-italic;
+}
+
+/* Buscar mas plugins para tailwind */

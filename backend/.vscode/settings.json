@@ -1,0 +1,9 @@
+{
+  // Configuración para que Prettier y ESLint funcionen automáticamente al guardar
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.run": "onSave",
+  "eslint.alwaysShowStatus": true,
+  "files.eol": "\r\n"
+}
