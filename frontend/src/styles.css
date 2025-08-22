@@ -2,8 +2,8 @@
 @plugin "@iconify/tailwind4";
 @plugin "@tailwindcss/typography";
 @plugin "@tailwindcss/forms";
-@plugin 'tailwind-scrollbar';
 @plugin 'tailwindcss-animated';
+@plugin 'tailwind-scrollbar';
 /*
 Para iconos que no estan escritos en html sino en typescript
 

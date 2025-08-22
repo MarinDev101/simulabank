@@ -6,7 +6,7 @@ const prettierRecommended = require('eslint-plugin-prettier').configs.recommende
 
 module.exports = tseslint.config(
   {
-    ignores: ['dist/**', '.angular/**', 'node_modules/**'],
+    ignores: ['dist/**', '.angular/**', 'node_modules/**', './src/styles.css'],
   },
 
   // Archivos TypeScript
