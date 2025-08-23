@@ -4,6 +4,12 @@
 @plugin "@tailwindcss/forms";
 @plugin 'tailwindcss-animated';
 @plugin 'tailwind-scrollbar';
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark,
+    cupcake;
+}
 /*
 Para iconos que no estan escritos en html sino en typescript
 
