@@ -7,8 +7,7 @@
 @plugin "daisyui" {
   themes:
     light --default,
-    dark --prefersdark,
-    cupcake;
+    /* dark --prefersdark, */ cupcake;
 }
 /*
 Para iconos que no estan escritos en html sino en typescript
@@ -62,6 +61,8 @@ Grupo de iconos de un paquete
   --color-info: hsl(191, 89%, 50%);
 
   --font-nunito: 'Nunito Sans', sans-serif;
+
+  --radius-plataforma: 10px;
 }
 
 .social-button {
