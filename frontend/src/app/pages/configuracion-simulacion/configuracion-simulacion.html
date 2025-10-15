@@ -1,6 +1,193 @@
 <app-header-plataforma></app-header-plataforma>
-<div>
-  <div>
-    <p>a</p>
+<div class='bg-[#efefef] flex flex-col items-center pb-15 pl-15 pr-15'>
+
+  <div class="flex flex-col items-center rounded-plataforma pt-10 pb-10 pr-20 pl-20 bg-white w-[80rem]">
+
+    <p class="text-center font-medium mb-8 text-[22px]">Configurar la simulación</p>
+
+    <article class="flex flex-col w-full">
+      <div class='flex mb-5 gap-2 items-center'>
+        <span class=" flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6">1</span>
+        <p>Selecciona un producto</p>
+      </div>
+      <div class="flex justify-center gap-20">
+        <article class="flex gap-2 flex-col">
+          <p class="font-medium">Producto de captación</p>
+          <ul class="flex flex-col gap-2">
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#A3D9A5] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[streamline-cyber-color--piggy-bank] size-7'></span>
+                </div>
+                <p>Cuenta de ahorros</p>
+              </button>
+            </li>
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#FDE28A] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[streamline-cyber-color--bank-note-1] size-7'></span>
+                </div>
+                <p>Cuenta corriente</p>
+              </button>
+            </li>
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#F6A5C0] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[streamline-cyber-color--wallet-cash] size-7'></span>
+                </div>
+                <p>CDT digital</p>
+              </button>
+            </li>
+          </ul>
+        </article>
+        <article class="flex gap-2 flex-col">
+          <p class="font-medium">Producto de colocación</p>
+          <ul class="flex flex-col gap-2">
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#8EC5FC] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[streamline-cyber-color--cash-hand-4] size-7'></span>
+                </div>
+                <p>Credito de libre inversión</p>
+              </button>
+            </li>
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#FFB997] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[streamline-cyber-color--book-open-bookmark] size-7'></span>
+                </div>
+                <p>Credito educativo EducaPlus</p>
+              </button>
+            </li>
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#92E6D9] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[streamline-cyber-color--business-suitcase-2] size-7'></span>
+                </div>
+                <p>Credito rotativo empresarial</p>
+              </button>
+            </li>
+          </ul>
+        </article>
+        <article class="flex gap-2 flex-col">
+          <p class="font-medium">Aleatorio</p>
+          <ul class="flex flex-col gap-2">
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#797979] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[fad--random-1dice] size-10 text-white'></span>
+                </div>
+                <p>Todos los productos</p>
+              </button>
+            </li>
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#3D9A66] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[fad--random-1dice] size-10 text-white'></span>
+                </div>
+                <p>Productos de captación</p>
+              </button>
+            </li>
+            <li>
+              <button
+                class="flex items-center gap-2 border-1 p-1.5 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                <div class="bg-[#4B73BD] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                  <span class='icon-[fad--random-1dice] size-10 text-white'></span>
+                </div>
+                <p>Productos de colocación</p>
+              </button>
+            </li>
+          </ul>
+        </article>
+      </div>
+    </article>
+
+    <article class="flex mt-15 w-full">
+      <div class="w-[50%]">
+        <div class="flex mb-5 gap-2 items-center">
+          <span class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6">2</span>
+          <p>Selecciona el modo</p>
+        </div>
+        <ul class="flex ml-28 gap-10">
+          <li>
+            <button
+              class="flex flex-col items-center border-1 p-2 w-30 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+              <p>Aprendizaje</p>
+              <span class="icon-[noto--brain] size-15"></span>
+            </button>
+          </li>
+          <li>
+            <button
+              class="flex flex-col items-center border-1 p-2 w-30 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+              <p>Evaluativo</p>
+              <span class="icon-[noto--graduation-cap] size-15"></span>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="w-[50%]">
+        <div class="flex mb-5 gap-2 items-center">
+          <span class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6">3</span>
+          <p>Selecciona el destino de entrega</p>
+        </div>
+        <ul class="flex flex-col ml-28 gap-2">
+          <li>
+            <button
+              class="flex gap-3 items-center border-1 p-2 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+              <span class='icon-[ph--person-light] size-12 text-[#6F6F6F]'></span>
+              <p>Evidencia personal</p>
+            </button>
+          </li>
+          <li>
+            <button
+              class="flex gap-3 items-center  border-1 p-2 w-70 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+              <span class="icon-[streamline-ultimate--meeting-remote] size-12 text-[#6F6F6F]"></span>
+              <p>Evidencia salón sena</p>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="flex flex-col mt-15 w-full">
+      <div class='flex mb-5 gap-2'>
+        <span class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6">4</span>
+        <p>Selecciona la interacción</p>
+      </div>
+      <ul class="flex ml-28 gap-10">
+        <li>
+          <button
+            class="flex flex-col items-center border-1 p-2 w-40 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+            <p>Sonido automatico</p>
+            <span class="icon-[emojione-v1--right-speaker-3-sound-waves] size-15"></span>
+          </button>
+        </li>
+        <li>
+          <button
+            class="flex flex-col items-center border-1 p-2 w-40 rounded-md border-elegant-300 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+            <p>Sonido silenciado</p>
+            <span class="icon-[emojione-v1--speaker-with-1-sound-wave] size-15"></span>
+          </button>
+        </li>
+      </ul>
+    </article>
+
+    <button
+      class="mt-15 bg-[#009040] p-2 rounded-full flex gap-3 items-center hover:bg-[#007a33] transition-colors duration-200 cursor-pointer w-55 justify-end">
+      <p class="text-white">Empezar simulación</p>
+      <div class="bg-white w-7 h-7 p-1 rounded-full">
+        <span class="icon-[solar--play-linear]"></span>
+      </div>
+    </button>
+
   </div>
+
 </div>
