@@ -15,6 +15,13 @@ export const routes: Routes = [
     canActivate: [],
   },
   {
+    path: 'inicio-aprendiz',
+    loadComponent: () =>
+      import('./pages/inicio-aprendiz/inicio-aprendiz').then((m) => m.InicioAprendiz),
+    title: 'Inicio aprendiz',
+    canActivate: [],
+  },
+  {
     path: 'products',
     children: [
       {
