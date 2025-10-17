@@ -24,7 +24,8 @@ module.exports = [
     rules: {
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
-      indent: ['error', 2],
+      // Defer indentation to Prettier/editor to avoid conflicts on conditional/object formatting
+      indent: 'off',
       'no-trailing-spaces': 'error',
       'eol-last': ['error', 'always'],
       'no-unused-vars': 'warn',
