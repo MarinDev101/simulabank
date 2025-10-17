@@ -1,4 +1,0 @@
-npm install jspdf jspdf-autotable
-npm install pdf-lib
-npm install sweetalert2
-npm install toastify-js
