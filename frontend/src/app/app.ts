@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { InformacionPlataforma } from "./pages/informacion-plataforma/informacion-plataforma";
+import { InformacionPlataforma } from './pages/informacion-plataforma/informacion-plataforma';
+import { PoliticasPlataforma } from './pages/politicas-plataforma/politicas-plataforma';
+import { ConfiguracionSimulacion } from './pages/configuracion-simulacion/configuracion-simulacion';
+import { TerminosCondicionesPagina } from './pages/terminos-condiciones-pagina/terminos-condiciones-pagina';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, InformacionPlataforma],
+  imports: [RouterOutlet, ConfiguracionSimulacion, PoliticasPlataforma, InformacionPlataforma, TerminosCondicionesPagina],
   templateUrl: './app.html',
 })
 export class App {
