@@ -1,2 +1,176 @@
-<app-header-basico></app-header-basico>
-<p>inicio works!</p>
+<div class="flex min-h-screen flex-col">
+  <app-header-basico></app-header-basico>
+  <main
+    class="flex flex-1 flex-col items-center gap-35 bg-(image:--background-image-geometria) bg-[length:275px_275px] bg-repeat pt-[150px] pb-20"
+  >
+    <section class="relative flex w-[65%] flex-row items-center justify-between overflow-visible">
+      <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
+        <div class="leading-10">
+          <p class="w-[576.203px]">
+            Una nueva forma de
+            <span class="text-[55px] text-[#00A448]">Aprender</span>
+          </p>
+          <p class="w-[576.203px]">Simulando Asesorias Bancarias</p>
+          <p class="w-[576.203px]">
+            Impulsadas con
+            <span class="text-[35px] text-[#1788EF]">Inteligencia Artificial</span>
+          </p>
+        </div>
+        <p class="nunito-sans-body [margin-block:1lh] w-[450px] text-[18px] leading-7 text-balance">
+          Explora las posibilidades de Aprender Interactivamente con clientes virtuales impulsados
+          con inteligencia artificial. Fortalece tus competencias técnicas, habilidades
+          comunicativas y capacidad de tomar decisiones.
+        </p>
+        <app-go-to-register-button></app-go-to-register-button>
+      </div>
+      <div class="relative">
+        <img
+          src="images/personas/asesora_inicio.png"
+          alt="asesora"
+          class="relative z-20 -ml-20 h-auto w-[700px] max-w-none"
+        />
+      </div>
+    </section>
+    <section class="relative flex w-[65%] flex-row items-center justify-between overflow-visible">
+      <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
+        <div class="leading-10 text-[#034D82]">
+          <p class="w-[576.203px]">Todo lo que puedes aprender en</p>
+          <p class="w-[576.203px]">una asesoría bancaria real, puedes</p>
+          <p class="w-[576.203px]">practicarlo en SimulaBank</p>
+        </div>
+        <p class="nunito-sans-body [margin-block:1lh] w-[450px] text-[18px] leading-7 text-balance">
+          Vive la experiencia completa de atender clientes, analizar perfiles, recomendar productos
+          y resolver dudas, todo en un entorno virtual interactivo que simula situaciones reales del
+          sector financiero.
+        </p>
+      </div>
+      <iframe
+        loading="lazy"
+        class="mx-auto aspect-video w-[600px] max-w-4xl rounded-xl border-2 border-[#01162E] bg-black"
+        src="https://www.youtube-nocookie.com/embed/xWKedtup6AI?si=xktpcEWBOmODbtk0&rel=0&modestbranding=1&playsinline=1"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      >
+      </iframe>
+    </section>
+    <section
+      class="relative flex w-[65%] flex-row items-center justify-between gap-10 overflow-visible"
+    >
+      <img
+        src="images/ilustraciones/celular_pagina.png"
+        alt=""
+        class="h-auto w-[150px] max-w-none"
+      />
+      <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
+        <div class="leading-10 text-[#034D82]">
+          <p class="w-[460px]">Entrena y Mejora tus Asesorías</p>
+          <p class="w-[460px]">desde Cualquier Dispositivo</p>
+        </div>
+        <p class="nunito-sans-body [margin-block:1lh] w-[450px] text-[18px] leading-7 text-balance">
+          Accede desde tu teléfono o computador para practicar con clientes virtuales, resolver
+          casos bancarios y seguir tu progreso en tiempo real.
+        </p>
+      </div>
+      <img
+        src="images/ilustraciones/computador_pagina.png"
+        alt=""
+        class="h-auto w-[500px] max-w-none"
+      />
+    </section>
+    <section class="relative flex w-[65%] items-center justify-center overflow-visible">
+      <div class="nunito-sans-title text-center text-[30px] text-[#505050]">
+        <div class="leading-10 text-[#034D82]">
+          <p>Lo que Debes Saber de SimulaBank</p>
+        </div>
+        <p
+          class="nunito-sans-body mx-auto [margin-block:1lh] w-[850px] text-[18px] leading-7 text-balance"
+        >
+          SimulaBank una plataforma virtual interactiva que permite a los aprendices del sector
+          financiero practicar asesorías con clientes simulados en tiempo real. Ofrece escenarios
+          realistas, productos y servicios bancarios, retroalimentación personalizada y evaluación
+          de habilidades, fortaleciendo competencias técnicas y blandas esenciales para la atención
+          efectiva al cliente.
+        </p>
+      </div>
+    </section>
+    <section
+      class="relative mt-25 grid w-[65%] grid-cols-3 [grid-template-rows:repeat(1,150px_1fr)] items-center justify-center gap-[2rem] overflow-visible [grid-template-areas:'tarjeta1_tarjeta2_tarjeta3''tarjeta1_tarjeta2_tarjeta3']"
+    >
+      <div
+        class="relative grid [grid-template-rows:subgrid] justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta1]"
+      >
+        <img
+          src="images/ilustraciones/robot_ia.png"
+          alt=""
+          class="relative bottom-[100px] mx-auto w-45"
+        />
+
+        <div class="p-6">
+          <h5 class="nunito-sans-title mb-2 block text-center text-[1.6rem] text-[#1788EF]">
+            Cliente Virtual con IA Interactivo
+          </h5>
+          <p class="block pr-4 pb-3 pl-4 text-[18px] leading-7 text-balance">
+            Enfréntate a clientes simulados que presentan necesidades y problemas reales, para que
+            practiques la resolución y asesoría efectiva.
+          </p>
+        </div>
+      </div>
+      <div
+        class="relative grid [grid-template-rows:subgrid] justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta2]"
+      >
+        <img
+          src="images/ilustraciones/asesor_bancario.png"
+          alt=""
+          class="relative bottom-[140px] mx-auto w-50"
+        />
+
+        <div class="p-6">
+          <h5 class="nunito-sans-title mb-2 block text-center text-[1.6rem] text-[#1377d4]">
+            Prácticas Guiadas de Asesoría
+          </h5>
+          <p class="block pr-4 pb-3 pl-4 text-[18px] leading-7 text-balance">
+            Atiende casos bancarios paso a paso, mejorando tu comunicación, empatía y capacidad de
+            ofrecer soluciones personalizadas.
+          </p>
+        </div>
+      </div>
+      <div
+        class="relative grid [grid-template-rows:subgrid] justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta3]"
+      >
+        <img
+          src="images/ilustraciones/alcancia_cerdito.png"
+          alt=""
+          class="relative bottom-[55px] mx-auto w-50"
+        />
+
+        <div class="p-6">
+          <h5 class="nunito-sans-title mb-2 block text-center text-[1.6rem] text-[#00a84c]">
+            Gestión de Productos Financieros
+          </h5>
+          <p class="block pr-4 pb-3 pl-4 text-[18px] leading-7 text-balance">
+            Aprende a recomendar cuentas, créditos e inversiones, asegurando la satisfacción y
+            confianza del cliente simulado.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div
+    class="relative flex h-[500px] flex-col items-center justify-center bg-(image:--background-image-imagenes_ia) bg-cover bg-center bg-no-repeat"
+  >
+    <div
+      class="absolute inset-x-0 top-0 h-[150px] bg-gradient-to-b from-white/95 to-transparent"
+    ></div>
+    <div class="nunito-sans-title leading-10">
+      <h1 class="[margin-block:1lh] text-center text-[55px] text-[#034D82]">
+        Aprender nunca fue tan fácil
+      </h1>
+      <h1 class="[margin-block:1lh] text-center text-[55px] text-[#00A448]">¡Empieza ahora!</h1>
+    </div>
+    <app-go-to-register-button></app-go-to-register-button>
+  </div>
+  <app-footer></app-footer>
+</div>
