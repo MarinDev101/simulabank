@@ -19,6 +19,7 @@ function mapDbToUsuario(dbRow) {
   return {
     id: dbRow.id_usuario || dbRow.id || null,
     correo: dbRow.correo_electronico,
+    contrasena: dbRow.contrasena,
     nombres: dbRow.nombres,
     apellidos: dbRow.apellidos,
     estado: dbRow.estado,
