@@ -63,25 +63,35 @@ Grupo de iconos de un paquete
   --color-info: hsl(191, 89%, 50%);
 
   --font-nunito: 'Nunito Sans', sans-serif;
+  --background-image-geometria: url('/images/patrones/geometria.png');
+  --background-image-imagenes_ia: url('/images/patrones/imagenes_ia.png');
+  --background-image-olas_azules: url('/images/patrones/olas_azules.png');
 }
 
 .social-button {
   @apply inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 p-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none;
 }
 
+.text-balance {
+  @apply text-justify;
+  text-wrap: pretty;
+  hyphens: auto;
+  hyphenate-limit-chars: 10;
+}
+
 /* Clase personalizada para títulos */
 .nunito-sans-title {
-  @apply font-[--font-nunito] font-extrabold not-italic;
+  @apply font-nunito font-extrabold not-italic;
 }
 
 /* Clase personalizada para párrafos */
 .nunito-sans-body {
-  @apply font-[--font-nunito] font-normal not-italic;
+  @apply font-nunito font-normal not-italic;
 }
 
 /* Clase personalizada para texto ligero */
 .nunito-sans-light {
-  @apply font-[--font-nunito] font-light not-italic;
+  @apply font-nunito font-light not-italic;
 }
 
 /* Buscar mas plugins para tailwind */
