@@ -1,0 +1,195 @@
+<div class="drawer overflow-visible lg:drawer-open">
+  <input id="my-drawer" type="checkbox" class="drawer-toggle" checked />
+
+  <div class="drawer-content flex flex-col overflow-visible">
+    <app-header-plataforma>
+      <div class="p-2 lg:hidden">
+        <label for="my-drawer" class="drawer-button btn btn-circle btn-ghost">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </label>
+      </div>
+    </app-header-plataforma>
+
+    <!-- AQUÍ VA EL CONTENIDO PRINCIPAL PROYECTADO -->
+    <div class="flex flex-1 items-center justify-center bg-[#F9F9FA]">
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <div class="drawer-side overflow-visible">
+    <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+
+    <div
+      class="flex min-h-full flex-col items-start overflow-visible border-r-2 border-r-[#E7E9EB] bg-white transition-all duration-150 is-drawer-close:w-17 is-drawer-open:w-64"
+    >
+      <div
+        class="group z-1000 flex w-full items-center border-b-2 border-b-[#E7E9EB] p-2 px-[15px] text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+        data-tip="Inicio"
+      >
+        <!-- Isotipo: visible cuando está cerrado -->
+        <img
+          src="images/isotipo/isotipo_simulabank_sidebar.svg"
+          class="h-[40px] w-[36px]"
+          alt="Isotipo SimulaBank"
+        />
+
+        <!-- Imagotipo: visible cuando está abierto -->
+        <img
+          src="images/imagotipo/imagotipo_simulabank_sidebar.svg"
+          class="h-[15px] animate-fade-right pl-[8px] animate-duration-150 is-drawer-close:hidden"
+          alt="Imagotipo SimulaBank"
+        />
+
+        <div
+          class="ml-auto is-drawer-close:hidden lg:is-drawer-open:tooltip lg:is-drawer-open:tooltip-right"
+          data-tip="Toggle sidebar"
+        >
+          <label
+            for="my-drawer"
+            class="drawer-button btn btn-circle btn-ghost is-drawer-open:rotate-y-180"
+          >
+            <span class="icon-[hugeicons--sidebar-left-01] text-2xl"></span>
+          </label>
+        </div>
+      </div>
+      <ul class="nunito-sans-body menu w-full grow">
+        <li>
+          <button
+            class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            data-tip="Inicio"
+          >
+            <span
+              class="icon-[hugeicons--home-12] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5]"
+            ></span>
+            <span
+              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
+            >
+              Inicio
+            </span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            data-tip="Simulación"
+          >
+            <span
+              class="icon-[hugeicons--vr-glasses] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5]"
+            ></span>
+            <span
+              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
+            >
+              Simulación
+            </span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            data-tip="Mi Personal"
+          >
+            <span
+              class="icon-[hugeicons--user-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5]"
+            ></span>
+            <span
+              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
+            >
+              Mi Personal
+            </span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            data-tip="Mi Sala"
+          >
+            <span
+              class="icon-[hugeicons--user-group-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5]"
+            ></span>
+            <span
+              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
+            >
+              Mi Sala
+            </span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            data-tip="Políticas"
+          >
+            <span
+              class="icon-[hugeicons--bank] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5]"
+            ></span>
+            <span
+              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
+            >
+              Políticas
+            </span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            data-tip="Información"
+          >
+            <span
+              class="icon-[hugeicons--document-validation] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5]"
+            ></span>
+            <span
+              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
+            >
+              Información
+            </span>
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            data-tip="Mis Logros"
+          >
+            <span
+              class="icon-[hugeicons--award-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5]"
+            ></span>
+            <span
+              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
+            >
+              Mis Logros
+            </span>
+          </button>
+        </li>
+      </ul>
+
+      <div
+        class="z-1000 m-2 lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+        data-tip="Toggle sidebar"
+      >
+        <label
+          for="my-drawer"
+          class="drawer-button btn btn-circle btn-ghost is-drawer-open:rotate-y-180"
+        >
+          <span class="icon-[hugeicons--sidebar-left-01] text-2xl"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

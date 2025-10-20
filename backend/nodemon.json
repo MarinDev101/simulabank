@@ -1,0 +1,7 @@
+{
+  "watch": ["src", "server.js"],
+  "ext": "js,json",
+  "delay": "500ms",
+  "signal": "SIGTERM",
+  "exec": "node server.js"
+}

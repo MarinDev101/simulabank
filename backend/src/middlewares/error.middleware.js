@@ -15,4 +15,3 @@ function errorHandler(err, req, res, _next) {
 }
 
 module.exports = errorHandler;
-

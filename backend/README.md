@@ -34,7 +34,7 @@ Proveer todos los servicios del lado servidor (API, acceso a base de datos, env√
 - Node.js (recomendada v18+)
 - npm (recomendada v9+)
 - MySQL accesible (o configure la URL/credenciales en variables de entorno)
-- (Opcional) Redis si desea usar el `tokenService` con `REDIS_URL`.
+- MySQL accesible (o configure la URL/credenciales en variables de entorno)
 
 ## Instalaci√≥n
 

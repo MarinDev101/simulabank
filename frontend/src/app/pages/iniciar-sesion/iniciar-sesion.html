@@ -1,0 +1,96 @@
+<div class="flex min-h-screen flex-col">
+  <main
+    class="flex flex-1 flex-row justify-between bg-[image:var(--background-image-geometria)] bg-[length:275px_275px] bg-repeat"
+  >
+    <!-- Mitad izquierda -->
+    <div
+      class="relative flex w-1/2 flex-col bg-white bg-[image:var(--background-image-geometria)] bg-[length:275px_275px] bg-repeat"
+    >
+      <!-- Botón arriba a la izquierda -->
+      <div class="absolute top-8 left-8">
+        <app-return-button></app-return-button>
+      </div>
+
+      <!-- Contenedor centrado del formulario -->
+      <div class="flex flex-1 items-center justify-center p-10">
+        <form
+          class="w-full max-w-md space-y-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg"
+          (ngSubmit)="onSubmit()"
+          [formGroup]="loginForm"
+        >
+          <h2 class="nunito-sans-title text-center text-[40px] font-semibold text-[#595959]">
+            Iniciar sesión
+          </h2>
+          <p class="text-center text-base text-gray-600">
+            ¡Bienvenido de nuevo! Ingresa tus credenciales para acceder a tu cuenta
+          </p>
+          <!-- Campo de correo -->
+          <label class="floating-label block">
+            <span class="text-base text-gray-600">Correo electrónico</span>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="mail@site.com"
+              required
+              autocomplete="username"
+              class="input input-lg mt-2 w-full border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </label>
+
+          <!-- Campo de contraseña -->
+          <div class="floating-label block">
+            <span class="text-base text-gray-600">Contraseña</span>
+            <div class="mt-2 flex items-center gap-3">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="••••••••"
+                required
+                minlength="8"
+                id="passwordInput"
+                autocomplete="current-password"
+                class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+
+              <button
+                type="button"
+                (mousedown)="$event.preventDefault()"
+                (click)="togglePasswordVisibility()"
+                class="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              >
+                @if (!showPassword) {
+                <span class="icon-[fluent--eye-16-regular] text-xl"></span>
+                } @else {
+                <span class="icon-[fluent--eye-off-16-regular] text-xl"></span>
+                }
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-base text-gray-600">
+            <label class="flex items-center gap-2">
+              <input type="checkbox" class="checkbox checkbox-md" />
+              <span>Recordarme</span>
+            </label>
+            <a href="#" class="text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="btn btn-block bg-blue-600 text-white">Ingresar</button>
+
+          <p class="text-center text-base text-gray-600">
+            ¿No tienes una cuenta?
+            <a href="/registro" class="text-blue-600 hover:underline">Regístrate</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Mitad derecha -->
+    <div
+      class="flex w-1/2 items-start justify-end bg-green-200 bg-[image:var(--background-image-olas_azules)] p-10"
+    >
+      <img src="images/imagotipo/imagotipo_simulabank_claro.svg" class="h-auto w-[450px]" alt="" />
+    </div>
+  </main>
+</div>

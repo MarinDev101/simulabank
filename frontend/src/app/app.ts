@@ -9,7 +9,7 @@ import { PoliticasPrivacidadPagina } from "./pages/politicas-privacidad-pagina/p
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ConfiguracionSimulacion, PoliticasPlataforma, InformacionPlataforma, TerminosCondicionesPagina, PoliticasPrivacidadPagina],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
 })
 export class App {

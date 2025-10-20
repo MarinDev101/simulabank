@@ -1,2 +1,0 @@
-npm install --save-dev nodemon
-npm i bcrypt cors dotenv express multer mysql2 jsonwebtoken
