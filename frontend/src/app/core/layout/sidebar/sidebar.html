@@ -35,37 +35,40 @@
     <div
       class="flex min-h-full flex-col items-start overflow-visible border-r-2 border-r-[#E7E9EB] bg-white transition-all duration-150 is-drawer-close:w-17 is-drawer-open:w-64"
     >
+      <div
+        class="group z-1000 flex w-full items-center border-b-2 border-b-[#E7E9EB] p-2 px-[15px] text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+        data-tip="Inicio"
+      >
+        <!-- Isotipo: visible cuando está cerrado -->
+        <img
+          src="images/isotipo/isotipo_simulabank_sidebar.svg"
+          class="h-[40px] w-[36px]"
+          alt="Isotipo SimulaBank"
+        />
+
+        <!-- Imagotipo: visible cuando está abierto -->
+        <img
+          src="images/imagotipo/imagotipo_simulabank_sidebar.svg"
+          class="h-[15px] animate-fade-right pl-[8px] animate-duration-150 is-drawer-close:hidden"
+          alt="Imagotipo SimulaBank"
+        />
+
+        <div
+          class="ml-auto is-drawer-close:hidden lg:is-drawer-open:tooltip lg:is-drawer-open:tooltip-right"
+          data-tip="Toggle sidebar"
+        >
+          <label
+            for="my-drawer"
+            class="drawer-button btn btn-circle btn-ghost is-drawer-open:rotate-y-180"
+          >
+            <span class="icon-[hugeicons--sidebar-left-01] text-2xl"></span>
+          </label>
+        </div>
+      </div>
       <ul class="nunito-sans-body menu w-full grow">
         <li>
           <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
-            data-tip="Inicio"
-          >
-            <!-- Isotipo: visible cuando está cerrado -->
-            <img
-              src="images/isotipo/isotipo_simulabank.svg"
-              class="h-full is-drawer-close:block is-drawer-open:hidden"
-              alt="Isotipo SimulaBank"
-            />
-
-            <!-- Imagotipo: visible cuando está abierto -->
-            <img
-              src="images/imagotipo/imagotipo_simulabank.svg"
-              class="h-full is-drawer-close:hidden is-drawer-open:block"
-              alt="Imagotipo SimulaBank"
-            />
-
-            <span
-              class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] is-drawer-close:hidden"
-            >
-              Inicio
-            </span>
-          </button>
-        </li>
-        <hr />
-        <li>
-          <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
             data-tip="Inicio"
           >
             <span
@@ -81,7 +84,7 @@
 
         <li>
           <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
             data-tip="Simulación"
           >
             <span
@@ -97,7 +100,7 @@
 
         <li>
           <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
             data-tip="Mi Personal"
           >
             <span
@@ -113,7 +116,7 @@
 
         <li>
           <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
             data-tip="Mi Sala"
           >
             <span
@@ -129,7 +132,7 @@
 
         <li>
           <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
             data-tip="Políticas"
           >
             <span
@@ -145,7 +148,7 @@
 
         <li>
           <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
             data-tip="Información"
           >
             <span
@@ -161,7 +164,7 @@
 
         <li>
           <button
-            class="group z-[1000] flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+            class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
             data-tip="Mis Logros"
           >
             <span
@@ -177,7 +180,7 @@
       </ul>
 
       <div
-        class="z-[1000] m-2 lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
+        class="z-1000 m-2 lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right"
         data-tip="Toggle sidebar"
       >
         <label
