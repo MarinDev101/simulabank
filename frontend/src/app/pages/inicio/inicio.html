@@ -1,7 +1,7 @@
 <div class="flex min-h-screen flex-col">
   <app-header-basico></app-header-basico>
   <main
-    class="flex flex-1 flex-col items-center gap-35 bg-(image:--background-image-geometria) bg-[length:275px_275px] bg-repeat pt-[150px] pb-20"
+    class="flex flex-1 flex-col items-center gap-35 bg-geometria bg-size-[275px_275px] bg-repeat pt-[150px] pb-20"
   >
     <section class="relative flex w-[65%] flex-row items-center justify-between overflow-visible">
       <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
@@ -16,7 +16,7 @@
             <span class="text-[35px] text-[#1788EF]">Inteligencia Artificial</span>
           </p>
         </div>
-        <p class="nunito-sans-body [margin-block:1lh] w-[450px] text-[18px] leading-7 text-balance">
+        <p class="nunito-sans-body my-[1lh] w-[450px] text-[18px] leading-7 text-balance">
           Explora las posibilidades de Aprender Interactivamente con clientes virtuales impulsados
           con inteligencia artificial. Fortalece tus competencias técnicas, habilidades
           comunicativas y capacidad de tomar decisiones.
@@ -38,7 +38,7 @@
           <p class="w-[576.203px]">una asesoría bancaria real, puedes</p>
           <p class="w-[576.203px]">practicarlo en SimulaBank</p>
         </div>
-        <p class="nunito-sans-body [margin-block:1lh] w-[450px] text-[18px] leading-7 text-balance">
+        <p class="nunito-sans-body my-[1lh] w-[450px] text-[18px] leading-7 text-balance">
           Vive la experiencia completa de atender clientes, analizar perfiles, recomendar productos
           y resolver dudas, todo en un entorno virtual interactivo que simula situaciones reales del
           sector financiero.
@@ -69,7 +69,7 @@
           <p class="w-[460px]">Entrena y Mejora tus Asesorías</p>
           <p class="w-[460px]">desde Cualquier Dispositivo</p>
         </div>
-        <p class="nunito-sans-body [margin-block:1lh] w-[450px] text-[18px] leading-7 text-balance">
+        <p class="nunito-sans-body my-[1lh] w-[450px] text-[18px] leading-7 text-balance">
           Accede desde tu teléfono o computador para practicar con clientes virtuales, resolver
           casos bancarios y seguir tu progreso en tiempo real.
         </p>
@@ -85,9 +85,7 @@
         <div class="leading-10 text-[#034D82]">
           <p>Lo que Debes Saber de SimulaBank</p>
         </div>
-        <p
-          class="nunito-sans-body mx-auto [margin-block:1lh] w-[850px] text-[18px] leading-7 text-balance"
-        >
+        <p class="nunito-sans-body mx-auto my-[1lh] w-[850px] text-[18px] leading-7 text-balance">
           SimulaBank una plataforma virtual interactiva que permite a los aprendices del sector
           financiero practicar asesorías con clientes simulados en tiempo real. Ofrece escenarios
           realistas, productos y servicios bancarios, retroalimentación personalizada y evaluación
@@ -97,10 +95,10 @@
       </div>
     </section>
     <section
-      class="relative mt-25 grid w-[65%] grid-cols-3 [grid-template-rows:repeat(1,150px_1fr)] items-center justify-center gap-[2rem] overflow-visible [grid-template-areas:'tarjeta1_tarjeta2_tarjeta3''tarjeta1_tarjeta2_tarjeta3']"
+      class="relative mt-25 grid w-[65%] grid-cols-3 grid-rows-[repeat(1,150px_1fr)] items-center justify-center gap-8 overflow-visible [grid-template-areas:'tarjeta1_tarjeta2_tarjeta3''tarjeta1_tarjeta2_tarjeta3']"
     >
       <div
-        class="relative grid [grid-template-rows:subgrid] justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta1]"
+        class="relative grid grid-rows-subgrid justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta1]"
       >
         <img
           src="images/ilustraciones/robot_ia.png"
@@ -119,7 +117,7 @@
         </div>
       </div>
       <div
-        class="relative grid [grid-template-rows:subgrid] justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta2]"
+        class="relative grid grid-rows-subgrid justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta2]"
       >
         <img
           src="images/ilustraciones/asesor_bancario.png"
@@ -138,7 +136,7 @@
         </div>
       </div>
       <div
-        class="relative grid [grid-template-rows:subgrid] justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta3]"
+        class="relative grid grid-rows-subgrid justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta3]"
       >
         <img
           src="images/ilustraciones/alcancia_cerdito.png"
@@ -159,16 +157,14 @@
     </section>
   </main>
   <div
-    class="relative flex h-[500px] flex-col items-center justify-center bg-(image:--background-image-imagenes_ia) bg-cover bg-center bg-no-repeat"
+    class="relative flex h-[500px] flex-col items-center justify-center bg-imagenes_ia bg-cover bg-center bg-no-repeat"
   >
     <div
-      class="absolute inset-x-0 top-0 h-[150px] bg-gradient-to-b from-white/95 to-transparent"
+      class="absolute inset-x-0 top-0 h-[150px] bg-linear-to-b from-white/95 to-transparent"
     ></div>
     <div class="nunito-sans-title leading-10">
-      <h1 class="[margin-block:1lh] text-center text-[55px] text-[#034D82]">
-        Aprender nunca fue tan fácil
-      </h1>
-      <h1 class="[margin-block:1lh] text-center text-[55px] text-[#00A448]">¡Empieza ahora!</h1>
+      <h1 class="my-[1lh] text-center text-[55px] text-[#034D82]">Aprender nunca fue tan fácil</h1>
+      <h1 class="my-[1lh] text-center text-[55px] text-[#00A448]">¡Empieza ahora!</h1>
     </div>
     <app-go-to-register-button></app-go-to-register-button>
   </div>

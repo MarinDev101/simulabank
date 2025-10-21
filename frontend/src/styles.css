@@ -63,6 +63,9 @@ Grupo de iconos de un paquete
   --color-info: hsl(191, 89%, 50%);
 
   --font-nunito: 'Nunito Sans', sans-serif;
+  --background-image-geometria: url('/images/patrones/geometria.png');
+  --background-image-imagenes_ia: url('/images/patrones/imagenes_ia.png');
+  --background-image-olas_azules: url('/images/patrones/olas_azules.png');
 }
 
 .social-button {

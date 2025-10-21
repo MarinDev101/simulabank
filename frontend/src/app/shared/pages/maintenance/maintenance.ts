@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-maintenance',
+  standalone: true,
   imports: [],
-  templateUrl: './maintenance.html'
+  templateUrl: './maintenance.html',
 })
-export class Maintenance {
-
-}
+export class Maintenance {}

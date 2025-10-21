@@ -4,6 +4,7 @@ import { HeaderPlataforma } from '@app/components/header-plataforma/header-plata
 
 @Component({
   selector: 'app-configuracion-simulacion',
+  standalone: true,
   imports: [HeaderPlataforma],
   templateUrl: './configuracion-simulacion.html',
 })
