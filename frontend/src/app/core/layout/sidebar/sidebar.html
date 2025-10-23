@@ -35,24 +35,27 @@
       class="group/sidebar flex h-full flex-col items-start overflow-visible border-r-2 border-r-[#E7E9EB] bg-white is-drawer-close:w-17 is-drawer-open:w-64 is-drawer-open:transition-all is-drawer-open:duration-150"
     >
       <div
-        class="flex h-full w-full flex-col items-start overflow-x-hidden is-drawer-close:overflow-y-auto is-drawer-open:overflow-y-auto"
+        class="scrollbar-thin flex h-full w-full flex-col items-start overflow-x-hidden scrollbar-corner-black scrollbar-thumb-green-600 scrollbar-track-gray-200 is-drawer-close:overflow-y-auto is-drawer-open:overflow-y-auto"
       >
         <div
-          class="group fixed z-1500 mr-[15px] flex h-[65px] shrink-0 items-center border-b-2 border-b-[#E7E9EB] bg-white pt-2 pb-2 pl-[15px] text-[#566577] transition-colors duration-200 is-drawer-open:w-[239px] is-drawer-open:justify-start"
+          class="group z-1500 flex h-[65px] w-full shrink-0 items-center border-b-2 border-b-[#E7E9EB] bg-white pt-2 pb-2 pl-[15px] text-[#566577] transition-colors duration-200 is-drawer-open:justify-start"
         >
-          <img
-            src="images/isotipo/isotipo_simulabank_sidebar.svg"
-            class="h-[40px] w-[36px] transition-opacity duration-200 lg:is-drawer-close:group-hover/sidebar:opacity-0"
-            alt="Isotipo SimulaBank"
-          />
+          <!-- Contenedor relativo para el isotipo y el botón -->
+          <div class="relative h-[40px] w-[36px]">
+            <img
+              src="images/isotipo/isotipo_simulabank_sidebar.svg"
+              class="h-[40px] w-[36px] transition-opacity duration-200 lg:is-drawer-close:group-hover/sidebar:opacity-0"
+              alt="Isotipo SimulaBank"
+            />
 
-          <div
-            class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right lg:is-drawer-close:group-hover/sidebar:pointer-events-auto lg:is-drawer-close:group-hover/sidebar:opacity-100"
-            data-tip="Mostrar barra lateral"
-          >
-            <label for="my-drawer" class="drawer-button btn btn-circle btn-ghost">
-              <span class="icon-[hugeicons--sidebar-left-01] text-2xl"></span>
-            </label>
+            <div
+              class="pointer-events-none absolute top-0 left-0 w-[36px] opacity-0 transition-opacity duration-200 lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right lg:is-drawer-close:group-hover/sidebar:pointer-events-auto lg:is-drawer-close:group-hover/sidebar:opacity-100"
+              data-tip="Mostrar barra lateral"
+            >
+              <label for="my-drawer" class="drawer-button btn btn-circle w-full btn-ghost">
+                <span class="icon-[hugeicons--sidebar-left-01] text-2xl"></span>
+              </label>
+            </div>
           </div>
 
           <img
@@ -71,7 +74,7 @@
           </div>
         </div>
         <!-- overflow-x-hidden is-drawer-close:overflow-y-auto is-drawer-open:overflow-y-auto -->
-        <div class="w-full flex-1 pt-[65px]">
+        <div class="w-full flex-1">
           <ul class="nunito-sans-body menu w-full">
             <li>
               <button
@@ -182,17 +185,16 @@
           </ul>
         </div>
 
-        <ul class="nunito-sans-body menu w-full shrink-0 border-t-2 border-t-[#E7E9EB]">
-          <div class="relative">
-            <div class="group flex h-18 w-full items-center justify-start">
-              <div class="avatar fixed left-3 is-drawer-close:left-3">
+        <ul class="nunito-sans-body menu w-full shrink-0 border-t-2 border-t-[#E7E9EB] bg-white">
+          <div class="relative bg-white">
+            <div class="group flex h-18 w-full items-center justify-start bg-white">
+              <div class="avatar ml-[5px]">
                 <div class="w-[40px] rounded-full">
                   <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
                 </div>
               </div>
-              <div class="w-[65px] is-drawer-close:hidden"></div>
               <span
-                class="ml-2 w-full animate-fade-right animate-duration-150 is-drawer-close:hidden"
+                class="ml-4 w-full animate-fade-right animate-duration-150 is-drawer-close:hidden"
               >
                 <p
                   class="max-w-[130px] truncate font-bold text-[#566577]"
