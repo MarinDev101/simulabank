@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { App } from '@app/app';
-import { HeaderPlataforma } from '@app/components/header-plataforma/header-plataforma';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-configuracion-simulacion',
   standalone: true,
-  imports: [HeaderPlataforma],
+  imports: [RouterLink],
   templateUrl: './configuracion-simulacion.html',
 })
 export class ConfiguracionSimulacion {}
