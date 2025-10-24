@@ -7,10 +7,12 @@
 @plugin "daisyui" {
   themes:
     light --default,
-    /* dark --prefersdark, */ cupcake;
+    dark;
 }
 
-@custom-variant dark (&:where([data-theme=night], [data-theme=night] *));
+/* Soporte para modo oscuro: activable mediante la clase .dark o mediante el atributo data-theme="dark" */
+@custom-variant dark (&:where(.dark, [data-theme="dark"], [data-theme=dark], .dark *, [data-theme="dark"] *, [data-theme=dark] *));
+
 /*
 Para iconos que no estan escritos en html sino en typescript
 
@@ -68,30 +70,58 @@ Grupo de iconos de un paquete
   --background-image-olas_azules: url('/images/patrones/olas_azules.png');
 }
 
-.social-button {
-  @apply inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 p-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none;
+/* Base: forzar color-scheme según el tema para que navegadores ajusten form controls, scrollbars, etc. */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  .dark,
+  [data-theme='dark'] {
+    color-scheme: dark;
+  }
 }
 
-.text-balance {
-  @apply text-justify;
-  text-wrap: pretty;
-  hyphens: auto;
-  hyphenate-limit-chars: 10;
+/* Utilidades personalizadas */
+@layer utilities {
+  .social-button {
+    @apply inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 p-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none dark:bg-blue-500 dark:hover:bg-blue-600;
+  }
+
+  .text-balance {
+    @apply text-justify;
+    text-wrap: pretty;
+    hyphens: auto;
+    hyphenate-limit-chars: 10;
+  }
+
+  /* Clase personalizada para títulos */
+  .nunito-sans-title {
+    @apply font-nunito font-extrabold not-italic;
+  }
+
+  /* Clase personalizada para párrafos */
+  .nunito-sans-body {
+    @apply font-nunito font-normal not-italic;
+  }
+
+  /* Clase personalizada para texto ligero */
+  .nunito-sans-light {
+    @apply font-nunito font-light not-italic;
+  }
 }
 
-/* Clase personalizada para títulos */
-.nunito-sans-title {
-  @apply font-nunito font-extrabold not-italic;
+/* Variantes personalizadas para controles táctiles/hover */
+@custom-variant has-hover (@media (hover: hover) and (pointer: fine));
+@custom-variant no-hover (@media (hover: none) or (pointer: coarse));
+@custom-variant hover-always {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+  @media (hover: none) or (pointer: coarse) {
+    & {
+      @slot;
+    }
+  }
 }
-
-/* Clase personalizada para párrafos */
-.nunito-sans-body {
-  @apply font-nunito font-normal not-italic;
-}
-
-/* Clase personalizada para texto ligero */
-.nunito-sans-light {
-  @apply font-nunito font-light not-italic;
-}
-
-/* Buscar mas plugins para tailwind */

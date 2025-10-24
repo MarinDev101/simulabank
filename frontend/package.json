@@ -31,10 +31,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.2.10",
     "@angular/common": "^20.0.0",
     "@angular/compiler": "^20.0.0",
     "@angular/core": "^20.0.0",
     "@angular/forms": "^20.0.0",
+    "@angular/material": "^20.2.10",
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@sweetalert2/ngx-sweetalert2": "^14.0.0",
