@@ -95,3 +95,19 @@ Grupo de iconos de un paquete
 }
 
 /* Buscar mas plugins para tailwind */
+
+/* En un archivo .css que carga Tailwind */
+@custom-variant has-hover (@media (hover: hover) and (pointer: fine));
+@custom-variant no-hover (@media (hover: none) or (pointer: coarse));
+@custom-variant hover-always {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+  @media (hover: none) or (pointer: coarse) {
+    & {
+      @slot;
+    }
+  }
+}
