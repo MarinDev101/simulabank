@@ -1,265 +1,272 @@
-<div class="flex flex-col items-center rounded-plataforma py-8 md:py-10 px-4 md:px-20 bg-white w-full max-w-6xl">
+<div class="flex min-h-[calc(100vh-65px)] w-full flex-col items-center bg-[#F9F9FA] p-2 md:p-4 lg:p-6 m-10">
+  <div
+    class='flex flex-col items-center rounded-plataforma bg-white p-4 w-full lg:p-6 xl:p-8'>
 
-  <p class="text-center font-medium mb-6 md:mb-8 text-lg md:text-[22px]">Configurar la simulación</p>
+    <p class="mb-6 text-center text-lg font-medium md:mb-8 md:text-[22px]">
+      Configurar la simulación
+    </p>
 
-  <article class="flex flex-col w-full">
-    <div class='flex mb-4 md:mb-5 gap-2 items-center'>
-      <span
-        class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">1</span>
-      <p class="text-base md:text-inherit">Selecciona un producto</p>
-    </div>
-    <div class="flex flex-col [@media(min-width:1300px)]:flex-row justify-center gap-8 md:gap-10 lg:gap-20">
-
-      <!-- Producto de captación -->
-      <article class="flex gap-4 md:gap-5 flex-col w-full md:w-auto">
-        <p class="font-medium text-center md:text-left">Producto de captación</p>
-        <ul class="flex flex-col gap-4 md:gap-5">
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#A3D9A5] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[streamline-cyber-color--piggy-bank] size-7'></span>
-                </div>
-                <p class="text-sm md:text-base">Cuenta de ahorros</p>
-              </span>
-            </label>
-          </li>
-
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#FDE28A] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[streamline-cyber-color--bank-note-1] size-7'></span>
-                </div>
-                <p class="text-sm md:text-base">Cuenta corriente</p>
-              </span>
-            </label>
-          </li>
-
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#F6A5C0] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[streamline-cyber-color--wallet-cash] size-7'></span>
-                </div>
-                <p class="text-sm md:text-base">CDT digital</p>
-              </span>
-            </label>
-          </li>
-        </ul>
-      </article>
-
-      <!-- Producto de colocación -->
-      <article class="flex gap-4 md:gap-5 flex-col w-full md:w-auto">
-        <p class="font-medium text-center md:text-left">Producto de colocación</p>
-        <ul class="flex flex-col gap-4 md:gap-5">
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#8EC5FC] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[streamline-cyber-color--cash-hand-4] size-7'></span>
-                </div>
-                <p class="text-sm md:text-base">Credito de libre inversión</p>
-              </span>
-            </label>
-          </li>
-
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#FFB997] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[streamline-cyber-color--book-open-bookmark] size-7'></span>
-                </div>
-                <p class="text-sm md:text-base">Credito educativo EducaPlus</p>
-              </span>
-            </label>
-          </li>
-
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#92E6D9] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[streamline-cyber-color--business-suitcase-2] size-7'></span>
-                </div>
-                <p class="text-sm md:text-base">Credito rotativo empresarial</p>
-              </span>
-            </label>
-          </li>
-        </ul>
-      </article>
-
-      <!-- Aleatorio -->
-      <article class="flex gap-4 md:gap-5 flex-col w-full md:w-auto">
-        <p class="font-medium text-center md:text-left">Aleatorio</p>
-        <ul class="flex flex-col gap-4 md:gap-5">
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#797979] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[fad--random-1dice] size-10 text-white'></span>
-                </div>
-                <p class="text-sm md:text-base">Todos los productos</p>
-              </span>
-            </label>
-          </li>
-
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#3D9A66] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[fad--random-1dice] size-10 text-white'></span>
-                </div>
-                <p class="text-sm md:text-base">Productos de captación</p>
-              </span>
-            </label>
-          </li>
-
-          <li>
-            <label class="text-slate-400 w-full">
-              <input type="radio" name="producto"
-                class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
-              <span
-                class="flex items-center gap-2 border-2 p-1.5 w-full md:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-                <div class="bg-[#4B73BD] flex items-center justify-center size-9 rounded-md w-12 h-12">
-                  <span class='icon-[fad--random-1dice] size-10 text-white'></span>
-                </div>
-                <p class="text-sm md:text-base">Productos de colocación</p>
-              </span>
-            </label>
-          </li>
-        </ul>
-      </article>
-    </div>
-  </article>
-
-  <article class="flex flex-col [@media(min-width:1300px)]:flex-row mt-8 md:mt-15 w-full gap-8 md:gap-0">
-    <!-- Div 1: Modo -->
-    <div class="w-full md:w-[50%]">
-      <div class="flex mb-4 md:mb-5 gap-2 items-center">
+    <article class="flex flex-col w-full">
+      <div class='flex mb-4 md:mb-5 gap-2 items-center'>
         <span
-          class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">2</span>
-        <p class="text-base md:text-inherit">Selecciona el modo</p>
+          class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">1</span>
+        <p class="text-base md:text-inherit">Selecciona un producto</p>
       </div>
-      <ul class="flex justify-center md:justify-start md:ml-28 gap-6 md:gap-10">
+      <div class="grid w-full grid-cols-1 justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+
+        <!-- Producto de captación -->
+        <article class="flex w-full max-w-md flex-col gap-4 md:gap-5">
+          <p class="font-medium text-center md:text-left">Producto de captación</p>
+          <ul class="flex flex-col gap-4 md:gap-5">
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="cuenta-ahorros"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#A3D9A5] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[streamline-cyber-color--piggy-bank] size-7'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Cuenta de ahorros</p>
+                </span>
+              </label>
+            </li>
+
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="cuenta-corriente"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#FDE28A] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[streamline-cyber-color--bank-note-1] size-7'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Cuenta corriente</p>
+                </span>
+              </label>
+            </li>
+
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="cdt-digital"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#F6A5C0] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[streamline-cyber-color--wallet-cash] size-7'></span>
+                  </div>
+                  <p class="text-sm md:text-base">CDT digital</p>
+                </span>
+              </label>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Producto de colocación -->
+        <article class="flex gap-4 md:gap-5 flex-col w-full md:w-auto">
+          <p class="font-medium text-center md:text-left">Producto de colocación</p>
+          <ul class="flex flex-col gap-4 md:gap-5">
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="credito-libre-inversion"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#8EC5FC] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[streamline-cyber-color--cash-hand-4] size-7'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Credito de libre inversión</p>
+                </span>
+              </label>
+            </li>
+
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="credito-educativo"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#FFB997] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[streamline-cyber-color--book-open-bookmark] size-7'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Credito educativo EducaPlus</p>
+                </span>
+              </label>
+            </li>
+
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="credito-rotativo"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#92E6D9] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[streamline-cyber-color--business-suitcase-2] size-7'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Credito rotativo empresarial</p>
+                </span>
+              </label>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Aleatorio -->
+        <article class="flex gap-4 md:gap-5 flex-col w-full md:w-auto">
+          <p class="font-medium text-center md:text-left">Aleatorio</p>
+          <ul class="flex flex-col gap-4 md:gap-5">
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="todos-productos"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#797979] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[fad--random-1dice] size-10 text-white'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Todos los productos</p>
+                </span>
+              </label>
+            </li>
+
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="productos-captacion"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#3D9A66] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[fad--random-1dice] size-10 text-white'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Productos de captación</p>
+                </span>
+              </label>
+            </li>
+
+            <li>
+              <label class="text-slate-400 w-full">
+                <input type="radio" name="producto" value="productos-colocacion"
+                  class="h-px1 opacity-0 overflow-hidden absolute whitespace-nowrap w-px1 peer" />
+                <span
+                  class="flex items-center gap-2 border-2 p-1.5 w-full md:w-60 lg:w-70 rounded-md border-elegant-300 cursor-pointer bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                  <div class="bg-[#4B73BD] flex items-center justify-center size-9 rounded-md w-12 h-12">
+                    <span class='icon-[fad--random-1dice] size-10 text-white'></span>
+                  </div>
+                  <p class="text-sm md:text-base">Productos de colocación</p>
+                </span>
+              </label>
+            </li>
+          </ul>
+        </article>
+      </div>
+    </article>
+
+    <article class="mt-8 grid w-full grid-cols-1 gap-8 lg:mt-12 lg:grid-cols-2 lg:gap-4">
+      <!-- Div 1: Modo -->
+      <div class="w-full">
+        <div class="flex mb-4 md:mb-5 gap-2 items-center">
+          <span
+            class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">2</span>
+          <p class="text-base md:text-inherit">Selecciona el modo</p>
+        </div>
+        <ul class="flex flex-wrap justify-center gap-6 md:justify-start md:gap-12 lg:gap-10">
+          <li>
+            <label class="w-full text-slate-400">
+              <input type="radio" name="modo" value="aprendizaje" class="peer h-px1 w-px1 opacity-0 absolute" />
+              <span
+                class="flex flex-col items-center border-2 p-2 w-28 md:w-30 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                <p class="text-sm md:text-base">Aprendizaje</p>
+                <span class="icon-[noto--brain] size-12 md:size-15"></span>
+              </span>
+            </label>
+          </li>
+
+          <li>
+            <label class="w-full text-slate-400">
+              <input type="radio" name="modo" value="evaluativo" class="peer h-px1 w-px1 opacity-0 absolute" />
+              <span
+                class="flex flex-col items-center border-2 p-2 w-28 md:w-30 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                <p class="text-sm md:text-base">Evaluativo</p>
+                <span class="icon-[noto--graduation-cap] size-12 md:size-15"></span>
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Div 2: Destino de entrega -->
+      <div class="w-full">
+        <div class="flex mb-4 md:mb-5 gap-2 items-center">
+          <span
+            class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">3</span>
+          <p class="text-base md:text-inherit">Selecciona el destino de entrega</p>
+        </div>
+        <ul class="flex flex-col items-center md:items-start md:ml-8 lg:ml-28 gap-3 md:gap-2">
+          <li class="w-full max-w-xs">
+            <label class="w-full text-slate-400">
+              <input type="radio" name="destino" value="evidencia-personal"
+                class="peer h-px1 w-px1 opacity-0 absolute" />
+              <span
+                class="flex gap-3 items-center border-2 p-2 w-full rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+                <span class="icon-[ph--person-light] size-10 md:size-12 text-[#6F6F6F]"></span>
+                <p class="text-sm md:text-base">Evidencia personal</p>
+              </span>
+            </label>
+          </li>
+
+          <li class="w-full max-w-xs">
+            <label class="w-full text-slate-400">
+              <input type="radio" name="destino" value="evidencia-salon" class="peer h-px1 w-px1 opacity-0 absolute" />
+              <span
+                class="flex gap-3 items-center border-2 p-2 w-full rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center before:z-10">
+                <span class="icon-[streamline-ultimate--meeting-remote] size-10 md:size-12 text-[#6F6F6F]"></span>
+                <p class="text-sm md:text-base">Evidencia salón sena</p>
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="flex flex-col mt-8 md:mt-15 w-full">
+      <!-- Interacción -->
+      <div class='flex mb-4 md:mb-5 gap-2 items-center'>
+        <span
+          class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">4</span>
+        <p class="text-base md:text-inherit">Selecciona la interacción</p>
+      </div>
+
+      <ul class="flex justify-center gap-6 md:justify-start md:gap-12 lg:gap-10">
         <li>
           <label class="w-full text-slate-400">
-            <input type="radio" name="modo" class="peer h-px1 w-px1 opacity-0 absolute" />
+            <input type="radio" name="interaccion" value="sonido-automatico"
+              class="peer h-px1 w-px1 opacity-0 absolute" />
             <span
-              class="flex flex-col items-center border-2 p-2 w-28 md:w-30 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-              <p class="text-sm md:text-base">Aprendizaje</p>
-              <span class="icon-[noto--brain] size-12 md:size-15"></span>
+              class="flex flex-col items-center border-2 p-2 w-36 md:w-40 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+              <p class="text-sm md:text-base">Sonido automático</p>
+              <span class="icon-[emojione-v1--right-speaker-3-sound-waves] size-12 md:size-15"></span>
             </span>
           </label>
         </li>
 
         <li>
           <label class="w-full text-slate-400">
-            <input type="radio" name="modo" class="peer h-px1 w-px1 opacity-0 absolute" />
+            <input type="radio" name="interaccion" value="sonido-silenciado"
+              class="peer h-px1 w-px1 opacity-0 absolute" />
             <span
-              class="flex flex-col items-center border-2 p-2 w-28 md:w-30 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-              <p class="text-sm md:text-base">Evaluativo</p>
-              <span class="icon-[noto--graduation-cap] size-12 md:size-15"></span>
+              class="flex flex-col items-center border-2 p-2 w-36 md:w-40 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
+              <p class="text-sm md:text-base">Sonido silenciado</p>
+              <span class="icon-[emojione-v1--speaker-with-1-sound-wave] size-12 md:size-15"></span>
             </span>
           </label>
         </li>
       </ul>
-    </div>
+    </article>
 
-    <!-- Div 2: Destino de entrega -->
-    <div class="w-full md:w-[50%]">
-      <div class="flex mb-4 md:mb-5 gap-2 items-center">
-        <span
-          class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">3</span>
-        <p class="text-base md:text-inherit">Selecciona el destino de entrega</p>
+    <button routerLink="/simulador-plataforma"
+      class="mt-8 flex w-full max-w-xs items-center justify-center gap-3 rounded-full bg-[#009040] p-2 transition-colors duration-200 hover:bg-[#007a33] md:mt-12">
+      <p class="text-white text-sm md:text-base">Empezar simulación</p>
+      <div class="bg-white w-6 h-6 md:w-7 md:h-7 p-1 rounded-full">
+        <span class="icon-[solar--play-linear]"></span>
       </div>
-      <ul class="flex flex-col items-center md:items-start md:ml-28 gap-3 md:gap-2">
-        <li class="w-full max-w-xs">
-          <label class="w-full text-slate-400">
-            <input type="radio" name="destino" class="peer h-px1 w-px1 opacity-0 absolute" />
-            <span
-              class="flex gap-3 items-center border-2 p-2 w-full rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-              <span class="icon-[ph--person-light] size-10 md:size-12 text-[#6F6F6F]"></span>
-              <p class="text-sm md:text-base">Evidencia personal</p>
-            </span>
-          </label>
-        </li>
-
-        <li class="w-full max-w-xs">
-          <label class="w-full text-slate-400">
-            <input type="radio" name="destino" class="peer h-px1 w-px1 opacity-0 absolute" />
-            <span
-              class="flex gap-3 items-center border-2 p-2 w-full rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center before:z-10">
-              <span class="icon-[streamline-ultimate--meeting-remote] size-10 md:size-12 text-[#6F6F6F]"></span>
-              <p class="text-sm md:text-base">Evidencia salón sena</p>
-            </span>
-          </label>
-        </li>
-      </ul>
-    </div>
-  </article>
-
-  <article class="flex flex-col mt-8 md:mt-15 w-full">
-    <!-- Interacción -->
-    <div class='flex mb-4 md:mb-5 gap-2 items-center'>
-      <span
-        class="flex justify-center items-center font-bold bg-[#545454] text-white rounded-full w-6 h-6 text-sm">4</span>
-      <p class="text-base md:text-inherit">Selecciona la interacción</p>
-    </div>
-
-    <ul class="flex justify-center md:justify-start md:ml-28 gap-6 md:gap-10">
-      <li>
-        <label class="w-full text-slate-400">
-          <input type="radio" name="interaccion" class="peer h-px1 w-px1 opacity-0 absolute" />
-          <span
-            class="flex flex-col items-center border-2 p-2 w-36 md:w-40 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-            <p class="text-sm md:text-base">Sonido automático</p>
-            <span class="icon-[emojione-v1--right-speaker-3-sound-waves] size-12 md:size-15"></span>
-          </span>
-        </label>
-      </li>
-
-      <li>
-        <label class="w-full text-slate-400">
-          <input type="radio" name="interaccion" class="peer h-px1 w-px1 opacity-0 absolute" />
-          <span
-            class="flex flex-col items-center border-2 p-2 w-36 md:w-40 rounded-md cursor-pointer border-elegant-300 bg-white transition-all duration-200 relative hover:border-blue-500 hover:before:border-gray-400 hover:before:scale-100 hover:before:opacity-100 peer-checked:border-blue-500 peer-checked:text-blue-500 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 peer-checked:before:scale-100 peer-checked:before:content-['✓'] peer-checked:shadow-blue-500/10 peer-checked:hover:border-blue-500 peer-checked:hover:before:border-blue-500 peer-checked:hover:before:bg-blue-500 peer-checked:hover:before:opacity-100 before:absolute before:w-5 before:h-5 before:border-[3px] before:rounded-full before:top-1 before:left-1 before:opacity-0 before:transition-all before:scale-0 before:text-white before:text-xs before:flex before:items-center before:justify-center">
-            <p class="text-sm md:text-base">Sonido silenciado</p>
-            <span class="icon-[emojione-v1--speaker-with-1-sound-wave] size-12 md:size-15"></span>
-          </span>
-        </label>
-      </li>
-    </ul>
-  </article>
-
-  <button routerLink="/simulador-plataforma"
-    class="mt-8 md:mt-15 bg-[#009040] p-2 rounded-full flex gap-3 items-center hover:bg-[#007a33] transition-colors duration-200 cursor-pointer w-55 md:w-55 justify-center md:justify-end">
-    <p class="text-white text-sm md:text-base">Empezar simulación</p>
-    <div class="bg-white w-6 h-6 md:w-7 md:h-7 p-1 rounded-full">
-      <span class="icon-[solar--play-linear]"></span>
-    </div>
-  </button>
-</div>
+    </button>
+  </div>

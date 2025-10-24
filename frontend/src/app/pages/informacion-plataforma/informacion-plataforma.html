@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col gap-6 w-full max-w-5xl bg-white rounded-xl p-6 md:p-10 text-gray-800 leading-relaxed shadow-md">
+  class="flex flex-col gap-6 w-full max-w-5xl bg-white rounded-xl p-6 md:p-10 text-gray-800 leading-relaxed md:leading-loose shadow-md m-5">
 
   <!-- TÍTULO PRINCIPAL -->
   <h1 class="text-3xl md:text-4xl font-bold text-center">
@@ -7,94 +7,128 @@
   </h1>
 
   <!-- CONTENIDO -->
-  <h2 class="text-2xl font-semibold mt-6">Perfil de clientes</h2>
-  <p>
-    En <strong>SimulaBank</strong> ofrecemos servicios financieros ajustados a distintos perfiles de clientes:
-  </p>
+  <section>
+    <h2 class="text-2xl font-semibold mt-6">Perfil de clientes</h2>
+    <p>
+      En <strong>SimulaBank</strong> ofrecemos servicios financieros ajustados a distintos perfiles de clientes:
+    </p>
 
-  <h3 class="text-xl font-semibold mt-4">Privado / Private Banking</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Personas con altos ingresos o patrimonio elevado (ingresos desde $25.000.000/mes o patrimonio desde
-      $1.000.000.000).</li>
-    <li>Atención 100% personalizada, con un ejecutivo exclusivo.</li>
-  </ul>
+    <!-- Perfil Privado -->
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Privado / Private Banking</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Personas con altos ingresos o patrimonio elevado (ingresos desde $25.000.000/mes o patrimonio desde
+          $1.000.000.000).</li>
+        <li>Atención 100% personalizada, con un ejecutivo exclusivo.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">Persona Natural</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Personas con ingresos altos, medios o modestos (desde $0 hasta $25.000.000/mes).</li>
-    <li>Atención personalizada o mixta, de acuerdo con sus necesidades.</li>
-  </ul>
+    <!-- Persona Natural -->
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Persona Natural</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Personas con ingresos altos, medios o modestos (desde $0 hasta $25.000.000/mes).</li>
+        <li>Atención personalizada o mixta, de acuerdo con sus necesidades.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">Básico / Salario Mínimo</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Personas con ingresos cercanos al SMLV ($1.300.000 – $2.600.000/mes).</li>
-    <li>Acceso a productos de bajo costo, cuentas de ahorro básicas y educación financiera.</li>
-  </ul>
+    <!-- Básico -->
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Básico / Salario Mínimo</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Personas con ingresos cercanos al SMLV ($1.300.000 – $2.600.000/mes).</li>
+        <li>Acceso a productos de bajo costo, cuentas de ahorro básicas y educación financiera.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">PYME / MiPyme / Microcréditos</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Empresas pequeñas, medianas o independientes, con ventas anuales entre $400.000.000 y $12.000.000.000.</li>
-    <li>Atención guiada por un asesor empresarial.</li>
-  </ul>
+    <!-- Pyme -->
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">PYME / MiPyme / Microcréditos</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Empresas pequeñas, medianas o independientes, con ventas anuales entre $400.000.000 y $12.000.000.000.</li>
+        <li>Atención guiada por un asesor empresarial.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">Empresarial / Corporativo</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Grandes empresas y corporaciones con ventas anuales superiores a $12.000.000.000.</li>
-    <li>Soluciones integrales y personalizadas para gestión financiera.</li>
-  </ul>
+    <!-- Empresarial -->
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Empresarial / Corporativo</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Grandes empresas y corporaciones con ventas anuales superiores a $12.000.000.000.</li>
+        <li>Soluciones integrales y personalizadas para gestión financiera.</li>
+      </ul>
+    </div>
+  </section>
 
   <!-- Tipos de clientes -->
-  <h2 class="text-2xl font-semibold mt-8">Tipos de clientes</h2>
-  <p>En SimulaBank entendemos que cada cliente tiene un estilo de interacción distinto. Algunos ejemplos:</p>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Ideal o fiel: confía en la marca y compra de forma recurrente.</li>
-    <li>Amigable: cordial y cercano en la atención.</li>
-    <li>Detallista: revisa minuciosamente cada característica antes de decidir.</li>
-    <li>Conversador: busca interacción constante con el asesor.</li>
-    <li>Racional: toma decisiones basadas en datos y cifras claras.</li>
-    <li>Impaciente: quiere soluciones rápidas e inmediatas.</li>
-    <li>Negociador: busca mejores condiciones.</li>
-    <li>Crítico: encuentra fallas y exige mejoras.</li>
-    <li>Entusiasta: receptivo a nuevas ideas.</li>
-    <li>Informado: llega con conocimiento previo sobre los productos.</li>
-  </ul>
+  <section class="mt-8">
+    <h2 class="text-2xl font-semibold">Tipos de clientes</h2>
+    <p>En SimulaBank entendemos que cada cliente tiene un estilo de interacción distinto. Algunos ejemplos:</p>
+    <ul class="list-disc pl-6 space-y-2 mt-2">
+      <li>Ideal o fiel: confía en la marca y compra de forma recurrente.</li>
+      <li>Amigable: cordial y cercano en la atención.</li>
+      <li>Detallista: revisa minuciosamente cada característica antes de decidir.</li>
+      <li>Conversador: busca interacción constante con el asesor.</li>
+      <li>Racional: toma decisiones basadas en datos y cifras claras.</li>
+      <li>Impaciente: quiere soluciones rápidas e inmediatas.</li>
+      <li>Negociador: busca mejores condiciones.</li>
+      <li>Crítico: encuentra fallas y exige mejoras.</li>
+      <li>Entusiasta: receptivo a nuevas ideas.</li>
+      <li>Informado: llega con conocimiento previo sobre los productos.</li>
+    </ul>
+  </section>
 
   <!-- Productos financieros -->
-  <h2 class="text-2xl font-semibold mt-8">Productos financieros</h2>
-  <p>Estos son algunos de los principales productos financieros que ofrece SimulaBank:</p>
+  <section class="mt-8">
+    <h2 class="text-2xl font-semibold">Productos financieros</h2>
+    <p>Estos son algunos de los principales productos financieros que ofrece SimulaBank:</p>
 
-  <h3 class="text-xl font-semibold mt-4">Cuenta de Ahorros SimulaBank</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Depósito seguro sin cuota de manejo, con tarjeta débito digital y física.</li>
-    <li>Ideal para manejar el dinero de forma práctica y segura desde la App.</li>
-  </ul>
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Cuenta de Ahorros SimulaBank</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Depósito seguro sin cuota de manejo, con tarjeta débito digital y física.</li>
+        <li>Ideal para manejar el dinero de forma práctica y segura desde la App.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">Cuenta Corriente SimulaBank</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Producto flexible con chequera, sobregiro autorizado y acceso a canales digitales.</li>
-    <li>Perfecto para pagos y cobros empresariales, con control de transacciones en tiempo real.</li>
-  </ul>
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Cuenta Corriente SimulaBank</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Producto flexible con chequera, sobregiro autorizado y acceso a canales digitales.</li>
+        <li>Perfecto para pagos y cobros empresariales, con control de transacciones en tiempo real.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">CDT Digital SimulaBank</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Inversión a plazo fijo con tasas garantizadas y apertura 100% en línea.</li>
-    <li>Rentabilidad asegurada, respaldada por Fogafín.</li>
-  </ul>
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">CDT Digital SimulaBank</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Inversión a plazo fijo con tasas garantizadas y apertura 100% en línea.</li>
+        <li>Rentabilidad asegurada, respaldada por Fogafín.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">Crédito de Libre Inversión</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Préstamo sin destinación específica, con plazos de hasta 60 meses.</li>
-    <li>Aprobación rápida y sin necesidad de codeudor en montos bajos.</li>
-  </ul>
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Crédito de Libre Inversión</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Préstamo sin destinación específica, con plazos de hasta 60 meses.</li>
+        <li>Aprobación rápida y sin necesidad de codeudor en montos bajos.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">Crédito Educativo EducaPlus</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Financiación de estudios técnicos, tecnológicos o profesionales.</li>
-    <li>Desembolso directo a la institución, tasa fija desde el inicio.</li>
-  </ul>
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Crédito Educativo EducaPlus</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Financiación de estudios técnicos, tecnológicos o profesionales.</li>
+        <li>Desembolso directo a la institución, tasa fija desde el inicio.</li>
+      </ul>
+    </div>
 
-  <h3 class="text-xl font-semibold mt-4">Crédito Rotativo Empresarial</h3>
-  <ul class="list-disc pl-6 space-y-2">
-    <li>Línea de crédito flexible con cupo reutilizable y pagos según necesidades.</li>
-    <li>Liquidez inmediata para mantener el flujo de caja.</li>
-  </ul>
+    <div class="mt-4">
+      <h3 class="text-xl font-semibold">Crédito Rotativo Empresarial</h3>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Línea de crédito flexible con cupo reutilizable y pagos según necesidades.</li>
+        <li>Liquidez inmediata para mantener el flujo de caja.</li>
+      </ul>
+    </div>
+  </section>
+</div>
