@@ -34,7 +34,16 @@ export class Sidebar implements OnInit {
   }
 
   private applyTheme(theme: 'light' | 'dark') {
+    // Mantener compatibilidad con el atributo data-theme (ya usado por el proyecto)
     document.documentElement.setAttribute('data-theme', theme);
+
+    // AdemÃ¡s aÃ±adir/remover la clase .dark para que utilidades `dark:` de Tailwind funcionen
+    // y para compatibilidad con otras librerÃ­as que esperan la clase.
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }
 
   toggleDrawer() {
@@ -50,7 +59,7 @@ export class Sidebar implements OnInit {
     this.isDrawerClosed = !drawer?.checked;
   }
 
-  // Método para determinar si mostrar tooltip (solo cuando drawer está cerrado en pantallas grandes)
+  // MÃ©todo para determinar si mostrar tooltip (solo cuando drawer estÃ¡ cerrado en pantallas grandes)
   shouldShowTooltip(): boolean {
     return this.isDrawerClosed;
   }

@@ -38,7 +38,7 @@
       </div>
     </app-header-plataforma>
 
-    <div class="flex flex-1 items-center justify-center bg-[#F9F9FA]">
+    <div class="flex flex-1 items-center justify-center bg-[#F9F9FA] dark:bg-gray-900">
       <ng-content></ng-content>
     </div>
   </div>
@@ -52,21 +52,21 @@
     ></label>
 
     <nav
-      class="group/sidebar flex h-full flex-col items-start overflow-visible border-r-2 border-r-[#E7E9EB] bg-white is-drawer-close:w-17 is-drawer-open:w-64 is-drawer-open:transition-all is-drawer-open:duration-150"
+      class="group/sidebar flex h-full flex-col items-start overflow-visible border-r-2 border-r-[#E7E9EB] bg-white dark:border-r-gray-700 dark:bg-gray-900 is-drawer-close:w-17 is-drawer-open:w-64 is-drawer-open:transition-all is-drawer-open:duration-150"
       aria-label="Navegación principal"
       role="navigation"
     >
       <div
-        class="scrollbar-thin flex h-full w-full flex-col items-start overflow-x-hidden scrollbar-corner-black scrollbar-thumb-green-600 scrollbar-track-gray-200 is-drawer-close:overflow-y-auto is-drawer-open:overflow-y-auto"
+        class="scrollbar-thin flex h-full w-full flex-col items-start overflow-x-hidden scrollbar-corner-black scrollbar-thumb-green-600 scrollbar-track-gray-200 dark:scrollbar-thumb-green-500 dark:scrollbar-track-gray-800 is-drawer-close:overflow-y-auto is-drawer-open:overflow-y-auto"
       >
         <!-- Header del Sidebar -->
         <div
-          class="group z-1500 flex h-[65px] w-full shrink-0 items-center border-b-2 border-b-[#E7E9EB] bg-white pt-2 pb-2 pl-[15px] text-[#566577] transition-colors duration-200 is-drawer-open:justify-start"
+          class="group z-1500 flex h-[65px] w-full shrink-0 items-center border-b-2 border-b-[#E7E9EB] bg-white pt-2 pb-2 pl-[15px] text-[#566577] transition-colors duration-200 dark:border-b-gray-700 dark:bg-gray-900 dark:text-gray-300 is-drawer-open:justify-start"
         >
           <div class="relative h-10 w-9">
             <img
               src="images/isotipo/isotipo_simulabank_sidebar.svg"
-              class="h-10 w-9 transition-opacity duration-200 lg:is-drawer-close:group-hover/sidebar:opacity-0"
+              class="h-10 w-9 transition-opacity duration-200 dark:brightness-200 lg:is-drawer-close:group-hover/sidebar:opacity-0"
               alt="Logo SimulaBank"
             />
 
@@ -93,7 +93,7 @@
 
           <img
             src="images/imagotipo/imagotipo_simulabank_sidebar.svg"
-            class="h-[15px] pl-2 is-drawer-close:hidden"
+            class="h-[15px] pl-2 dark:brightness-200 is-drawer-close:hidden"
             alt="SimulaBank"
           />
 
@@ -106,7 +106,7 @@
           >
             <label
               for="my-drawer"
-              class="drawer-button btn btn-circle btn-ghost focus:ring-0 focus:outline-none"
+              class="drawer-button btn btn-circle btn-ghost focus:ring-0 focus:outline-none dark:hover:bg-gray-800"
               tabindex="0"
               role="button"
               aria-label="Ocultar barra lateral"
@@ -123,7 +123,7 @@
           <ul class="nunito-sans-body menu w-full" role="menubar" aria-label="Menú principal">
             <li role="none">
               <button
-                class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+                class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Inicio'"
                 [matTooltipDisabled]="!isDrawerClosed"
                 matTooltipPosition="right"
@@ -133,11 +133,11 @@
                 aria-label="Ir a Inicio"
               >
                 <span
-                  class="icon-[hugeicons--home-12] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                  class="icon-[hugeicons--home-12] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                   aria-hidden="true"
                 ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Inicio
                 </span>
@@ -146,7 +146,7 @@
 
             <li role="none">
               <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Simulación'"
                 [matTooltipDisabled]="!isDrawerClosed"
                 matTooltipPosition="right"
@@ -156,11 +156,11 @@
                 aria-label="Ir a Simulación"
               >
                 <span
-                  class="icon-[hugeicons--vr-glasses] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                  class="icon-[hugeicons--vr-glasses] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                   aria-hidden="true"
                 ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Simulación
                 </span>
@@ -169,7 +169,7 @@
 
             <li role="none">
               <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Mi Personal'"
                 [matTooltipDisabled]="!isDrawerClosed"
                 matTooltipPosition="right"
@@ -179,11 +179,11 @@
                 aria-label="Ir a Mi Personal"
               >
                 <span
-                  class="icon-[hugeicons--user-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                  class="icon-[hugeicons--user-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                   aria-hidden="true"
                 ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Mi Personal
                 </span>
@@ -192,7 +192,7 @@
 
             <li role="none">
               <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Mi Sala'"
                 [matTooltipDisabled]="!isDrawerClosed"
                 matTooltipPosition="right"
@@ -202,11 +202,11 @@
                 aria-label="Ir a Mi Sala"
               >
                 <span
-                  class="icon-[hugeicons--user-group-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                  class="icon-[hugeicons--user-group-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                   aria-hidden="true"
                 ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Mi Sala
                 </span>
@@ -215,7 +215,7 @@
 
             <li role="none">
               <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Políticas'"
                 [matTooltipDisabled]="!isDrawerClosed"
                 matTooltipPosition="right"
@@ -225,11 +225,11 @@
                 aria-label="Ir a Políticas"
               >
                 <span
-                  class="icon-[hugeicons--bank] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                  class="icon-[hugeicons--bank] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                   aria-hidden="true"
                 ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Políticas
                 </span>
@@ -238,7 +238,7 @@
 
             <li role="none">
               <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Información'"
                 [matTooltipDisabled]="!isDrawerClosed"
                 matTooltipPosition="right"
@@ -248,11 +248,11 @@
                 aria-label="Ir a Información"
               >
                 <span
-                  class="icon-[hugeicons--document-validation] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                  class="icon-[hugeicons--document-validation] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                   aria-hidden="true"
                 ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Información
                 </span>
@@ -261,7 +261,7 @@
 
             <li role="none">
               <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Mis Logros'"
                 [matTooltipDisabled]="!isDrawerClosed"
                 matTooltipPosition="right"
@@ -271,11 +271,11 @@
                 aria-label="Ir a Mis Logros"
               >
                 <span
-                  class="icon-[hugeicons--award-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                  class="icon-[hugeicons--award-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                   aria-hidden="true"
                 ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Mis Logros
                 </span>
@@ -286,15 +286,19 @@
 
         <!-- Menú de Usuario y Configuración -->
         <ul
-          class="nunito-sans-body menu w-full shrink-0 border-t-2 border-t-[#E7E9EB] bg-white"
+          class="nunito-sans-body menu w-full shrink-0 border-t-2 border-t-[#E7E9EB] bg-white dark:border-t-gray-700 dark:bg-gray-900"
           role="menubar"
           aria-label="Menú de usuario"
         >
           <!-- Perfil de Usuario -->
-          <div class="relative bg-white">
-            <div class="group flex h-18 w-full items-center justify-start bg-white">
+          <div class="relative bg-white dark:bg-gray-900">
+            <div
+              class="group flex h-18 w-full items-center justify-start bg-white dark:bg-gray-900"
+            >
               <div class="avatar ml-[5px]">
-                <div class="w-10 rounded-full">
+                <div
+                  class="w-10 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
+                >
                   <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
                 </div>
               </div>
@@ -302,12 +306,14 @@
                 class="ml-4 w-full animate-fade-right animate-duration-150 is-drawer-close:hidden"
               >
                 <p
-                  class="max-w-[130px] truncate font-bold text-[#566577]"
+                  class="max-w-[130px] truncate font-bold text-[#566577] dark:text-gray-200"
                   title="Juan David Avila Gutierrez"
                 >
                   Juan David Avila Gutierrez
                 </p>
-                <span class="badge bg-[#10b95c] font-bold text-white">Aprendiz</span>
+                <span class="badge bg-[#10b95c] font-bold text-white dark:bg-green-600"
+                  >Aprendiz</span
+                >
               </span>
             </div>
           </div>
@@ -315,7 +321,7 @@
           <li role="none">
             <button
               (click)="toggleTheme()"
-              class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+              class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
               [matTooltip]="currentTheme === 'light' ? 'Modo Claro' : 'Modo Oscuro'"
               [matTooltipDisabled]="!isDrawerClosed"
               matTooltipPosition="right"
@@ -327,16 +333,16 @@
             >
               <span
                 *ngIf="currentTheme === 'light'"
-                class="icon-[hugeicons--sun-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                class="icon-[hugeicons--sun-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                 aria-hidden="true"
               ></span>
               <span
                 *ngIf="currentTheme === 'dark'"
-                class="icon-[hugeicons--moon-02] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                class="icon-[hugeicons--moon-02] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                 aria-hidden="true"
               ></span>
               <span
-                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
               >
                 {{ currentTheme === 'light' ? 'Modo Claro' : 'Modo Oscuro' }}
               </span>
@@ -345,7 +351,7 @@
 
           <li role="none">
             <button
-              class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+              class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
               [matTooltip]="'Configuración'"
               [matTooltipDisabled]="!isDrawerClosed"
               matTooltipPosition="right"
@@ -355,11 +361,11 @@
               aria-label="Ir a Configuración"
             >
               <span
-                class="icon-[hugeicons--settings-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                class="icon-[hugeicons--settings-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                 aria-hidden="true"
               ></span>
               <span
-                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
               >
                 Configuración
               </span>
@@ -368,7 +374,7 @@
 
           <li role="none">
             <button
-              class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF]"
+              class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
               [matTooltip]="'Cerrar sesión'"
               [matTooltipDisabled]="!isDrawerClosed"
               matTooltipPosition="right"
@@ -378,11 +384,11 @@
               aria-label="Cerrar sesión"
             >
               <span
-                class="icon-[hugeicons--logout-square-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3]"
+                class="icon-[hugeicons--logout-square-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
                 aria-hidden="true"
               ></span>
               <span
-                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] is-drawer-close:hidden"
+                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
               >
                 Cerrar sesión
               </span>
