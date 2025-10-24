@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderPlataforma } from '../headers/header-plataforma/header-plataforma';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, HeaderPlataforma, MatTooltipModule],
+  imports: [CommonModule, HeaderPlataforma, MatTooltipModule, RouterLink],
   templateUrl: './sidebar.html',
 })
 export class Sidebar implements OnInit {
