@@ -1,10 +1,26 @@
 import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-configuracion-simulacion',
   standalone: true,
-  imports: [RouterLink],
+  imports: [FormsModule],
   templateUrl: './configuracion-simulacion.html',
 })
-export class ConfiguracionSimulacion {}
+export class ConfiguracionSimulacion {
+
+  datosFormulario = {
+    producto: '',
+    modo: '',
+    destino: '',
+    interaccion: ''
+  };
+
+  enviarFormulario(form: NgForm) {
+    if (form.valid) {
+      console.log('Formulario enviado:', this.datosFormulario);
+    } else {
+      console.log('Formulario inválido');
+    }
+  }
+}
