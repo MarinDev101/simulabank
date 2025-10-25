@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderPlataforma } from '../headers/header-plataforma/header-plataforma';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+import { AuthService } from '@app/core/auth/service/auth';
 
 @Component({
   selector: 'app-sidebar',
@@ -63,5 +64,21 @@ export class Sidebar implements OnInit {
   // MÃ©todo para determinar si mostrar tooltip (solo cuando drawer estÃ¡ cerrado en pantallas grandes)
   shouldShowTooltip(): boolean {
     return this.isDrawerClosed;
+  }
+
+  //LOGIN==================
+  usuario: any;
+
+  // Se inyecta el servicio Authservices y Router
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {
+    this.usuario = this.auth.obtenerUsuario(); // Obtiene el usuario guardado en localStorage
+  }
+
+  cerrarSesion() {
+    this.auth.cerrarSesion();
+    this.router.navigate(['/login']); // Redirige al login al cerrar sesión
   }
 }

@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth/auth-guard';
+import { roleGuard } from './guards/role/role-guard';
+import { adminGuard } from './guards/admin/admin-guard';
 
 export const routes: Routes = [
   // ============================================
@@ -6,7 +9,11 @@ export const routes: Routes = [
   // ============================================
   {
     path: '',
+    redirectTo: 'inicio',
     pathMatch: 'full',
+  },
+  {
+    path: 'inicio',
     loadComponent: () => import('./pages/pagina/inicio/inicio').then((m) => m.Inicio),
     title: 'Inicio',
   },
@@ -153,22 +160,6 @@ export const routes: Routes = [
             (m) => m.InicioAdministrador
           ),
         title: 'Inicio - Administrador',
-      },
-      {
-        path: 'informacion-plataforma',
-        loadComponent: () =>
-          import('./pages/aprendiz-instructor/informacion-plataforma/informacion-plataforma').then(
-            (m) => m.InformacionPlataforma
-          ),
-        title: 'Información de la plataforma',
-      },
-      {
-        path: 'politicas-plataforma',
-        loadComponent: () =>
-          import('./pages/aprendiz-instructor/politicas-plataforma/politicas-plataforma').then(
-            (m) => m.PoliticasPlataforma
-          ),
-        title: 'Políticas de la plataforma',
       },
     ],
   },

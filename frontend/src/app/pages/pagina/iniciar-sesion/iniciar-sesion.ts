@@ -1,35 +1,44 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ReturnButton } from '@app/components/return-button/return-button';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/core/auth/service/auth';
 
 @Component({
   selector: 'app-iniciar-sesion',
   standalone: true,
-  imports: [ReactiveFormsModule, ReturnButton],
+  imports: [CommonModule, FormsModule, ReturnButton],
   templateUrl: './iniciar-sesion.html',
 })
 export class IniciarSesion {
-  loginForm: FormGroup;
-  showPassword = false;
+  correo = '';
+  clave = '';
 
-  constructor(private fb: FormBuilder) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  // Funcion encargada de iniciar sesion
+  iniciarSesion() {
+    // Se llama al servicio para utilziar su funcionalidad (Ctrl + click en iniciarSesion)
+    this.authService.iniciarSesion(this.correo, this.clave).subscribe({
+      // El next sirve para manejar las respuestas exitosas de la funcion
+      next: () => {
+        // Se obtiene el usuario logueado
+        const usuario = this.authService.obtenerUsuario();
+
+        // Aquí decides a dónde va el usuario
+        if (usuario.rol === 'Administrador') {
+          this.router.navigate(['/usuarios']); // panel admin
+        } else {
+          this.router.navigate(['/inicio']); // página normal
+        }
+      },
+      error: (err) => {
+        alert('Credenciales incorrectas');
+      },
     });
-  }
-
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
-  }
-
-  onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
-
-    const { email, password } = this.loginForm.value;
-    console.log('Iniciando sesión con:', email, password);
   }
 }
