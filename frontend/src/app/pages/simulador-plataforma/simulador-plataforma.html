@@ -1,5 +1,5 @@
-<div class="flex gap-8 m-8">
-  <div class="flex flex-col rounded-md gap-8">
+<div class="flex flex-col lg:flex-row gap-8 p-8">
+  <div class="w-full lg:w-1/2 flex flex-col rounded-md gap-8">
     <article class="rounded-md border-2 border-elegant-300 bg-white">
       <div class="flex justify-between items-center p-4 border-b-2 border-elegant-300">
         <div class="flex items-center gap-2">
@@ -25,9 +25,9 @@
       <p class=" p-4 h-40">Todas las recomendaciones de la IA</p>
     </article>
 
-    <div class="flex gap-8">
+    <div class="flex flex-col md:flex-row gap-8">
       <!-- ARTÍCULO IZQUIERDA -->
-      <article class="w-[60%] border-2 border-elegant-300 rounded-md bg-white flex flex-col">
+      <article class="w-full md:w-[60%] border-2 border-elegant-300 rounded-md bg-white flex flex-col h-[550px]">
         <!-- Encabezado -->
         <p
           class="text-center border-b-2 border-b-elegant-300 text-[20px] font-medium p-4 h-16 flex items-center justify-center">
@@ -36,12 +36,16 @@
 
         <!-- Imagen y Nombre -->
         <div class="flex flex-col items-center gap-2 border-b-2 border-b-elegant-300 p-4 h-40 justify-center">
-          <div class="w-[100px] h-[100px] bg-amber-400 rounded-full"></div>
+          <div class="avatar">
+            <div class="ring-primary ring-offset-base-100 w-24 rounded-full ring-2 ring-offset-2">
+              <img src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp" />
+            </div>
+          </div>
           <p class="text-base font-medium">Sebastian Marin</p>
         </div>
 
         <!-- Lista de información -->
-        <ul class="p-4 flex-1 space-y-3">
+        <ul class="p-4 flex-1 space-y-3 overflow-y-auto">
           <li class="flex gap-4 items-center">
             <div class="bg-elegant-300 w-4 h-4 rounded-full shrink-0"></div>
             <p>Sebastián Marín, de 35 años, administrador de empresas, acaba de recibir una liquidación laboral por
@@ -66,7 +70,7 @@
       </article>
 
       <!-- ARTÍCULO DERECHA -->
-      <article class="w-[40%] border-2 border-elegant-300 rounded-md bg-white flex flex-col">
+      <article class="w-full md:w-[40%] border-2 border-elegant-300 rounded-md bg-white flex flex-col h-[550px]">
         <!-- Encabezado -->
         <p
           class="text-center border-b-2 border-b-elegant-300 text-[20px] font-medium p-4 h-16 flex items-center justify-center">
@@ -80,7 +84,7 @@
         </div>
 
         <!-- Área para contenido adicional -->
-        <div class="p-4 flex flex-col gap-2 flex-1">
+        <div class="p-4 flex flex-col gap-2 flex-1 overflow-y-auto">
           <p>Producto:</p>
           <select class="select select-lg">
             <option disabled selected>Large</option>
@@ -107,16 +111,21 @@
     </div>
   </div>
 
-  <div class="flex flex-col gap-8 rounded-md">
-    <article class="border-2 border-elegant-300 rounded-md bg-white">
-      <div class="flex justify-between border-b-2 border-elegant-300 rounded-t-md p-4">
-        <div class="flex gap-2">
-          <p>asd</p>
-          Cliente: Sebastian Marín
+  <div class="w-full lg:w-1/2 flex flex-col gap-8 rounded-md">
+    <article class="border-2 border-elegant-300 rounded-md bg-white flex flex-col h-[650px]">
+      <div class="flex items-center justify-between border-b-2 border-elegant-300 rounded-t-md p-4">
+        <div class="flex gap-3 items-center">
+          <div class="avatar ml-[5px]">
+            <div
+              class="w-10 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
+              <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+            </div>
+          </div>
+          <p>Cliente: Sebastian Marín</p>
         </div>
         <p>Asesoría</p>
       </div>
-      <div class="">
+      <div class="flex-1 overflow-y-auto">
         <div class="divider pr-15 pl-15">1 Etapa</div>
         <article class="p-4">
           <div class="chat chat-start">
@@ -173,7 +182,7 @@
         </article>
       </div>
     </article>
-    <article class="border-2 border-elegant-300 rounded-md bg-white">
+    <article class="h-[200px] border-2 border-elegant-300 rounded-md bg-white flex flex-col">
       <div class="flex justify-between p-2 border-b-2 border-elegant-300 bg-white">
         <p class="p-2 rounded-md w-85 bg-[#EEF2FF] text-[#07457E]"><strong>Indicación: </strong>Ofrecele los beneficios
           al cliente</p>
@@ -187,7 +196,7 @@
           </button>
         </div>
       </div>
-      <div class=" bg-white h-30">
+      <div class="flex-1 bg-white overflow-y-auto">
         <textarea class="w-full h-full p-2 border-0 resize-none outline-none focus:outline-none focus:ring-0" name=""
           id="" placeholder="Asesora aquí..."></textarea>
       </div>
