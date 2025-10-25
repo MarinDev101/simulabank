@@ -1,99 +1,191 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  // Public routes (no sidebar)
+  // ============================================
+  // RUTAS PÚBLICAS (sin autenticación)
+  // ============================================
   {
     path: '',
     pathMatch: 'full',
-    loadComponent: () => import('./pages/inicio/inicio').then((m) => m.Inicio),
+    loadComponent: () => import('./pages/pagina/inicio/inicio').then((m) => m.Inicio),
     title: 'Inicio',
   },
   {
     path: 'iniciar-sesion',
     loadComponent: () =>
-      import('./pages/iniciar-sesion/iniciar-sesion').then((m) => m.IniciarSesion),
+      import('./pages/pagina/iniciar-sesion/iniciar-sesion').then((m) => m.IniciarSesion),
     title: 'Iniciar sesión',
-    canActivate: [],
+  },
+  {
+    path: 'politicas-privacidad',
+    loadComponent: () =>
+      import('./pages/pagina/politicas-privacidad-pagina/politicas-privacidad-pagina').then(
+        (m) => m.PoliticasPrivacidadPagina
+      ),
+    title: 'Políticas de privacidad',
+  },
+  {
+    path: 'terminos-condiciones',
+    loadComponent: () =>
+      import('./pages/pagina/terminos-condiciones-pagina/terminos-condiciones-pagina').then(
+        (m) => m.TerminosCondicionesPagina
+      ),
+    title: 'Términos y condiciones',
   },
 
-  // Platform routes that should keep the sidebar: use a layout component with children
+  // ============================================
+  // RUTAS DE APRENDIZ (con layout y sidebar)
+  // ============================================
   {
-    path: '',
+    path: 'aprendiz',
     loadComponent: () =>
       import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
+    canActivate: [], // [authGuard, roleGuard], data: { roles: ['aprendiz'] }
+    data: { role: 'aprendiz' },
     children: [
       {
-        path: 'inicio-aprendiz',
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
         loadComponent: () =>
-          import('./pages/inicio-aprendiz/inicio-aprendiz').then((m) => m.InicioAprendiz),
-        title: 'Inicio aprendiz',
-        canActivate: [],
+          import('./pages/aprendiz/inicio-aprendiz/inicio-aprendiz').then((m) => m.InicioAprendiz),
+        title: 'Inicio - Aprendiz',
       },
       {
         path: 'configuracion-simulacion',
         loadComponent: () =>
-          import('./pages/configuracion-simulacion/configuracion-simulacion').then(
+          import('./pages/aprendiz/configuracion-simulacion/configuracion-simulacion').then(
             (m) => m.ConfiguracionSimulacion
           ),
-        title: 'Configuracion simulacion',
-        canActivate: [],
+        title: 'Configuración de simulación',
+      },
+      {
+        path: 'simulador',
+        loadComponent: () =>
+          import('./pages/aprendiz/simulador-plataforma/simulador-plataforma').then(
+            (m) => m.SimuladorPlataforma
+          ),
+        title: 'Simulador',
       },
       {
         path: 'informacion-plataforma',
         loadComponent: () =>
-          import('./pages/informacion-plataforma/informacion-plataforma').then(
+          import('./pages/aprendiz-instructor/informacion-plataforma/informacion-plataforma').then(
             (m) => m.InformacionPlataforma
           ),
-        title: 'Informacion plataforma',
-        canActivate: [],
+        title: 'Información de la plataforma',
       },
       {
         path: 'politicas-plataforma',
         loadComponent: () =>
-          import('./pages/politicas-plataforma/politicas-plataforma').then(
+          import('./pages/aprendiz-instructor/politicas-plataforma/politicas-plataforma').then(
             (m) => m.PoliticasPlataforma
           ),
-        title: 'Politicas plataforma',
-        canActivate: [],
-      },
-      {
-        path: 'simulador-plataforma',
-        loadComponent: () =>
-          import('./pages/simulador-plataforma/simulador-plataforma').then(
-            (m) => m.SimuladorPlataforma
-          ),
-        title: 'Simulador plataforma',
-        canActivate: [],
-      },
-      {
-        path: 'products',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./pages/products/product-list/product-list').then((m) => m.ProductList),
-            title: 'Productos',
-          },
-          {
-            path: ':id',
-            loadComponent: () =>
-              import('./pages/products/product-detail/product-detail').then((m) => m.ProductDetail),
-            title: 'Detalle del producto',
-          },
-        ],
-      },
-      {
-        path: 'mantenimiento',
-        loadComponent: () =>
-          import('./shared/pages/maintenance/maintenance').then((m) => m.Maintenance),
-        title: 'En mantenimiento',
-      },
-      {
-        path: '**',
-        loadComponent: () =>
-          import('./shared/pages/not-found-error/not-found-error').then((m) => m.NotFoundError),
-        title: 'Página no encontrada',
+        title: 'Políticas de la plataforma',
       },
     ],
+  },
+
+  // ============================================
+  // RUTAS DE INSTRUCTOR (con layout y sidebar)
+  // ============================================
+  {
+    path: 'instructor',
+    loadComponent: () =>
+      import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
+    canActivate: [], // [authGuard, roleGuard], data: { roles: ['instructor'] }
+    data: { role: 'instructor' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
+        loadComponent: () =>
+          import('./pages/instructor/inicio-instructor/inicio-instructor').then(
+            (m) => m.InicioInstructor
+          ),
+        title: 'Inicio - Instructor',
+      },
+      {
+        path: 'informacion-plataforma',
+        loadComponent: () =>
+          import('./pages/aprendiz-instructor/informacion-plataforma/informacion-plataforma').then(
+            (m) => m.InformacionPlataforma
+          ),
+        title: 'Información de la plataforma',
+      },
+      {
+        path: 'politicas-plataforma',
+        loadComponent: () =>
+          import('./pages/aprendiz-instructor/politicas-plataforma/politicas-plataforma').then(
+            (m) => m.PoliticasPlataforma
+          ),
+        title: 'Políticas de la plataforma',
+      },
+    ],
+  },
+
+  // ============================================
+  // RUTAS DE ADMINISTRADOR (con layout y sidebar)
+  // ============================================
+  {
+    path: 'administrador',
+    loadComponent: () =>
+      import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
+    canActivate: [], // [authGuard, roleGuard], data: { roles: ['administrador'] }
+    data: { role: 'administrador' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'inicio',
+        pathMatch: 'full',
+      },
+      {
+        path: 'inicio',
+        loadComponent: () =>
+          import('./pages/administrador/inicio-administrador/inicio-administrador').then(
+            (m) => m.InicioAdministrador
+          ),
+        title: 'Inicio - Administrador',
+      },
+      {
+        path: 'informacion-plataforma',
+        loadComponent: () =>
+          import('./pages/aprendiz-instructor/informacion-plataforma/informacion-plataforma').then(
+            (m) => m.InformacionPlataforma
+          ),
+        title: 'Información de la plataforma',
+      },
+      {
+        path: 'politicas-plataforma',
+        loadComponent: () =>
+          import('./pages/aprendiz-instructor/politicas-plataforma/politicas-plataforma').then(
+            (m) => m.PoliticasPlataforma
+          ),
+        title: 'Políticas de la plataforma',
+      },
+    ],
+  },
+
+  // ============================================
+  // RUTAS ESPECIALES
+  // ============================================
+  {
+    path: 'mantenimiento',
+    loadComponent: () =>
+      import('./shared/pages/maintenance/maintenance').then((m) => m.Maintenance),
+    title: 'En mantenimiento',
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./shared/pages/not-found-error/not-found-error').then((m) => m.NotFoundError),
+    title: 'Página no encontrada',
   },
 ];
