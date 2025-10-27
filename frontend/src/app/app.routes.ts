@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth/auth-guard';
+import { authGuard } from './core/auth/guard/auth-guard';
 import { roleGuard } from './guards/role/role-guard';
 import { adminGuard } from './guards/admin/admin-guard';
+import { publicGuard } from './guards/public/public-guard';
 
 export const routes: Routes = [
   // ============================================
@@ -16,12 +17,14 @@ export const routes: Routes = [
     path: 'inicio',
     loadComponent: () => import('./pages/pagina/inicio/inicio').then((m) => m.Inicio),
     title: 'Inicio',
+    canActivate: [publicGuard],
   },
   {
     path: 'iniciar-sesion',
     loadComponent: () =>
       import('./pages/pagina/iniciar-sesion/iniciar-sesion').then((m) => m.IniciarSesion),
     title: 'Iniciar sesión',
+    canActivate: [publicGuard],
   },
   {
     path: 'politicas-privacidad',
@@ -30,6 +33,7 @@ export const routes: Routes = [
         (m) => m.PoliticasPrivacidadPagina
       ),
     title: 'Políticas de privacidad',
+    canActivate: [publicGuard],
   },
   {
     path: 'terminos-condiciones',
@@ -38,6 +42,7 @@ export const routes: Routes = [
         (m) => m.TerminosCondicionesPagina
       ),
     title: 'Términos y condiciones',
+    canActivate: [publicGuard],
   },
 
   // ============================================
@@ -47,7 +52,7 @@ export const routes: Routes = [
     path: 'aprendiz',
     loadComponent: () =>
       import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
-    canActivate: [], // [authGuard, roleGuard], data: { roles: ['aprendiz'] }
+    canActivate: [authGuard, roleGuard],
     data: { role: 'aprendiz' },
     children: [
       {
@@ -103,7 +108,7 @@ export const routes: Routes = [
     path: 'instructor',
     loadComponent: () =>
       import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
-    canActivate: [], // [authGuard, roleGuard], data: { roles: ['instructor'] }
+    canActivate: [authGuard, roleGuard],
     data: { role: 'instructor' },
     children: [
       {
@@ -145,7 +150,7 @@ export const routes: Routes = [
     path: 'administrador',
     loadComponent: () =>
       import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
-    canActivate: [], // [authGuard, roleGuard], data: { roles: ['administrador'] }
+    canActivate: [authGuard, adminGuard],
     data: { role: 'administrador' },
     children: [
       {

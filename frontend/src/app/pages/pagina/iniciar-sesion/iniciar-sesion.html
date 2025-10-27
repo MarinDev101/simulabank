@@ -20,6 +20,17 @@
           <p class="text-center text-base text-gray-600">
             ¡Bienvenido de nuevo! Ingresa tus credenciales para acceder a tu cuenta
           </p>
+
+          <!-- Mensaje de error -->
+          @if (errorMessage) {
+          <div class="rounded-lg border border-red-200 bg-red-50 p-4">
+            <div class="flex items-start">
+              <span class="mt-0.5 mr-3 icon-[hugeicons--alert-circle] text-xl text-red-600"></span>
+              <p class="text-sm text-red-800">{{ errorMessage }}</p>
+            </div>
+          </div>
+          }
+
           <!-- Campo de correo -->
           <label class="floating-label block">
             <span class="text-base text-gray-600">Correo electrónico</span>
@@ -27,10 +38,16 @@
               type="email"
               formControlName="email"
               placeholder="mail@site.com"
-              required
               autocomplete="username"
+              [class.border-red-500]="emailInvalid"
               class="input input-lg mt-2 w-full border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
+            @if (emailInvalid) {
+            <span class="mt-1 block text-sm text-red-600">
+              @if (loginForm.get('email')?.hasError('required')) { El correo es requerido } @if
+              (loginForm.get('email')?.hasError('email')) { Ingresa un correo válido }
+            </span>
+            }
           </label>
 
           <!-- Campo de contraseña -->
@@ -41,10 +58,9 @@
                 [type]="showPassword ? 'text' : 'password'"
                 formControlName="password"
                 placeholder="••••••••"
-                required
-                minlength="8"
                 id="passwordInput"
                 autocomplete="current-password"
+                [class.border-red-500]="passwordInvalid"
                 class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
 
@@ -62,17 +78,31 @@
                 }
               </button>
             </div>
+            @if (passwordInvalid) {
+            <span class="mt-1 block text-sm text-red-600">
+              @if (loginForm.get('password')?.hasError('required')) { La contraseña es requerida }
+              @if (loginForm.get('password')?.hasError('minlength')) { Mínimo 8 caracteres }
+            </span>
+            }
           </div>
 
           <div class="flex items-center justify-between text-base text-gray-600">
-            <label class="flex items-center gap-2">
-              <input type="checkbox" class="checkbox checkbox-md" />
+            <label class="flex cursor-pointer items-center gap-2">
+              <input type="checkbox" formControlName="remember" class="checkbox checkbox-md" />
               <span>Recordarme</span>
             </label>
             <a href="#" class="text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
           </div>
 
-          <button type="submit" class="btn btn-block bg-blue-600 text-white">Ingresar</button>
+          <button
+            type="submit"
+            class="btn btn-block bg-blue-600 text-white hover:bg-blue-700"
+            [disabled]="isLoading"
+          >
+            @if (isLoading) {
+            <span class="loading loading-sm loading-spinner"></span>
+            Ingresando... } @else { Ingresar }
+          </button>
 
           <p class="text-center text-base text-gray-600">
             ¿No tienes una cuenta?
@@ -84,7 +114,11 @@
 
     <!-- Mitad derecha -->
     <div class="flex w-1/2 items-start justify-end bg-green-200 bg-olas_azules p-10">
-      <img src="images/imagotipo/imagotipo_simulabank_claro.svg" class="h-auto w-[450px]" alt="" />
+      <img
+        src="images/imagotipo/imagotipo_simulabank_claro.svg"
+        class="h-auto w-[450px]"
+        alt="SimulaBank"
+      />
     </div>
   </main>
 </div>
