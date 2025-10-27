@@ -27,6 +27,13 @@ export const routes: Routes = [
     canActivate: [publicGuard],
   },
   {
+    path: 'crear-cuenta',
+    loadComponent: () =>
+      import('./pages/pagina/crear-cuenta/crear-cuenta').then((m) => m.CrearCuenta),
+    title: 'Crear cuenta',
+    canActivate: [publicGuard],
+  },
+  {
     path: 'politicas-privacidad',
     loadComponent: () =>
       import('./pages/pagina/politicas-privacidad-pagina/politicas-privacidad-pagina').then(
