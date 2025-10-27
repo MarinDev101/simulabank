@@ -19,7 +19,7 @@ const pool = mysql.createPool({
   queueLimit: 0,
   // Timeouts: ayuda a que las operaciones con la BD fallen rápido en lugar de quedarse "colgadas"
   connectTimeout: 10000, // ms para establecer conexión
-  acquireTimeout: 10000, // ms para obtener una conexión del pool
+  // acquireTimeout: 10000, // ms para obtener una conexión del pool
 });
 
 // =========================================================

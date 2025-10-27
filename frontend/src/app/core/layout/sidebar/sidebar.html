@@ -121,8 +121,10 @@
         <!-- Menú de Navegación Principal -->
         <div class="w-full flex-1">
           <ul class="nunito-sans-body menu w-full" role="menubar" aria-label="Menú principal">
+            <!-- Inicio -->
             <li role="none">
               <button
+                [routerLink]="inicioRoute"
                 class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Inicio'"
                 [matTooltipDisabled]="!isDrawerClosed"
@@ -144,9 +146,11 @@
               </button>
             </li>
 
+            <!-- Simulación (solo para aprendices) -->
+            @if (shouldShowMenuItem(['aprendiz'])) {
             <li role="none">
               <button
-                routerLink="/configuracion-simulacion"
+                routerLink="/aprendiz/configuracion-simulacion"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Simulación'"
                 [matTooltipDisabled]="!isDrawerClosed"
@@ -167,7 +171,10 @@
                 </span>
               </button>
             </li>
+            }
 
+            <!-- Mi Personal (solo para aprendices e instructores) -->
+            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
             <li role="none">
               <button
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
@@ -190,7 +197,10 @@
                 </span>
               </button>
             </li>
+            }
 
+            <!-- Mi Sala -->
+            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
             <li role="none">
               <button
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
@@ -213,10 +223,12 @@
                 </span>
               </button>
             </li>
+            }
 
+            <!-- Políticas -->
             <li role="none">
               <button
-                routerLink="/politicas-plataforma"
+                [routerLink]="politicasRoute"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Políticas'"
                 [matTooltipDisabled]="!isDrawerClosed"
@@ -238,9 +250,10 @@
               </button>
             </li>
 
+            <!-- Información -->
             <li role="none">
               <button
-                routerLink="/informacion-plataforma"
+                [routerLink]="informacionRoute"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Información'"
                 [matTooltipDisabled]="!isDrawerClosed"
@@ -262,6 +275,8 @@
               </button>
             </li>
 
+            <!-- Mis Logros (solo para aprendices) -->
+            @if (shouldShowMenuItem(['aprendiz'])) {
             <li role="none">
               <button
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
@@ -284,6 +299,7 @@
                 </span>
               </button>
             </li>
+            }
           </ul>
         </div>
 
@@ -302,7 +318,10 @@
                 <div
                   class="w-10 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
                 >
-                  <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+                  <img
+                    [src]="usuario?.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
+                    [alt]="nombreCompleto"
+                  />
                 </div>
               </div>
               <span
@@ -310,17 +329,18 @@
               >
                 <p
                   class="max-w-[130px] truncate font-bold text-[#566577] dark:text-gray-200"
-                  title="Juan David Avila Gutierrez"
+                  [title]="nombreCompleto"
                 >
-                  Juan David Avila Gutierrez
+                  {{ nombreCompleto }}
                 </p>
-                <span class="badge bg-[#10b95c] font-bold text-white dark:bg-green-600"
-                  >Aprendiz</span
-                >
+                <span class="badge font-bold text-white" [ngClass]="rolBadge.color">
+                  {{ rolBadge.text }}
+                </span>
               </span>
             </div>
           </div>
 
+          <!-- Cambiar tema -->
           <li role="none">
             <button
               (click)="toggleTheme()"
@@ -352,6 +372,7 @@
             </button>
           </li>
 
+          <!-- Configuración -->
           <li role="none">
             <button
               class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
@@ -375,8 +396,10 @@
             </button>
           </li>
 
+          <!-- Cerrar sesión -->
           <li role="none">
             <button
+              (click)="cerrarSesion()"
               class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
               [matTooltip]="'Cerrar sesión'"
               [matTooltipDisabled]="!isDrawerClosed"
