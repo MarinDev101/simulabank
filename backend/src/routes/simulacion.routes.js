@@ -1,35 +1,96 @@
 // const express = require('express');
-// const { iniciarChat, chatMensaje } = require('../controllers/geminiChat.controller');
+// const asyncHandler = require('../utils/asyncHandler');
+// const simulacionController = require('../controllers/simulacion.controller');
 
-// const router = express.Router();
+// // Middlewares
+// const { authenticateJWT } = require('../middlewares/jwt.middleware');
 
-// router.post('/gemini/chat/iniciar', iniciarChat);
-// router.post('/gemini/chat/mensaje', chatMensaje);
+// function crearSimulacionRouter() {
+//   const router = express.Router();
 
-// module.exports = router;
+//   // Rutas protegidas
+//   router.post(
+//     '/iniciar',
+//     authenticateJWT,
+//     asyncHandler(simulacionController.iniciarSimulacion.bind(simulacionController))
+//   );
+//   router.post(
+//     '/mensaje',
+//     authenticateJWT,
+//     asyncHandler(simulacionController.enviarMensaje.bind(simulacionController))
+//   );
+//   router.post(
+//     '/finalizar',
+//     authenticateJWT,
+//     asyncHandler(simulacionController.finalizarSimulacion.bind(simulacionController))
+//   );
+
+//   return router;
+// }
+
+// module.exports = crearSimulacionRouter;
+
+// ============================================
+// ARCHIVO: routes/simulacion.routes.js
+// ============================================
 
 const express = require('express');
-const {
-  iniciarSimulacion,
-  enviarMensaje,
-  obtenerEstado,
-  finalizarSimulacion,
-} = require('../controllers/simulacion.controller');
+const asyncHandler = require('../utils/asyncHandler');
+const simulacionController = require('../controllers/simulacion.controller');
 
-module.exports = () => {
+// Middlewares
+const { authenticateJWT } = require('../middlewares/jwt.middleware');
+
+/**
+ * Función que crea y retorna el router de simulación
+ * Todas las rutas están protegidas con autenticación JWT
+ */
+function crearSimulacionRouter() {
   const router = express.Router();
 
-  // Iniciar una nueva simulación
-  router.post('/iniciar', iniciarSimulacion);
+  /**
+   * POST /api/simulacion/iniciar
+   * Inicia una nueva simulación de asesoría bancaria
+   *
+   * Headers: Authorization: Bearer <token>
+   * Body: { configuracion: { producto, modo, destino, interaccion } }
+   * Response: { ok, cliente, etapaActual, estado, mensajeCliente, mensaje }
+   */
+  router.post('/iniciar', authenticateJWT, asyncHandler(simulacionController.iniciarSimulacion));
 
-  // Enviar mensaje del asesor y recibir respuesta del cliente
-  router.post('/mensaje', enviarMensaje);
+  /**
+   * POST /api/simulacion/mensaje
+   * Envía un mensaje del asesor y recibe respuesta del cliente IA
+   *
+   * Headers: Authorization: Bearer <token>
+   * Body: { mensaje: "texto del mensaje" }
+   * Response: { ok, mensajeCliente, etapaCambiada, etapaActual, estado, ... }
+   */
+  router.post('/mensaje', authenticateJWT, asyncHandler(simulacionController.enviarMensaje));
 
-  // Obtener estado actual de la simulación
-  router.get('/estado/:userId', obtenerEstado);
+  /**
+   * GET /api/simulacion/estado
+   * Obtiene el estado actual de la simulación
+   *
+   * Headers: Authorization: Bearer <token>
+   * Response: { ok, estado, cliente, etapaActual, historialConversacion, ... }
+   */
+  router.get('/estado', authenticateJWT, asyncHandler(simulacionController.obtenerEstado));
 
-  // Finalizar simulación y obtener resumen
-  router.post('/finalizar', finalizarSimulacion);
+  /**
+   * POST /api/simulacion/finalizar
+   * Finaliza la simulación actual y obtiene resumen
+   *
+   * Headers: Authorization: Bearer <token>
+   * Response: { ok, mensaje, duracion, etapasCompletadas, historial, ... }
+   */
+  router.post(
+    '/finalizar',
+    authenticateJWT,
+    asyncHandler(simulacionController.finalizarSimulacion)
+  );
 
   return router;
-};
+}
+
+module.exports = crearSimulacionRouter;

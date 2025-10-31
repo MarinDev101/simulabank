@@ -10,17 +10,22 @@
 
 // module.exports = { geminiModel };
 
-require('dotenv').config();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const dotenvSafe = require('dotenv-safe');
+const { GoogleGenAI } = require('@google/genai');
+
+dotenvSafe.config({ allowEmptyValues: true });
 
 if (!process.env.GEMINI_API_KEY) {
   throw new Error('GEMINI_API_KEY no está definida en el archivo .env');
 }
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Inicializar el cliente de Google GenAI
+const genAI = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 const geminiConfig = {
-  model: process.env.GEMINI_CHAT_MODEL || 'gemini-1.5-pro',
+  model: process.env.GEMINI_CHAT_MODEL || 'gemini-2.0-flash-exp',
   temperature: parseFloat(process.env.GEMINI_TEMPERATURE) || 0.7,
   maxOutputTokens: parseInt(process.env.GEMINI_MAX_TOKENS) || 2048,
 };
