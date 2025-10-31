@@ -18,18 +18,6 @@ const isDevelopment = ENV === 'development';
 const isProduction = ENV === 'production';
 
 // =========================================================
-// Valores por defecto centralizados
-// =========================================================
-const DEFAULTS = {
-  port: 3000,
-  dbPort: 3306,
-  jwtExpires: '2h',
-  jwtRefreshExpires: '7d',
-  corsOrigins: ['*'],
-  logLevel: 'info',
-};
-
-// =========================================================
 // Helper para parsear listas separadas por comas
 // =========================================================
 const parseList = (value, fallback = []) => {
@@ -53,13 +41,13 @@ const config = {
 
   // Servidor
   server: {
-    port: Number(process.env.PORT) || DEFAULTS.port,
+    port: Number(process.env.PORT),
   },
 
   // Base de datos MySQL
   db: {
     host: process.env.DATABASE_HOST,
-    port: Number(process.env.DATABASE_PORT) || DEFAULTS.dbPort,
+    port: Number(process.env.DATABASE_PORT),
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     name: process.env.DATABASE_NAME,
@@ -67,38 +55,68 @@ const config = {
 
   // Autenticación (JWT)
   jwt: {
-    secret: process.env.JWT_SECRET || '',
-    expiresIn: process.env.JWT_EXPIRES || DEFAULTS.jwtExpires,
-    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES || DEFAULTS.jwtRefreshExpires,
+    secret: process.env.JWT_SECRET,
+    expiresIn: process.env.JWT_EXPIRES,
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES,
   },
 
   // CORS
   cors: {
-    origins: parseList(process.env.CORS_ORIGINS, DEFAULTS.corsOrigins),
+    origins: parseList(process.env.CORS_ORIGINS),
   },
 
   // Logging
   log: {
-    level: process.env.LOG_LEVEL || DEFAULTS.logLevel,
+    level: process.env.LOG_LEVEL,
   },
 
-  // Google AI / Gemini (opcional)
-  google: {
-    apiKey: process.env.GOOGLE_API_KEY || null,
-    geminiModel: process.env.GOOGLE_GEMINI_MODEL || null,
+  // Gemini API
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY,
+    model: process.env.GEMINI_CHAT_MODEL,
+    temperature: Number(process.env.GEMINI_TEMPERATURE),
+    maxTokens: Number(process.env.GEMINI_MAX_TOKENS),
   },
 
-  // Gmail Bot (opcional)
+  // Gmail Bot
   gmail: {
-    clientId: process.env.CLIENT_ID || null,
-    clientSecret: process.env.CLIENT_SECRET || null,
-    redirectUri: process.env.REDIRECT_URI || null,
-    refreshToken: process.env.REFRESH_TOKEN || null,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    redirectUri: process.env.REDIRECT_URI,
+    refreshToken: process.env.REFRESH_TOKEN,
   },
 };
 
-if (!config.jwt.secret) {
-  console.warn('JWT_SECRET no definido. Usa un valor seguro en producción.');
+// =========================================================
+// Validación de variables requeridas
+// =========================================================
+const requiredEnvVars = [
+  'PORT',
+  'DATABASE_HOST',
+  'DATABASE_PORT',
+  'DATABASE_USER',
+  'DATABASE_PASSWORD',
+  'DATABASE_NAME',
+  'JWT_SECRET',
+  'JWT_EXPIRES',
+  'JWT_REFRESH_EXPIRES',
+  'CORS_ORIGINS',
+  'LOG_LEVEL',
+  'GEMINI_API_KEY',
+  'GEMINI_CHAT_MODEL',
+  'GEMINI_TEMPERATURE',
+  'GEMINI_MAX_TOKENS',
+  // 'CLIENT_ID',
+  // 'CLIENT_SECRET',
+  // 'REDIRECT_URI',
+  // 'REFRESH_TOKEN',
+];
+
+const missingVars = requiredEnvVars.filter((key) => !process.env[key]);
+
+if (missingVars.length > 0) {
+  console.error('Faltan variables de entorno requeridas:\n', missingVars.join('\n'));
+  process.exit(1);
 }
 
 module.exports = config;

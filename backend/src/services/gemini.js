@@ -557,24 +557,24 @@ async function generarEscenarioCliente(nombreProducto) {
   const perfilCliente = generarPerfilPorProducto(nombreProducto);
 
   const prompt = `
-Eres un generador de escenarios de clientes bancarios simulados.
-Devuelve únicamente un objeto JSON con los campos solicitados.
+    Eres un generador de escenarios de clientes bancarios simulados.
+    Devuelve únicamente un objeto JSON con los campos solicitados.
 
-Contexto del banco:
-${JSON.stringify(POLITICAS_BANCO, null, 2)}
+    Contexto del banco:
+    ${JSON.stringify(POLITICAS_BANCO, null, 2)}
 
-Producto:
-${JSON.stringify(producto, null, 2)}
+    Producto:
+    ${JSON.stringify(producto, null, 2)}
 
-Tipo de cliente:
-${JSON.stringify(tipoCliente, null, 2)}
+    Tipo de cliente:
+    ${JSON.stringify(tipoCliente, null, 2)}
 
-Perfil:
-${JSON.stringify(perfilCliente, null, 2)}
+    Perfil:
+    ${JSON.stringify(perfilCliente, null, 2)}
 
-Crea un cliente ficticio coherente con este producto y perfil.
-Incluye nombre, edad, profesión, situacion_actual, motivación, nivel_conocimiento, perfil_riesgo, objetivo y escenario_narrativo.
-`;
+    Crea un cliente ficticio coherente con este producto y perfil.
+    Incluye nombre, edad, profesión, situacion_actual, motivación, nivel_conocimiento, perfil_riesgo, objetivo y escenario_narrativo.
+  `;
 
   const schema = {
     type: 'object',

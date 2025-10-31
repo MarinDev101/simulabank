@@ -1,39 +1,3 @@
-// const express = require('express');
-// const asyncHandler = require('../utils/asyncHandler');
-// const simulacionController = require('../controllers/simulacion.controller');
-
-// // Middlewares
-// const { authenticateJWT } = require('../middlewares/jwt.middleware');
-
-// function crearSimulacionRouter() {
-//   const router = express.Router();
-
-//   // Rutas protegidas
-//   router.post(
-//     '/iniciar',
-//     authenticateJWT,
-//     asyncHandler(simulacionController.iniciarSimulacion.bind(simulacionController))
-//   );
-//   router.post(
-//     '/mensaje',
-//     authenticateJWT,
-//     asyncHandler(simulacionController.enviarMensaje.bind(simulacionController))
-//   );
-//   router.post(
-//     '/finalizar',
-//     authenticateJWT,
-//     asyncHandler(simulacionController.finalizarSimulacion.bind(simulacionController))
-//   );
-
-//   return router;
-// }
-
-// module.exports = crearSimulacionRouter;
-
-// ============================================
-// ARCHIVO: routes/simulacion.routes.js
-// ============================================
-
 const express = require('express');
 const asyncHandler = require('../utils/asyncHandler');
 const simulacionController = require('../controllers/simulacion.controller');
