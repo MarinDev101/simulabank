@@ -3,7 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { jwt: jwtConfig } = require('../config/env.config');
 const tokenService = require('../services/token');
-const { TABLAS, CAMPOS_ID, ESTADOS, ROLES } = require('../constants/auth.constants');
+const {
+  TABLAS,
+  CAMPOS_ID,
+  ESTADOS,
+  ROLES,
+} = require('../constants/informacion-database/auth.constants');
 const { mapUsuarioToDb, mapDbToUsuario } = require('../models/usuario.model');
 
 class AuthController {
