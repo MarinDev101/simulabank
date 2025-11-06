@@ -276,3 +276,16 @@ CREATE TABLE evidencias_salas_vistas_aprendices (
   FOREIGN KEY (id_carpeta_sala_vista_aprendiz) REFERENCES carpetas_salas_vistas_aprendices(id_carpeta_sala_vista_aprendiz)
     ON DELETE SET NULL
 );
+
+CREATE TABLE codigos_verificacion (
+  id_codigo_verificacion INT AUTO_INCREMENT PRIMARY KEY,
+  correo_electronico VARCHAR(255) NOT NULL,
+  codigo VARCHAR(6) NOT NULL,
+  nombres VARCHAR(100) NOT NULL,
+  apellidos VARCHAR(100) NOT NULL,
+  contrasena_hash VARCHAR(255) NOT NULL,
+  intentos INT DEFAULT 0,
+  usado BOOLEAN DEFAULT FALSE,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_expiracion TIMESTAMP NOT NULL
+);
