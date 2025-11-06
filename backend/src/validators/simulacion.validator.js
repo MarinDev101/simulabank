@@ -1,5 +1,6 @@
 const { pool } = require('../config/database.config');
 
+// 🗺️ Mapa de conversión: clave del frontend → nombre en BD
 const MAPA_PRODUCTOS = {
   cuenta_ahorros: 'Cuenta de Ahorros',
   cuenta_corriente: 'Cuenta Corriente',
@@ -16,7 +17,8 @@ const INTERACCIONES_VALIDAS = ['automatico', 'silenciado'];
 
 /**
  * Middleware que valida la solicitud de iniciar simulación.
- * Realiza las mismas comprobaciones que estaban en el controlador.
+ * Valida los datos Y hace el mapeo del producto.
+ * El controlador recibe datos ya procesados y listos para usar.
  */
 async function validarIniciarSimulacion(req, res, next) {
   try {
@@ -66,7 +68,7 @@ async function validarIniciarSimulacion(req, res, next) {
       });
     }
 
-    // Validar producto
+    // ============ VALIDAR Y MAPEAR PRODUCTO ============
     if (!PRODUCTOS_VALIDOS.includes(producto)) {
       return res.status(400).json({
         ok: false,
@@ -76,7 +78,13 @@ async function validarIniciarSimulacion(req, res, next) {
       });
     }
 
-    // Validar modo
+    // ✅ MAPEAR el producto a su nombre en BD
+    const nombreProducto = MAPA_PRODUCTOS[producto];
+
+    // Agregar el nombre mapeado a la configuración para el controlador
+    req.body.configuracion.nombreProducto = nombreProducto;
+
+    // ============ VALIDAR MODO ============
     if (!MODOS_VALIDOS.includes(modo)) {
       return res.status(400).json({
         ok: false,
@@ -86,7 +94,7 @@ async function validarIniciarSimulacion(req, res, next) {
       });
     }
 
-    // Validar destino
+    // ============ VALIDAR DESTINO ============
     if (destino && !DESTINOS_VALIDOS.includes(destino)) {
       return res.status(400).json({
         ok: false,
@@ -96,7 +104,7 @@ async function validarIniciarSimulacion(req, res, next) {
       });
     }
 
-    // Validar interaccion
+    // ============ VALIDAR INTERACCIÓN ============
     if (interaccion && !INTERACCIONES_VALIDAS.includes(interaccion)) {
       return res.status(400).json({
         ok: false,
@@ -106,7 +114,7 @@ async function validarIniciarSimulacion(req, res, next) {
       });
     }
 
-    // ✅ Si todo pasa, continuar al controlador
+    // ✅ Todo validado y mapeado, continuar al controlador
     next();
   } catch (err) {
     console.error('[Validación simulación] Error:', err);
