@@ -45,6 +45,17 @@ function crearAuthRouter() {
     runValidation,
     asyncHandler(authController.logout.bind(authController))
   );
+  router.post(
+    '/registrar-inicio',
+    registerRules(), // Puedes usar las mismas validaciones
+    runValidation,
+    asyncHandler(authController.iniciarRegistro.bind(authController))
+  );
+
+  router.post(
+    '/verificar-codigo',
+    asyncHandler(authController.verificarCodigoRegistro.bind(authController))
+  );
 
   // Rutas protegidas
   router.get(

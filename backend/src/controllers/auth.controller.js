@@ -5,8 +5,156 @@ const { jwt: jwtConfig } = require('../config/env.config');
 const tokenService = require('../services/token');
 const { TABLAS, CAMPOS_ID, ESTADOS, ROLES } = require('../constants/auth.constants');
 const { mapUsuarioToDb, mapDbToUsuario } = require('../models/usuario.model');
+const emailService = require('../services/email');
+const verificacionService = require('../services/verificacion');
 
 class AuthController {
+
+  async iniciarRegistro(req, res) {
+    const { correo, nombres, apellidos, contrasena } = req.body;
+
+    // Validación básica
+    if (!correo || !nombres || !apellidos || !contrasena) {
+      return res.status(400).json({
+        success: false,
+        error: 'Todos los campos son requeridos',
+      });
+    }
+
+    try {
+      // Verificar si el correo ya existe
+      const [existeUsuario] = await pool.query(
+        'SELECT id_usuario FROM usuarios WHERE correo_electronico = ? LIMIT 1',
+        [correo]
+      );
+
+      if (existeUsuario.length > 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Este correo ya está registrado',
+        });
+      }
+
+      // Generar y guardar código
+      const codigo = await verificacionService.guardarCodigoVerificacion(
+        correo,
+        nombres,
+        apellidos,
+        contrasena
+      );
+
+      // Enviar código por email
+      await emailService.enviarCodigoVerificacion(correo, codigo, nombres);
+
+      return res.json({
+        success: true,
+        message: 'Código de verificación enviado al correo',
+        correo: correo,
+      });
+    } catch (error) {
+      console.error('Error en iniciarRegistro:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al procesar el registro. Intenta nuevamente.',
+      });
+    }
+  }
+
+  async verificarCodigoRegistro(req, res) {
+    const { correo, codigo } = req.body;
+
+    if (!correo || !codigo) {
+      return res.status(400).json({
+        success: false,
+        error: 'Correo y código son requeridos',
+      });
+    }
+
+    try {
+      // Verificar el código
+      const datosVerificacion = await verificacionService.verificarCodigo(correo, codigo);
+
+      if (!datosVerificacion) {
+        return res.status(400).json({
+          success: false,
+          error: 'Código inválido o expirado',
+        });
+      }
+
+      // Crear el usuario
+      const nuevoUsuario = {
+        correo_electronico: datosVerificacion.correo_electronico,
+        contrasena: datosVerificacion.contrasena_hash,
+        nombres: datosVerificacion.nombres,
+        apellidos: datosVerificacion.apellidos,
+        fecha_creacion: new Date(),
+        fecha_actualizacion: new Date(),
+        estado: 'activo',
+      };
+
+      const conn = await pool.getConnection();
+      try {
+        await conn.beginTransaction();
+
+        // Insertar usuario
+        const [insertRes] = await conn.query('INSERT INTO usuarios SET ?', nuevoUsuario);
+        const userId = insertRes.insertId;
+
+        // Asignar rol de aprendiz por defecto
+        await conn.query('INSERT INTO aprendices (id_aprendiz) VALUES (?)', [userId]);
+
+        // Marcar código como usado
+        await verificacionService.marcarCodigoUsado(correo, codigo);
+
+        await conn.commit();
+
+        // Generar tokens
+        const token = jwt.sign(
+          { id: userId, correo: nuevoUsuario.correo_electronico, rol: 'aprendiz' },
+          jwtConfig.secret,
+          { expiresIn: jwtConfig.expiresIn }
+        );
+
+        const refreshToken = jwt.sign({ id: userId }, jwtConfig.secret, {
+          expiresIn: jwtConfig.refreshExpiresIn,
+        });
+
+        // Guardar refresh token
+        const meta = {
+          ip: req.ip,
+          userAgent: req.get('User-Agent'),
+        };
+
+        await tokenService.saveRefreshToken(refreshToken, userId, jwtConfig.refreshExpiresIn, meta);
+
+        return res.status(201).json({
+          success: true,
+          message: 'Cuenta creada exitosamente',
+          token,
+          refreshToken,
+          user: {
+            id: userId,
+            correo: nuevoUsuario.correo_electronico,
+            nombres: nuevoUsuario.nombres,
+            apellidos: nuevoUsuario.apellidos,
+            rol: 'aprendiz',
+          },
+        });
+      } catch (err) {
+        await conn.rollback();
+        throw err;
+      } finally {
+        conn.release();
+      }
+    } catch (error) {
+      console.error('Error en verificarCodigoRegistro:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al verificar el código. Intenta nuevamente.',
+      });
+    }
+  }
+
   async registrar(req, res) {
     const { correo, nombres, apellidos, rol = ROLES.APRENDIZ, contrasena } = req.body;
 
