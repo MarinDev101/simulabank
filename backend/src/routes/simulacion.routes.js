@@ -5,6 +5,11 @@ const simulacionController = require('../controllers/simulacion.controller');
 // Middlewares
 const { authenticateJWT } = require('../middlewares/jwt.middleware');
 
+// Validadores
+const {
+  validarIniciarSimulacion
+} = require('../validators/simulacion.validator');
+
 /**
  * Función que crea y retorna el router de simulación
  * Todas las rutas están protegidas con autenticación JWT
@@ -20,7 +25,7 @@ function crearSimulacionRouter() {
    * Body: { configuracion: { producto, modo, destino, interaccion } }
    * Response: { ok, cliente, etapaActual, estado, mensajeCliente, mensaje }
    */
-  router.post('/iniciar', authenticateJWT, asyncHandler(simulacionController.iniciarSimulacion));
+  router.post('/iniciar', authenticateJWT, validarIniciarSimulacion, asyncHandler(simulacionController.iniciarSimulacion));
 
   /**
    * POST /api/simulacion/mensaje

@@ -1,81 +1,129 @@
 const TIPOS_CLIENTES = [
   {
-    tipo: 'Ideal o fiel',
-    actua: 'Compra de forma recurrente y confía en la marca',
-    ejemplo: 'Siempre vengo aquí, me atienden excelente',
-  },
-  { tipo: 'Amigable', actua: 'Cordial y cercano', ejemplo: 'Hola, ¿cómo has estado?' },
-  {
-    tipo: 'Detallista',
-    actua: 'Revisa cada detalle antes de decidir',
-    ejemplo: '¿Me puedes mostrar todas las características del producto?',
+    'tipo': 'Ideal o fiel',
+    'actua': 'Compra de forma recurrente y confia en la marca',
+    'ejemplo': 'Siempre vengo aqui, me atienden excelente'
   },
   {
-    tipo: 'Conversador',
-    actua: 'Habla mucho y busca interacción',
-    ejemplo: 'Te voy a contar lo que me pasó ayer…',
+    'tipo': 'Amigable',
+    'actua': 'Cordial y cercano',
+    'ejemplo': 'Hola, como has estado?'
   },
   {
-    tipo: 'Racional',
-    actua: 'Decide con base en datos',
-    ejemplo: 'Muéstrame las cifras y condiciones del crédito',
+    'tipo': 'Detallista',
+    'actua': 'Revisa cada detalle antes de decidir',
+    'ejemplo': 'Me puedes mostrar todas las caracteristicas del producto?'
   },
   {
-    tipo: 'Reservado',
-    actua: 'Comparte poca información',
-    ejemplo: 'Prefiero no dar muchos datos',
-  },
-  { tipo: 'Tímido', actua: 'Evita interacción directa', ejemplo: 'Solo estoy mirando, gracias' },
-  {
-    tipo: 'Exigente',
-    actua: 'Pide altos estándares',
-    ejemplo: 'Quiero que el servicio sea perfecto',
+    'tipo': 'Conversador',
+    'actua': 'Habla mucho y busca interaccion',
+    'ejemplo': 'Te voy a contar lo que me paso ayer...'
   },
   {
-    tipo: 'Impaciente',
-    actua: 'Quiere soluciones inmediatas',
-    ejemplo: '¿Ya está listo? No tengo tiempo',
+    'tipo': 'Racional',
+    'actua': 'Decide con base en datos',
+    'ejemplo': 'Muestrame las cifras y condiciones del credito'
   },
   {
-    tipo: 'Indeciso',
-    actua: 'Duda antes de elegir',
-    ejemplo: 'No sé si llevar el azul o el negro',
+    'tipo': 'Reservado',
+    'actua': 'Comparte poca informacion',
+    'ejemplo': 'Prefiero no dar muchos datos'
   },
   {
-    tipo: 'Negociador',
-    actua: 'Busca mejores condiciones',
-    ejemplo: '¿Me puedes dar un descuento?',
+    'tipo': 'Timido',
+    'actua': 'Evita interaccion directa',
+    'ejemplo': 'Solo estoy mirando, gracias'
   },
   {
-    tipo: 'Autosuficiente',
-    actua: 'Quiere hacer todo solo',
-    ejemplo: 'No se preocupe, yo lo configuro',
+    'tipo': 'Exigente',
+    'actua': 'Pide altos estandares',
+    'ejemplo': 'Quiero que el servicio sea perfecto'
   },
-  { tipo: 'Crítico', actua: 'Encuentra fallas', ejemplo: 'El producto tiene un defecto aquí' },
-  { tipo: 'Indiferente', actua: 'Muestra poco interés', ejemplo: 'Da igual cuál me des' },
-  { tipo: 'Nervioso', actua: 'Inquieto o ansioso', ejemplo: '¿Y si no funciona bien?' },
   {
-    tipo: 'Distraído',
-    actua: 'Pierde el hilo fácilmente',
-    ejemplo: 'Perdón, ¿qué me estabas diciendo?',
+    'tipo': 'Impaciente',
+    'actua': 'Quiere soluciones inmediatas',
+    'ejemplo': 'Ya esta listo? No tengo tiempo'
   },
-  { tipo: 'Ocupado', actua: 'Quiere rapidez', ejemplo: 'Hagámoslo rápido que voy tarde' },
   {
-    tipo: 'Agresivo',
-    actua: 'Habla de forma hostil',
-    ejemplo: 'Esto es inaceptable, arréglelo ya',
+    'tipo': 'Indeciso',
+    'actua': 'Duda antes de elegir',
+    'ejemplo': 'No se si llevar el azul o el negro'
   },
-  { tipo: 'Confundido', actua: 'No entiende bien', ejemplo: '¿Qué significa esta cláusula?' },
-  { tipo: 'Descortés', actua: 'Falta de respeto', ejemplo: 'Apúrese, no tengo todo el día' },
-  { tipo: 'Insatisfecho', actua: 'No quedó conforme', ejemplo: 'Esto no es lo que esperaba' },
-  { tipo: 'Entusiasta', actua: 'Alegre y motivado', ejemplo: '¡Me encanta este servicio!' },
-  { tipo: 'Conservador', actua: 'Prefiere lo seguro', ejemplo: 'Me quedo con lo que ya conozco' },
-  { tipo: 'Impulsivo', actua: 'Decide sin analizar', ejemplo: 'Lo compro, no importa el precio' },
   {
-    tipo: 'Informado',
-    actua: 'Conoce bien el tema',
-    ejemplo: 'He buscado información con antelación, y estás en lo cierto',
+    'tipo': 'Negociador',
+    'actua': 'Busca mejores condiciones',
+    'ejemplo': 'Me puedes dar un descuento?'
   },
+  {
+    'tipo': 'Autosuficiente',
+    'actua': 'Quiere hacer todo solo',
+    'ejemplo': 'No se preocupe, yo lo configuro'
+  },
+  {
+    'tipo': 'Critico',
+    'actua': 'Encuentra fallas',
+    'ejemplo': 'El producto tiene un defecto aqui'
+  },
+  {
+    'tipo': 'Indiferente',
+    'actua': 'Muestra poco interes',
+    'ejemplo': 'Da igual cual me des'
+  },
+  {
+    'tipo': 'Nervioso',
+    'actua': 'Inquieto o ansioso',
+    'ejemplo': 'Y si no funciona bien?'
+  },
+  {
+    'tipo': 'Distraido',
+    'actua': 'Pierde el hilo facilmente',
+    'ejemplo': 'Perdon, que me estabas diciendo?'
+  },
+  {
+    'tipo': 'Ocupado',
+    'actua': 'Quiere rapidez',
+    'ejemplo': 'Hagamoslo rapido que voy tarde'
+  },
+  {
+    'tipo': 'Agresivo',
+    'actua': 'Habla de forma hostil',
+    'ejemplo': 'Esto es inaceptable, arreglelo ya'
+  },
+  {
+    'tipo': 'Confundido',
+    'actua': 'No entiende bien',
+    'ejemplo': 'Que significa esta clausula?'
+  },
+  {
+    'tipo': 'Descortes',
+    'actua': 'Falta de respeto',
+    'ejemplo': 'Apurese, no tengo todo el dia'
+  },
+  {
+    'tipo': 'Insatisfecho',
+    'actua': 'No quedo conforme',
+    'ejemplo': 'Esto no es lo que esperaba'
+  },
+  {
+    'tipo': 'Entusiasta',
+    'actua': 'Alegre y motivado',
+    'ejemplo': 'Me encanta este servicio!'
+  },
+  {
+    'tipo': 'Conservador',
+    'actua': 'Prefiere lo seguro',
+    'ejemplo': 'Me quedo con lo que ya conozco'
+  },
+  {
+    'tipo': 'Impulsivo',
+    'actua': 'Decide sin analizar',
+    'ejemplo': 'Lo compro, no importa el precio'
+  },
+  {
+    'tipo': 'Informado',
+    'actua': 'Conoce bien el tema',
+    'ejemplo': 'He buscado informacion con antelacion, y estas en lo cierto'
+  }
 ];
 
 module.exports = TIPOS_CLIENTES;
