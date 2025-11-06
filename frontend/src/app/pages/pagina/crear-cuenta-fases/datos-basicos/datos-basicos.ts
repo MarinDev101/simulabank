@@ -8,6 +8,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha-2';
+import { RegistroService } from '@app/core/auth/service/registro';
 
 @Component({
   selector: 'app-datos-basicos',
@@ -16,11 +17,13 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha-2';
   templateUrl: './datos-basicos.html',
 })
 export class DatosBasicos {
-  @Output() continuar = new EventEmitter<void>();
+  @Output() continuar = new EventEmitter<{ correo: string }>();
 
   formCrearCuenta!: FormGroup;
   mostrarContrasena = false;
   mostrarConfirmarContrasena = false;
+  isLoading = false;
+  errorMessage = '';
 
   siteKey = '6Ld1Y_krAAAAANnFX7riXM65MWDSuQMmEm1krU33';
 
@@ -31,16 +34,19 @@ export class DatosBasicos {
     simbolo: false,
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private registroService: RegistroService
+  ) {
     this.formCrearCuenta = this.fb.group(
       {
         nombre: [
           '',
-          [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÁ-ÿ\s]+$/)],
+          [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/)],
         ],
         apellido: [
           '',
-          [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÁ-ÿ\s]+$/)],
+          [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/)],
         ],
         correo: ['', [Validators.required, Validators.email]],
         contrasena: [
@@ -92,11 +98,42 @@ export class DatosBasicos {
   }
 
   validarCuenta() {
-    if (this.formCrearCuenta.valid) {
-      console.log('Formulario válido:', this.formCrearCuenta.value);
-      this.continuar.emit();
-    } else {
+    if (this.formCrearCuenta.invalid) {
       this.formCrearCuenta.markAllAsTouched();
+      return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const datos = {
+      correo: this.f['correo'].value,
+      nombres: this.f['nombre'].value,
+      apellidos: this.f['apellido'].value,
+      contrasena: this.f['contrasena'].value,
+    };
+
+    this.registroService.iniciarRegistro(datos).subscribe({
+      next: (response) => {
+        console.log('Código enviado exitosamente:', response);
+        // Emitir evento para cambiar a la siguiente sección
+        this.continuar.emit({ correo: datos.correo });
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error al enviar código:', error);
+
+        if (error.status === 400 && error.error?.error) {
+          this.errorMessage = error.error.error;
+        } else if (error.status === 0) {
+          this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+        } else {
+          this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
+        }
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 }

@@ -7,6 +7,15 @@
 
   <p>*Todos los campos son obligatorios.</p>
 
+  @if (errorMessage) {
+  <div class="rounded-lg border border-red-200 bg-red-50 p-4 mb-4">
+    <div class="flex items-start">
+      <span class="mt-0.5 mr-3 icon-[hugeicons--alert-circle] text-xl text-red-600"></span>
+      <p class="text-sm text-red-800">{{ errorMessage }}</p>
+    </div>
+  </div>
+  }
+
   <form [formGroup]="formCrearCuenta" (ngSubmit)="validarCuenta()" class="flex flex-col gap-6">
     <div class="flex gap-6">
       <!-- Nombre -->
@@ -184,6 +193,11 @@
       </small>
     </div>
 
-    <button type="submit" class="btn btn-block bg-[#01162E] text-white hover:bg-[#012042]">Validar cuenta</button>
+    <button type="submit" class="btn btn-block bg-[#01162E] text-white hover:bg-[#012042]" [disabled]="isLoading">
+      @if (isLoading) {
+      <span class="loading loading-sm loading-spinner"></span>
+      Enviando código... } @else { Validar cuenta }
+    </button>
+
   </form>
 </div>

@@ -15,8 +15,10 @@
   <!-- Contenedor dinámico -->
   <div class="w-full max-w-3xl bg-white rounded-xl shadow-md mb-20">
     <ng-container [ngSwitch]="pasoActual">
-      <app-datos-basicos *ngSwitchCase="1" (continuar)="siguientePaso()"></app-datos-basicos>
-      <app-validar-cuenta *ngSwitchCase="2" (continuar)="siguientePaso()" (volver)="anteriorPaso()"></app-validar-cuenta>
+      <app-datos-basicos *ngSwitchCase="1" (continuar)="siguientePaso($event)"></app-datos-basicos>
+      <app-validar-cuenta *ngSwitchCase="2" [correoUsuario]="correoUsuario" (continuar)="siguientePaso()"
+        (volver)="anteriorPaso()">
+      </app-validar-cuenta>
       <app-personalizar-perfil *ngSwitchCase="3" (volver)="anteriorPaso()"></app-personalizar-perfil>
     </ng-container>
   </div>

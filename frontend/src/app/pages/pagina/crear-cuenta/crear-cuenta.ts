@@ -14,8 +14,13 @@ import { PersonalizarPerfil } from '../crear-cuenta-fases/personalizar-perfil/pe
 })
 export class CrearCuenta {
   pasoActual = 1;
+  correoUsuario = '';
 
-  siguientePaso() {
+  siguientePaso(datos?: { correo: string }) {
+    if (datos?.correo) {
+      this.correoUsuario = datos.correo;
+    }
+
     if (this.pasoActual < 3) {
       this.pasoActual++;
     }

@@ -1,6 +1,9 @@
-import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { RegistroService } from '@app/core/auth/service/registro';
+import { AuthService } from '@app/core/auth/service/auth';
 
 @Component({
   selector: 'app-validar-cuenta',
@@ -9,13 +12,24 @@ import { CommonModule } from '@angular/common';
   templateUrl: './validar-cuenta.html',
 })
 export class ValidarCuenta implements OnInit {
+  @Input() correoUsuario: string = '';
+  @Output() volver = new EventEmitter<void>();
+
   pinForm!: FormGroup;
   pinControls = Array(6);
+  isLoading = false;
+  errorMessage = '';
+  isResending = false;
+  resendMessage = '';
 
   @ViewChild('inputsContainer') inputsContainer!: ElementRef<HTMLDivElement>;
 
-  @Output() volver = new EventEmitter<void>();
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private registroService: RegistroService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     const group: any = {};
@@ -69,7 +83,6 @@ export class ValidarCuenta implements OnInit {
     }
   }
 
-  /** Mejorado: reparte el código pegado y mueve el foco al último input con valor */
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
     const pasteData = event.clipboardData?.getData('text') || '';
@@ -91,11 +104,73 @@ export class ValidarCuenta implements OnInit {
 
   verificarCodigo() {
     const codigo = Object.values(this.pinForm.value).join('');
-    if (codigo.length === 6) {
-      console.log('Código ingresado:', codigo);
-    } else {
-      console.log('Código incompleto');
+
+    if (codigo.length !== 6) {
+      this.errorMessage = 'Por favor, ingresa el código completo de 6 dígitos';
+      return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.registroService.verificarCodigo({ correo: this.correoUsuario, codigo }).subscribe({
+      next: (response) => {
+        console.log('Verificación exitosa:', response);
+
+        // Guardar tokens y datos del usuario
+        localStorage.setItem('access_token', response.token);
+        localStorage.setItem('refresh_token', response.refreshToken);
+        localStorage.setItem('user_data', JSON.stringify(response.user));
+
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error al verificar código:', error);
+
+        if (error.status === 400) {
+          this.errorMessage = error.error?.error || 'Código inválido o expirado';
+        } else if (error.status === 0) {
+          this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+        } else {
+          this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
+        }
+
+        // Limpiar el formulario
+        this.limpiarCodigo();
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  reenviarCodigo() {
+    this.isResending = true;
+    this.resendMessage = '';
+    this.errorMessage = '';
+
+    // Aquí necesitarías obtener los datos originales del registro
+    // Por ahora, solo mostramos un mensaje
+    // En producción, deberías almacenar temporalmente estos datos
+
+    setTimeout(() => {
+      this.isResending = false;
+      this.resendMessage = 'Código reenviado exitosamente. Revisa tu correo.';
+
+      // Limpiar mensaje después de 5 segundos
+      setTimeout(() => {
+        this.resendMessage = '';
+      }, 5000);
+    }, 2000);
+  }
+
+  limpiarCodigo() {
+    const inputs = this.inputsContainer.nativeElement.querySelectorAll('input');
+    inputs.forEach((input, i) => {
+      (input as HTMLInputElement).value = '';
+      this.pinForm.get(`digit${i}`)?.setValue('');
+    });
+    (inputs[0] as HTMLInputElement)?.focus();
   }
 
   emitirVolver() {
