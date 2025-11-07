@@ -362,19 +362,30 @@ exports.iniciarSimulacion = async (req, res) => {
         );
 
         // Guardar el mensaje inicial en la simulación
+        // En la parte donde guardas el mensaje inicial, cambia a esto:
         await pool.query(
           `UPDATE simulaciones
-           SET conversacion_asesoria = JSON_ARRAY(
-             JSON_OBJECT(
-               'rol', 'cliente',
-               'mensaje', ?,
-               'indiceEtapa', 1,
-               'nombreEtapa', ?,
-               'fecha', NOW()
-             )
-           )
-           WHERE id_simulacion = ?`,
-          [mensajeInicialCliente.mensaje, etapaActual.nombre, idNuevaSimulacion]
+   SET conversacion_asesoria = JSON_ARRAY(
+     JSON_OBJECT(
+       'rol', 'cliente',
+       'mensaje', ?,
+       'indiceEtapa', 1,
+       'nombreEtapa', ?,
+       'totalEtapas', (SELECT COUNT(*) FROM etapas_conversacion WHERE id_producto_bancario = ?),
+       'etapa', ?,
+       'objetivoEtapa', ?,
+       'receptor', 'Asesor'
+     )
+   )
+   WHERE id_simulacion = ?`,
+          [
+            mensajeInicialCliente.mensaje,
+            etapaActual.nombre,
+            producto.id_producto_bancario, // Para totalEtapas
+            etapaActual.nombre, // Para etapa
+            etapaActual.objetivo, // Para objetivoEtapa
+            idNuevaSimulacion,
+          ]
         );
       } catch (error) {
         console.error('Error al generar primer mensaje del cliente:', error);

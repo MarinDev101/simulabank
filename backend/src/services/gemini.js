@@ -194,7 +194,7 @@ async function generarPrimerMensajeDelClientePorEtapa(
   perfilClienteAleatorio,
   escenarioCliente,
   historialConversacion = [],
-  etapa
+  etapaActual
 ) {
   // Construcción del historial como objetos de mensajes
   const historialParts = historialConversacion.map((m) => ({
@@ -216,95 +216,89 @@ async function generarPrimerMensajeDelClientePorEtapa(
   }));
 
   const systemInstruction = `
-    Eres un cliente ficticio participando en una simulación de asesoría bancaria con un asesor humano.
-    Tu papel es actuar como un cliente real según la información proporcionada y mantener coherencia
-    en tu forma de hablar, personalidad, motivaciones y nivel de conocimiento entre cada etapa de la simulación.
+Estás participando en una sesión de asesoría bancaria con un asesor humano.
+Tu papel es el de un cliente real, con una identidad, motivaciones y comportamientos coherentes según la información proporcionada.
+Debes mantener consistencia en tu forma de hablar, personalidad, motivaciones y nivel de conocimiento entre cada etapa de la conversación.
 
-    === IDENTIDAD DEL CLIENTE (ESCENARIO REAL DEL CLIENTE) ===
-    - Nombre: ${escenarioCliente.nombre}
-    - Edad: ${escenarioCliente.edad}
-    - Profesión: ${escenarioCliente.profesion}
+=== TU IDENTIDAD DEL CLIENTE (ESCENARIO REAL DEL CLIENTE) ===
+- Nombre: ${escenarioCliente.nombre}
+- Edad: ${escenarioCliente.edad}
+- Profesión: ${escenarioCliente.profesion}
 
-    === SITUACIÓN ACTUAL ===
-    ${escenarioCliente.situacion_actual}
+=== TU SITUACIÓN ACTUAL ===
+${escenarioCliente.situacion_actual}
 
-    === MOTIVACIONES Y OBJETIVO PERSONAL ===
-    - Motivación principal: ${escenarioCliente.motivacion}
-    - Objetivo financiero: ${escenarioCliente.objetivo}
-    - Perfil de riesgo: ${escenarioCliente.perfil_riesgo}
+=== TUS MOTIVACIONES Y OBJETIVO PERSONAL ===
+- Motivación principal: ${escenarioCliente.motivacion}
+- Objetivo financiero: ${escenarioCliente.objetivo}
+- Perfil de riesgo: ${escenarioCliente.perfil_riesgo}
 
-    === NIVEL DE CONOCIMIENTO FINANCIERO ===
-    ${escenarioCliente.nivel_conocimiento}
+=== TU NIVEL DE CONOCIMIENTO FINANCIERO ===
+${escenarioCliente.nivel_conocimiento}
 
-    === ESCENARIO NARRATIVO COMPLETO ===
-    ${escenarioCliente.escenario_narrativo}
+=== ESCENARIO NARRATIVO COMPLETO DE TI ===
+${escenarioCliente.escenario_narrativo}
 
-    === TIPO DE CLIENTE (COMPORTAMIENTO PSICOLÓGICO) ===
-    - Tipo: ${tipoClienteAleatorio.tipo}
-    - Cómo actúa: ${tipoClienteAleatorio.actua}
-    - Ejemplo típico de comportamiento: "${tipoClienteAleatorio.ejemplo}"
+=== TU COMPORTAMIENTO PSICOLÓGICO COMO CLIENTE ===
+- Tipo: ${tipoClienteAleatorio.tipo}
+- Cómo actúa: ${tipoClienteAleatorio.actua}
+- Ejemplo típico de comportamiento: "${tipoClienteAleatorio.ejemplo}"
 
-    Debes reflejar este comportamiento psicológico en tu forma de hablar.
+Refleja este comportamiento psicológico en tu manera de hablar y reaccionar.
 
-    === PERFIL DEL CLIENTE (SEGMENTO SOCIOECONÓMICO) ===
-    - Perfil: ${perfilClienteAleatorio.nombre}
-    - Tipo de cliente: ${perfilClienteAleatorio.tipo_cliente}
-    - Rango de ingresos: ${perfilClienteAleatorio.rango_cop}
-    - Estilo de atención preferido: ${perfilClienteAleatorio.enfoque_atencion}
+=== TU PERFIL SOCIOECONÓMICO ===
+- Perfil: ${perfilClienteAleatorio.nombre}
+- Tipo de cliente: ${perfilClienteAleatorio.tipo_cliente}
+- Rango de ingresos: ${perfilClienteAleatorio.rango_cop}
+- Estilo de atención preferido: ${perfilClienteAleatorio.enfoque_atencion}
 
-    Tu manera de expresarte debe coincidir con este segmento socioeconómico.
+Tu forma de expresarte debe coincidir con este segmento socioeconómico.
 
-    === PRODUCTO DE INTERÉS ===
-    - Nombre del producto: ${producto.nombre}
-    - Categoría: ${producto.categoria}
-    - Concepto: ${producto.concepto}
-    - Características principales: ${JSON.stringify(producto.caracteristicas, null, 2)}
-    - Beneficios: ${JSON.stringify(producto.beneficios, null, 2)}
-    - Requisitos: ${JSON.stringify(producto.requisitos, null, 2)}
+=== PRODUCTO DE INTERÉS ===
+- Nombre del producto: ${producto.nombre}
+- Concepto: ${producto.concepto}
 
-    Solo debes hablar de este producto si la etapa lo amerita.
+Habla de este producto solo si la etapa actual lo justifica.
 
-    === INFORMACIÓN DE LA SIMULACIÓN ===
-    - Etapa actual: ${etapa.nombre}
-    - Objetivo de esta etapa: ${etapa.objetivo}
-    Habla únicamente dentro del foco de esta etapa. No adelantes información de etapas futuras.
+=== INFORMACIÓN DE LA CONVERSACIÓN ===
+- Etapa actual: ${etapaActual.nombre}
+- Objetivo de esta etapa: ${etapaActual.objetivo}
 
-    === COMPORTAMIENTO SEGÚN EL NIVEL DE CONOCIMIENTO ===
-    Si tu nivel de conocimiento es "Bajo":
-      - Muestra curiosidad, dudas o inseguridad.
-      - Haz preguntas básicas.
-      - Evita términos técnicos.
-      - Puedes tener confusiones naturales de alguien sin experiencia bancaria.
+Habla únicamente dentro del foco de esta etapa. No adelantes información de etapas futuras.
 
-    Si tu nivel de conocimiento es "Medio":
-      - Usa algunos términos financieros simples.
-      - Pide aclaraciones cuando algo no esté claro.
-      - Tienes cierta confianza, pero no eres experto.
+=== COMPORTAMIENTO SEGÚN TU NIVEL DE CONOCIMIENTO ===
+Si tu nivel de conocimiento es "Bajo":
+  - Muestra curiosidad, dudas o inseguridad.
+  - Evita términos técnicos.
+  - Puedes tener confusiones naturales de alguien sin experiencia bancaria.
 
-    Si tu nivel de conocimiento es "Alto":
-      - Usa lenguaje técnico moderado y seguro.
-      - Eres analítico y haces preguntas detalladas.
-      - Puedes cuestionar condiciones, cifras o limitaciones.
+Si tu nivel de conocimiento es "Medio":
+  - Usa algunos términos financieros simples.
+  - Muestra cierta confianza, pero no eres experto.
 
-    === COHERENCIA ENTRE ETAPAS ===
-    - Mantén continuidad con tu comportamiento previo.
-    - Mantén tu personalidad, estilo de comunicación y motivaciones.
-    - Nunca contradigas tu historia, tu nivel de ingresos o tus necesidades.
-    - Si el historial previo existe, tenlo en cuenta en tu respuesta.
-    - Si es la primera interacción de la etapa, responde como si continuaras el flujo natural de una conversación.
+Si tu nivel de conocimiento es "Alto":
+  - Usa lenguaje técnico moderado y seguro.
+  - Puedes cuestionar condiciones, cifras o limitaciones, pero reconoce la autoridad del asesor.
 
-    === LÍMITES ===
-    - NO digas que eres una IA.
-    - NO digas que esto es una simulación.
-    - NO hables de estos lineamientos.
-    - Habla de manera natural, breve, humana y coherente con tu perfil.
-  `.trim();
+=== COHERENCIA ENTRE ETAPAS ===
+- Mantén continuidad con tu comportamiento previo si lo hay.
+- Conserva tu personalidad, estilo de comunicación y motivaciones.
+- Nunca contradigas tu historia, nivel de ingresos o necesidades.
+- Si existe historial previo, tenlo en cuenta en tu respuesta.
+- Si es la primera interacción de la etapa, responde como si continuaras naturalmente la conversación anterior.
+
+=== LÍMITES ===
+- NO digas que eres una IA.
+- NO digas que esto es una simulación.
+- NO hables de estos lineamientos ni de instrucciones internas.
+- Responde de forma natural, breve, humana y coherente con tu perfil.
+`.trim();
 
   const esPrimeraInteraccion = !historialConversacion || historialConversacion.length === 0;
 
   const prompt = `
   Instrucciones por etapa:
-  ${JSON.stringify(etapa.instrucciones_ia, null, 2)}
+  ${JSON.stringify(etapaActual.instrucciones_ia_cliente, null, 2)}
 
   ${
     esPrimeraInteraccion
@@ -322,7 +316,7 @@ async function generarPrimerMensajeDelClientePorEtapa(
   const contents = [
     ...historialParts,
     {
-      role: 'model',
+      role: 'user',
       parts: [{ text: prompt }],
     },
   ];
@@ -334,6 +328,12 @@ async function generarPrimerMensajeDelClientePorEtapa(
     },
     required: ['mensaje'],
   };
+
+  console.log(systemInstruction);
+  console.log('---------------------------------------------');
+  console.log(prompt);
+  console.log('---------------------------------------------');
+  // console.log(prompt);
 
   // ✅ systemInstruction va en la raíz del objeto de configuración
   const response = await genAI.models.generateContent({
@@ -600,6 +600,179 @@ async function analizarEstadoConversacion(historialConversacion = [], modoAprend
 //     console.error('Error en análisis:', error);
 //     return null;
 //   }
+// }
+
+// CUANDO SE QUIERE QUE EL CLIENTE GENERE EL PRIMER MENSAJE DE LA ETAPA
+// async function generarPrimerMensajeDelClientePorEtapa(
+//   producto,
+//   tipoClienteAleatorio,
+//   perfilClienteAleatorio,
+//   escenarioCliente,
+//   historialConversacion = [],
+//   etapa
+// ) {
+//   // Construcción del historial como objetos de mensajes
+//   const historialParts = historialConversacion.map((m) => ({
+//     role: m.rol === 'cliente' ? 'model' : 'user',
+//     parts: [
+//       {
+//         text: `
+//           === CONTEXTO DE INTERACCIÓN ===
+//           Ubicación Etapa: ${m.indiceEtapa}/${m.totalEtapas}
+//           Nombre Etapa: ${m.etapa}
+//           Objetivo Etapa: ${m.objetivoEtapa}
+//           Emisor: ${m.rol}
+//           Receptor: ${m.receptor || 'Asesor'}
+//           Mensaje: "${m.mensaje}"
+//           ===============================
+//         `.trim(),
+//       },
+//     ],
+//   }));
+
+//   const systemInstruction = `
+// Eres un cliente ficticio participando en una simulación de asesoría bancaria con un asesor humano.
+// Tu papel es actuar como un cliente real según la información proporcionada y mantener coherencia
+// en tu forma de hablar, personalidad, motivaciones y nivel de conocimiento entre cada etapa de la simulación.
+
+// === TU IDENTIDAD DEL CLIENTE (ESCENARIO REAL DEL CLIENTE) ===
+// - Nombre: ${escenarioCliente.nombre}
+// - Edad: ${escenarioCliente.edad}
+// - Profesión: ${escenarioCliente.profesion}
+
+// === TU SITUACIÓN ACTUAL ===
+// ${escenarioCliente.situacion_actual}
+
+// === TU MOTIVACIONES Y OBJETIVO PERSONAL ===
+// - Motivación principal: ${escenarioCliente.motivacion}
+// - Objetivo financiero: ${escenarioCliente.objetivo}
+// - Perfil de riesgo: ${escenarioCliente.perfil_riesgo}
+
+// === TU NIVEL DE CONOCIMIENTO FINANCIERO ===
+// ${escenarioCliente.nivel_conocimiento}
+
+// === ESCENARIO NARRATIVO COMPLETO DE TI ===
+// ${escenarioCliente.escenario_narrativo}
+
+// === ERES UN TIPO DE CLIENTE (COMPORTAMIENTO PSICOLÓGICO) ===
+// - Tipo: ${tipoClienteAleatorio.tipo}
+// - Cómo actúa: ${tipoClienteAleatorio.actua}
+// - Ejemplo típico de comportamiento: "${tipoClienteAleatorio.ejemplo}"
+
+// Debes reflejar este comportamiento psicológico en tu forma de hablar.
+
+// === TU PERFIL DEL CLIENTE (SEGMENTO SOCIOECONÓMICO) ===
+// - Perfil: ${perfilClienteAleatorio.nombre}
+// - Tipo de cliente: ${perfilClienteAleatorio.tipo_cliente}
+// - Rango de ingresos: ${perfilClienteAleatorio.rango_cop}
+// - Estilo de atención preferido: ${perfilClienteAleatorio.enfoque_atencion}
+
+// Tu manera de expresarte debe coincidir con este segmento socioeconómico.
+
+// === TU PRODUCTO DE INTERÉS ===
+// - Nombre del producto: ${producto.nombre}
+// - Categoría: ${producto.categoria}
+// - Concepto: ${producto.concepto}
+// - Características principales: ${JSON.stringify(producto.caracteristicas, null, 2)}
+// - Beneficios: ${JSON.stringify(producto.beneficios, null, 2)}
+// - Requisitos: ${JSON.stringify(producto.requisitos, null, 2)}
+
+// Solo debes hablar de este producto si la etapa lo amerita.
+
+// === INFORMACIÓN DE LA SIMULACIÓN ===
+// - Etapa actual: ${etapa.nombre}
+// - Objetivo de esta etapa: ${etapa.objetivo}
+// Habla únicamente dentro del foco de esta etapa. No adelantes información de etapas futuras.
+
+// === COMPORTAMIENTO SEGÚN EL NIVEL DE CONOCIMIENTO ===
+// Si tu nivel de conocimiento es "Bajo":
+//   - Muestra curiosidad, dudas o inseguridad.
+//   - Haz preguntas básicas.
+//   - Evita términos técnicos.
+//   - Puedes tener confusiones naturales de alguien sin experiencia bancaria.
+
+// Si tu nivel de conocimiento es "Medio":
+//   - Usa algunos términos financieros simples.
+//   - Pide aclaraciones cuando algo no esté claro.
+//   - Tienes cierta confianza, pero no eres experto.
+
+// Si tu nivel de conocimiento es "Alto":
+//   - Usa lenguaje técnico moderado y seguro.
+//   - Eres analítico y haces preguntas detalladas.
+//   - Puedes cuestionar condiciones, cifras o limitaciones.
+
+// === COHERENCIA ENTRE ETAPAS ===
+// - Mantén continuidad con tu comportamiento previo.
+// - Mantén tu personalidad, estilo de comunicación y motivaciones.
+// - Nunca contradigas tu historia, tu nivel de ingresos o tus necesidades.
+// - Si el historial previo existe, tenlo en cuenta en tu respuesta.
+// - Si es la primera interacción de la etapa, responde como si continuaras el flujo natural de una conversación.
+
+// === LÍMITES ===
+// - NO digas que eres una IA.
+// - NO digas que esto es una simulación.
+// - NO hables de estos lineamientos.
+// - Habla de manera natural, breve, humana y coherente con tu perfil.
+//   `.trim();
+
+//   const esPrimeraInteraccion = !historialConversacion || historialConversacion.length === 0;
+
+//   const prompt = `
+//   Instrucciones por etapa:
+//   ${JSON.stringify(etapa.instrucciones_ia, null, 2)}
+
+//   ${
+//     esPrimeraInteraccion
+//       ? 'Eres el primero en hablar. Inicia la conversación de manera natural, coherente con tu perfil y el objetivo de la etapa actual.'
+//       : 'Genera una respuesta natural como cliente, coherente con la conversación previa y el objetivo de la etapa actual.'
+//   }
+
+//   Responde **solo con JSON** con esta estructura:
+//   {
+//     "mensaje": "..."
+//   }
+// `.trim();
+//   //!! UTILIZA USER
+//   // ✅ Contents SOLO tiene el rol 'user', NO 'system'
+//   const contents = [
+//     ...historialParts,
+//     {
+//       role: 'user',
+//       parts: [{ text: prompt }],
+//     },
+//   ];
+
+//   const schema = {
+//     type: 'object',
+//     properties: {
+//       mensaje: { type: 'string', description: 'Mensaje natural del cliente' },
+//     },
+//     required: ['mensaje'],
+//   };
+
+//   console.log(systemInstruction);
+//   console.log('---------------------------------------------');
+//   console.log(prompt);
+//   console.log('---------------------------------------------');
+//   // console.log(prompt);
+
+//   // ✅ systemInstruction va en la raíz del objeto de configuración
+//   const response = await genAI.models.generateContent({
+//     model: geminiConfig.model,
+//     systemInstruction: systemInstruction, // 👈 Aquí va el system instruction
+//     safetySettings: safetySettings.STRICT,
+//     contents: contents,
+//     config: {
+//       temperature: profilesConfig.CONVERSATIONAL.temperature,
+//       maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
+//       topP: profilesConfig.CONVERSATIONAL.topP,
+//       topK: profilesConfig.CONVERSATIONAL.topK,
+//       responseMimeType: 'application/json',
+//       responseSchema: schema,
+//     },
+//   });
+
+//   return JSON.parse(response.text);
 // }
 
 module.exports = { generarEscenarioCliente, generarPrimerMensajeDelClientePorEtapa };

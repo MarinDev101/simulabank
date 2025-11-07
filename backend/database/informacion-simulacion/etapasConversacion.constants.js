@@ -1,22 +1,23 @@
 const ETAPAS_PRODUCTOS = {
   'Cuenta de Ahorros': [
     {
-      'numero_orden': 1,
-      'nombre': 'Saludo inicial',
-      'objetivo': 'Dar la bienvenida y establecer una relacion cordial con el cliente interesado en abrir una cuenta.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 1,
+      nombre: 'Saludo inicial',
+      objetivo:
+        'Dar la bienvenida y establecer una relacion cordial con el cliente interesado en abrir una cuenta.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'El asesor debe presentarse con nombre completo y cargo',
         'Agradecer al cliente por acercarse o mostrar interes',
         'Mantener un tono cordial y profesional',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Manten un tono cercano y profesional',
         'Presentate con tu nombre completo y cargo',
         'Agradece al cliente por su visita o interes',
         'Usa un lenguaje formal pero amigable',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde al saludo del asesor de forma cordial y breve',
         'Muestra interes genuino en abrir una cuenta de ahorros',
         'Manten un tono conversacional y natural',
@@ -25,23 +26,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 2,
-      'nombre': 'Deteccion de necesidades',
-      'objetivo': 'Identificar los motivos del cliente para abrir una cuenta y sus habitos financieros.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 2,
+      nombre: 'Deteccion de necesidades',
+      objetivo:
+        'Identificar los motivos del cliente para abrir una cuenta y sus habitos financieros.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'El asesor debe hacer preguntas abiertas sobre objetivos de ahorro',
         'Escuchar activamente la necesidad del cliente',
         'No interrumpir al cliente mientras explica su situacion',
         'Identificar monto disponible, frecuencia de depositos y objetivos',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Haz preguntas abiertas para conocer sus metas de ahorro',
         'Escucha atentamente la informacion que brinde el cliente',
         'Identifica: monto disponible, frecuencia de depositos, objetivos financieros',
         'Toma nota de los datos clave para recomendar el producto adecuado',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde las preguntas del asesor sobre tus objetivos de ahorro',
         'Proporciona informacion realista: monto aproximado, frecuencia de depositos',
         'Menciona un objetivo financiero claro (ahorrar para emergencias, viaje, compra, etc.)',
@@ -50,24 +52,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 3,
-      'nombre': 'Presentacion de producto',
-      'objetivo': 'Explicar beneficios, manejo y ventajas de la cuenta de ahorros.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 3,
+      nombre: 'Presentacion de producto',
+      objetivo: 'Explicar beneficios, manejo y ventajas de la cuenta de ahorros.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Mencionar nombre del producto: Cuenta de Ahorros',
         'Explicar caracteristicas principales: tasas, comisiones, beneficios',
         'Informar sobre FOGAFIN u otra proteccion aplicable',
         'Hacer un calculo aproximado de rentabilidad segun el monto del cliente',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Presenta la cuenta de ahorros adecuada al perfil del cliente',
         'Explica caracteristicas y beneficios de manera simple y clara',
         'Haz un calculo de rentabilidad con el monto que el cliente planea ahorrar',
         'Resalta beneficios emocionales: seguridad, tranquilidad, facilidad de acceso',
         'Se transparente con costos, comisiones y requisitos',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Escucha atentamente la presentacion del producto',
         'Muestra interes genuino en los beneficios mencionados',
         'Haz preguntas de aclaracion sobre aspectos que te parezcan importantes',
@@ -76,24 +78,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 4,
-      'nombre': 'Objeciones y dudas',
-      'objetivo': 'Resolver inquietudes sobre costos, seguridad o accesibilidad.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 4,
+      nombre: 'Objeciones y dudas',
+      objetivo: 'Resolver inquietudes sobre costos, seguridad o accesibilidad.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Responder con informacion precisa y verificable',
         'No inventar beneficios o caracteristicas',
         'Ser honesto sobre limitaciones del producto',
         'Comparar con alternativas si el cliente lo solicita',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Escucha atentamente la objecion sin interrumpir',
         'Valida la preocupacion del cliente: "Entiendo su inquietud..."',
         'Responde con informacion precisa sobre la cuenta de ahorro',
         'Si no sabes algo, admite la limitacion y ofrece seguimiento',
         'Refuerza beneficios que respondan directamente a la objecion del cliente',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Plantea objeciones o dudas razonables sobre el producto',
         'Pregunta sobre costos de manejo, comisiones, retiros o disponibilidad',
         'Cuestiona aspectos como seguridad, tasas de interes o facilidad de uso',
@@ -102,23 +104,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 5,
-      'nombre': 'Cierre de interes',
-      'objetivo': 'Confirmar si el cliente desea continuar con la apertura.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 5,
+      nombre: 'Cierre de interes',
+      objetivo: 'Confirmar si el cliente desea continuar con la apertura.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Hacer resumen de lo conversado y beneficios principales',
         'Preguntar si tiene mas dudas',
         'Ofrecer iniciar apertura de cuenta o agendar cita',
         'Proporcionar contacto para seguimiento',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Resume los puntos clave y beneficios de la cuenta',
         'Haz pregunta de cierre: ¿Desea abrir la cuenta hoy o agendamos cita?',
         'Si no decide, agenda un seguimiento',
         'Deja la puerta abierta para futuras consultas',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Evalua la informacion recibida y muestra tu decision',
         'Puedes expresar interes en continuar o solicitar tiempo para pensar',
         'Si tienes dudas finales, preguntalas antes de decidir',
@@ -127,23 +129,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 6,
-      'nombre': 'Confirmacion de datos',
-      'objetivo': 'Validar informacion basica del cliente para iniciar el proceso de apertura.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 6,
+      nombre: 'Confirmacion de datos',
+      objetivo: 'Validar informacion basica del cliente para iniciar el proceso de apertura.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Solicitar y verificar datos personales completos',
         'Confirmar documento de identidad vigente',
         'Validar informacion de contacto (telefono, correo)',
         'Explicar el proceso siguiente de apertura',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Solicita los datos de manera ordenada y clara',
         'Verifica que la informacion este completa y correcta',
         'Explica para que se usara cada dato solicitado',
         'Manten la confidencialidad de la informacion',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Proporciona datos personales de forma organizada cuando te los soliciten',
         'Pregunta por que se necesita cada dato si no esta claro',
         'Confirma que la informacion que diste es correcta',
@@ -152,22 +154,22 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 7,
-      'nombre': 'Despedida',
-      'objetivo': 'Cerrar la conversacion de forma amable y profesional.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 7,
+      nombre: 'Despedida',
+      objetivo: 'Cerrar la conversacion de forma amable y profesional.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Agradecer al cliente',
         'Reafirmar disponibilidad para futuras consultas',
         'Despedida cordial',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Agradece al cliente por su tiempo y confianza',
         'Reafirma tu disponibilidad para futuras consultas o apoyo',
         'Manten un tono positivo y cordial hasta el final',
         'Desea un buen dia al cliente',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Inicia o responde la despedida de forma cordial',
         'Agradece al asesor por la atencion y la informacion',
         'Muestra satisfaccion con el servicio recibido',
@@ -179,22 +181,23 @@ const ETAPAS_PRODUCTOS = {
 
   'Cuenta Corriente': [
     {
-      'numero_orden': 1,
-      'nombre': 'Saludo inicial',
-      'objetivo': 'Dar la bienvenida e identificar el interes del cliente en productos transaccionales.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 1,
+      nombre: 'Saludo inicial',
+      objetivo:
+        'Dar la bienvenida e identificar el interes del cliente en productos transaccionales.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'El asesor debe presentarse con nombre completo y cargo',
         'Agradecer al cliente por acercarse o mostrar interes',
         'Mantener un tono cordial y profesional',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Manten un tono cercano y profesional',
         'Presentate con tu nombre completo y cargo',
         'Agradece al cliente por su visita o interes',
         'Usa un lenguaje formal pero amigable',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde al saludo del asesor de forma cordial y breve',
         'Muestra interes en abrir una cuenta corriente',
         'Manten un tono conversacional y natural',
@@ -203,23 +206,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 2,
-      'nombre': 'Deteccion de necesidades',
-      'objetivo': 'Explorar si el cliente busca una cuenta para pagos frecuentes o gestion empresarial.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 2,
+      nombre: 'Deteccion de necesidades',
+      objetivo:
+        'Explorar si el cliente busca una cuenta para pagos frecuentes o gestion empresarial.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Identificar si es para uso personal o empresarial',
         'Preguntar sobre volumen y frecuencia de transacciones',
         'Indagar sobre necesidad de chequera y sobregiros',
         'Comprender habitos de pago y cobro del cliente',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Haz preguntas sobre el tipo de transacciones que realizara',
         'Identifica si necesita chequera, tarjeta debito o ambas',
         'Pregunta sobre frecuencia de pagos y cobros',
         'Determina si requiere funcionalidades empresariales',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde sobre el uso que le darias a la cuenta (personal o empresarial)',
         'Menciona el volumen aproximado de transacciones mensuales',
         'Indica si necesitas chequera, tarjeta debito o ambas',
@@ -228,23 +232,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 3,
-      'nombre': 'Presentacion de producto',
-      'objetivo': 'Explicar las caracteristicas de la cuenta corriente, chequera y sobregiros.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 3,
+      nombre: 'Presentacion de producto',
+      objetivo: 'Explicar las caracteristicas de la cuenta corriente, chequera y sobregiros.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Explicar diferencia entre cuenta corriente y cuenta de ahorros',
         'Detallar costos de manejo, chequera y transacciones',
         'Informar sobre cupo de sobregiro si aplica',
         'Mencionar beneficios de gestion transaccional',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Explica claramente que es una cuenta corriente y para que sirve',
         'Detalla los costos asociados: cuota de manejo, chequera, comisiones',
         'Menciona las opciones de sobregiro si el cliente califica',
         'Resalta la facilidad para realizar multiples transacciones',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Escucha atentamente la explicacion del producto',
         'Muestra interes en las funcionalidades transaccionales',
         'Pregunta sobre la diferencia con una cuenta de ahorros si no esta claro',
@@ -253,24 +257,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 4,
-      'nombre': 'Objeciones y dudas',
-      'objetivo': 'Resolver preguntas sobre costos, cheques o control financiero.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 4,
+      nombre: 'Objeciones y dudas',
+      objetivo: 'Resolver preguntas sobre costos, cheques o control financiero.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Responder con informacion precisa y verificable',
         'No inventar beneficios o caracteristicas',
         'Ser honesto sobre limitaciones del producto',
         'Comparar con alternativas si el cliente lo solicita',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Escucha atentamente la objecion sin interrumpir',
         'Valida la preocupacion del cliente: "Entiendo su inquietud..."',
         'Responde con informacion precisa sobre costos y funcionalidades',
         'Si no sabes algo, admite la limitacion y ofrece seguimiento',
         'Aclara dudas sobre el uso de cheques y control de transacciones',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Plantea objeciones sobre costos de manejo o comisiones',
         'Pregunta sobre el manejo de chequera y proteccion contra fraudes',
         'Cuestiona sobre limites de transacciones o sobregiros',
@@ -279,23 +283,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 5,
-      'nombre': 'Cierre de interes',
-      'objetivo': 'Verificar si el cliente desea continuar con la apertura.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 5,
+      nombre: 'Cierre de interes',
+      objetivo: 'Verificar si el cliente desea continuar con la apertura.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Hacer resumen de lo conversado y beneficios principales',
         'Preguntar si tiene mas dudas',
         'Ofrecer iniciar apertura de cuenta o agendar cita',
         'Proporcionar contacto para seguimiento',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Resume los puntos clave y beneficios de la cuenta corriente',
         'Haz pregunta de cierre: ¿Desea abrir la cuenta hoy o agendamos cita?',
         'Si no decide, agenda un seguimiento',
         'Deja la puerta abierta para futuras consultas',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Evalua la informacion y decide si continuar o no',
         'Expresa tu nivel de interes claramente',
         'Si tienes dudas finales, preguntalas antes de decidir',
@@ -304,23 +308,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 6,
-      'nombre': 'Confirmacion de datos',
-      'objetivo': 'Solicitar documentos e informacion basica para formalizar la solicitud.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 6,
+      nombre: 'Confirmacion de datos',
+      objetivo: 'Solicitar documentos e informacion basica para formalizar la solicitud.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Solicitar y verificar datos personales o empresariales completos',
         'Confirmar documento de identidad y RUT si aplica',
         'Validar informacion de contacto y referencias',
         'Explicar documentacion adicional requerida',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Solicita los datos de manera ordenada y clara',
         'Si es cuenta empresarial, solicita documentos del negocio',
         'Verifica que la informacion este completa y correcta',
         'Explica los pasos siguientes del proceso de apertura',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Proporciona tus datos personales o empresariales segun corresponda',
         'Pregunta que documentos especificos necesitas traer',
         'Confirma los datos que proporcionaste',
@@ -329,22 +333,22 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 7,
-      'nombre': 'Despedida',
-      'objetivo': 'Finalizar la conversacion de forma profesional y cordial.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 7,
+      nombre: 'Despedida',
+      objetivo: 'Finalizar la conversacion de forma profesional y cordial.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Agradecer al cliente',
         'Reafirmar disponibilidad para futuras consultas',
         'Despedida cordial',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Agradece al cliente por su tiempo y confianza',
         'Reafirma tu disponibilidad para futuras consultas o apoyo',
         'Manten un tono positivo y cordial hasta el final',
         'Desea un buen dia al cliente',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Inicia o responde la despedida de forma cordial',
         'Agradece al asesor por la informacion y atencion',
         'Expresa satisfaccion con el servicio',
@@ -356,22 +360,22 @@ const ETAPAS_PRODUCTOS = {
 
   'CDT Digital': [
     {
-      'numero_orden': 1,
-      'nombre': 'Saludo inicial',
-      'objetivo': 'Dar la bienvenida e identificar el interes del cliente en inversiones seguras.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 1,
+      nombre: 'Saludo inicial',
+      objetivo: 'Dar la bienvenida e identificar el interes del cliente en inversiones seguras.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'El asesor debe presentarse con nombre completo y cargo',
         'Agradecer al cliente por acercarse o mostrar interes',
         'Mantener un tono cordial y profesional',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Manten un tono cercano y profesional',
         'Presentate con tu nombre completo y cargo',
         'Agradece al cliente por su visita o interes',
         'Usa un lenguaje formal pero amigable',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde al saludo del asesor de forma cordial',
         'Muestra interes en opciones de inversion segura',
         'Menciona brevemente que buscas rentabilidad para tus ahorros',
@@ -380,23 +384,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 2,
-      'nombre': 'Deteccion de necesidades',
-      'objetivo': 'Comprender las metas de ahorro o inversion del cliente.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 2,
+      nombre: 'Deteccion de necesidades',
+      objetivo: 'Comprender las metas de ahorro o inversion del cliente.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Identificar monto disponible para invertir',
         'Preguntar sobre plazo de inversion deseado',
         'Indagar sobre experiencia previa en inversiones',
         'Comprender objetivos financieros y tolerancia al riesgo',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Pregunta sobre el monto que desea invertir',
         'Identifica por cuanto tiempo puede dejar el dinero sin necesitarlo',
         'Determina si busca rentabilidad a corto, mediano o largo plazo',
         'Evalua su perfil: conservador, moderado o arriesgado',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde sobre el monto que tienes disponible para invertir',
         'Indica el plazo durante el cual no necesitaras ese dinero',
         'Menciona tu objetivo: ahorrar para algo especifico o generar rentabilidad',
@@ -405,24 +409,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 3,
-      'nombre': 'Presentacion de producto',
-      'objetivo': 'Explicar la rentabilidad, plazos y beneficios del CDT digital.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 3,
+      nombre: 'Presentacion de producto',
+      objetivo: 'Explicar la rentabilidad, plazos y beneficios del CDT digital.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Explicar que es un CDT y como funciona',
         'Mencionar tasas de interes segun plazo',
         'Informar sobre proteccion FOGAFIN',
         'Calcular rentabilidad estimada segun monto y plazo del cliente',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Explica de forma simple que es un CDT (Certificado de Deposito a Termino)',
         'Presenta las opciones de plazos disponibles y sus tasas',
         'Haz una simulacion de rentabilidad con el monto del cliente',
         'Destaca la seguridad y respaldo de la inversion',
         'Menciona que el dinero esta protegido por FOGAFIN',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Escucha atentamente la explicacion sobre el CDT',
         'Muestra interes en las tasas de interes presentadas',
         'Pregunta sobre la diferencia entre plazos si no esta claro',
@@ -431,24 +435,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 4,
-      'nombre': 'Objeciones y dudas',
-      'objetivo': 'Aclarar inquietudes sobre tasas, plazos o seguridad del capital.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 4,
+      nombre: 'Objeciones y dudas',
+      objetivo: 'Aclarar inquietudes sobre tasas, plazos o seguridad del capital.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Responder con informacion precisa y verificable',
         'No inventar beneficios o caracteristicas',
         'Ser honesto sobre limitaciones del producto',
         'Comparar con alternativas si el cliente lo solicita',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Escucha atentamente la objecion sin interrumpir',
         'Valida la preocupacion del cliente: "Entiendo su inquietud..."',
         'Aclara dudas sobre liquidez anticipada y penalidades',
         'Si no sabes algo, admite la limitacion y ofrece seguimiento',
         'Refuerza la seguridad y rentabilidad garantizada del CDT',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Pregunta que pasa si necesitas el dinero antes del plazo',
         'Cuestiona sobre penalidades por retiro anticipado',
         'Pregunta como se compara con otras opciones de inversion',
@@ -457,23 +461,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 5,
-      'nombre': 'Cierre de interes',
-      'objetivo': 'Evaluar si el cliente esta dispuesto a invertir y por cuanto tiempo.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 5,
+      nombre: 'Cierre de interes',
+      objetivo: 'Evaluar si el cliente esta dispuesto a invertir y por cuanto tiempo.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Hacer resumen de lo conversado y beneficios principales',
         'Preguntar si tiene mas dudas',
         'Confirmar monto y plazo de inversion',
         'Ofrecer iniciar proceso de apertura del CDT',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Resume la rentabilidad calculada y beneficios del CDT',
         'Pregunta: ¿Desea proceder con la inversion?',
         'Confirma el monto y plazo que el cliente eligio',
         'Si no decide, agenda un seguimiento',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Evalua si la rentabilidad y condiciones te convencen',
         'Expresa tu decision: invertir ahora, consultar o pensarlo',
         'Si decides invertir, confirma el monto y plazo elegido',
@@ -482,23 +486,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 6,
-      'nombre': 'Confirmacion de datos',
-      'objetivo': 'Solicitar monto y plazo para simular o iniciar la inversion.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 6,
+      nombre: 'Confirmacion de datos',
+      objetivo: 'Solicitar monto y plazo para simular o iniciar la inversion.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Confirmar monto exacto de inversion',
         'Validar plazo seleccionado',
         'Verificar datos personales del cliente',
         'Explicar proceso de constitucion del CDT',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Confirma el monto exacto que el cliente invertira',
         'Valida el plazo elegido (90, 180, 360 dias, etc.)',
         'Solicita los datos necesarios para formalizar',
         'Explica como recibira la rentabilidad al vencimiento',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Confirma el monto exacto que vas a invertir',
         'Especifica el plazo que elegiste',
         'Proporciona tus datos personales cuando te los soliciten',
@@ -507,22 +511,22 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 7,
-      'nombre': 'Despedida',
-      'objetivo': 'Finalizar la atencion de forma amable.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 7,
+      nombre: 'Despedida',
+      objetivo: 'Finalizar la atencion de forma amable.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Agradecer al cliente',
         'Reafirmar disponibilidad para futuras consultas',
         'Despedida cordial',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Agradece al cliente por su tiempo y confianza',
         'Reafirma tu disponibilidad para futuras consultas o apoyo',
         'Manten un tono positivo y cordial hasta el final',
         'Desea un buen dia al cliente',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Inicia o responde la despedida cordialmente',
         'Agradece al asesor por la asesoria y claridad',
         'Expresa satisfaccion con la inversion realizada',
@@ -534,22 +538,22 @@ const ETAPAS_PRODUCTOS = {
 
   'Credito de Libre Inversion': [
     {
-      'numero_orden': 1,
-      'nombre': 'Saludo inicial',
-      'objetivo': 'Dar la bienvenida y conocer el interes del cliente en financiacion personal.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 1,
+      nombre: 'Saludo inicial',
+      objetivo: 'Dar la bienvenida y conocer el interes del cliente en financiacion personal.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'El asesor debe presentarse con nombre completo y cargo',
         'Agradecer al cliente por acercarse o mostrar interes',
         'Mantener un tono cordial y profesional',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Manten un tono cercano y profesional',
         'Presentate con tu nombre completo y cargo',
         'Agradece al cliente por su visita o interes',
         'Usa un lenguaje formal pero amigable',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde al saludo del asesor cordialmente',
         'Muestra interes en obtener un credito personal',
         'Menciona brevemente que necesitas financiacion',
@@ -558,23 +562,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 2,
-      'nombre': 'Deteccion de necesidades',
-      'objetivo': 'Identificar el destino o motivo del prestamo.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 2,
+      nombre: 'Deteccion de necesidades',
+      objetivo: 'Identificar el destino o motivo del prestamo.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Identificar el destino especifico del credito',
         'Preguntar por monto aproximado requerido',
         'Indagar sobre capacidad de pago mensual',
         'Conocer situacion laboral y estabilidad de ingresos',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Pregunta para que necesita el credito (viaje, estudio, compra, etc.)',
         'Identifica el monto que requiere',
         'Evalua su capacidad de pago y estabilidad laboral',
         'Pregunta en cuanto tiempo le gustaria pagar el credito',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Explica para que necesitas el credito (viaje, compra, emergencia, etc.)',
         'Menciona el monto aproximado que requieres',
         'Indica tu capacidad de pago mensual estimada',
@@ -583,24 +587,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 3,
-      'nombre': 'Presentacion de producto',
-      'objetivo': 'Explicar las condiciones, tasas y beneficios del credito de libre inversion.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 3,
+      nombre: 'Presentacion de producto',
+      objetivo: 'Explicar las condiciones, tasas y beneficios del credito de libre inversion.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Explicar caracteristicas del credito de libre inversion',
         'Mencionar tasas de interes y plazos disponibles',
         'Calcular cuota mensual aproximada segun monto solicitado',
         'Detallar requisitos y documentacion necesaria',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Explica que es un credito de libre inversion',
         'Presenta las opciones de plazo y tasas disponibles',
         'Haz una simulacion de cuota mensual con el monto del cliente',
         'Menciona los requisitos: ingresos minimos, antiguedad laboral, etc.',
         'Se transparente con seguros y costos asociados',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Escucha atentamente las condiciones del credito',
         'Muestra interes en la cuota mensual calculada',
         'Pregunta sobre seguros y costos adicionales',
@@ -609,24 +613,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 4,
-      'nombre': 'Objeciones y dudas',
-      'objetivo': 'Resolver inquietudes sobre plazos, intereses o requisitos.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 4,
+      nombre: 'Objeciones y dudas',
+      objetivo: 'Resolver inquietudes sobre plazos, intereses o requisitos.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Responder con informacion precisa y verificable',
         'No inventar beneficios o caracteristicas',
         'Ser honesto sobre limitaciones del producto',
         'Comparar con alternativas si el cliente lo solicita',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Escucha atentamente la objecion sin interrumpir',
         'Valida la preocupacion del cliente: "Entiendo su inquietud..."',
         'Aclara dudas sobre tasas, seguros y penalidades por pago anticipado',
         'Si no sabes algo, admite la limitacion y ofrece seguimiento',
         'Refuerza los beneficios del credito segun su necesidad',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Pregunta sobre la tasa de interes y si es fija o variable',
         'Cuestiona sobre penalidades por pago anticipado',
         'Pregunta que pasa si tienes dificultades para pagar alguna cuota',
@@ -635,23 +639,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 5,
-      'nombre': 'Cierre de interes',
-      'objetivo': 'Confirmar si el cliente desea iniciar la solicitud del credito.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 5,
+      nombre: 'Cierre de interes',
+      objetivo: 'Confirmar si el cliente desea iniciar la solicitud del credito.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Hacer resumen de lo conversado y beneficios principales',
         'Preguntar si tiene mas dudas',
         'Ofrecer iniciar solicitud de credito',
         'Explicar los siguientes pasos del proceso',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Resume el monto, plazo y cuota mensual calculada',
         'Pregunta: ¿Desea iniciar la solicitud del credito?',
         'Explica los pasos siguientes: documentacion, estudio y aprobacion',
         'Si no decide, agenda un seguimiento',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Evalua si las condiciones se ajustan a tu capacidad de pago',
         'Expresa tu decision: solicitar el credito, consultar o pensarlo',
         'Si decides continuar, confirma el monto y plazo',
@@ -660,23 +664,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 6,
-      'nombre': 'Confirmacion de datos',
-      'objetivo': 'Validar la informacion financiera necesaria para continuar el proceso.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 6,
+      nombre: 'Confirmacion de datos',
+      objetivo: 'Validar la informacion financiera necesaria para continuar el proceso.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Solicitar y verificar datos personales completos',
         'Confirmar informacion laboral y de ingresos',
         'Validar referencias personales y comerciales',
         'Explicar documentacion requerida',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Solicita datos personales, laborales y de ingresos',
         'Pide certificados laborales y soportes de ingresos',
         'Verifica referencias personales',
         'Explica el proceso de estudio de credito y tiempos de respuesta',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Proporciona tus datos personales y laborales completos',
         'Pregunta que documentos especificos debes presentar',
         'Confirma tus datos de contacto y referencias',
@@ -685,22 +689,22 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 7,
-      'nombre': 'Despedida',
-      'objetivo': 'Cerrar la conversacion de forma cordial y profesional.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 7,
+      nombre: 'Despedida',
+      objetivo: 'Cerrar la conversacion de forma cordial y profesional.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Agradecer al cliente',
         'Reafirmar disponibilidad para futuras consultas',
         'Despedida cordial',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Agradece al cliente por su tiempo y confianza',
         'Reafirma tu disponibilidad para futuras consultas o apoyo',
         'Manten un tono positivo y cordial hasta el final',
         'Desea un buen dia al cliente',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Inicia o responde la despedida de forma cordial',
         'Agradece al asesor por la informacion y apoyo',
         'Expresa confianza en el proceso',
@@ -712,22 +716,22 @@ const ETAPAS_PRODUCTOS = {
 
   'Credito Educativo EducaPlus': [
     {
-      'numero_orden': 1,
-      'nombre': 'Saludo inicial',
-      'objetivo': 'Dar la bienvenida e interesarse por los objetivos educativos del cliente.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 1,
+      nombre: 'Saludo inicial',
+      objetivo: 'Dar la bienvenida e interesarse por los objetivos educativos del cliente.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'El asesor debe presentarse con nombre completo y cargo',
         'Agradecer al cliente por acercarse o mostrar interes',
         'Mantener un tono cordial y profesional',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Manten un tono cercano y profesional',
         'Presentate con tu nombre completo y cargo',
         'Agradece al cliente por su visita o interes',
         'Usa un lenguaje formal pero amigable',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde al saludo del asesor cordialmente',
         'Muestra interes en financiar tus estudios',
         'Menciona brevemente tu objetivo educativo',
@@ -736,23 +740,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 2,
-      'nombre': 'Deteccion de necesidades',
-      'objetivo': 'Identificar el tipo de estudio y el monto requerido para financiarlo.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 2,
+      nombre: 'Deteccion de necesidades',
+      objetivo: 'Identificar el tipo de estudio y el monto requerido para financiarlo.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Identificar tipo de estudio: pregrado, posgrado, tecnico, etc.',
         'Preguntar por institucion educativa',
         'Conocer monto de matricula y gastos educativos',
         'Indagar sobre capacidad de pago del cliente o codeudor',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Pregunta que tipo de estudio desea financiar',
         'Identifica la institucion educativa y si tenemos convenio',
         'Determina el monto total requerido (matricula, materiales, etc.)',
         'Evalua si necesita codeudor y capacidad de pago',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Explica que tipo de estudio deseas realizar (pregrado, posgrado, etc.)',
         'Menciona la institucion educativa y duracion del programa',
         'Indica el monto aproximado de matricula y otros gastos',
@@ -761,24 +765,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 3,
-      'nombre': 'Presentacion de producto',
-      'objetivo': 'Explicar las condiciones especiales del credito educativo EducaPlus.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 3,
+      nombre: 'Presentacion de producto',
+      objetivo: 'Explicar las condiciones especiales del credito educativo EducaPlus.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Explicar beneficios especificos del credito educativo',
         'Mencionar tasas preferenciales y periodos de gracia',
         'Calcular cuota mensual aproximada',
         'Detallar requisitos y documentacion especifica',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Presenta las tasas preferenciales para educacion',
         'Explica los periodos de gracia durante el estudio',
         'Haz una simulacion de cuota mensual',
         'Menciona requisitos: carta de admision, codeudor, etc.',
         'Destaca beneficios de invertir en educacion',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Escucha atentamente las condiciones especiales del credito educativo',
         'Muestra interes en las tasas preferenciales y periodos de gracia',
         'Pregunta sobre la cuota mensual durante y despues del estudio',
@@ -787,24 +791,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 4,
-      'nombre': 'Objeciones y dudas',
-      'objetivo': 'Resolver inquietudes sobre tasas, codeudor o periodo de gracia.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 4,
+      nombre: 'Objeciones y dudas',
+      objetivo: 'Resolver inquietudes sobre tasas, codeudor o periodo de gracia.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Responder con informacion precisa y verificable',
         'No inventar beneficios o caracteristicas',
         'Ser honesto sobre limitaciones del producto',
         'Comparar con alternativas si el cliente lo solicita',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Escucha atentamente la objecion sin interrumpir',
         'Valida la preocupacion del cliente: "Entiendo su inquietud..."',
         'Aclara dudas sobre codeudor, tasas y periodo de gracia',
         'Si no sabes algo, admite la limitacion y ofrece seguimiento',
         'Refuerza la importancia de invertir en educacion',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Pregunta sobre la necesidad de codeudor y requisitos',
         'Cuestiona sobre la tasa de interes y si es fija',
         'Pregunta sobre el periodo de gracia y cuando empiezan los pagos',
@@ -813,23 +817,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 5,
-      'nombre': 'Cierre de interes',
-      'objetivo': 'Confirmar si el cliente desea iniciar la solicitud del credito educativo.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 5,
+      nombre: 'Cierre de interes',
+      objetivo: 'Confirmar si el cliente desea iniciar la solicitud del credito educativo.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Hacer resumen de lo conversado y beneficios principales',
         'Preguntar si tiene mas dudas',
         'Ofrecer iniciar solicitud de credito',
         'Explicar los siguientes pasos del proceso',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Resume los beneficios del credito educativo',
         'Pregunta: ¿Desea iniciar la solicitud del credito?',
         'Explica los pasos siguientes: documentacion, estudio y aprobacion',
         'Si no decide, agenda un seguimiento',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Evalua si las condiciones se ajustan a tu situacion',
         'Expresa tu decision: solicitar el credito, consultar o pensarlo',
         'Si decides continuar, confirma el monto y plazo',
@@ -838,23 +842,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 6,
-      'nombre': 'Confirmacion de datos',
-      'objetivo': 'Validar la informacion academica y financiera para continuar el proceso.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 6,
+      nombre: 'Confirmacion de datos',
+      objetivo: 'Validar la informacion academica y financiera para continuar el proceso.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Solicitar y verificar datos personales y academicos',
         'Confirmar informacion de la institucion educativa',
         'Validar datos del codeudor si aplica',
         'Explicar documentacion requerida especifica',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Solicita datos personales y academicos',
         'Pide informacion de la institucion: nombre, programa, duracion',
         'Si aplica, solicita datos del codeudor',
         'Explica documentacion: carta de admision, costos educativos, etc.',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Proporciona tus datos personales y academicos completos',
         'Entrega informacion detallada de la institucion educativa',
         'Si aplica, proporciona datos del codeudor',
@@ -863,23 +867,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 7,
-      'nombre': 'Despedida',
-      'objetivo': 'Cerrar la conversacion de forma motivadora y profesional.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 7,
+      nombre: 'Despedida',
+      objetivo: 'Cerrar la conversacion de forma motivadora y profesional.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Agradecer al cliente',
         'Reafirmar disponibilidad para futuras consultas',
         'Despedida cordial',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Agradece al cliente por su tiempo y confianza',
         'Motiva al cliente en su proyecto educativo',
         'Reafirma tu disponibilidad para futuras consultas o apoyo',
         'Manten un tono positivo y cordial hasta el final',
         'Desea exito en sus estudios',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Inicia o responde la despedida de forma cordial',
         'Agradece al asesor por el apoyo en tu proyecto educativo',
         'Expresa emocion por comenzar tus estudios',
@@ -891,22 +895,22 @@ const ETAPAS_PRODUCTOS = {
 
   'Credito Hipotecario': [
     {
-      'numero_orden': 1,
-      'nombre': 'Saludo inicial',
-      'objetivo': 'Dar la bienvenida e interesarse por el proyecto de vivienda del cliente.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 1,
+      nombre: 'Saludo inicial',
+      objetivo: 'Dar la bienvenida e interesarse por el proyecto de vivienda del cliente.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'El asesor debe presentarse con nombre completo y cargo',
         'Agradecer al cliente por acercarse o mostrar interes',
         'Mantener un tono cordial y profesional',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Manten un tono cercano y profesional',
         'Presentate con tu nombre completo y cargo',
         'Agradece al cliente por su visita o interes',
         'Usa un lenguaje formal pero amigable',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Responde al saludo del asesor cordialmente',
         'Muestra interes en adquirir vivienda propia',
         'Menciona brevemente tu proyecto de vivienda',
@@ -915,23 +919,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 2,
-      'nombre': 'Deteccion de necesidades',
-      'objetivo': 'Identificar el tipo de vivienda y capacidad de pago del cliente.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 2,
+      nombre: 'Deteccion de necesidades',
+      objetivo: 'Identificar el tipo de vivienda y capacidad de pago del cliente.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Identificar tipo de vivienda: nueva, usada, construccion, etc.',
         'Preguntar por valor aproximado de la propiedad',
         'Conocer ingresos y capacidad de pago del cliente',
         'Indagar sobre ahorros para cuota inicial',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Pregunta que tipo de vivienda busca (nueva, usada, construccion)',
         'Identifica el valor aproximado de la propiedad',
         'Determina su capacidad de pago mensual',
         'Evalua el ahorro para cuota inicial y gastos notariales',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Explica que tipo de vivienda estas buscando',
         'Menciona el valor aproximado de la propiedad que tienes en mente',
         'Indica tus ingresos mensuales y capacidad de pago',
@@ -940,24 +944,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 3,
-      'nombre': 'Presentacion de producto',
-      'objetivo': 'Explicar las condiciones, tasas y beneficios del credito hipotecario.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 3,
+      nombre: 'Presentacion de producto',
+      objetivo: 'Explicar las condiciones, tasas y beneficios del credito hipotecario.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Explicar caracteristicas del credito hipotecario',
         'Mencionar tasas de interes y plazos disponibles',
         'Calcular cuota mensual aproximada',
         'Detallar requisitos y documentacion necesaria',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Presenta las opciones de plazo (15, 20, 30 anos)',
         'Explica las tasas de interes y si son fijas o variables',
         'Haz una simulacion de cuota mensual',
         'Menciona requisitos: ingresos, historial crediticio, etc.',
         'Detalla gastos notariales y de escrituracion',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Escucha atentamente las condiciones del credito hipotecario',
         'Muestra interes en la cuota mensual calculada',
         'Pregunta sobre la tasa de interes y si es fija o variable',
@@ -966,24 +970,24 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 4,
-      'nombre': 'Objeciones y dudas',
-      'objetivo': 'Resolver inquietudes sobre tasas, seguros o requisitos.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 4,
+      nombre: 'Objeciones y dudas',
+      objetivo: 'Resolver inquietudes sobre tasas, seguros o requisitos.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Responder con informacion precisa y verificable',
         'No inventar beneficios o caracteristicas',
         'Ser honesto sobre limitaciones del producto',
         'Comparar con alternativas si el cliente lo solicita',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Escucha atentamente la objecion sin interrumpir',
         'Valida la preocupacion del cliente: "Entiendo su inquietud..."',
         'Aclara dudas sobre tasas, seguros y requisitos',
         'Si no sabes algo, admite la limitacion y ofrece seguimiento',
         'Refuerza los beneficios de tener vivienda propia',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Pregunta sobre la tasa de interes a largo plazo',
         'Cuestiona sobre seguros obligatorios (incendio, terremoto, vida)',
         'Pregunta sobre penalidades por pago anticipado',
@@ -992,23 +996,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 5,
-      'nombre': 'Cierre de interes',
-      'objetivo': 'Confirmar si el cliente desea iniciar la solicitud del credito hipotecario.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 5,
+      nombre: 'Cierre de interes',
+      objetivo: 'Confirmar si el cliente desea iniciar la solicitud del credito hipotecario.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Hacer resumen de lo conversado y beneficios principales',
         'Preguntar si tiene mas dudas',
         'Ofrecer iniciar solicitud de credito',
         'Explicar los siguientes pasos del proceso',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Resume los beneficios del credito hipotecario',
         'Pregunta: ¿Desea iniciar la solicitud del credito?',
         'Explica los pasos siguientes: documentacion, estudio y aprobacion',
         'Si no decide, agenda un seguimiento',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Evalua si las condiciones se ajustan a tu capacidad de pago',
         'Expresa tu decision: solicitar el credito, consultar o pensarlo',
         'Si decides continuar, confirma el monto y plazo',
@@ -1017,23 +1021,23 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 6,
-      'nombre': 'Confirmacion de datos',
-      'objetivo': 'Validar la informacion financiera y de la propiedad para continuar el proceso.',
-      'quien_inicia': 'Asesor',
-      'validaciones': [
+      numero_orden: 6,
+      nombre: 'Confirmacion de datos',
+      objetivo: 'Validar la informacion financiera y de la propiedad para continuar el proceso.',
+      quien_inicia: 'Asesor',
+      validaciones: [
         'Solicitar y verificar datos personales y financieros',
         'Confirmar informacion de la propiedad si ya esta seleccionada',
         'Validar datos de ingresos y capacidad de pago',
         'Explicar documentacion requerida especifica',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Solicita datos personales, laborales y de ingresos',
         'Si ya tiene propiedad, pide informacion de esta',
         'Pide documentacion: extractos bancarios, declaracion de renta, etc.',
         'Explica el proceso de avaluo y estudio de titulos',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Proporciona tus datos personales y financieros completos',
         'Si ya tienes propiedad seleccionada, comparte sus detalles',
         'Entrega informacion sobre tus ingresos y capacidad de pago',
@@ -1042,22 +1046,22 @@ const ETAPAS_PRODUCTOS = {
       ],
     },
     {
-      'numero_orden': 7,
-      'nombre': 'Despedida',
-      'objetivo': 'Cerrar la conversacion de forma cordial y profesional.',
-      'quien_inicia': 'Cliente',
-      'validaciones': [
+      numero_orden: 7,
+      nombre: 'Despedida',
+      objetivo: 'Cerrar la conversacion de forma cordial y profesional.',
+      quien_inicia: 'Cliente',
+      validaciones: [
         'Agradecer al cliente',
         'Reafirmar disponibilidad para futuras consultas',
         'Despedida cordial',
       ],
-      'sugerencias_aprendizaje': [
+      sugerencias_aprendizaje: [
         'Agradece al cliente por su tiempo y confianza',
         'Reafirma tu disponibilidad para futuras consultas o apoyo',
         'Manten un tono positivo y cordial hasta el final',
         'Desea exito en su proyecto de vivienda',
       ],
-      'instrucciones_ia_cliente': [
+      instrucciones_ia_cliente: [
         'Inicia o responde la despedida de forma cordial',
         'Agradece al asesor por el apoyo en tu proyecto de vivienda',
         'Expresa emocion por adquirir tu casa propia',
