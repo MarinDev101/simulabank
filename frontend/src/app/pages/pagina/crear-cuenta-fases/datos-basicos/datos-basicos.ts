@@ -116,8 +116,8 @@ export class DatosBasicos {
     this.registroService.iniciarRegistro(datos).subscribe({
       next: (response) => {
         console.log('Código enviado exitosamente:', response);
-        // Emitir evento para cambiar a la siguiente sección
-        this.continuar.emit({ correo: datos.correo });
+        // Emitir todos los datos para poder reenviar el código después
+        this.continuar.emit(datos);
       },
       error: (error) => {
         this.isLoading = false;

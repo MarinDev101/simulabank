@@ -9,7 +9,6 @@ const emailService = require('../services/email');
 const verificacionService = require('../services/verificacion');
 
 class AuthController {
-
   async iniciarRegistro(req, res) {
     const { correo, nombres, apellidos, contrasena } = req.body;
 
@@ -234,6 +233,76 @@ class AuthController {
       throw err;
     } finally {
       conn.release();
+    }
+  }
+
+  async actualizarPerfilInicial(req, res) {
+    const userId = req.body.userId;
+    const { foto_perfil, fecha_nacimiento, genero } = req.body;
+
+    // Si se envió un archivo usando multipart/form-data (campo 'foto'), convertirlo a base64
+    // y establecer el valor para guardar en la DB.
+    if (req.file && req.file.buffer) {
+      try {
+        const mime = req.file.mimetype || 'image/png';
+        const base64 = req.file.buffer.toString('base64');
+        // Guarda como data URI para facilitar uso desde el frontend
+        // Ejemplo: data:image/png;base64,AAAA...
+        req.body.foto_perfil = `data:${mime};base64,${base64}`;
+      } catch (err) {
+        console.error('Error convirtiendo imagen a base64:', err);
+        return res.status(400).json({ success: false, error: 'Error al procesar la imagen' });
+      }
+    }
+
+    // Validación básica - userId es requerido
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        error: 'ID de usuario requerido',
+      });
+    }
+
+    try {
+      // Construir objeto con solo los campos proporcionados
+      const datosActualizar = {};
+      // Usar el valor actualizado en req.body (puede haber sido establecido desde req.file)
+      const fotoValor = req.body.foto_perfil || foto_perfil;
+      if (fotoValor) datosActualizar.foto_perfil = fotoValor;
+      if (fecha_nacimiento) datosActualizar.fecha_nacimiento = fecha_nacimiento;
+      if (genero) datosActualizar.genero = genero;
+
+      // Si no hay datos para actualizar, retornar éxito
+      if (Object.keys(datosActualizar).length === 0) {
+        return res.json({
+          success: true,
+          message: 'No hay datos para actualizar',
+        });
+      }
+
+      // Actualizar fecha de modificación
+      datosActualizar.fecha_actualizacion = new Date();
+
+      // Actualizar usuario en la base de datos
+      const queryActualizar = 'UPDATE ?? SET ? WHERE ?? = ?';
+      await pool.query(queryActualizar, [
+        TABLAS.USUARIOS,
+        datosActualizar,
+        CAMPOS_ID.USUARIO,
+        userId,
+      ]);
+
+      return res.json({
+        success: true,
+        message: 'Perfil actualizado exitosamente',
+        datos: datosActualizar,
+      });
+    } catch (error) {
+      console.error('Error en actualizarPerfilInicial:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al actualizar el perfil',
+      });
     }
   }
 

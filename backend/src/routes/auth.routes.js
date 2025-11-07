@@ -1,6 +1,7 @@
 const express = require('express');
 const asyncHandler = require('../utils/asyncHandler');
 const authController = require('../controllers/auth.controller');
+const { upload } = require('../config/multer.config');
 
 // Middlewares
 const { authenticateJWT } = require('../middlewares/jwt.middleware');
@@ -62,6 +63,14 @@ function crearAuthRouter() {
     '/sessions',
     authenticateJWT,
     asyncHandler(authController.listSessions.bind(authController))
+  );
+  // Acepta multipart/form-data con campo 'foto' (opcional). Si no envías archivo,
+  // sigue aceptando los campos por JSON en el cuerpo (p. ej. foto_perfil como cadena).
+  router.put(
+    '/perfil-inicial',
+    authenticateJWT,
+    upload.single('foto'),
+    asyncHandler(authController.actualizarPerfilInicial.bind(authController))
   );
   router.post(
     '/logoutAll',

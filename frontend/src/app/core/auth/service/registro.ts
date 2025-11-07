@@ -34,6 +34,19 @@ export interface VerificarCodigoResponse {
   };
 }
 
+export interface ActualizarPerfilRequest {
+  userId: number;
+  foto_perfil?: string;
+  fecha_nacimiento?: string;
+  genero?: string;
+}
+
+export interface ActualizarPerfilResponse {
+  success: boolean;
+  message: string;
+  datos?: any;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -48,5 +61,18 @@ export class RegistroService {
 
   verificarCodigo(datos: VerificarCodigoRequest): Observable<VerificarCodigoResponse> {
     return this.http.post<VerificarCodigoResponse>(`${this.apiUrl}/verificar-codigo`, datos);
+  }
+
+  actualizarPerfilInicial(datos: ActualizarPerfilRequest): Observable<ActualizarPerfilResponse> {
+    return this.http.put<ActualizarPerfilResponse>(`${this.apiUrl}/perfil-inicial`, datos);
+  }
+
+  reenviarCodigo(datos: {
+    correo: string;
+    nombres: string;
+    apellidos: string;
+    contrasena: string;
+  }): Observable<InicioRegistroResponse> {
+    return this.http.post<InicioRegistroResponse>(`${this.apiUrl}/registrar-inicio`, datos);
   }
 }

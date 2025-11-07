@@ -1,4 +1,12 @@
-import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  Output,
+  EventEmitter,
+  Input,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -13,7 +21,9 @@ import { AuthService } from '@app/core/auth/service/auth';
 })
 export class ValidarCuenta implements OnInit {
   @Input() correoUsuario: string = '';
+  @Input() datosRegistro: any = null; // Recibir datos completos del registro
   @Output() volver = new EventEmitter<void>();
+  @Output() continuar = new EventEmitter<void>();
 
   pinForm!: FormGroup;
   pinControls = Array(6);
@@ -114,7 +124,7 @@ export class ValidarCuenta implements OnInit {
     this.errorMessage = '';
 
     this.registroService.verificarCodigo({ correo: this.correoUsuario, codigo }).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log('Verificación exitosa:', response);
 
         // Guardar tokens y datos del usuario
@@ -122,8 +132,13 @@ export class ValidarCuenta implements OnInit {
         localStorage.setItem('refresh_token', response.refreshToken);
         localStorage.setItem('user_data', JSON.stringify(response.user));
 
+        // Continuar al siguiente paso (personalizar perfil)
+        setTimeout(() => {
+          this.isLoading = false;
+          this.continuar.emit();
+        }, 1000);
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoading = false;
         console.error('Error al verificar código:', error);
 
@@ -135,33 +150,47 @@ export class ValidarCuenta implements OnInit {
           this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
         }
 
-        // Limpiar el formulario
         this.limpiarCodigo();
-      },
-      complete: () => {
-        this.isLoading = false;
       },
     });
   }
 
+  // MÉTODO ACTUALIZADO: Reenviar código con datos reales
   reenviarCodigo() {
+    if (!this.datosRegistro) {
+      this.errorMessage = 'No se encontraron los datos del registro';
+      return;
+    }
+
     this.isResending = true;
     this.resendMessage = '';
     this.errorMessage = '';
 
-    // Aquí necesitarías obtener los datos originales del registro
-    // Por ahora, solo mostramos un mensaje
-    // En producción, deberías almacenar temporalmente estos datos
+    // Llamar al servicio para reenviar el código
+    this.registroService.reenviarCodigo(this.datosRegistro).subscribe({
+      next: (response) => {
+        this.isResending = false;
+        this.resendMessage = 'Código reenviado exitosamente. Revisa tu correo.';
 
-    setTimeout(() => {
-      this.isResending = false;
-      this.resendMessage = 'Código reenviado exitosamente. Revisa tu correo.';
+        // Limpiar campos y enfocar el primero
+        this.limpiarCodigo();
 
-      // Limpiar mensaje después de 5 segundos
-      setTimeout(() => {
-        this.resendMessage = '';
-      }, 5000);
-    }, 2000);
+        // Ocultar mensaje después de 5 segundos
+        setTimeout(() => {
+          this.resendMessage = '';
+        }, 5000);
+      },
+      error: (error) => {
+        this.isResending = false;
+        console.error('Error al reenviar código:', error);
+
+        if (error.status === 400) {
+          this.errorMessage = error.error?.error || 'Error al reenviar el código';
+        } else {
+          this.errorMessage = 'No se pudo reenviar el código. Intenta nuevamente.';
+        }
+      },
+    });
   }
 
   limpiarCodigo() {

@@ -15,10 +15,13 @@ import { PersonalizarPerfil } from '../crear-cuenta-fases/personalizar-perfil/pe
 export class CrearCuenta {
   pasoActual = 1;
   correoUsuario = '';
+  datosRegistro: any = null; // Almacenar datos completos del registro
 
-  siguientePaso(datos?: { correo: string }) {
+  siguientePaso(datos?: any) {
+    // Guardar datos del registro si vienen del paso 1
     if (datos?.correo) {
       this.correoUsuario = datos.correo;
+      this.datosRegistro = datos; // Guardar datos completos
     }
 
     if (this.pasoActual < 3) {

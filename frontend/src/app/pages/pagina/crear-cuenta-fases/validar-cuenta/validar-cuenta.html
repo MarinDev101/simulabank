@@ -40,7 +40,7 @@
     </div>
   </form>
 
-  <button (click)="verificarCodigo()" class="mt-5 bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg"
+  <button (click)="verificarCodigo()" class="cursor-pointer mt-5 bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg"
     [disabled]="isLoading">
     @if (isLoading) {
     <span class="loading loading-sm loading-spinner"></span>
@@ -51,11 +51,11 @@
   </button>
 
   <div class="flex justify-around">
-    <button class="mt-5 w-[150px] bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg" (click)="emitirVolver()"
+    <button class="cursor-pointer mt-5 w-[150px] bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg" (click)="emitirVolver()"
       [disabled]="isLoading">
       Volver
     </button>
-    <button class="mt-5 w-[150px] border border-black hover:bg-gray-100 p-2 rounded-lg" (click)="reenviarCodigo()"
+    <button class="cursor-pointer mt-5 w-[150px] border border-black hover:bg-gray-100 p-2 rounded-lg" (click)="reenviarCodigo()"
       [disabled]="isResending || isLoading">
       @if (isResending) {
       <span class="loading loading-sm loading-spinner"></span>
