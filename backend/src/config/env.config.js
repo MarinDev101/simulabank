@@ -27,6 +27,7 @@ const DEFAULTS = {
   jwtRefreshExpires: '7d',
   corsOrigins: ['*'],
   logLevel: 'info',
+  bodyLimit: '10mb',
 };
 
 // =========================================================
@@ -54,6 +55,8 @@ const config = {
   // Servidor
   server: {
     port: Number(process.env.PORT) || DEFAULTS.port,
+    // Límite máximo del cuerpo de las peticiones (p. ej. '10mb')
+    bodyLimit: process.env.BODY_LIMIT || DEFAULTS.bodyLimit,
   },
 
   // Base de datos MySQL

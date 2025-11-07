@@ -10,7 +10,7 @@ CREATE TABLE usuarios (
   contrasena VARCHAR(255) NOT NULL,
   nombres VARCHAR(100) NOT NULL,
   apellidos VARCHAR(100) NOT NULL,
-  foto_perfil VARCHAR(500),
+  foto_perfil MEDIUMTEXT,
   fecha_nacimiento DATE,
   genero ENUM('masculino', 'femenino', 'otro') DEFAULT NULL,
   preferencia_tema ENUM('claro', 'oscuro', 'auto') DEFAULT 'auto',

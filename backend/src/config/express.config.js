@@ -7,7 +7,7 @@ const rateLimit = require('express-rate-limit');
 const { corsOptions } = require('./cors.config');
 const securityMiddleware = require('../middlewares/security.middleware');
 const logger = require('../utils/logger');
-const { isDevelopment } = require('./env.config');
+const { isDevelopment, server } = require('./env.config');
 
 function createExpressApp() {
   const app = express();
@@ -16,8 +16,10 @@ function createExpressApp() {
   app.disable('x-powered-by');
 
   // Parseo de JSON y formularios
-  app.use(express.json({ limit: '10kb' }));
-  app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+  // Usar el límite configurable (BODY_LIMIT) con valor por defecto razonable
+  const bodyLimit = (server && server.bodyLimit) || '10mb';
+  app.use(express.json({ limit: bodyLimit }));
+  app.use(express.urlencoded({ extended: true, limit: bodyLimit }));
 
   // Seguridad básica HTTP
   app.use(cors(corsOptions));
