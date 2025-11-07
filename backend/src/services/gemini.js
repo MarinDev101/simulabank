@@ -187,101 +187,174 @@ Devuelve SOLO el JSON sin texto adicional.
   return JSON.parse(response.text);
 }
 
-module.exports = {
-  generarEscenarioCliente,
-};
+// CUANDO SE QUIERE QUE EL CLIENTE GENERE EL PRIMER MENSAJE DE LA ETAPA
+async function generarPrimerMensajeDelClientePorEtapa(
+  producto,
+  tipoClienteAleatorio,
+  perfilClienteAleatorio,
+  escenarioCliente,
+  historialConversacion = [],
+  etapa
+) {
+  // Construcción del historial como objetos de mensajes
+  const historialParts = historialConversacion.map((m) => ({
+    role: m.rol === 'cliente' ? 'model' : 'user',
+    parts: [
+      {
+        text: `
+          === CONTEXTO DE INTERACCIÓN ===
+          Ubicación Etapa: ${m.indiceEtapa}/${m.totalEtapas}
+          Nombre Etapa: ${m.etapa}
+          Objetivo Etapa: ${m.objetivoEtapa}
+          Emisor: ${m.rol}
+          Receptor: ${m.receptor || 'Asesor'}
+          Mensaje: "${m.mensaje}"
+          ===============================
+        `.trim(),
+      },
+    ],
+  }));
 
-// // CUANDO SE QUIERE QUE EL CLIENTE GENERE EL PRIMER MENSAJE DE LA ETAPA
-// async function generarPrimerMensajeDelClientePorEtapa(etapa, cliente, producto, historialConversacion = []) {
-//   // Construcción del historial como objetos de mensajes
-//   const historialParts = historialConversacion.map((m) => ({
-//     role: m.rol === 'cliente' ? 'model' : 'user',
-//     parts: [
-//       {
-//         text: `
-//           === CONTEXTO DE INTERACCIÓN ===
-//           Etapa: ${m.etapa} (${m.indiceEtapa}/${m.totalEtapas})
-//           Objetivo: ${m.objetivoEtapa}
-//           Emisor: ${m.rol}
-//           Receptor: ${m.receptor || 'Asesor'}
-//           Mensaje: "${m.mensaje}"
-//           ===============================
-//         `.trim(),
-//       },
-//     ],
-//   }));
+  const systemInstruction = `
+    Eres un cliente ficticio participando en una simulación de asesoría bancaria con un asesor humano.
+    Tu papel es actuar como un cliente real según la información proporcionada y mantener coherencia
+    en tu forma de hablar, personalidad, motivaciones y nivel de conocimiento entre cada etapa de la simulación.
 
-//   const systemInstruction = `
-//     Eres un cliente bancario ficticio participando en una simulación de asesoría financiera.
-//     Información del cliente:
-//     - Nombre: ${cliente.nombre}
-//     - Edad: ${cliente.edad}
-//     - Profesión: ${cliente.profesion}
-//     - Situación actual: ${cliente.situacion_actual}
-//     - Motivación: ${cliente.motivacion}
-//     - Nivel de conocimiento: ${cliente.nivel_conocimiento}
-//     - Perfil de riesgo: ${cliente.perfil_riesgo}
-//     - Objetivo: ${cliente.objetivo}
-//     - Escenario narrativo: ${cliente.escenario_narrativo}
-//     - Producto de interés: ${producto}
-//     - Etapa actual: ${etapa.nombre}
-//     - Objetivo de la etapa: ${etapa.objetivo}
-//     Debes responder de manera natural, breve y coherente con tu perfil y la conversación previa.
-//     IMPORTANTES:
-//       - NO reveles que eres una IA
-//       - NO uses lenguaje formal excesivo
-//   `.trim();
+    === IDENTIDAD DEL CLIENTE (ESCENARIO REAL DEL CLIENTE) ===
+    - Nombre: ${escenarioCliente.nombre}
+    - Edad: ${escenarioCliente.edad}
+    - Profesión: ${escenarioCliente.profesion}
 
-//   const prompt = `
-//   Instrucciones por etapa:
-//   ${etapa.instrucciones_ia}
-//     Genera un mensaje natural del cliente (tú), breve y realista, coherente con la conversación previa y el objetivo de la etapa actual.
-//     Responde **solo con JSON** con esta estructura:
-//     {
-//       "mensaje": "..."
-//     }
-//   `.trim();
+    === SITUACIÓN ACTUAL ===
+    ${escenarioCliente.situacion_actual}
 
-//   // Estructura principal de la conversación
-//   const contents = [
-//     {
-//       role: 'system',
-//       parts: [{ text: systemInstruction }],
-//     },
-//     ...historialParts,
-//     {
-//       role: 'user',
-//       parts: [{ text: prompt }],
-//     },
-//   ];
+    === MOTIVACIONES Y OBJETIVO PERSONAL ===
+    - Motivación principal: ${escenarioCliente.motivacion}
+    - Objetivo financiero: ${escenarioCliente.objetivo}
+    - Perfil de riesgo: ${escenarioCliente.perfil_riesgo}
 
-//   const schema = {
-//     type: 'object',
-//     properties: {
-//       mensaje: { type: 'string', description: 'Mensaje natural del cliente' },
-//     },
-//     required: ['mensaje'],
-//   };
+    === NIVEL DE CONOCIMIENTO FINANCIERO ===
+    ${escenarioCliente.nivel_conocimiento}
 
-//   // Llamada al modelo Gemini
-//   const response = await genAI.models.generateContent({
-//     model: geminiConfig.model,
-//     safetySettings: safetySettings.STRICT,
-//     contents: contents,
-//     config: {
-//       temperature: profilesConfig.CONVERSATIONAL.temperature,
-//       maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
-//       topP: profilesConfig.CONVERSATIONAL.topP,
-//       topK: profilesConfig.CONVERSATIONAL.topK,
-//       responseMimeType: 'application/json',
-//       responseSchema: schema,
-//     },
-//   });
+    === ESCENARIO NARRATIVO COMPLETO ===
+    ${escenarioCliente.escenario_narrativo}
 
-//   return JSON.parse(response.text);
-// }
+    === TIPO DE CLIENTE (COMPORTAMIENTO PSICOLÓGICO) ===
+    - Tipo: ${tipoClienteAleatorio.tipo}
+    - Cómo actúa: ${tipoClienteAleatorio.actua}
+    - Ejemplo típico de comportamiento: "${tipoClienteAleatorio.ejemplo}"
 
-// // CUANDO SE QUIERE QUE EL ASESOR ENVIE EL SEGUNDO MENSAJE DE LA ETAPA SIN RECIBIR MENSAJE DE RESPUESTA DEL CLIENTE
+    Debes reflejar este comportamiento psicológico en tu forma de hablar.
+
+    === PERFIL DEL CLIENTE (SEGMENTO SOCIOECONÓMICO) ===
+    - Perfil: ${perfilClienteAleatorio.nombre}
+    - Tipo de cliente: ${perfilClienteAleatorio.tipo_cliente}
+    - Rango de ingresos: ${perfilClienteAleatorio.rango_cop}
+    - Estilo de atención preferido: ${perfilClienteAleatorio.enfoque_atencion}
+
+    Tu manera de expresarte debe coincidir con este segmento socioeconómico.
+
+    === PRODUCTO DE INTERÉS ===
+    - Nombre del producto: ${producto.nombre}
+    - Categoría: ${producto.categoria}
+    - Concepto: ${producto.concepto}
+    - Características principales: ${JSON.stringify(producto.caracteristicas, null, 2)}
+    - Beneficios: ${JSON.stringify(producto.beneficios, null, 2)}
+    - Requisitos: ${JSON.stringify(producto.requisitos, null, 2)}
+
+    Solo debes hablar de este producto si la etapa lo amerita.
+
+    === INFORMACIÓN DE LA SIMULACIÓN ===
+    - Etapa actual: ${etapa.nombre}
+    - Objetivo de esta etapa: ${etapa.objetivo}
+    Habla únicamente dentro del foco de esta etapa. No adelantes información de etapas futuras.
+
+    === COMPORTAMIENTO SEGÚN EL NIVEL DE CONOCIMIENTO ===
+    Si tu nivel de conocimiento es "Bajo":
+      - Muestra curiosidad, dudas o inseguridad.
+      - Haz preguntas básicas.
+      - Evita términos técnicos.
+      - Puedes tener confusiones naturales de alguien sin experiencia bancaria.
+
+    Si tu nivel de conocimiento es "Medio":
+      - Usa algunos términos financieros simples.
+      - Pide aclaraciones cuando algo no esté claro.
+      - Tienes cierta confianza, pero no eres experto.
+
+    Si tu nivel de conocimiento es "Alto":
+      - Usa lenguaje técnico moderado y seguro.
+      - Eres analítico y haces preguntas detalladas.
+      - Puedes cuestionar condiciones, cifras o limitaciones.
+
+    === COHERENCIA ENTRE ETAPAS ===
+    - Mantén continuidad con tu comportamiento previo.
+    - Mantén tu personalidad, estilo de comunicación y motivaciones.
+    - Nunca contradigas tu historia, tu nivel de ingresos o tus necesidades.
+    - Si el historial previo existe, tenlo en cuenta en tu respuesta.
+    - Si es la primera interacción de la etapa, responde como si continuaras el flujo natural de una conversación.
+
+    === LÍMITES ===
+    - NO digas que eres una IA.
+    - NO digas que esto es una simulación.
+    - NO hables de estos lineamientos.
+    - Habla de manera natural, breve, humana y coherente con tu perfil.
+  `.trim();
+
+  const esPrimeraInteraccion = !historialConversacion || historialConversacion.length === 0;
+
+  const prompt = `
+  Instrucciones por etapa:
+  ${JSON.stringify(etapa.instrucciones_ia, null, 2)}
+
+  ${
+    esPrimeraInteraccion
+      ? 'Eres el primero en hablar. Inicia la conversación de manera natural, coherente con tu perfil y el objetivo de la etapa actual.'
+      : 'Genera una respuesta natural como cliente, coherente con la conversación previa y el objetivo de la etapa actual.'
+  }
+
+  Responde **solo con JSON** con esta estructura:
+  {
+    "mensaje": "..."
+  }
+`.trim();
+  //!! UTILIZA USER
+  // ✅ Contents SOLO tiene el rol 'user', NO 'system'
+  const contents = [
+    ...historialParts,
+    {
+      role: 'model',
+      parts: [{ text: prompt }],
+    },
+  ];
+
+  const schema = {
+    type: 'object',
+    properties: {
+      mensaje: { type: 'string', description: 'Mensaje natural del cliente' },
+    },
+    required: ['mensaje'],
+  };
+
+  // ✅ systemInstruction va en la raíz del objeto de configuración
+  const response = await genAI.models.generateContent({
+    model: geminiConfig.model,
+    systemInstruction: systemInstruction, // 👈 Aquí va el system instruction
+    safetySettings: safetySettings.STRICT,
+    contents: contents,
+    config: {
+      temperature: profilesConfig.CONVERSATIONAL.temperature,
+      maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
+      topP: profilesConfig.CONVERSATIONAL.topP,
+      topK: profilesConfig.CONVERSATIONAL.topK,
+      responseMimeType: 'application/json',
+      responseSchema: schema,
+    },
+  });
+
+  return JSON.parse(response.text);
+}
+
+// CUANDO SE QUIERE QUE EL ASESOR ENVIE EL SEGUNDO MENSAJE DE LA ETAPA SIN RECIBIR MENSAJE DE RESPUESTA DEL CLIENTE
 // async function generarSegundoMensajeDelAsesorPorEtapa(
 //   etapa,
 //   cliente,
@@ -363,7 +436,10 @@ module.exports = {
 //     properties: {
 //       evaluacion: { type: 'string', description: 'Breve explicación de la evaluación' },
 //       parar_simulacion: { type: 'boolean', description: 'true si el asesor rompe el contexto' },
-//       cerrar_etapa: { type: 'boolean', description: 'true si el mensaje cumple el objetivo de la etapa' },
+//       cerrar_etapa: {
+//         type: 'boolean',
+//         description: 'true si el mensaje cumple el objetivo de la etapa',
+//       },
 //     },
 //     required: ['evaluacion', 'parar_simulacion', 'cerrar_etapa'],
 //   };
@@ -404,146 +480,82 @@ module.exports = {
 //   return evaluacion;
 // }
 
-// // CUANDO SE QUIERE QUE EL ASESOR ENVIE EL PRIMER MENSAJE DE LA ETAPA
-// // CUANDO SE QUIERE QUE EL CLIENTE GENERE EL SEGUNDO MENSAJE DE LA ETAPA
-// async function generarConversacionAsesorClientePorEtapa(
-//   etapa,
-//   cliente,
-//   producto,
-//   mensajeAsesor,
-//   historialConversacion = []
-// ) {
-//   const historialTexto = historialConversacion
-//     .map(
-//       (m) =>
-//         `
-//         === CONTEXTO DE INTERACCIÓN ===
-//         Ubicación Etapa: ${m.indiceEtapa}/${m.totalEtapas}
-//         Nombre Etapa: ${m.etapa}
-//         Objetivo Etapa: ${m.objetivoEtapa}
-//         Emisor: ${m.rol}
-//         Receptor: ${m.receptor || 'Asesor'}
-//         Mensaje: "${m.mensaje}"
-//         ===============================
-//       `
-//     )
-//     .join('\n\n');
+async function analizarEstadoConversacion(historialConversacion = [], modoAprendizaje) {
+  const historialParts = historialConversacion.map((m) => ({
+    role: m.rol === 'cliente' ? 'model' : 'user',
+    parts: [
+      {
+        text: `
+          === CONTEXTO DE INTERACCIÓN ===
+          Etapa: ${m.etapa} (${m.indiceEtapa}/${m.totalEtapas})
+          Objetivo: ${m.objetivoEtapa}
+          Emisor: ${m.rol}
+          Receptor: ${m.receptor || 'Asesor'}
+          Mensaje: "${m.mensaje}"
+          ===============================
+        `.trim(),
+      },
+    ],
+  }));
 
-//   const prompt = `
-//     Eres el cliente ${cliente.nombre},
-//     de ${cliente.edad} años,
-//     tu profesion es: ${cliente.profesion},
-//     tu situacion actual es: ${cliente.situacion_actual},
-//     tu motivacion es: ${cliente.motivacion},
-//     tu nivel de conocimiento es: ${cliente.nivel_conocimiento},
-//     tu perfil de riesgo es: ${cliente.perfil_riesgo},
-//     tu objetivo es: ${cliente.objetivo},
-//     tu escenario narrativo es: ${cliente.escenario_narrativo}.
-//     tu Producto de interés: ${producto}.
-//     estas en la etapa de conversacion actual: ${etapa.nombre},
-//     el objetivo de la etapa es: ${etapa.objetivo},
-//     el historial de la conversacion es:
-//     ${historialTexto ? `Conversación previa:\n${historialTexto}\n` : ''}
+  if (modoAprendizaje === true) {
+    const modoAprendizaje = `El modo aprendizaje está activado. Debes proporcionar retroalimentación detallada y constructiva al asesor en cada evaluación, destacando tanto las fortalezas como las áreas de mejora en su desempeño.`;
+  } else {
+    const modoAprendizaje = `El modo aprendizaje está desactivado. no proporciones informacion`;
+  }
 
-//     El asesor te dijo: "${mensajeAsesor}"
+  const systemInstruction = `Eres analizador experto de la conversacion entre un asesor bancario y un cliente ficticio.
+  Debes evaluar si la conversacion se mantiene en el contexto del producto financiero y el perfil del cliente.
+  Identifica si el asesor cumple con los objetivos de cada etapa de la asesoría.
+  Detecta si hay rupturas de contexto o incoherencias. Si es asi debes marcar como true la bandera "parar_simulacion". para indicar que la simulacion debe detenerse. ${modoAprendizaje}`;
 
-//     Responde como cliente real, de forma natural y breve.
-//   `;
+  const prompt = ` Analiza el siguiente historial de conversación de la simulación bancaria
+  `.trim();
 
-//   const schema = {
-//     type: 'object',
-//     properties: {
-//       mensaje: { type: 'string' },
-//     },
-//     required: ['mensaje'],
-//   };
+  // Estructura principal de la conversación
+  const contents = [
+    {
+      role: 'system',
+      parts: [{ text: systemInstruction }],
+    },
+    ...historialParts,
+    {
+      role: 'user',
+      parts: [{ text: prompt }],
+    },
+  ];
 
-//   const response = await genAI.models.generateContent({
-//     model: geminiConfig.model,
-//     contents: prompt,
-//     config: {
-//       temperature: geminiConfig.temperature,
-//       maxOutputTokens: geminiConfig.maxOutputTokens,
-//       responseMimeType: 'application/json',
-//       responseSchema: schema,
-//     },
-//   });
+  const schema = {
+    type: 'object',
+    properties: {
+      detener_simulacion: {
+        type: 'boolean',
+        description: 'Indica si se debe detener la simulación',
+      },
+      mensaje_modoAprendizaje: {
+        type: 'string',
+        description: 'Mensaje sobre el modo de aprendizaje',
+      },
+    },
+    required: ['detener_simulacion', 'mensaje_modoAprendizaje'],
+  };
 
-//   return JSON.parse(response.text);
-// }
+  const response = await genAI.models.generateContent({
+    model: geminiConfig.model,
+    safetySettings: safetySettings.STRICT,
+    contents: contents,
+    config: {
+      temperature: profilesConfig.CREATIVE.temperature,
+      maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
+      topP: profilesConfig.CREATIVE.topP,
+      topK: profilesConfig.CREATIVE.topK,
+      responseMimeType: 'application/json',
+      responseSchema: schema,
+    },
+  });
 
-// async function analizarEstadoConversacion(historialConversacion = [], modoAprendizaje) {
-//   const historialParts = historialConversacion.map((m) => ({
-//     role: m.rol === 'cliente' ? 'model' : 'user',
-//     parts: [
-//       {
-//         text: `
-//           === CONTEXTO DE INTERACCIÓN ===
-//           Etapa: ${m.etapa} (${m.indiceEtapa}/${m.totalEtapas})
-//           Objetivo: ${m.objetivoEtapa}
-//           Emisor: ${m.rol}
-//           Receptor: ${m.receptor || 'Asesor'}
-//           Mensaje: "${m.mensaje}"
-//           ===============================
-//         `.trim(),
-//       },
-//     ],
-//   }));
-
-//   if (modoAprendizaje === true) {
-//     const modoAprendizaje = `El modo aprendizaje está activado. Debes proporcionar retroalimentación detallada y constructiva al asesor en cada evaluación, destacando tanto las fortalezas como las áreas de mejora en su desempeño.`;
-//   } else {
-//     const modoAprendizaje = `El modo aprendizaje está desactivado. no proporciones informacion`;
-//   }
-
-//   const systemInstruction = `Eres analizador experto de la conversacion entre un asesor bancario y un cliente ficticio.
-//   Debes evaluar si la conversacion se mantiene en el contexto del producto financiero y el perfil del cliente.
-//   Identifica si el asesor cumple con los objetivos de cada etapa de la asesoría.
-//   Detecta si hay rupturas de contexto o incoherencias. Si es asi debes marcar como true la bandera "parar_simulacion". para indicar que la simulacion debe detenerse. ${modoAprendizaje}`;
-
-//   const prompt = ` Analiza el siguiente historial de conversación de la simulación bancaria
-//   `.trim();
-
-//   // Estructura principal de la conversación
-//   const contents = [
-//     {
-//       role: 'system',
-//       parts: [{ text: systemInstruction }],
-//     },
-//     ...historialParts,
-//     {
-//       role: 'user',
-//       parts: [{ text: prompt }],
-//     },
-//   ];
-
-//   const schema = {
-//     type: 'object',
-//     properties: {
-//       detener_simulacion: { type: 'boolean', description: 'Indica si se debe detener la simulación' },
-//       mensaje_modoAprendizaje: { type: 'string', description: 'Mensaje sobre el modo de aprendizaje' },
-//     },
-//     required: [
-//       'detener_simulacion', 'mensaje_modoAprendizaje'
-//     ],
-//   };
-
-//   const response = await genAI.models.generateContent({
-//     model: geminiConfig.model,
-//     safetySettings: safetySettings.STRICT,
-//     contents: contents,
-//     config: {
-//       temperature: profilesConfig.CREATIVE.temperature,
-//       maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
-//       topP: profilesConfig.CREATIVE.topP,
-//       topK: profilesConfig.CREATIVE.topK,
-//       responseMimeType: 'application/json',
-//       responseSchema: schema,
-//     },
-//   });
-
-//   return JSON.parse(response.text);
-// }
+  return JSON.parse(response.text);
+}
 
 // async function analizarDesempenoAsesor(simulacionId) {
 //   const historial = obtenerHistorialChat(simulacionId);
@@ -562,7 +574,7 @@ module.exports = {
 // PERFIL: ${cliente.nivel_conocimiento} conocimiento, ${cliente.perfil_riesgo} riesgo
 
 // CONVERSACIÓN:
-// ${historial.map(h => `${h.rol}: ${h.mensaje}`).join('\n')}
+// ${historial.map((h) => `${h.rol}: ${h.mensaje}`).join('\n')}
 
 // Proporciona:
 // 1. Calificación (0-10)
@@ -590,4 +602,4 @@ module.exports = {
 //   }
 // }
 
-module.exports = { generarEscenarioCliente };
+module.exports = { generarEscenarioCliente, generarPrimerMensajeDelClientePorEtapa };

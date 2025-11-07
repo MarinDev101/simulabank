@@ -177,20 +177,15 @@ const geminiService = require('../services/gemini');
 }
  * El controlador recibe datos ya procesados y listos para usar.
  */
+
 exports.iniciarSimulacion = async (req, res) => {
   try {
     const userId = req.user?.id || req.user?.userId;
     const { configuracion } = req.body;
-
-    // ✅ El validador ya verificó:
-    // - userId existe y es un aprendiz
-    // - configuración es válida
-    // - producto está mapeado a nombreProducto
-
-    const nombreProducto = configuracion.nombreProducto; // Ya viene mapeado del validador
+    const nombreProducto = configuracion.nombreProducto;
 
     // =====================================================
-    // 1️⃣ Verificar si ya hay una simulación activa o pausada
+    // 1️⃣ Verificar simulación activa o pausada
     // =====================================================
     const [simulacionExistente] = await pool.query(
       `SELECT id_simulacion, estado
@@ -212,41 +207,36 @@ exports.iniciarSimulacion = async (req, res) => {
     }
 
     // =====================================================
-    // 2️⃣ Obtener información del producto bancario por nombre
+    // 2️⃣ Obtener producto bancario
     // =====================================================
     const [productos] = await pool.query('SELECT * FROM productos_bancarios WHERE nombre = ?', [
       nombreProducto,
     ]);
-
-    const producto = productos[0] || null;
-
+    const producto = productos[0];
     if (!producto) {
       return res.status(404).json({
         ok: false,
         error: 'Producto no encontrado',
-        mensaje: `No se encontró un producto bancario con el nombre "${nombreProducto}" en la base de datos.`,
+        mensaje: `No se encontró un producto bancario con el nombre "${nombreProducto}".`,
       });
     }
 
     // =====================================================
-    // 3️⃣ Obtener un tipo de cliente aleatorio
+    // 3️⃣ Tipo de cliente aleatorio
     // =====================================================
     const [tiposClientes] = await pool.query(
       'SELECT * FROM tipos_clientes ORDER BY RAND() LIMIT 1'
     );
-
-    const tipoClienteAleatorio = tiposClientes[0] || null;
-
+    const tipoClienteAleatorio = tiposClientes[0];
     if (!tipoClienteAleatorio) {
       return res.status(404).json({
         ok: false,
         error: 'Tipo de cliente no encontrado',
-        mensaje: 'No se encontró ningún tipo de cliente en la base de datos.',
       });
     }
 
     // =====================================================
-    // 4️⃣ Obtener un perfil de cliente asociado al producto (aleatorio)
+    // 4️⃣ Perfil de cliente asociado al producto
     // =====================================================
     const [perfilesAsociados] = await pool.query(
       `SELECT pc.*
@@ -258,21 +248,19 @@ exports.iniciarSimulacion = async (req, res) => {
        LIMIT 1`,
       [nombreProducto]
     );
-
-    const perfilClienteAleatorio = perfilesAsociados[0] || null;
-
+    const perfilClienteAleatorio = perfilesAsociados[0];
     if (!perfilClienteAleatorio) {
       return res.status(404).json({
         ok: false,
         error: 'Perfil no encontrado',
-        mensaje: `No se encontró ningún perfil de cliente asociado al producto "${nombreProducto}".`,
+        mensaje: `No se encontró ningún perfil asociado al producto "${nombreProducto}".`,
       });
     }
 
     // =====================================================
-    // 5️⃣ Generar escenario del cliente usando Gemini 🤖
+    // 5️⃣ Generar escenario del cliente con Gemini 🤖
     // =====================================================
-    let escenarioCliente = null;
+    let escenarioCliente;
     try {
       escenarioCliente = await geminiService.generarEscenarioCliente(
         producto,
@@ -290,7 +278,7 @@ exports.iniciarSimulacion = async (req, res) => {
     }
 
     // =====================================================
-    // 6️⃣ Crear la nueva simulación
+    // 6️⃣ Crear simulación (inicia con etapa_actual_index = 1)
     // =====================================================
     const { modo, destino, interaccion } = configuracion;
 
@@ -305,16 +293,17 @@ exports.iniciarSimulacion = async (req, res) => {
         perfil_cliente,
         aspectos_clave_registrados,
         conversacion_asesoria,
-        estado
+        estado,
+        etapa_actual_index
       )
-      VALUES (?, ?, 'especifico', ?, ?, ?, '{}', '[]', '[]', 'en_proceso')`,
+      VALUES (?, ?, 'especifico', ?, ?, ?, '{}', '[]', '[]', 'en_proceso', 1)`,
       [userId, producto.id_producto_bancario, modo, destino, interaccion !== 'silenciado']
     );
 
     const idNuevaSimulacion = result.insertId;
 
     // =====================================================
-    // 7️⃣ Guardar el CLIENTE SIMULADO (escenario generado)
+    // 7️⃣ Guardar cliente simulado
     // =====================================================
     await pool.query(
       `INSERT INTO clientes_simulados (
@@ -348,7 +337,52 @@ exports.iniciarSimulacion = async (req, res) => {
     );
 
     // =====================================================
-    // 8️⃣ Respuesta completa al frontend
+    // 8️⃣ Verificar quién inicia la etapa 1
+    // =====================================================
+    const [etapas] = await pool.query(
+      `SELECT * FROM etapas_conversacion
+       WHERE id_producto_bancario = ?
+       AND numero_orden = 1
+       LIMIT 1`,
+      [producto.id_producto_bancario]
+    );
+
+    const etapaActual = etapas[0];
+    let mensajeInicialCliente = null;
+
+    if (etapaActual && etapaActual.quien_inicia === 'Cliente') {
+      try {
+        mensajeInicialCliente = await geminiService.generarPrimerMensajeDelClientePorEtapa(
+          producto,
+          tipoClienteAleatorio,
+          perfilClienteAleatorio,
+          escenarioCliente,
+          [],
+          etapaActual
+        );
+
+        // Guardar el mensaje inicial en la simulación
+        await pool.query(
+          `UPDATE simulaciones
+           SET conversacion_asesoria = JSON_ARRAY(
+             JSON_OBJECT(
+               'rol', 'cliente',
+               'mensaje', ?,
+               'indiceEtapa', 1,
+               'nombreEtapa', ?,
+               'fecha', NOW()
+             )
+           )
+           WHERE id_simulacion = ?`,
+          [mensajeInicialCliente.mensaje, etapaActual.nombre, idNuevaSimulacion]
+        );
+      } catch (error) {
+        console.error('Error al generar primer mensaje del cliente:', error);
+      }
+    }
+
+    // =====================================================
+    // 9️⃣ Respuesta final al frontend
     // =====================================================
     return res.status(201).json({
       ok: true,
@@ -358,6 +392,8 @@ exports.iniciarSimulacion = async (req, res) => {
       tipo_cliente: tipoClienteAleatorio,
       perfil_cliente: perfilClienteAleatorio,
       escenario_cliente: escenarioCliente,
+      etapa_inicial: etapaActual || null,
+      primer_mensaje_cliente: mensajeInicialCliente || null,
     });
   } catch (error) {
     console.error('Error al iniciar simulación:', error);
