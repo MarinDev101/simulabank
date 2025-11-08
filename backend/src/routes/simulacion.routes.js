@@ -7,7 +7,8 @@ const { authenticateJWT } = require('../middlewares/jwt.middleware');
 
 // Validadores
 const {
-  validarIniciarSimulacion
+  validarDatosDeIniciarSimulacion,
+  validarDatosDeEnviarMensaje,
 } = require('../validators/simulacion.validator');
 
 /**
@@ -25,7 +26,12 @@ function crearSimulacionRouter() {
    * Body: { configuracion: { producto, modo, destino, interaccion } }
    * Response: { ok, cliente, etapaActual, estado, mensajeCliente, mensaje }
    */
-  router.post('/iniciar', authenticateJWT, validarIniciarSimulacion, asyncHandler(simulacionController.iniciarSimulacion));
+  router.post(
+    '/iniciar',
+    authenticateJWT,
+    validarDatosDeIniciarSimulacion,
+    asyncHandler(simulacionController.iniciarSimulacion)
+  );
 
   /**
    * POST /api/simulacion/mensaje
@@ -35,7 +41,12 @@ function crearSimulacionRouter() {
    * Body: { mensaje: "texto del mensaje" }
    * Response: { ok, mensajeCliente, etapaCambiada, etapaActual, estado, ... }
    */
-  router.post('/mensaje', authenticateJWT, asyncHandler(simulacionController.enviarMensaje));
+  router.post(
+    '/mensaje',
+    authenticateJWT,
+    validarDatosDeEnviarMensaje,
+    asyncHandler(simulacionController.enviarMensaje)
+  );
 
   /**
    * GET /api/simulacion/estado

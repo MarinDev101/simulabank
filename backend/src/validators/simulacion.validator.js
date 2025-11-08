@@ -20,7 +20,7 @@ const INTERACCIONES_VALIDAS = ['automatico', 'silenciado'];
  * Valida los datos Y hace el mapeo del producto.
  * El controlador recibe datos ya procesados y listos para usar.
  */
-async function validarIniciarSimulacion(req, res, next) {
+async function validarDatosDeIniciarSimulacion(req, res, next) {
   try {
     const userId = req.user?.id || req.user?.userId;
     const { configuracion } = req.body;
@@ -126,6 +126,104 @@ async function validarIniciarSimulacion(req, res, next) {
   }
 }
 
+async function validarDatosDeEnviarMensaje(req, res, next) {
+  try {
+    const userId = req.user?.id || req.user?.userId;
+    const { mensaje } = req.body;
+
+    // ============ VALIDAR AUTENTICACIÓN ============
+    if (!userId) {
+      return res.status(401).json({
+        ok: false,
+        error: 'Usuario no autenticado',
+        mensaje: 'Debe iniciar sesión para enviar mensajes.',
+      });
+    }
+
+    // ============ VALIDAR EXISTENCIA DEL USUARIO COMO APRENDIZ ============
+    const [aprendiz] = await pool.query(
+      'SELECT id_aprendiz FROM aprendices WHERE id_aprendiz = ?',
+      [userId]
+    );
+
+    if (!aprendiz || aprendiz.length === 0) {
+      return res.status(403).json({
+        ok: false,
+        error: 'Acceso denegado',
+        mensaje: 'El usuario autenticado no está registrado como aprendiz.',
+      });
+    }
+
+    // ============ VALIDAR ESTRUCTURA DEL BODY ============
+    if (!req.body || typeof req.body !== 'object') {
+      return res.status(400).json({
+        ok: false,
+        error: 'Cuerpo de solicitud inválido',
+        mensaje: 'Debe enviar un objeto JSON con el campo "mensaje".',
+      });
+    }
+
+    // ============ VALIDAR CAMPO "mensaje" ============
+    if (mensaje === undefined || mensaje === null) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Mensaje requerido',
+        mensaje: 'Debe enviar el campo "mensaje" en la solicitud.',
+      });
+    }
+
+    if (typeof mensaje !== 'string') {
+      return res.status(400).json({
+        ok: false,
+        error: 'Tipo de dato incorrecto',
+        mensaje: 'El campo "mensaje" debe ser una cadena de texto.',
+      });
+    }
+
+    const mensajeLimpio = mensaje.trim();
+
+    if (mensajeLimpio.length === 0) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Mensaje vacío',
+        mensaje: 'El mensaje no puede estar vacío o solo contener espacios.',
+      });
+    }
+
+    // ============ VALIDAR LONGITUD Y CONTENIDO ============
+    if (mensajeLimpio.length > 1000) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Mensaje demasiado largo',
+        mensaje: 'El mensaje no puede superar los 1000 caracteres.',
+      });
+    }
+
+    // Evitar mensajes con solo símbolos o números
+    if (!/[a-zA-ZÀ-ÿ]/.test(mensajeLimpio)) {
+      return res.status(400).json({
+        ok: false,
+        error: 'Contenido inválido',
+        mensaje: 'El mensaje debe contener al menos una palabra o carácter alfabético válido.',
+      });
+    }
+
+    // Sanitizar el mensaje (para evitar espacios repetidos y caracteres no deseados)
+    req.body.mensaje = mensajeLimpio.replace(/\s+/g, ' ');
+
+    // ✅ Todo validado, continuar al controlador
+    next();
+  } catch (err) {
+    console.error('[Validación enviar mensaje] Error:', err);
+    return res.status(500).json({
+      ok: false,
+      error: 'Error interno de validación',
+      mensaje: err.message,
+    });
+  }
+}
+
 module.exports = {
-  validarIniciarSimulacion,
+  validarDatosDeIniciarSimulacion,
+  validarDatosDeEnviarMensaje,
 };
