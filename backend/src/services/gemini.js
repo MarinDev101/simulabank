@@ -43,6 +43,11 @@ Devuelve SOLO el JSON sin texto adicional.
   const schema = {
     type: 'object',
     properties: {
+      genero: {
+        type: 'string',
+        enum: ['hombre', 'mujer'],
+        description: 'Género del cliente (hombre o mujer)',
+      },
       nombre: { type: 'string', description: 'Nombre completo realista' },
       edad: { type: 'string', description: 'Edad coherente con el perfil' },
       profesion: { type: 'string', description: 'Profesión específica' },
@@ -54,6 +59,7 @@ Devuelve SOLO el JSON sin texto adicional.
       escenario_narrativo: { type: 'string', description: 'Historia de fondo del cliente' },
     },
     required: [
+      'genero',
       'nombre',
       'edad',
       'profesion',
@@ -131,7 +137,7 @@ async function generarMensajeCliente(
 === CONTEXTO DE INTERACCIÓN ===
 Ubicación Etapa: ${m.indiceEtapa}/${m.totalEtapas}
 Nombre Etapa: ${m.nombreEtapa}
-Objetivo Etapa: ${m.objetivoEtapa}
+Objetivo del asesor en la Etapa: ${m.objetivoEtapa}
 Emisor: ${m.emisor}
 Mensaje: "${m.mensaje}"
 Receptor: ${m.receptor}
@@ -147,6 +153,7 @@ Tu papel es el de un cliente real, con una identidad, motivaciones y comportamie
 Debes mantener consistencia en tu forma de hablar, personalidad, motivaciones y nivel de conocimiento entre cada etapa de la conversación.
 
 === TU IDENTIDAD DEL CLIENTE (ESCENARIO REAL DEL CLIENTE) ===
+- Genero: ${escenarioCliente.genero}
 - Nombre: ${escenarioCliente.nombre}
 - Edad: ${escenarioCliente.edad}
 - Profesión: ${escenarioCliente.profesion}

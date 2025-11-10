@@ -1,5 +1,6 @@
 const { pool } = require('../config/database.config');
 const geminiService = require('../services/gemini');
+const fetch = require('node-fetch');
 
 /**
  * http://localhost:3000/api/simulacion/iniciar
@@ -144,6 +145,7 @@ exports.iniciarSimulacion = async (req, res) => {
     await pool.query(
       `INSERT INTO clientes_simulados (
         id_simulacion,
+        genero,
         nombre,
         edad,
         profesion,
@@ -155,9 +157,10 @@ exports.iniciarSimulacion = async (req, res) => {
         escenario_narrativo,
         id_tipo_cliente,
         id_perfil_cliente
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         idNuevaSimulacion,
+        escenarioCliente.genero,
         escenarioCliente.nombre,
         escenarioCliente.edad,
         escenarioCliente.profesion,
@@ -301,8 +304,8 @@ exports.enviarMensaje = async (req, res) => {
     // 2️⃣ Buscar simulación activa (en_proceso)
     // ===============================================
     const [simulaciones] = await pool.query(
-      `SELECT * FROM simulaciones WHERE id_aprendiz = ? AND estado = 'en_proceso' LIMIT 1`,
-      [userId]
+      'SELECT * FROM simulaciones WHERE id_aprendiz = ? AND estado = ? LIMIT 1',
+      [userId, 'en_proceso']
     );
 
     const simulacion = simulaciones[0];
