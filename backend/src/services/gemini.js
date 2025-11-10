@@ -319,213 +319,203 @@ Responde **solo con JSON** con esta estructura:
   }
 }
 
+async function generarAnalisisConversacion(
+  producto,
+  tipoClienteAleatorio,
+  perfilClienteAleatorio,
+  escenarioCliente,
+  historialConversacion = [],
+  etapaActual,
+  modoAprendizaje,
+  mensajeAsesor
+) {
+  // Construir historial formateado con roles correctos según el emisor
+  const historialParts = historialConversacion.map((m) => ({
+    // Si el emisor es "Cliente", el rol es "model" (respuesta de la IA)
+    // Si el emisor es "Asesor", el rol es "user" (mensaje del usuario)
+    role: m.emisor === 'Cliente' ? 'model' : 'user',
+    parts: [
+      {
+        text: `
+=== CONTEXTO DE INTERACCIÓN ===
+Ubicación Etapa: ${m.indiceEtapa}/${m.totalEtapas}
+Nombre Etapa: ${m.nombreEtapa}
+Objetivo del asesor en la Etapa: ${m.objetivoEtapa}
+Emisor: ${m.emisor}
+Mensaje: "${m.mensaje}"
+Receptor: ${m.receptor}
+===============================
+`.trim(),
+      },
+    ],
+  }));
+  const instruccionesModoAprendizaje = '';
+  if (modoAprendizaje) {
+    instruccionesModoAprendizaje = `
+      Tu deber tambien es recomendar al asesor como debe hablar y que
+      debe decir con respecto al historial y a la asesoria y a la etapa
+      en la que se encuentra.
+          INSTRUCCIONES DE EVALUACIÓN:
+    - Evalúa si el mensaje del asesor se mantiene en el contexto del producto y objetivo de la etapa.
+    - Evalúa si el mensaje aporta valor y cumple con el propósito de la etapa (orientar, informar, cerrar, etc.).
+    - Si el mensaje se sale del contexto, marca "parar_simulacion": true.
+    - Si el mensaje cumple correctamente el objetivo de la etapa, marca "cerrar_etapa": true.
+    - Si el mensaje es apropiado pero no completa la etapa, deja ambas banderas en false.
+    - Incluye una breve justificación textual de la evaluación.
+    `;
+  }
+
+  const systemInstruction = `
+Eres un evaluador de simulaciones bancarias para entrenar asesores.
+Tu tarea es analizar los mensajes enviados por el asesor
+de una asesoría simulada y determinar si:
+  - El mensaje cumple el objetivo de la etapa.
+  - El mensaje mantiene coherencia con el producto y el perfil del cliente.
+  - El mensaje se sale del contexto o rompe la simulación.
+  Eres analizador experto de la conversacion entre un asesor bancario y un cliente ficticio.
+  Debes evaluar si la conversacion se mantiene en el contexto del producto financiero y el perfil del cliente.
+  Identifica si el asesor cumple con los objetivos de cada etapa de la asesoría.
+
+${instruccionesModoAprendizaje}
+
+=== INFORMACION DEL PRODUCTO QUE EL CLIENTE NECESITA ===
+- Nombre del producto: ${producto.nombre}
+- Categoría: ${producto.categoria}
+- Concepto: ${producto.concepto}
+- Características principales: ${JSON.stringify(producto.caracteristicas, null, 2)}
+- Beneficios: ${JSON.stringify(producto.beneficios, null, 2)}
+- Requisitos: ${JSON.stringify(producto.requisitos, null, 2)}
+
+=== COMPORTAMIENTO PSICOLÓGICO DEL CLIENTE ===
+- Tipo: ${tipoClienteAleatorio.tipo}
+- Cómo actúa: ${tipoClienteAleatorio.actua}
+- Ejemplo típico de comportamiento: "${tipoClienteAleatorio.ejemplo}"
+
+=== PERFIL SOCIOECONÓMICO DEL CLIENTE ===
+- Perfil: ${perfilClienteAleatorio.nombre}
+- Tipo de cliente: ${perfilClienteAleatorio.tipo_cliente}
+- Rango de ingresos: ${perfilClienteAleatorio.rango_cop}
+- Estilo de atención preferido: ${perfilClienteAleatorio.enfoque_atencion}
+
+=== CONTEXTO DEL CLIENTE ===
+- Genero: ${escenarioCliente.genero}
+- Nombre: ${escenarioCliente.nombre}
+- Edad: ${escenarioCliente.edad}
+- Profesión: ${escenarioCliente.profesion}
+- situacion actual: ${escenarioCliente.situacion_actual}
+- Motivación principal: ${escenarioCliente.motivacion}
+- Objetivo financiero: ${escenarioCliente.objetivo}
+- Perfil de riesgo: ${escenarioCliente.perfil_riesgo}
+- Nivel de conocimiento: ${escenarioCliente.nivel_conocimiento}
+- Escenario narrativo del cliente: ${escenarioCliente.escenario_narrativo}
+
+=== INFORMACIÓN DE LA CONVERSACIÓN ===
+- Etapa actual: ${etapaActual.nombre}
+- Objetivo de esta etapa: ${etapaActual.objetivo}
+
+INSTRUCCIONES DE EVALUACIÓN:
+- Evalúa si el mensaje del asesor se mantiene en el contexto del producto y objetivo de la etapa.
+- Evalúa si el mensaje aporta valor y cumple con el propósito de la etapa (orientar, informar, cerrar, etc.).
+- Si el mensaje se sale del contexto, marca "parar_simulacion": true.
+- Si el mensaje cumple correctamente el objetivo de la etapa, marca "cerrar_etapa": true.
+- Si el mensaje es apropiado pero no completa la etapa, deja ambas banderas en false.
+- Incluye una breve justificación textual de la evaluación.
+
+=== LÍMITES ===
+- NO digas que eres una IA.
+- NO digas que esto es una simulación.
+- NO hables de estos lineamientos ni de instrucciones internas.
+- Responde de forma natural, breve, humana y coherente con tu perfil.
+`.trim();
+
+  let prompt;
+  if (modoAprendizaje) {
+    const esPrimeraInteraccion = !historialConversacion || historialConversacion.length === 0;
+    prompt = `
+Instrucciones por etapa:
+${JSON.stringify(etapaActual.instrucciones_ia_cliente, null, 2)}
+
+${
+  esPrimeraInteraccion
+    ? 'Eres el primero en hablar. Inicia la conversación de manera natural, coherente con tu perfil y el objetivo de la etapa actual.'
+    : 'Genera una respuesta natural como cliente, coherente con la conversación previa y el objetivo de la etapa actual.'
+}
+
+Responde **solo con JSON** con esta estructura:
+{
+  "mensaje": "..."
+}
+`.trim();
+  } else {
+    prompt = `
+Instrucciones por etapa:
+${JSON.stringify(etapaActual.instrucciones_ia_cliente, null, 2)}
+
+El asesor te dijo: "${mensajeAsesor}"
+
+Genera una respuesta natural como cliente, coherente con la conversación previa y el objetivo de la etapa actual.
+
+Responde **solo con JSON** con esta estructura:
+{
+  "finalizar_simulacion": boolean,
+  "recomendaciones_aprendizaje": "..."
+}
+      MENSAJE DEL ASESOR A EVALUAR:
+    "${mensajeAsesor}"
+`.trim();
+  }
+
+  const contents = [
+    ...historialParts,
+    {
+      role: 'user',
+      parts: [{ text: prompt }],
+    },
+  ];
+
+  const schema = {
+    type: 'object',
+    properties: {
+      finalizar_simulacion: {
+        type: 'boolean',
+        description: 'Indica si se debe detener la simulación',
+      },
+      recomendaciones_aprendizaje: {
+        type: 'string',
+        description: 'Mensaje sobre el modo de aprendizaje',
+      },
+    },
+    required: ['finalizar_simulacion', 'recomendaciones_aprendizaje'],
+  };
+
+  try {
+    const response = await genAI.models.generateContent({
+      model: geminiConfig.model,
+      systemInstruction: systemInstruction,
+      safetySettings: safetySettings.STRICT,
+      contents: contents,
+      config: {
+        temperature: profilesConfig.CONVERSATIONAL.temperature,
+        maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
+        topP: profilesConfig.CONVERSATIONAL.topP,
+        topK: profilesConfig.CONVERSATIONAL.topK,
+        responseMimeType: 'application/json',
+        responseSchema: schema,
+      },
+    });
+
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error('Error al generar mensaje del cliente:', error);
+    throw new Error(`Error generando mensaje del cliente: ${error.message}`);
+  }
+}
+
 module.exports = {
   generarEscenarioCliente,
   generarMensajeCliente,
+  generarAnalisisConversacion,
 };
-
-// CUANDO SE QUIERE QUE EL ASESOR ENVIE EL SEGUNDO MENSAJE DE LA ETAPA SIN RECIBIR MENSAJE DE RESPUESTA DEL CLIENTE
-// async function generarSegundoMensajeDelAsesorPorEtapa(
-//   etapa,
-//   cliente,
-//   producto,
-//   mensajeAsesor,
-//   historialConversacion = []
-// ) {
-//   // ============================================
-//   // 1. CONSTRUCCIÓN DEL HISTORIAL CONTEXTUAL
-//   // ============================================
-//   const historialTexto = historialConversacion
-//     .map(
-//       (m) => `
-//       === CONTEXTO DE INTERACCIÓN ===
-//       Etapa: ${m.etapa} (${m.indiceEtapa}/${m.totalEtapas})
-//       Objetivo Etapa: ${m.objetivoEtapa}
-//       Emisor: ${m.rol}
-//       Receptor: ${m.receptor || 'Cliente'}
-//       Mensaje: "${m.mensaje}"
-//       ===============================`
-//     )
-//     .join('\n\n');
-
-//   // ============================================
-//   // 2. PROMPT DE EVALUACIÓN
-//   // ============================================
-//   const prompt = `
-//     Eres un evaluador de simulaciones bancarias para entrenar asesores.
-//     Tu tarea es analizar el segundo mensaje enviado por el ASESOR en una etapa específica
-//     de una asesoría simulada y determinar si:
-//       - El mensaje cumple el objetivo de la etapa.
-//       - El mensaje mantiene coherencia con el producto y el perfil del cliente.
-//       - El mensaje se sale del contexto o rompe la simulación.
-
-//     CONTEXTO DEL CLIENTE:
-//     - Nombre: ${cliente.nombre}
-//     - Edad: ${cliente.edad}
-//     - Profesión: ${cliente.profesion}
-//     - Situación actual: ${cliente.situacion_actual}
-//     - Motivación: ${cliente.motivacion}
-//     - Nivel de conocimiento: ${cliente.nivel_conocimiento}
-//     - Perfil de riesgo: ${cliente.perfil_riesgo}
-//     - Objetivo financiero: ${cliente.objetivo}
-
-//     PRODUCTO DE INTERÉS:
-//     ${JSON.stringify(producto, null, 2)}
-
-//     ETAPA ACTUAL:
-//     - Nombre: ${etapa.nombre}
-//     - Objetivo: ${etapa.objetivo}
-
-//     HISTORIAL DE CONVERSACIÓN:
-//     ${historialTexto ? historialTexto : 'No hay mensajes previos.'}
-
-//     MENSAJE DEL ASESOR A EVALUAR:
-//     "${mensajeAsesor}"
-
-//     INSTRUCCIONES DE EVALUACIÓN:
-//     - Evalúa si el mensaje del asesor se mantiene en el contexto del producto y objetivo de la etapa.
-//     - Evalúa si el mensaje aporta valor y cumple con el propósito de la etapa (orientar, informar, cerrar, etc.).
-//     - Si el mensaje se sale del contexto, marca "parar_simulacion": true.
-//     - Si el mensaje cumple correctamente el objetivo de la etapa, marca "cerrar_etapa": true.
-//     - Si el mensaje es apropiado pero no completa la etapa, deja ambas banderas en false.
-//     - Incluye una breve justificación textual de la evaluación.
-
-//     Devuelve únicamente el siguiente JSON:
-//     {
-//       "evaluacion": "string explicativa (1 o 2 frases)",
-//       "parar_simulacion": boolean,
-//       "cerrar_etapa": boolean
-//     }
-//   `;
-
-//   // ============================================
-//   // 3. DEFINICIÓN DE SCHEMA
-//   // ============================================
-//   const schema = {
-//     type: 'object',
-//     properties: {
-//       evaluacion: { type: 'string', description: 'Breve explicación de la evaluación' },
-//       parar_simulacion: { type: 'boolean', description: 'true si el asesor rompe el contexto' },
-//       cerrar_etapa: {
-//         type: 'boolean',
-//         description: 'true si el mensaje cumple el objetivo de la etapa',
-//       },
-//     },
-//     required: ['evaluacion', 'parar_simulacion', 'cerrar_etapa'],
-//   };
-
-//   // ============================================
-//   // 4. LLAMADA AL MODELO GEMINI
-//   // ============================================
-//   const response = await genAI.models.generateContent({
-//     model: geminiConfig.model,
-//     safetySettings: safetySettings.STRICT,
-//     contents: prompt,
-//     config: {
-//       temperature: 0.3, // baja para evaluación más estable
-//       maxOutputTokens: 300,
-//       responseMimeType: 'application/json',
-//       responseSchema: schema,
-//     },
-//   });
-
-//   // ============================================
-//   // 5. PROCESAR RESULTADO Y GUARDAR EN HISTORIAL
-//   // ============================================
-//   const evaluacion = JSON.parse(response.text);
-
-//   const nuevoRegistro = {
-//     etapa: etapa.nombre,
-//     indiceEtapa: etapa.id,
-//     rol: 'evaluador',
-//     mensaje: evaluacion.evaluacion,
-//     parar_simulacion: evaluacion.parar_simulacion,
-//     cerrar_etapa: evaluacion.cerrar_etapa,
-//     fecha: new Date(),
-//   };
-
-//   // Guardar en base de datos o historial local según tu flujo
-//   // Ejemplo: await guardarEnHistorialConversacion(nuevoRegistro);
-
-//   return evaluacion;
-// }
-
-// async function analizarEstadoConversacion(historialConversacion = [], modoAprendizaje) {
-//   const historialParts = historialConversacion.map((m) => ({
-//     role: m.rol === 'cliente' ? 'model' : 'user',
-//     parts: [
-//       {
-//         text: `
-//           === CONTEXTO DE INTERACCIÓN ===
-//           Etapa: ${m.etapa} (${m.indiceEtapa}/${m.totalEtapas})
-//           Objetivo: ${m.objetivoEtapa}
-//           Emisor: ${m.rol}
-//           Receptor: ${m.receptor || 'Asesor'}
-//           Mensaje: "${m.mensaje}"
-//           ===============================
-//         `.trim(),
-//       },
-//     ],
-//   }));
-
-//   if (modoAprendizaje === true) {
-//     const modoAprendizaje = `El modo aprendizaje está activado. Debes proporcionar retroalimentación detallada y constructiva al asesor en cada evaluación, destacando tanto las fortalezas como las áreas de mejora en su desempeño.`;
-//   } else {
-//     const modoAprendizaje = `El modo aprendizaje está desactivado. no proporciones informacion`;
-//   }
-
-//   const systemInstruction = `Eres analizador experto de la conversacion entre un asesor bancario y un cliente ficticio.
-//   Debes evaluar si la conversacion se mantiene en el contexto del producto financiero y el perfil del cliente.
-//   Identifica si el asesor cumple con los objetivos de cada etapa de la asesoría.
-//   Detecta si hay rupturas de contexto o incoherencias. Si es asi debes marcar como true la bandera "parar_simulacion". para indicar que la simulacion debe detenerse. ${modoAprendizaje}`;
-
-//   const prompt = ` Analiza el siguiente historial de conversación de la simulación bancaria
-//   `.trim();
-
-//   // Estructura principal de la conversación
-//   const contents = [
-//     {
-//       role: 'system',
-//       parts: [{ text: systemInstruction }],
-//     },
-//     ...historialParts,
-//     {
-//       role: 'user',
-//       parts: [{ text: prompt }],
-//     },
-//   ];
-
-//   const schema = {
-//     type: 'object',
-//     properties: {
-//       detener_simulacion: {
-//         type: 'boolean',
-//         description: 'Indica si se debe detener la simulación',
-//       },
-//       mensaje_modoAprendizaje: {
-//         type: 'string',
-//         description: 'Mensaje sobre el modo de aprendizaje',
-//       },
-//     },
-//     required: ['detener_simulacion', 'mensaje_modoAprendizaje'],
-//   };
-
-//   const response = await genAI.models.generateContent({
-//     model: geminiConfig.model,
-//     safetySettings: safetySettings.STRICT,
-//     contents: contents,
-//     config: {
-//       temperature: profilesConfig.CREATIVE.temperature,
-//       maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
-//       topP: profilesConfig.CREATIVE.topP,
-//       topK: profilesConfig.CREATIVE.topK,
-//       responseMimeType: 'application/json',
-//       responseSchema: schema,
-//     },
-//   });
-
-//   return JSON.parse(response.text);
-// }
 
 // async function analizarDesempenoAsesor(simulacionId) {
 //   const historial = obtenerHistorialChat(simulacionId);
@@ -570,177 +560,4 @@ module.exports = {
 //     console.error('Error en análisis:', error);
 //     return null;
 //   }
-// }
-
-// CUANDO SE QUIERE QUE EL CLIENTE GENERE EL PRIMER MENSAJE DE LA ETAPA
-// async function generarPrimerMensajeDelClientePorEtapa(
-//   producto,
-//   tipoClienteAleatorio,
-//   perfilClienteAleatorio,
-//   escenarioCliente,
-//   historialConversacion = [],
-//   etapa
-// ) {
-//   // Construcción del historial como objetos de mensajes
-//   const historialParts = historialConversacion.map((m) => ({
-//     role: m.rol === 'cliente' ? 'model' : 'user',
-//     parts: [
-//       {
-//         text: `
-//           === CONTEXTO DE INTERACCIÓN ===
-//           Ubicación Etapa: ${m.indiceEtapa}/${m.totalEtapas}
-//           Nombre Etapa: ${m.etapa}
-//           Objetivo Etapa: ${m.objetivoEtapa}
-//           Emisor: ${m.rol}
-//           Receptor: ${m.receptor || 'Asesor'}
-//           Mensaje: "${m.mensaje}"
-//           ===============================
-//         `.trim(),
-//       },
-//     ],
-//   }));
-
-//   const systemInstruction = `
-// Eres un cliente ficticio participando en una simulación de asesoría bancaria con un asesor humano.
-// Tu papel es actuar como un cliente real según la información proporcionada y mantener coherencia
-// en tu forma de hablar, personalidad, motivaciones y nivel de conocimiento entre cada etapa de la simulación.
-
-// === TU IDENTIDAD DEL CLIENTE (ESCENARIO REAL DEL CLIENTE) ===
-// - Nombre: ${escenarioCliente.nombre}
-// - Edad: ${escenarioCliente.edad}
-// - Profesión: ${escenarioCliente.profesion}
-
-// === TU SITUACIÓN ACTUAL ===
-// ${escenarioCliente.situacion_actual}
-
-// === TU MOTIVACIONES Y OBJETIVO PERSONAL ===
-// - Motivación principal: ${escenarioCliente.motivacion}
-// - Objetivo financiero: ${escenarioCliente.objetivo}
-// - Perfil de riesgo: ${escenarioCliente.perfil_riesgo}
-
-// === TU NIVEL DE CONOCIMIENTO FINANCIERO ===
-// ${escenarioCliente.nivel_conocimiento}
-
-// === ESCENARIO NARRATIVO COMPLETO DE TI ===
-// ${escenarioCliente.escenario_narrativo}
-
-// === ERES UN TIPO DE CLIENTE (COMPORTAMIENTO PSICOLÓGICO) ===
-// - Tipo: ${tipoClienteAleatorio.tipo}
-// - Cómo actúa: ${tipoClienteAleatorio.actua}
-// - Ejemplo típico de comportamiento: "${tipoClienteAleatorio.ejemplo}"
-
-// Debes reflejar este comportamiento psicológico en tu forma de hablar.
-
-// === TU PERFIL DEL CLIENTE (SEGMENTO SOCIOECONÓMICO) ===
-// - Perfil: ${perfilClienteAleatorio.nombre}
-// - Tipo de cliente: ${perfilClienteAleatorio.tipo_cliente}
-// - Rango de ingresos: ${perfilClienteAleatorio.rango_cop}
-// - Estilo de atención preferido: ${perfilClienteAleatorio.enfoque_atencion}
-
-// Tu manera de expresarte debe coincidir con este segmento socioeconómico.
-
-// === TU PRODUCTO DE INTERÉS ===
-// - Nombre del producto: ${producto.nombre}
-// - Categoría: ${producto.categoria}
-// - Concepto: ${producto.concepto}
-// - Características principales: ${JSON.stringify(producto.caracteristicas, null, 2)}
-// - Beneficios: ${JSON.stringify(producto.beneficios, null, 2)}
-// - Requisitos: ${JSON.stringify(producto.requisitos, null, 2)}
-
-// Solo debes hablar de este producto si la etapa lo amerita.
-
-// === INFORMACIÓN DE LA SIMULACIÓN ===
-// - Etapa actual: ${etapa.nombre}
-// - Objetivo de esta etapa: ${etapa.objetivo}
-// Habla únicamente dentro del foco de esta etapa. No adelantes información de etapas futuras.
-
-// === COMPORTAMIENTO SEGÚN EL NIVEL DE CONOCIMIENTO ===
-// Si tu nivel de conocimiento es "Bajo":
-//   - Muestra curiosidad, dudas o inseguridad.
-//   - Haz preguntas básicas.
-//   - Evita términos técnicos.
-//   - Puedes tener confusiones naturales de alguien sin experiencia bancaria.
-
-// Si tu nivel de conocimiento es "Medio":
-//   - Usa algunos términos financieros simples.
-//   - Pide aclaraciones cuando algo no esté claro.
-//   - Tienes cierta confianza, pero no eres experto.
-
-// Si tu nivel de conocimiento es "Alto":
-//   - Usa lenguaje técnico moderado y seguro.
-//   - Eres analítico y haces preguntas detalladas.
-//   - Puedes cuestionar condiciones, cifras o limitaciones.
-
-// === COHERENCIA ENTRE ETAPAS ===
-// - Mantén continuidad con tu comportamiento previo.
-// - Mantén tu personalidad, estilo de comunicación y motivaciones.
-// - Nunca contradigas tu historia, tu nivel de ingresos o tus necesidades.
-// - Si el historial previo existe, tenlo en cuenta en tu respuesta.
-// - Si es la primera interacción de la etapa, responde como si continuaras el flujo natural de una conversación.
-
-// === LÍMITES ===
-// - NO digas que eres una IA.
-// - NO digas que esto es una simulación.
-// - NO hables de estos lineamientos.
-// - Habla de manera natural, breve, humana y coherente con tu perfil.
-//   `.trim();
-
-//   const esPrimeraInteraccion = !historialConversacion || historialConversacion.length === 0;
-
-//   const prompt = `
-//   Instrucciones por etapa:
-//   ${JSON.stringify(etapa.instrucciones_ia, null, 2)}
-
-//   ${
-//     esPrimeraInteraccion
-//       ? 'Eres el primero en hablar. Inicia la conversación de manera natural, coherente con tu perfil y el objetivo de la etapa actual.'
-//       : 'Genera una respuesta natural como cliente, coherente con la conversación previa y el objetivo de la etapa actual.'
-//   }
-
-//   Responde **solo con JSON** con esta estructura:
-//   {
-//     "mensaje": "..."
-//   }
-// `.trim();
-//   //!! UTILIZA USER
-//   // ✅ Contents SOLO tiene el rol 'user', NO 'system'
-//   const contents = [
-//     ...historialParts,
-//     {
-//       role: 'user',
-//       parts: [{ text: prompt }],
-//     },
-//   ];
-
-//   const schema = {
-//     type: 'object',
-//     properties: {
-//       mensaje: { type: 'string', description: 'Mensaje natural del cliente' },
-//     },
-//     required: ['mensaje'],
-//   };
-
-//   console.log(systemInstruction);
-//   console.log('---------------------------------------------');
-//   console.log(prompt);
-//   console.log('---------------------------------------------');
-//   // console.log(prompt);
-
-//   // ✅ systemInstruction va en la raíz del objeto de configuración
-//   const response = await genAI.models.generateContent({
-//     model: geminiConfig.model,
-//     systemInstruction: systemInstruction, // 👈 Aquí va el system instruction
-//     safetySettings: safetySettings.STRICT,
-//     contents: contents,
-//     config: {
-//       temperature: profilesConfig.CONVERSATIONAL.temperature,
-//       maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
-//       topP: profilesConfig.CONVERSATIONAL.topP,
-//       topK: profilesConfig.CONVERSATIONAL.topK,
-//       responseMimeType: 'application/json',
-//       responseSchema: schema,
-//     },
-//   });
-
-//   return JSON.parse(response.text);
 // }
