@@ -236,6 +236,180 @@ class AuthController {
     }
   }
 
+  // Agregar estos métodos al auth.controller.js existente
+
+  async solicitarRecuperacion(req, res) {
+    const { correo } = req.body;
+
+    if (!correo) {
+      return res.status(400).json({
+        success: false,
+        error: 'El correo es requerido',
+      });
+    }
+
+    try {
+      // Verificar si el correo existe
+      const [usuario] = await pool.query(
+        'SELECT id_usuario, nombres FROM usuarios WHERE correo_electronico = ? LIMIT 1',
+        [correo]
+      );
+
+      if (usuario.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: 'No existe una cuenta con este correo electrónico',
+        });
+      }
+
+      // Generar y guardar código de recuperación
+      const codigo = await verificacionService.guardarCodigoRecuperacion(correo);
+
+      // Enviar código por email
+      await emailService.enviarCodigoRecuperacion(correo, codigo, usuario[0].nombres);
+
+      return res.json({
+        success: true,
+        message: 'Código de recuperación enviado al correo',
+        correo: correo,
+      });
+    } catch (error) {
+      console.error('Error en solicitarRecuperacion:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al procesar la solicitud. Intenta nuevamente.',
+      });
+    }
+  }
+
+  async verificarCodigoRecuperacion(req, res) {
+    const { correo, codigo } = req.body;
+
+    if (!correo || !codigo) {
+      return res.status(400).json({
+        success: false,
+        error: 'Correo y código son requeridos',
+      });
+    }
+
+    try {
+      // Reutilizar el servicio de verificación para mantener la misma lógica que el registro
+      const datosVerificacion = await verificacionService.verificarCodigoRecuperacion(
+        correo,
+        codigo
+      );
+
+      if (!datosVerificacion) {
+        return res.status(400).json({
+          success: false,
+          error: 'Código inválido o expirado',
+        });
+      }
+
+      // Generar token temporal (válido por 15 minutos)
+      const tokenTemporal = jwt.sign({ correo, tipo: 'recuperacion' }, jwtConfig.secret, {
+        expiresIn: '15m',
+      });
+
+      // Marcar código como usado usando el servicio (misma lógica que en registro)
+      await verificacionService.marcarCodigoUsado(correo, codigo);
+
+      return res.json({
+        success: true,
+        message: 'Código verificado correctamente',
+        token_temporal: tokenTemporal,
+      });
+    } catch (error) {
+      console.error('Error en verificarCodigoRecuperacion:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al verificar el código. Intenta nuevamente.',
+      });
+    }
+  }
+
+  async restablecerContrasena(req, res) {
+    const { token_temporal, nueva_contrasena } = req.body;
+
+    if (!token_temporal || !nueva_contrasena) {
+      return res.status(400).json({
+        success: false,
+        error: 'Token temporal y nueva contraseña son requeridos',
+      });
+    }
+
+    try {
+      // Verificar token temporal
+      const decoded = jwt.verify(token_temporal, jwtConfig.secret);
+
+      if (decoded.tipo !== 'recuperacion') {
+        return res.status(401).json({
+          success: false,
+          error: 'Token inválido',
+        });
+      }
+
+      // Validar que la contraseña cumpla requisitos
+      if (nueva_contrasena.length < 8) {
+        return res.status(400).json({
+          success: false,
+          error: 'La contraseña debe tener al menos 8 caracteres',
+        });
+      }
+
+      // Hash de la nueva contraseña
+      const hashedPassword = await bcrypt.hash(nueva_contrasena, 10);
+
+      // Actualizar contraseña
+      const [result] = await pool.query(
+        'UPDATE usuarios SET contrasena = ?, fecha_actualizacion = NOW() WHERE correo_electronico = ?',
+        [hashedPassword, decoded.correo]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          success: false,
+          error: 'Usuario no encontrado',
+        });
+      }
+
+      // Opcional: Revocar todos los tokens de sesión activos del usuario
+      const [usuario] = await pool.query(
+        'SELECT id_usuario FROM usuarios WHERE correo_electronico = ? LIMIT 1',
+        [decoded.correo]
+      );
+
+      if (usuario.length > 0) {
+        await tokenService.revokeAll(usuario[0].id_usuario);
+      }
+
+      return res.json({
+        success: true,
+        message: 'Contraseña restablecida exitosamente',
+      });
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({
+          success: false,
+          error: 'El token ha expirado. Solicita un nuevo código.',
+        });
+      }
+
+      if (error.name === 'JsonWebTokenError') {
+        return res.status(401).json({
+          success: false,
+          error: 'Token inválido',
+        });
+      }
+
+      console.error('Error en restablecerContrasena:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al restablecer la contraseña. Intenta nuevamente.',
+      });
+    }
+  }
+
   async actualizarPerfilInicial(req, res) {
     const userId = req.body.userId;
     const { foto_perfil, fecha_nacimiento, genero } = req.body;

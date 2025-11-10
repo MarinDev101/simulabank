@@ -3,7 +3,17 @@ const { body, param, validationResult } = require('express-validator');
 // Middlewares reutilizables para validar requests y manejar errores
 const runValidation = (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+  if (!errors.isEmpty()) {
+    console.log('[VALIDATOR ERROR]', errors.array());
+    return res.status(400).json({
+      success: false,
+      error: errors
+        .array()
+        .map((e) => e.msg)
+        .join(', '),
+      errors: errors.array(),
+    });
+  }
   next();
 };
 
@@ -31,10 +41,34 @@ const refreshRules = () => [body('refreshToken').isString().withMessage('refresh
 
 const sessionIdParam = () => [param('id').isInt().withMessage('id de sesión inválido')];
 
+const recuperacionRules = () => [body('correo').isEmail().withMessage('correo inválido')];
+
+const verificarCodigoRecuperacionRules = () => [
+  body('correo').trim().isEmail().withMessage('correo inválido'),
+  body('codigo')
+    .trim()
+    .notEmpty()
+    .withMessage('código requerido')
+    .isLength({ min: 6, max: 6 })
+    .withMessage('código debe tener exactamente 6 dígitos')
+    .matches(/^\d+$/)
+    .withMessage('código solo debe contener dígitos'),
+];
+
+const restablecerContrasenaRules = () => [
+  body('token_temporal').isString().withMessage('token_temporal requerido'),
+  body('nueva_contrasena')
+    .isLength({ min: 8 })
+    .withMessage('contraseña debe tener al menos 8 caracteres'),
+];
+
 module.exports = {
   runValidation,
   registerRules,
   loginRules,
   refreshRules,
   sessionIdParam,
+  recuperacionRules,
+  verificarCodigoRecuperacionRules,
+  restablecerContrasenaRules,
 };

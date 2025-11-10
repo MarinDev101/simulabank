@@ -14,6 +14,9 @@ const {
   loginRules,
   refreshRules,
   sessionIdParam,
+  recuperacionRules,
+  verificarCodigoRecuperacionRules,
+  restablecerContrasenaRules,
 } = require('../validators/auth.validator');
 
 function crearAuthRouter() {
@@ -56,6 +59,28 @@ function crearAuthRouter() {
   router.post(
     '/verificar-codigo',
     asyncHandler(authController.verificarCodigoRegistro.bind(authController))
+  );
+
+  // Rutas de recuperación de contraseña
+  router.post(
+    '/solicitar-recuperacion',
+    recuperacionRules(),
+    runValidation,
+    asyncHandler(authController.solicitarRecuperacion.bind(authController))
+  );
+
+  router.post(
+    '/verificar-codigo-recuperacion',
+    verificarCodigoRecuperacionRules(),
+    runValidation,
+    asyncHandler(authController.verificarCodigoRecuperacion.bind(authController))
+  );
+
+  router.post(
+    '/restablecer-contrasena',
+    restablecerContrasenaRules(),
+    runValidation,
+    asyncHandler(authController.restablecerContrasena.bind(authController))
   );
 
   // Rutas protegidas

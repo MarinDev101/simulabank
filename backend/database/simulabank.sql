@@ -281,11 +281,14 @@ CREATE TABLE codigos_verificacion (
   id_codigo_verificacion INT AUTO_INCREMENT PRIMARY KEY,
   correo_electronico VARCHAR(255) NOT NULL,
   codigo VARCHAR(6) NOT NULL,
-  nombres VARCHAR(100) NOT NULL,
-  apellidos VARCHAR(100) NOT NULL,
-  contrasena_hash VARCHAR(255) NOT NULL,
+  nombres VARCHAR(100) DEFAULT NULL,
+  apellidos VARCHAR(100) DEFAULT NULL,
+  contrasena_hash VARCHAR(255) DEFAULT NULL,
+  tipo ENUM('registro', 'recuperacion') NOT NULL DEFAULT 'registro',
   intentos INT DEFAULT 0,
   usado BOOLEAN DEFAULT FALSE,
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  fecha_expiracion TIMESTAMP NOT NULL
+  fecha_expiracion TIMESTAMP NOT NULL,
+  INDEX idx_tipo_correo (tipo, correo_electronico),
+  INDEX idx_correo_codigo (correo_electronico, codigo)
 );

@@ -34,6 +34,13 @@ export const routes: Routes = [
     canActivate: [publicGuard],
   },
   {
+    path: 'recuperar-contrasena',
+    loadComponent: () =>
+      import('./pages/pagina/recuperar-contrasena/recuperar-contrasena').then((m) => m.RecuperarContrasena),
+    title: 'Recuperar contraseña',
+    canActivate: [publicGuard],
+  },
+  {
     path: 'politicas-privacidad',
     loadComponent: () =>
       import('./pages/pagina/politicas-privacidad-pagina/politicas-privacidad-pagina').then(
