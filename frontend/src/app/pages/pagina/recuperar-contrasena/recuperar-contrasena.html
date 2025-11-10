@@ -1,0 +1,27 @@
+<app-header-basico></app-header-basico>
+
+<div class="flex flex-col items-center justify-center gap-10 bg-[#F9F9FA] min-h-200 mt-15">
+  <h2 class="nunito-sans-title text-center text-[40px] font-semibold">
+    Recuperar Cuenta
+  </h2>
+
+  <!-- Steps -->
+  <ul class="steps w-[60%] max-w-4xl">
+    <li class="step" [class.step-neutral]="pasoActual >= 1">Solicita Recuperación</li>
+    <li class="step" [class.step-neutral]="pasoActual >= 2">Validar Cuenta</li>
+    <li class="step" [class.step-neutral]="pasoActual >= 3">Establecer Nueva Contraseña</li>
+  </ul>
+
+  <!-- Contenedor dinámico -->
+  <div class="w-full max-w-3xl bg-white rounded-xl shadow-md">
+    <ng-container [ngSwitch]="pasoActual">
+      <app-solicitud *ngSwitchCase="1" (continuar)="siguientePaso($event)"></app-solicitud>
+      <app-validacion *ngSwitchCase="2" [correoUsuario]="correoUsuario" (continuar)="siguientePaso()"
+        (volver)="anteriorPaso()">
+      </app-validacion>
+      <app-nueva-contrasena *ngSwitchCase="3" (volver)="anteriorPaso()"></app-nueva-contrasena>
+    </ng-container>
+  </div>
+</div>
+
+<app-footer></app-footer>

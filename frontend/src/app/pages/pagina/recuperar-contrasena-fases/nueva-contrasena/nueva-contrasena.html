@@ -1,0 +1,117 @@
+<div class="flex flex-col gap-3 w-full h-full bg-white rounded-xl p-15 shadow-md">
+  <div class="flex gap-2 items-center">
+    <span
+      class="flex justify-center items-center font-bold bg-[#333333] text-white rounded-full w-6 h-6 text-sm">3</span>
+    <p class="text-base md:text-inherit dark:text-gray-200">Establecer Nueva Contraseña</p>
+  </div>
+
+  <p>Por favor, ingresa tu nueva contraseña. Asegúrate de cumplir con todos los requisitos de seguridad.</p>
+
+  @if (errorMessage) {
+  <div class="rounded-lg border border-red-200 bg-red-50 p-4 mb-4">
+    <div class="flex items-start">
+      <span class="mt-0.5 mr-3 icon-[hugeicons--alert-circle] text-xl text-red-600"></span>
+      <p class="text-sm text-red-800">{{ errorMessage }}</p>
+    </div>
+  </div>
+  }
+
+  <form [formGroup]="formNuevaContrasena" (ngSubmit)="restablecerContrasena()" class="flex flex-col gap-6">
+    <div class="flex gap-6">
+      <!-- Contraseña -->
+      <div class="flex-1">
+        <label class="floating-label block">
+          <span class="text-base text-gray-600">Nueva Contraseña</span>
+          <div class="flex items-center gap-3">
+            <input [type]="mostrarContrasena ? 'text' : 'password'" formControlName="contrasena"
+              (input)="verificarIndicaciones()" placeholder="••••••••"
+              [class.border-red-500]="f['contrasena'].invalid && f['contrasena'].touched"
+              class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleContrasena()"
+              class="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+              <span *ngIf="!mostrarContrasena" class="icon-[fluent--eye-16-regular] text-xl"></span>
+              <span *ngIf="mostrarContrasena" class="icon-[fluent--eye-off-16-regular] text-xl"></span>
+            </button>
+          </div>
+        </label>
+        <small class="block text-sm transition-all duration-200"
+          [class.text-red-600]="f['contrasena'].invalid && f['contrasena'].touched"
+          [style.visibility]="f['contrasena'].invalid && f['contrasena'].touched ? 'visible' : 'hidden'">
+          Faltan requerimientos para la contraseña.
+        </small>
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div class="flex-1">
+        <label class="floating-label block">
+          <span class="text-base text-gray-600">Confirmar contraseña</span>
+          <div class="flex items-center gap-3">
+            <input [type]="mostrarConfirmarContrasena ? 'text' : 'password'" formControlName="confirmarContrasena"
+              placeholder="••••••••"
+              [class.border-red-500]="(f['confirmarContrasena'].touched && formNuevaContrasena.errors?.['noCoinciden'])"
+              class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleConfirmarContrasena()"
+              class="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+              <span *ngIf="!mostrarConfirmarContrasena" class="icon-[fluent--eye-16-regular] text-xl"></span>
+              <span *ngIf="mostrarConfirmarContrasena" class="icon-[fluent--eye-off-16-regular] text-xl"></span>
+            </button>
+          </div>
+        </label>
+        <small class="block text-sm transition-all duration-200"
+          [class.text-red-600]="formNuevaContrasena.errors?.['noCoinciden'] && f['confirmarContrasena'].touched"
+          [style.visibility]="formNuevaContrasena.errors?.['noCoinciden'] && f['confirmarContrasena'].touched ? 'visible' : 'hidden'">
+          Las contraseñas no coinciden.
+        </small>
+      </div>
+    </div>
+
+    <!-- Indicaciones dinámicas -->
+    <div class="flex gap-12 text-sm">
+      <ul class="space-y-2">
+        <li class="flex items-center gap-2" [class.text-green-600]="indicaciones.longitud"
+          [class.text-red-500]="!indicaciones.longitud">
+          <span class="w-2 h-2 rounded-full" [class.bg-green-600]="indicaciones.longitud"
+            [class.bg-red-500]="!indicaciones.longitud"></span>
+          Usa 8 o más caracteres
+        </li>
+        <li class="flex items-center gap-2" [class.text-green-600]="indicaciones.numero"
+          [class.text-red-500]="!indicaciones.numero">
+          <span class="w-2 h-2 rounded-full" [class.bg-green-600]="indicaciones.numero"
+            [class.bg-red-500]="!indicaciones.numero"></span>
+          Incluye al menos un número
+        </li>
+      </ul>
+
+      <ul class="space-y-2">
+        <li class="flex items-center gap-2" [class.text-green-600]="indicaciones.mayuscula"
+          [class.text-red-500]="!indicaciones.mayuscula">
+          <span class="w-2 h-2 rounded-full" [class.bg-green-600]="indicaciones.mayuscula"
+            [class.bg-red-500]="!indicaciones.mayuscula"></span>
+          Usa letras mayúsculas y minúsculas
+        </li>
+        <li class="flex items-center gap-2" [class.text-green-600]="indicaciones.simbolo"
+          [class.text-red-500]="!indicaciones.simbolo">
+          <span class="w-2 h-2 rounded-full" [class.bg-green-600]="indicaciones.simbolo"
+            [class.bg-red-500]="!indicaciones.simbolo"></span>
+          Incluye un símbolo (!@#$)
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex justify-around mt-8">
+      <button type="button" (click)="emitirVolver()"
+        class="cursor-pointer w-[200px] border border-black hover:bg-gray-100 p-2 rounded-lg" [disabled]="isLoading">
+        Volver
+      </button>
+      <button type="submit" class="cursor-pointer w-[200px] bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg"
+        [disabled]="isLoading">
+        @if (isLoading) {
+        <span class="loading loading-sm loading-spinner"></span>
+        Restableciendo...
+        } @else {
+        Restablecer Contraseña
+        }
+      </button>
+    </div>
+  </form>
+</div>

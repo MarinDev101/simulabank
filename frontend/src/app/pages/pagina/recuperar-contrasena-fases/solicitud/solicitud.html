@@ -1,0 +1,51 @@
+<div class="flex flex-col gap-3 w-full h-full bg-white rounded-xl p-15 shadow-md">
+  <div class="flex gap-2 items-center">
+    <span
+      class="flex justify-center items-center font-bold bg-[#333333] text-white rounded-full w-6 h-6 text-sm">1</span>
+    <p class="text-base md:text-inherit dark:text-gray-200">Solicita Recuperación</p>
+  </div>
+
+  <p>Por favor, introduce tu correo electrónico para restablecer la contraseña.</p>
+
+  @if (errorMessage) {
+  <div class="rounded-lg border border-red-200 bg-red-50 p-4 mb-4">
+    <div class="flex items-start">
+      <span class="mt-0.5 mr-3 icon-[hugeicons--alert-circle] text-xl text-red-600"></span>
+      <p class="text-sm text-red-800">{{ errorMessage }}</p>
+    </div>
+  </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+    <!-- Correo -->
+    <div class="relative">
+      <label class="floating-label block relative">
+        <span class="text-base text-gray-600">Correo electrónico</span>
+        <div class="relative">
+          <input type="email" formControlName="correo" placeholder="mail@site.com"
+            [class.border-red-500]="f['correo'].invalid && f['correo'].touched"
+            class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 pr-10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <!-- Ícono fijo -->
+          <span
+            class="icon-[material-symbols-light--mail-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl pointer-events-none z-10"></span>
+        </div>
+      </label>
+      <small class="block text-sm transition-all duration-200"
+        [class.text-red-600]="f['correo'].invalid && f['correo'].touched"
+        [style.visibility]="f['correo'].invalid && f['correo'].touched ? 'visible' : 'hidden'">
+        <span *ngIf="f['correo'].hasError('required')">El correo es requerido.</span>
+        <span *ngIf="f['correo'].hasError('email')">Ingresa un correo válido.</span>
+      </small>
+    </div>
+
+    <button type="submit" class="mt-7 btn btn-block cursor-pointer bg-[#01162E] text-white hover:bg-[#012042]"
+      [disabled]="isLoading">
+      @if (isLoading) {
+      <span class="loading loading-sm loading-spinner"></span>
+      Enviando código...
+      } @else {
+      Validar cuenta
+      }
+    </button>
+  </form>
+</div>
