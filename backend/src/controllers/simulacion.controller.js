@@ -1,6 +1,6 @@
 const { pool } = require('../config/database.config');
 const geminiService = require('../services/gemini');
-const fetch = require('node-fetch');
+const { default: fetch } = require('node-fetch');
 
 /**
  * http://localhost:3000/api/simulacion/iniciar
@@ -115,6 +115,34 @@ exports.iniciarSimulacion = async (req, res) => {
     }
 
     // =====================================================
+    // 5.1️⃣ Obtener imagen de avatar según el género 🎨
+    // =====================================================
+    let urlAvatar = null;
+    try {
+      const generoApi =
+        escenarioCliente.genero.toLowerCase() === 'hombre'
+          ? 'male'
+          : escenarioCliente.genero.toLowerCase() === 'mujer'
+            ? 'female'
+            : 'female';
+
+      const resAvatar = await fetch(`https://randomuser.me/api/?gender=${generoApi}`);
+      if (!resAvatar.ok) throw new Error(`HTTP ${resAvatar.status}`);
+      const dataAvatar = await resAvatar.json();
+      urlAvatar = dataAvatar?.results?.[0]?.picture?.large || null;
+    } catch (error) {
+      console.error('Error al obtener avatar:', error);
+    } finally {
+      // Valor por defecto si sigue siendo null
+      if (!urlAvatar) {
+        urlAvatar =
+          escenarioCliente.genero.toLowerCase() === 'hombre'
+            ? 'https://randomuser.me/api/portraits/men/14.jpg'
+            : 'https://randomuser.me/api/portraits/women/8.jpg';
+      }
+    }
+
+    // =====================================================
     // 6️⃣ Crear simulación (inicia con etapa_actual_index = 1)
     // =====================================================
     const { modo, destino, interaccion } = configuracion;
@@ -140,12 +168,13 @@ exports.iniciarSimulacion = async (req, res) => {
     const idNuevaSimulacion = result.insertId;
 
     // =====================================================
-    // 7️⃣ Guardar cliente simulado
+    // 7️⃣ Guardar cliente simulado con imagen 📸
     // =====================================================
     await pool.query(
       `INSERT INTO clientes_simulados (
         id_simulacion,
         genero,
+        urlAvatar,
         nombre,
         edad,
         profesion,
@@ -157,10 +186,11 @@ exports.iniciarSimulacion = async (req, res) => {
         escenario_narrativo,
         id_tipo_cliente,
         id_perfil_cliente
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         idNuevaSimulacion,
         escenarioCliente.genero,
+        urlAvatar, // 👈 nueva columna con el avatar
         escenarioCliente.nombre,
         escenarioCliente.edad,
         escenarioCliente.profesion,
@@ -191,7 +221,6 @@ exports.iniciarSimulacion = async (req, res) => {
 
     if (etapaActual && etapaActual.quien_inicia === 'Cliente') {
       try {
-        // 🎯 USANDO LA NUEVA FUNCIÓN COMBINADA CON esPrimerMensaje: true
         mensajeInicialCliente = await geminiService.generarMensajeCliente(
           producto,
           tipoClienteAleatorio,
@@ -199,7 +228,7 @@ exports.iniciarSimulacion = async (req, res) => {
           escenarioCliente,
           [], // historial vacío
           etapaActual,
-          { esPrimerMensaje: true } // 👈 Activar lógica de primer mensaje
+          { esPrimerMensaje: true }
         );
 
         const [totalEtapasResult] = await pool.query(
@@ -208,7 +237,6 @@ exports.iniciarSimulacion = async (req, res) => {
         );
         const totalEtapas = totalEtapasResult[0].total;
 
-        // Crear el primer mensaje como objeto individual
         const primerMensaje = {
           indiceEtapa: 1,
           totalEtapas: totalEtapas,
@@ -219,7 +247,6 @@ exports.iniciarSimulacion = async (req, res) => {
           receptor: 'Asesor',
         };
 
-        // Guardar como array con un solo elemento
         await pool.query(
           'UPDATE simulaciones SET conversacion_asesoria = ? WHERE id_simulacion = ?',
           [JSON.stringify([primerMensaje]), idNuevaSimulacion]
@@ -239,7 +266,7 @@ exports.iniciarSimulacion = async (req, res) => {
       producto,
       tipo_cliente: tipoClienteAleatorio,
       perfil_cliente: perfilClienteAleatorio,
-      escenario_cliente: escenarioCliente,
+      escenario_cliente: { ...escenarioCliente, imagen: urlAvatar },
       etapa_inicial: etapaActual || null,
       primer_mensaje_cliente: mensajeInicialCliente || null,
     });

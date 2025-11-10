@@ -253,7 +253,7 @@ CREATE TABLE clientes_simulados (
   id_cliente_simulado INT AUTO_INCREMENT PRIMARY KEY,
   id_simulacion INT NOT NULL UNIQUE,  -- Relación 1:1
   genero ENUM('hombre', 'mujer') NOT NULL,
-  avatar VARCHAR(80) NOT NULL,
+  urlAvatar VARCHAR(80),
   nombre VARCHAR(255) NOT NULL,
   edad VARCHAR(50) NOT NULL,
   profesion VARCHAR(255) NOT NULL,
