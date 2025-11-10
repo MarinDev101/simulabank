@@ -188,13 +188,15 @@ exports.iniciarSimulacion = async (req, res) => {
 
     if (etapaActual && etapaActual.quien_inicia === 'Cliente') {
       try {
-        mensajeInicialCliente = await geminiService.generarPrimerMensajeDelClientePorEtapa(
+        // 🎯 USANDO LA NUEVA FUNCIÓN COMBINADA CON esPrimerMensaje: true
+        mensajeInicialCliente = await geminiService.generarMensajeCliente(
           producto,
           tipoClienteAleatorio,
           perfilClienteAleatorio,
           escenarioCliente,
-          [],
-          etapaActual
+          [], // historial vacío
+          etapaActual,
+          { esPrimerMensaje: true } // 👈 Activar lógica de primer mensaje
         );
 
         const [totalEtapasResult] = await pool.query(
@@ -347,7 +349,7 @@ exports.enviarMensaje = async (req, res) => {
     );
 
     // ===============================================
-    // 4️⃣ Obtener historial actual (ARREGLO CRÍTICO)
+    // 4️⃣ Obtener historial actual
     // ===============================================
     let historialConversacion = [];
     try {
@@ -369,9 +371,6 @@ exports.enviarMensaje = async (req, res) => {
       historialConversacion = [];
     }
 
-    // ===============================================
-    // LOG DE DEPURACIÓN (verifica acumulación)
-    // ===============================================
     console.log('📜 Historial actual:', historialConversacion.length, 'mensajes');
 
     // ===============================================
@@ -401,14 +400,18 @@ exports.enviarMensaje = async (req, res) => {
     // ===============================================
     let respuestaCliente;
     try {
-      respuestaCliente = await geminiService.generarConversacionAsesorClientePorEtapa(
+      // 🎯 USANDO LA NUEVA FUNCIÓN COMBINADA CON mensajeAsesor
+      respuestaCliente = await geminiService.generarMensajeCliente(
         producto,
         tipoClienteAleatorio,
         perfilClienteAleatorio,
         escenarioCliente,
         historialConversacion,
         etapaActual,
-        mensaje
+        {
+          esPrimerMensaje: false, // 👈 NO es primer mensaje
+          mensajeAsesor: mensaje.trim(), // 👈 Mensaje del asesor para responder
+        }
       );
     } catch (error) {
       console.error('❌ Error en Gemini:', error);
@@ -443,7 +446,7 @@ exports.enviarMensaje = async (req, res) => {
     );
 
     // ===============================================
-    // 8️⃣ DETERMINAR SI SE AVANZA DE ETAPA (USANDO HELPER)
+    // 8️⃣ DETERMINAR SI SE AVANZA DE ETAPA
     // ===============================================
     const { debeAvanzar, mensajesEtapa, minimoMensajes } = debeAvanzarDeEtapa(
       etapaActual,
@@ -501,15 +504,16 @@ exports.enviarMensaje = async (req, res) => {
 
         if (siguienteEtapa.quien_inicia === 'Cliente') {
           try {
-            const primerMensajeNuevaEtapa =
-              await geminiService.generarPrimerMensajeDelClientePorEtapa(
-                producto,
-                tipoClienteAleatorio,
-                perfilClienteAleatorio,
-                escenarioCliente,
-                historialConversacion,
-                siguienteEtapa
-              );
+            // 🎯 USANDO LA NUEVA FUNCIÓN COMBINADA PARA NUEVA ETAPA
+            const primerMensajeNuevaEtapa = await geminiService.generarMensajeCliente(
+              producto,
+              tipoClienteAleatorio,
+              perfilClienteAleatorio,
+              escenarioCliente,
+              historialConversacion,
+              siguienteEtapa,
+              { esPrimerMensaje: true } // 👈 Es primer mensaje de nueva etapa
+            );
 
             const mensajeClienteNuevaEtapa = {
               indiceEtapa: nuevoIndiceEtapa,

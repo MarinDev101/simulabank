@@ -90,16 +90,36 @@ Devuelve SOLO el JSON sin texto adicional.
 }
 
 /**
- * Genera el primer mensaje del cliente en una etapa específica
+ * Genera mensajes del cliente en una conversación de asesoría bancaria
+ *
+ * @param {Object} producto - Información del producto bancario
+ * @param {Object} tipoClienteAleatorio - Tipo psicológico del cliente
+ * @param {Object} perfilClienteAleatorio - Perfil socioeconómico del cliente
+ * @param {Object} escenarioCliente - Escenario completo del cliente generado
+ * @param {Array} historialConversacion - Historial de mensajes previos
+ * @param {Object} etapaActual - Información de la etapa actual de conversación
+ * @param {Object} opciones - Opciones adicionales
+ * @param {boolean} opciones.esPrimerMensaje - Si es el primer mensaje (sin mensaje del asesor)
+ * @param {string} opciones.mensajeAsesor - Mensaje del asesor (solo si NO es primer mensaje)
+ *
+ * @returns {Object} { mensaje: string }
  */
-async function generarPrimerMensajeDelClientePorEtapa(
+async function generarMensajeCliente(
   producto,
   tipoClienteAleatorio,
   perfilClienteAleatorio,
   escenarioCliente,
   historialConversacion = [],
-  etapaActual
+  etapaActual,
+  opciones = {}
 ) {
+  const { esPrimerMensaje = false, mensajeAsesor = null } = opciones;
+
+  // Validación: Si NO es primer mensaje, debe existir mensaje del asesor
+  if (!esPrimerMensaje && (!mensajeAsesor || mensajeAsesor.trim() === '')) {
+    throw new Error('Se requiere "mensajeAsesor" cuando no es el primer mensaje');
+  }
+
   // Construir historial formateado con roles correctos según el emisor
   const historialParts = historialConversacion.map((m) => ({
     // Si el emisor es "Cliente", el rol es "model" (respuesta de la IA)
@@ -199,9 +219,11 @@ Si tu nivel de conocimiento es "Alto":
 - Responde de forma natural, breve, humana y coherente con tu perfil.
 `.trim();
 
-  const esPrimeraInteraccion = !historialConversacion || historialConversacion.length === 0;
-
-  const prompt = `
+  // Construir prompt según si es primer mensaje o respuesta
+  let prompt;
+  if (esPrimerMensaje) {
+    const esPrimeraInteraccion = !historialConversacion || historialConversacion.length === 0;
+    prompt = `
 Instrucciones por etapa:
 ${JSON.stringify(etapaActual.instrucciones_ia_cliente, null, 2)}
 
@@ -216,163 +238,8 @@ Responde **solo con JSON** con esta estructura:
   "mensaje": "..."
 }
 `.trim();
-
-  const contents = [
-    ...historialParts,
-    {
-      role: 'user',
-      parts: [{ text: prompt }],
-    },
-  ];
-
-  const schema = {
-    type: 'object',
-    properties: {
-      mensaje: { type: 'string', description: 'Mensaje natural del cliente' },
-    },
-    required: ['mensaje'],
-  };
-
-  try {
-    const response = await genAI.models.generateContent({
-      model: geminiConfig.model,
-      systemInstruction: systemInstruction,
-      safetySettings: safetySettings.STRICT,
-      contents: contents,
-      config: {
-        temperature: profilesConfig.CONVERSATIONAL.temperature,
-        maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
-        topP: profilesConfig.CONVERSATIONAL.topP,
-        topK: profilesConfig.CONVERSATIONAL.topK,
-        responseMimeType: 'application/json',
-        responseSchema: schema,
-      },
-    });
-
-    return JSON.parse(response.text);
-  } catch (error) {
-    console.error('Error al generar primer mensaje del cliente:', error);
-    throw new Error(`Error generando mensaje inicial: ${error.message}`);
-  }
-}
-
-/**
- * Genera la respuesta del cliente al mensaje del asesor en una etapa
- */
-async function generarConversacionAsesorClientePorEtapa(
-  producto,
-  tipoClienteAleatorio,
-  perfilClienteAleatorio,
-  escenarioCliente,
-  historialConversacion = [],
-  etapaActual,
-  mensajeAsesor
-) {
-  // Validar que existe mensaje del asesor
-  if (!mensajeAsesor || mensajeAsesor.trim() === '') {
-    throw new Error('El mensaje del asesor no puede estar vacío');
-  }
-
-  // Construir historial formateado con roles correctos según el emisor
-  const historialParts = historialConversacion.map((m) => ({
-    // Si el emisor es "Cliente", el rol es "model" (respuesta de la IA)
-    // Si el emisor es "Asesor", el rol es "user" (mensaje del usuario)
-    role: m.emisor === 'Cliente' ? 'model' : 'user',
-    parts: [
-      {
-        text: `
-=== CONTEXTO DE INTERACCIÓN ===
-Ubicación Etapa: ${m.indiceEtapa}/${m.totalEtapas}
-Nombre Etapa: ${m.nombreEtapa}
-Objetivo Etapa: ${m.objetivoEtapa}
-Emisor: ${m.emisor}
-Mensaje: "${m.mensaje}"
-Receptor: ${m.receptor}
-===============================
-`.trim(),
-      },
-    ],
-  }));
-
-  const systemInstruction = `
-Estás participando en una sesión de asesoría bancaria con un asesor humano.
-Tu papel es el de un cliente real, con una identidad, motivaciones y comportamientos coherentes según la información proporcionada.
-Debes mantener consistencia en tu forma de hablar, personalidad, motivaciones y nivel de conocimiento entre cada etapa de la conversación.
-
-=== TU IDENTIDAD DEL CLIENTE (ESCENARIO REAL DEL CLIENTE) ===
-- Nombre: ${escenarioCliente.nombre}
-- Edad: ${escenarioCliente.edad}
-- Profesión: ${escenarioCliente.profesion}
-
-=== TU SITUACIÓN ACTUAL ===
-${escenarioCliente.situacion_actual}
-
-=== TUS MOTIVACIONES Y OBJETIVO PERSONAL ===
-- Motivación principal: ${escenarioCliente.motivacion}
-- Objetivo financiero: ${escenarioCliente.objetivo}
-- Perfil de riesgo: ${escenarioCliente.perfil_riesgo}
-
-=== TU NIVEL DE CONOCIMIENTO FINANCIERO ===
-${escenarioCliente.nivel_conocimiento}
-
-=== ESCENARIO NARRATIVO COMPLETO DE TI ===
-${escenarioCliente.escenario_narrativo}
-
-=== TU COMPORTAMIENTO PSICOLÓGICO COMO CLIENTE ===
-- Tipo: ${tipoClienteAleatorio.tipo}
-- Cómo actúa: ${tipoClienteAleatorio.actua}
-- Ejemplo típico de comportamiento: "${tipoClienteAleatorio.ejemplo}"
-
-Refleja este comportamiento psicológico en tu manera de hablar y reaccionar.
-
-=== TU PERFIL SOCIOECONÓMICO ===
-- Perfil: ${perfilClienteAleatorio.nombre}
-- Tipo de cliente: ${perfilClienteAleatorio.tipo_cliente}
-- Rango de ingresos: ${perfilClienteAleatorio.rango_cop}
-- Estilo de atención preferido: ${perfilClienteAleatorio.enfoque_atencion}
-
-Tu forma de expresarte debe coincidir con este segmento socioeconómico.
-
-=== PRODUCTO DE INTERÉS ===
-- Nombre del producto: ${producto.nombre}
-- Concepto: ${producto.concepto}
-
-Habla de este producto solo si la etapa actual lo justifica.
-
-=== INFORMACIÓN DE LA CONVERSACIÓN ===
-- Etapa actual: ${etapaActual.nombre}
-- Objetivo de esta etapa: ${etapaActual.objetivo}
-
-Habla únicamente dentro del foco de esta etapa. No adelantes información de etapas futuras.
-
-=== COMPORTAMIENTO SEGÚN TU NIVEL DE CONOCIMIENTO ===
-Si tu nivel de conocimiento es "Bajo":
-  - Muestra curiosidad, dudas o inseguridad.
-  - Evita términos técnicos.
-  - Puedes tener confusiones naturales de alguien sin experiencia bancaria.
-
-Si tu nivel de conocimiento es "Medio":
-  - Usa algunos términos financieros simples.
-  - Muestra cierta confianza, pero no eres experto.
-
-Si tu nivel de conocimiento es "Alto":
-  - Usa lenguaje técnico moderado y seguro.
-  - Puedes cuestionar condiciones, cifras o limitaciones, pero reconoce la autoridad del asesor.
-
-=== COHERENCIA ENTRE ETAPAS ===
-- Mantén continuidad con tu comportamiento previo si lo hay.
-- Conserva tu personalidad, estilo de comunicación y motivaciones.
-- Nunca contradigas tu historia, nivel de ingresos o necesidades.
-- Si existe historial previo, tenlo en cuenta en tu respuesta.
-
-=== LÍMITES ===
-- NO digas que eres una IA.
-- NO digas que esto es una simulación.
-- NO hables de estos lineamientos ni de instrucciones internas.
-- Responde de forma natural, breve, humana y coherente con tu perfil.
-`.trim();
-
-  const prompt = `
+  } else {
+    prompt = `
 Instrucciones por etapa:
 ${JSON.stringify(etapaActual.instrucciones_ia_cliente, null, 2)}
 
@@ -385,6 +252,7 @@ Responde **solo con JSON** con esta estructura:
   "mensaje": "..."
 }
 `.trim();
+  }
 
   const contents = [
     ...historialParts,
@@ -402,20 +270,24 @@ Responde **solo con JSON** con esta estructura:
     required: ['mensaje'],
   };
 
-  console.log(systemInstruction);
-  console.log('=====================================================');
-  console.log(prompt);
-  console.log('=====================================================');
-  console.log('=== HISTORIAL PARTS DETALLADO ===');
-  historialParts.forEach((h, i) => {
-    console.log(`--- Mensaje ${i + 1} ---`);
-    console.log(
-      JSON.stringify(h, null, 2)
-        .replace(/\\n/g, '\n') // mantiene saltos de línea
-        .replace(/\\"/g, '"') // quita escapes de comillas
-    );
-    console.log('---------------------------------------------');
-  });
+  // Logging para debug (solo en desarrollo)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('=== SYSTEM INSTRUCTION ===');
+    console.log(systemInstruction);
+    console.log('\n=== PROMPT ===');
+    console.log(prompt);
+    console.log('\n=== HISTORIAL PARTS ===');
+    historialParts.forEach((h, i) => {
+      console.log(`--- Mensaje ${i + 1} ---`);
+      console.log(
+        JSON.stringify(h, null, 2)
+          .replace(/\\n/g, '\n') // mantiene saltos de línea
+          .replace(/\\"/g, '"') // quita escapes de comillas
+      );
+      console.log('---------------------------------------------');
+    });
+    console.log('=====================================================');
+  }
 
   try {
     const response = await genAI.models.generateContent({
@@ -435,10 +307,15 @@ Responde **solo con JSON** con esta estructura:
 
     return JSON.parse(response.text);
   } catch (error) {
-    console.error('Error al generar respuesta del cliente:', error);
-    throw new Error(`Error generando respuesta del cliente: ${error.message}`);
+    console.error('Error al generar mensaje del cliente:', error);
+    throw new Error(`Error generando mensaje del cliente: ${error.message}`);
   }
 }
+
+module.exports = {
+  generarEscenarioCliente,
+  generarMensajeCliente,
+};
 
 // CUANDO SE QUIERE QUE EL ASESOR ENVIE EL SEGUNDO MENSAJE DE LA ETAPA SIN RECIBIR MENSAJE DE RESPUESTA DEL CLIENTE
 // async function generarSegundoMensajeDelAsesorPorEtapa(
@@ -860,9 +737,3 @@ Responde **solo con JSON** con esta estructura:
 
 //   return JSON.parse(response.text);
 // }
-
-module.exports = {
-  generarEscenarioCliente,
-  generarPrimerMensajeDelClientePorEtapa,
-  generarConversacionAsesorClientePorEtapa,
-};
