@@ -1,9 +1,3 @@
-// Importar configuracion necesaria
-// const { genAI, geminiConfig, profilesConfig, safetySettings } = require('../config/gemini.config');
-// const { pool } = require('../config/database.config');
-// const { mapSimulacionToDb, mapDbToSimulacion } = require('../models/simulacion.model');
-// const { TABLAS, CAMPOS_ID } = require('../constants/informacion-database/auth.constants');
-
 // Importar constantes de informacion de simulacion
 // const POLITICAS_BANCO = require('../constants/informacion-simulacion/politicasBanco.constants');
 // const PRODUCTOS_BANCARIOS = require('../constants/informacion-simulacion/productosBancarios.constants');
@@ -11,101 +5,13 @@
 // const PERFILES_CLIENTES = require('../constants/informacion-simulacion/perfilesClientes.constants');
 // const ETAPAS_PRODUCTOS = require('../constants/informacion-simulacion/etapasConversacion.constants');
 
-// Importar Funciones de utilidad
-// const {
-//   obtenerProductoEspecifico,
-//   obtenerTipoClienteAleatorio,
-//   obtenerPerfilPorProducto,
-// } = require('../utils/funciones-simulacion');
-
-// async function generarEscenarioCliente(producto, tipo_cliente, perfil_cliente) {
-//   const systemInstruction = `Eres un generador experto de perfiles de clientes bancarios realistas.
-//   Debes crear perfiles coherentes, creíbles y detallados que reflejen situaciones reales.`;
-
-//   const prompt = `
-//   Crea un perfil completo de cliente ficticio para este contexto bancario:
-
-//     CONTEXTO DEL BANCO:
-//     ${JSON.stringify(POLITICAS_BANCO, null, 2)}
-
-//     PRODUCTO DE INTERÉS:
-//     ${JSON.stringify(producto, null, 2)}
-
-//     TIPO DE CLIENTE:
-//     ${JSON.stringify(tipo_cliente, null, 2)}
-
-//     PERFIL ESPERADO:
-//     ${JSON.stringify(perfil_cliente, null, 2)}
-
-//     INSTRUCCIONES:
-//     - Crea un cliente REALISTA que encaje naturalmente con este producto
-//     - El perfil debe ser coherente en todos sus aspectos
-//     - La edad, profesión y situación deben estar alineadas
-//     - El nivel de conocimiento financiero debe corresponder con su perfil
-//     - El escenario narrativo debe ser específico y motivante
-
-//     Devuelve SOLO el JSON sin texto adicional.
-//   `;
-
-//   const contents = [
-//     {
-//       role: 'system',
-//       parts: [{ text: systemInstruction }],
-//     },
-//     {
-//       role: 'user',
-//       parts: [{ text: prompt }],
-//     },
-//   ];
-
-//   const schema = {
-//     type: 'object',
-//     properties: {
-//       nombre: { type: 'string', description: 'Nombre completo realista' },
-//       edad: { type: 'string', description: 'Edad coherente con el perfil' },
-//       profesion: { type: 'string', description: 'Profesión específica' },
-//       situacion_actual: { type: 'string', description: 'Situación financiera detallada' },
-//       motivacion: { type: 'string', description: 'Motivación clara para el producto' },
-//       nivel_conocimiento: { type: 'string', description: 'Bajo, Medio o Alto' },
-//       perfil_riesgo: { type: 'string', description: 'Conservador, Moderado o Agresivo' },
-//       objetivo: { type: 'string', description: 'Objetivo financiero específico' },
-//       escenario_narrativo: { type: 'string', description: 'Historia de fondo del cliente' },
-//     },
-//     required: [
-//       'nombre',
-//       'edad',
-//       'profesion',
-//       'situacion_actual',
-//       'motivacion',
-//       'nivel_conocimiento',
-//       'perfil_riesgo',
-//       'objetivo',
-//       'escenario_narrativo',
-//     ],
-//   };
-
-//   const response = await genAI.models.generateContent({
-//     model: geminiConfig.model,
-//     safetySettings: safetySettings.STRICT,
-//     contents: contents,
-//     config: {
-//       temperature: profilesConfig.CREATIVE.temperature,
-//       maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
-//       topP: profilesConfig.CREATIVE.topP,
-//       topK: profilesConfig.CREATIVE.topK,
-//       responseMimeType: 'application/json',
-//       responseSchema: schema,
-//     },
-//   });
-
-//   return JSON.parse(response.text);
-// }
-
 const { genAI, geminiConfig, profilesConfig, safetySettings } = require('../config/gemini.config');
 const POLITICAS_BANCO = require('../constants/informacion-simulacion/politicasBanco.constants');
 
+/**
+ * Genera un perfil completo de cliente ficticio basado en producto, tipo y perfil
+ */
 async function generarEscenarioCliente(producto, tipo_cliente, perfil_cliente) {
-  // ✅ System instruction va SEPARADO, no en contents
   const systemInstruction = `Eres un generador experto de perfiles de clientes bancarios realistas.
 Debes crear perfiles coherentes, creíbles y detallados que reflejen situaciones reales.`;
 
@@ -134,14 +40,6 @@ INSTRUCCIONES:
 Devuelve SOLO el JSON sin texto adicional.
 `;
 
-  // ✅ Contents SOLO tiene el rol 'user', NO 'system'
-  const contents = [
-    {
-      role: 'user',
-      parts: [{ text: prompt }],
-    },
-  ];
-
   const schema = {
     type: 'object',
     properties: {
@@ -168,26 +66,32 @@ Devuelve SOLO el JSON sin texto adicional.
     ],
   };
 
-  // ✅ systemInstruction va en la raíz del objeto de configuración
-  const response = await genAI.models.generateContent({
-    model: geminiConfig.model,
-    systemInstruction: systemInstruction, // 👈 Aquí va el system instruction
-    safetySettings: safetySettings.STRICT,
-    contents: contents,
-    config: {
-      temperature: profilesConfig.CREATIVE.temperature,
-      maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
-      topP: profilesConfig.CREATIVE.topP,
-      topK: profilesConfig.CREATIVE.topK,
-      responseMimeType: 'application/json',
-      responseSchema: schema,
-    },
-  });
+  try {
+    const response = await genAI.models.generateContent({
+      model: geminiConfig.model,
+      systemInstruction: systemInstruction,
+      safetySettings: safetySettings.STRICT,
+      contents: prompt,
+      config: {
+        temperature: profilesConfig.CREATIVE.temperature,
+        maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
+        topP: profilesConfig.CREATIVE.topP,
+        topK: profilesConfig.CREATIVE.topK,
+        responseMimeType: 'application/json',
+        responseSchema: schema,
+      },
+    });
 
-  return JSON.parse(response.text);
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error('Error al generar escenario del cliente:', error);
+    throw new Error(`Error generando perfil de cliente: ${error.message}`);
+  }
 }
 
-// CUANDO SE QUIERE QUE EL CLIENTE GENERE EL PRIMER MENSAJE DE LA ETAPA
+/**
+ * Genera el primer mensaje del cliente en una etapa específica
+ */
 async function generarPrimerMensajeDelClientePorEtapa(
   producto,
   tipoClienteAleatorio,
@@ -196,9 +100,11 @@ async function generarPrimerMensajeDelClientePorEtapa(
   historialConversacion = [],
   etapaActual
 ) {
-  // Construcción del historial como objetos de mensajes
+  // Construir historial formateado con roles correctos según el emisor
   const historialParts = historialConversacion.map((m) => ({
-    role: m.rol === 'cliente' ? 'model' : 'user',
+    // Si el emisor es "Cliente", el rol es "model" (respuesta de la IA)
+    // Si el emisor es "Asesor", el rol es "user" (mensaje del usuario)
+    role: m.emisor === 'Cliente' ? 'model' : 'user',
     parts: [
       {
         text: `
@@ -210,7 +116,7 @@ Emisor: ${m.emisor}
 Mensaje: "${m.mensaje}"
 Receptor: ${m.receptor}
 ===============================
-        `.trim(),
+`.trim(),
       },
     ],
   }));
@@ -285,7 +191,6 @@ Si tu nivel de conocimiento es "Alto":
 - Conserva tu personalidad, estilo de comunicación y motivaciones.
 - Nunca contradigas tu historia, nivel de ingresos o necesidades.
 - Si existe historial previo, tenlo en cuenta en tu respuesta.
-- Si es la primera interacción de la etapa, responde como si continuaras naturalmente la conversación anterior.
 
 === LÍMITES ===
 - NO digas que eres una IA.
@@ -311,8 +216,7 @@ Responde **solo con JSON** con esta estructura:
   "mensaje": "..."
 }
 `.trim();
-  //!! UTILIZA USER
-  // ✅ Contents SOLO tiene el rol 'user', NO 'system'
+
   const contents = [
     ...historialParts,
     {
@@ -329,31 +233,32 @@ Responde **solo con JSON** con esta estructura:
     required: ['mensaje'],
   };
 
-  console.log(systemInstruction);
-  console.log('---------------------------------------------');
-  console.log(prompt);
-  console.log('---------------------------------------------');
-  console.log(historialParts);
+  try {
+    const response = await genAI.models.generateContent({
+      model: geminiConfig.model,
+      systemInstruction: systemInstruction,
+      safetySettings: safetySettings.STRICT,
+      contents: contents,
+      config: {
+        temperature: profilesConfig.CONVERSATIONAL.temperature,
+        maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
+        topP: profilesConfig.CONVERSATIONAL.topP,
+        topK: profilesConfig.CONVERSATIONAL.topK,
+        responseMimeType: 'application/json',
+        responseSchema: schema,
+      },
+    });
 
-  // ✅ systemInstruction va en la raíz del objeto de configuración
-  const response = await genAI.models.generateContent({
-    model: geminiConfig.model,
-    systemInstruction: systemInstruction, // 👈 Aquí va el system instruction
-    safetySettings: safetySettings.STRICT,
-    contents: contents,
-    config: {
-      temperature: profilesConfig.CONVERSATIONAL.temperature,
-      maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
-      topP: profilesConfig.CONVERSATIONAL.topP,
-      topK: profilesConfig.CONVERSATIONAL.topK,
-      responseMimeType: 'application/json',
-      responseSchema: schema,
-    },
-  });
-
-  return JSON.parse(response.text);
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error('Error al generar primer mensaje del cliente:', error);
+    throw new Error(`Error generando mensaje inicial: ${error.message}`);
+  }
 }
 
+/**
+ * Genera la respuesta del cliente al mensaje del asesor en una etapa
+ */
 async function generarConversacionAsesorClientePorEtapa(
   producto,
   tipoClienteAleatorio,
@@ -363,9 +268,16 @@ async function generarConversacionAsesorClientePorEtapa(
   etapaActual,
   mensajeAsesor
 ) {
-  // Construcción del historial como objetos de mensajes
+  // Validar que existe mensaje del asesor
+  if (!mensajeAsesor || mensajeAsesor.trim() === '') {
+    throw new Error('El mensaje del asesor no puede estar vacío');
+  }
+
+  // Construir historial formateado con roles correctos según el emisor
   const historialParts = historialConversacion.map((m) => ({
-    role: m.rol === 'cliente' ? 'model' : 'user',
+    // Si el emisor es "Cliente", el rol es "model" (respuesta de la IA)
+    // Si el emisor es "Asesor", el rol es "user" (mensaje del usuario)
+    role: m.emisor === 'Cliente' ? 'model' : 'user',
     parts: [
       {
         text: `
@@ -377,7 +289,7 @@ Emisor: ${m.emisor}
 Mensaje: "${m.mensaje}"
 Receptor: ${m.receptor}
 ===============================
-        `.trim(),
+`.trim(),
       },
     ],
   }));
@@ -452,7 +364,6 @@ Si tu nivel de conocimiento es "Alto":
 - Conserva tu personalidad, estilo de comunicación y motivaciones.
 - Nunca contradigas tu historia, nivel de ingresos o necesidades.
 - Si existe historial previo, tenlo en cuenta en tu respuesta.
-- Si es la primera interacción de la etapa, responde como si continuaras naturalmente la conversación anterior.
 
 === LÍMITES ===
 - NO digas que eres una IA.
@@ -466,15 +377,15 @@ Instrucciones por etapa:
 ${JSON.stringify(etapaActual.instrucciones_ia_cliente, null, 2)}
 
 El asesor te dijo: "${mensajeAsesor}"
-'Genera una respuesta natural como cliente, coherente con la conversación previa y el objetivo de la etapa actual.'
+
+Genera una respuesta natural como cliente, coherente con la conversación previa y el objetivo de la etapa actual.
 
 Responde **solo con JSON** con esta estructura:
 {
   "mensaje": "..."
 }
 `.trim();
-  //!! UTILIZA USER
-  // ✅ Contents SOLO tiene el rol 'user', NO 'system'
+
   const contents = [
     ...historialParts,
     {
@@ -492,28 +403,41 @@ Responde **solo con JSON** con esta estructura:
   };
 
   console.log(systemInstruction);
-  console.log('---------------------------------------------');
+  console.log('=====================================================');
   console.log(prompt);
-  console.log('---------------------------------------------');
-  console.log(historialParts);
-
-  // ✅ systemInstruction va en la raíz del objeto de configuración
-  const response = await genAI.models.generateContent({
-    model: geminiConfig.model,
-    systemInstruction: systemInstruction, // 👈 Aquí va el system instruction
-    safetySettings: safetySettings.STRICT,
-    contents: contents,
-    config: {
-      temperature: profilesConfig.CONVERSATIONAL.temperature,
-      maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
-      topP: profilesConfig.CONVERSATIONAL.topP,
-      topK: profilesConfig.CONVERSATIONAL.topK,
-      responseMimeType: 'application/json',
-      responseSchema: schema,
-    },
+  console.log('=====================================================');
+  console.log('=== HISTORIAL PARTS DETALLADO ===');
+  historialParts.forEach((h, i) => {
+    console.log(`--- Mensaje ${i + 1} ---`);
+    console.log(
+      JSON.stringify(h, null, 2)
+        .replace(/\\n/g, '\n') // mantiene saltos de línea
+        .replace(/\\"/g, '"') // quita escapes de comillas
+    );
+    console.log('---------------------------------------------');
   });
 
-  return JSON.parse(response.text);
+  try {
+    const response = await genAI.models.generateContent({
+      model: geminiConfig.model,
+      systemInstruction: systemInstruction,
+      safetySettings: safetySettings.STRICT,
+      contents: contents,
+      config: {
+        temperature: profilesConfig.CONVERSATIONAL.temperature,
+        maxOutputTokens: profilesConfig.CONVERSATIONAL.maxOutputTokens,
+        topP: profilesConfig.CONVERSATIONAL.topP,
+        topK: profilesConfig.CONVERSATIONAL.topK,
+        responseMimeType: 'application/json',
+        responseSchema: schema,
+      },
+    });
+
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error('Error al generar respuesta del cliente:', error);
+    throw new Error(`Error generando respuesta del cliente: ${error.message}`);
+  }
 }
 
 // CUANDO SE QUIERE QUE EL ASESOR ENVIE EL SEGUNDO MENSAJE DE LA ETAPA SIN RECIBIR MENSAJE DE RESPUESTA DEL CLIENTE
@@ -642,82 +566,82 @@ Responde **solo con JSON** con esta estructura:
 //   return evaluacion;
 // }
 
-async function analizarEstadoConversacion(historialConversacion = [], modoAprendizaje) {
-  const historialParts = historialConversacion.map((m) => ({
-    role: m.rol === 'cliente' ? 'model' : 'user',
-    parts: [
-      {
-        text: `
-          === CONTEXTO DE INTERACCIÓN ===
-          Etapa: ${m.etapa} (${m.indiceEtapa}/${m.totalEtapas})
-          Objetivo: ${m.objetivoEtapa}
-          Emisor: ${m.rol}
-          Receptor: ${m.receptor || 'Asesor'}
-          Mensaje: "${m.mensaje}"
-          ===============================
-        `.trim(),
-      },
-    ],
-  }));
+// async function analizarEstadoConversacion(historialConversacion = [], modoAprendizaje) {
+//   const historialParts = historialConversacion.map((m) => ({
+//     role: m.rol === 'cliente' ? 'model' : 'user',
+//     parts: [
+//       {
+//         text: `
+//           === CONTEXTO DE INTERACCIÓN ===
+//           Etapa: ${m.etapa} (${m.indiceEtapa}/${m.totalEtapas})
+//           Objetivo: ${m.objetivoEtapa}
+//           Emisor: ${m.rol}
+//           Receptor: ${m.receptor || 'Asesor'}
+//           Mensaje: "${m.mensaje}"
+//           ===============================
+//         `.trim(),
+//       },
+//     ],
+//   }));
 
-  if (modoAprendizaje === true) {
-    const modoAprendizaje = `El modo aprendizaje está activado. Debes proporcionar retroalimentación detallada y constructiva al asesor en cada evaluación, destacando tanto las fortalezas como las áreas de mejora en su desempeño.`;
-  } else {
-    const modoAprendizaje = `El modo aprendizaje está desactivado. no proporciones informacion`;
-  }
+//   if (modoAprendizaje === true) {
+//     const modoAprendizaje = `El modo aprendizaje está activado. Debes proporcionar retroalimentación detallada y constructiva al asesor en cada evaluación, destacando tanto las fortalezas como las áreas de mejora en su desempeño.`;
+//   } else {
+//     const modoAprendizaje = `El modo aprendizaje está desactivado. no proporciones informacion`;
+//   }
 
-  const systemInstruction = `Eres analizador experto de la conversacion entre un asesor bancario y un cliente ficticio.
-  Debes evaluar si la conversacion se mantiene en el contexto del producto financiero y el perfil del cliente.
-  Identifica si el asesor cumple con los objetivos de cada etapa de la asesoría.
-  Detecta si hay rupturas de contexto o incoherencias. Si es asi debes marcar como true la bandera "parar_simulacion". para indicar que la simulacion debe detenerse. ${modoAprendizaje}`;
+//   const systemInstruction = `Eres analizador experto de la conversacion entre un asesor bancario y un cliente ficticio.
+//   Debes evaluar si la conversacion se mantiene en el contexto del producto financiero y el perfil del cliente.
+//   Identifica si el asesor cumple con los objetivos de cada etapa de la asesoría.
+//   Detecta si hay rupturas de contexto o incoherencias. Si es asi debes marcar como true la bandera "parar_simulacion". para indicar que la simulacion debe detenerse. ${modoAprendizaje}`;
 
-  const prompt = ` Analiza el siguiente historial de conversación de la simulación bancaria
-  `.trim();
+//   const prompt = ` Analiza el siguiente historial de conversación de la simulación bancaria
+//   `.trim();
 
-  // Estructura principal de la conversación
-  const contents = [
-    {
-      role: 'system',
-      parts: [{ text: systemInstruction }],
-    },
-    ...historialParts,
-    {
-      role: 'user',
-      parts: [{ text: prompt }],
-    },
-  ];
+//   // Estructura principal de la conversación
+//   const contents = [
+//     {
+//       role: 'system',
+//       parts: [{ text: systemInstruction }],
+//     },
+//     ...historialParts,
+//     {
+//       role: 'user',
+//       parts: [{ text: prompt }],
+//     },
+//   ];
 
-  const schema = {
-    type: 'object',
-    properties: {
-      detener_simulacion: {
-        type: 'boolean',
-        description: 'Indica si se debe detener la simulación',
-      },
-      mensaje_modoAprendizaje: {
-        type: 'string',
-        description: 'Mensaje sobre el modo de aprendizaje',
-      },
-    },
-    required: ['detener_simulacion', 'mensaje_modoAprendizaje'],
-  };
+//   const schema = {
+//     type: 'object',
+//     properties: {
+//       detener_simulacion: {
+//         type: 'boolean',
+//         description: 'Indica si se debe detener la simulación',
+//       },
+//       mensaje_modoAprendizaje: {
+//         type: 'string',
+//         description: 'Mensaje sobre el modo de aprendizaje',
+//       },
+//     },
+//     required: ['detener_simulacion', 'mensaje_modoAprendizaje'],
+//   };
 
-  const response = await genAI.models.generateContent({
-    model: geminiConfig.model,
-    safetySettings: safetySettings.STRICT,
-    contents: contents,
-    config: {
-      temperature: profilesConfig.CREATIVE.temperature,
-      maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
-      topP: profilesConfig.CREATIVE.topP,
-      topK: profilesConfig.CREATIVE.topK,
-      responseMimeType: 'application/json',
-      responseSchema: schema,
-    },
-  });
+//   const response = await genAI.models.generateContent({
+//     model: geminiConfig.model,
+//     safetySettings: safetySettings.STRICT,
+//     contents: contents,
+//     config: {
+//       temperature: profilesConfig.CREATIVE.temperature,
+//       maxOutputTokens: profilesConfig.CREATIVE.maxOutputTokens,
+//       topP: profilesConfig.CREATIVE.topP,
+//       topK: profilesConfig.CREATIVE.topK,
+//       responseMimeType: 'application/json',
+//       responseSchema: schema,
+//     },
+//   });
 
-  return JSON.parse(response.text);
-}
+//   return JSON.parse(response.text);
+// }
 
 // async function analizarDesempenoAsesor(simulacionId) {
 //   const historial = obtenerHistorialChat(simulacionId);

@@ -1,165 +1,3 @@
-// const geminiService = require('../services/gemini');
-// const logger = require('../utils/logger');
-// const { pool } = require('../config/database.config');
-// /**
-//  * POST /api/simulacion/iniciar
-//  * Inicia una nueva simulación con la configuración del frontend
-//  *
-//  * Body esperado:
-//  * {
-//  *   configuracion: {
-//  *     producto: "cdt_digital" | "cuenta_ahorros" | "cuenta_corriente" | etc.,
-//  *     modo: "aprendizaje" | "evaluativo",
-//  *     destino: "personal" | "salon_sena",
-//  *     interaccion: "automatico" | "silenciado"
-//  *   }
-//  * }
-//  *
-//  * El userId se obtiene del token JWT (req.user.id)
-//  */
-// exports.iniciarSimulacion = async (req, res) => {
-//   try {
-//     const userId = req.user?.id || req.user?.userId;
-//     const { configuracion } = req.body;
-
-//     // ============ VERIFICAR SI YA TIENE UNA SIMULACIÓN EN PROCESO ============
-//     const simulacionExistente = await simulacionModel.obtenerSimulacionEnProceso(userId);
-
-//     if (simulacionExistente) {
-//       return res.status(409).json({
-//         ok: false,
-//         error: 'Simulación en proceso',
-//         mensaje: 'Ya tienes una simulación en curso. Finalízala antes de iniciar una nueva.',
-//         simulacionActual: {
-//           producto: simulacionExistente.productoNombre,
-//           etapaActual: simulacionExistente.etapaActualIndex + 1,
-//           estado: simulacionExistente.estado,
-//         },
-//       });
-//     }
-
-//     // ============ OBTENER DATOS DE BD ============
-//     const nombreProducto = MAPA_PRODUCTOS[producto];
-//     const productoInfo = await simulacionModel.obtenerProductoPorNombre(nombreProducto);
-
-//     if (!productoInfo) {
-//       return res.status(404).json({
-//         ok: false,
-//         error: 'Producto no encontrado',
-//         mensaje: `No se encontró el producto: ${nombreProducto}`,
-//       });
-//     }
-
-//     const tipoCliente = await simulacionModel.obtenerTipoClienteAleatorio();
-//     const perfilCliente = await simulacionModel.obtenerPerfilPorProducto(
-//       productoInfo.id_producto_bancario
-//     );
-//     const etapas = await simulacionModel.obtenerEtapasProducto(productoInfo.id_producto_bancario);
-
-//     if (etapas.length === 0) {
-//       return res.status(500).json({
-//         ok: false,
-//         error: 'Etapas no definidas',
-//         mensaje: `No existen etapas definidas para el producto: ${nombreProducto}`,
-//       });
-//     }
-
-//     // ============ GENERAR PERFIL DEL CLIENTE CON IA ============
-//     logger.info(`[Simulación] Generando perfil de cliente para producto: ${nombreProducto}`);
-
-//     const cliente = await geminiService.generarPerfilCliente(
-//       productoInfo,
-//       tipoCliente,
-//       perfilCliente
-//     );
-
-//     // ============ DETERMINAR PRIMER MENSAJE ============
-//     const primeraEtapa = etapas[0];
-//     let historialConversacion = [];
-//     let estadoInicial = 'en_proceso'; // El estado debe ser uno de los valores permitidos: 'en_proceso', 'finalizada' o 'pausada'
-//     let ultimoMensajeCliente = null;
-
-//     if (primeraEtapa.quien_inicia === 'cliente') {
-//       logger.info('[Simulación] El cliente inicia la conversación');
-
-//       const mensajeCliente = await geminiService.generarMensajeInicialCliente(
-//         primeraEtapa,
-//         cliente,
-//         nombreProducto
-//       );
-
-//       historialConversacion.push({
-//         etapaId: primeraEtapa.id,
-//         rol: 'cliente',
-//         mensaje: mensajeCliente,
-//         timestamp: new Date(),
-//       });
-
-//       ultimoMensajeCliente = mensajeCliente;
-//     }
-
-//     // ============ GUARDAR EN BASE DE DATOS ============
-//     logger.info('[Simulación] Guardando simulación en base de datos');
-//     logger.info('[Debug] User data:', { user: req.user, userId });
-
-//     const idSimulacion = await simulacionModel.crearSimulacion({
-//       idAprendiz: userId,
-//       idProductoBancario: productoInfo.id_producto_bancario,
-//       idTipoCliente: tipoCliente.id_tipo_cliente,
-//       idPerfilCliente: perfilCliente.id_perfil_cliente,
-//       configuracion: {
-//         producto,
-//         modo,
-//         destino,
-//         interaccion,
-//       },
-//       cliente,
-//       etapaActualIndex: 0,
-//       historialConversacion,
-//       estado: estadoInicial,
-//       ultimoMensajeCliente,
-//     });
-
-//     logger.info(`[Simulación] Simulación iniciada exitosamente. ID: ${idSimulacion}`);
-
-//     // ============ RESPUESTA ============
-//     res.json({
-//       ok: true,
-//       mensaje:
-//         primeraEtapa.quien_inicia === 'cliente'
-//           ? 'El cliente ha iniciado la conversación'
-//           : 'El asesor debe iniciar esta etapa',
-//       cliente: {
-//         nombre: cliente.nombre,
-//         edad: cliente.edad,
-//         profesion: cliente.profesion,
-//         perfil_riesgo: cliente.perfil_riesgo,
-//         escenario_narrativo: cliente.escenario_narrativo,
-//       },
-//       etapaActual: {
-//         numero: 1,
-//         total: etapas.length,
-//         id: primeraEtapa.id,
-//         nombre: primeraEtapa.nombre,
-//         objetivo: primeraEtapa.objetivo,
-//         quien_inicia: primeraEtapa.quien_inicia,
-//         validaciones: primeraEtapa.validaciones,
-//         sugerencias: primeraEtapa.sugerencias_aprendizaje,
-//       },
-//       estado: estadoInicial,
-//       mensajeCliente: ultimoMensajeCliente,
-//     });
-//   } catch (err) {
-//     logger.error('[Simulación] Error al iniciar:', err);
-
-//     res.status(500).json({
-//       ok: false,
-//       error: 'Error al iniciar simulación',
-//       mensaje: err.message,
-//     });
-//   }
-// };
-
 const { pool } = require('../config/database.config');
 const geminiService = require('../services/gemini');
 
@@ -422,6 +260,25 @@ exports.iniciarSimulacion = async (req, res) => {
  *
  * El userId se obtiene del token JWT (req.user.id)
  */
+// ============================================================
+// HELPER: determina si se debe avanzar de etapa
+// ============================================================
+function debeAvanzarDeEtapa(etapaActual, historialConversacion) {
+  const mensajesEtapa = historialConversacion.filter(
+    (m) => m.indiceEtapa === etapaActual.numero_orden
+  );
+
+  // cuando la etapa la inicia el cliente → 3 mensajes
+  // cuando la etapa la inicia el asesor → 2 mensajes
+  const minimoMensajes = etapaActual.quien_inicia === 'Cliente' ? 3 : 2;
+
+  return {
+    debeAvanzar: mensajesEtapa.length >= minimoMensajes,
+    mensajesEtapa,
+    minimoMensajes,
+  };
+}
+
 exports.enviarMensaje = async (req, res) => {
   try {
     const userId = req.user?.id || req.user?.userId;
@@ -442,10 +299,7 @@ exports.enviarMensaje = async (req, res) => {
     // 2️⃣ Buscar simulación activa (en_proceso)
     // ===============================================
     const [simulaciones] = await pool.query(
-      `SELECT *
-       FROM simulaciones
-       WHERE id_aprendiz = ? AND estado = 'en_proceso'
-       LIMIT 1`,
+      `SELECT * FROM simulaciones WHERE id_aprendiz = ? AND estado = 'en_proceso' LIMIT 1`,
       [userId]
     );
 
@@ -459,78 +313,73 @@ exports.enviarMensaje = async (req, res) => {
     }
 
     // ===============================================
-    // 3️⃣ Obtener producto bancario
+    // 3️⃣ Obtener producto, escenario y datos base
     // ===============================================
-    const [productos] = await pool.query(
-      `SELECT * FROM productos_bancarios WHERE id_producto_bancario = ?`,
+    const [[producto]] = await pool.query(
+      'SELECT * FROM productos_bancarios WHERE id_producto_bancario = ?',
       [simulacion.id_producto_bancario]
     );
-    const producto = productos[0];
 
-    // ===============================================
-    // 4️⃣ Obtener cliente simulado (escenario)
-    // ===============================================
-    const [clientes] = await pool.query(
-      `SELECT * FROM clientes_simulados WHERE id_simulacion = ?`,
+    const [[escenarioCliente]] = await pool.query(
+      'SELECT * FROM clientes_simulados WHERE id_simulacion = ?',
       [simulacion.id_simulacion]
     );
-    const escenarioCliente = clientes[0];
 
-    // ===============================================
-    // 5️⃣ Obtener tipo de cliente y perfil asociado
-    // ===============================================
-    const [tiposCliente] = await pool.query(
-      `SELECT * FROM tipos_clientes WHERE id_tipo_cliente = ?`,
+    const [[tipoClienteAleatorio]] = await pool.query(
+      'SELECT * FROM tipos_clientes WHERE id_tipo_cliente = ?',
       [escenarioCliente.id_tipo_cliente]
     );
-    const tipoClienteAleatorio = tiposCliente[0];
 
-    const [perfilesCliente] = await pool.query(
-      `SELECT * FROM perfiles_clientes WHERE id_perfil_cliente = ?`,
+    const [[perfilClienteAleatorio]] = await pool.query(
+      'SELECT * FROM perfiles_clientes WHERE id_perfil_cliente = ?',
       [escenarioCliente.id_perfil_cliente]
     );
-    const perfilClienteAleatorio = perfilesCliente[0];
 
-    // ===============================================
-    // 6️⃣ Obtener etapa actual
-    // ===============================================
-    const [etapas] = await pool.query(
-      `SELECT *
-       FROM etapas_conversacion
-       WHERE id_producto_bancario = ?
-       AND numero_orden = ?
-       LIMIT 1`,
+    const [[etapaActual]] = await pool.query(
+      `SELECT * FROM etapas_conversacion
+       WHERE id_producto_bancario = ? AND numero_orden = ? LIMIT 1`,
       [simulacion.id_producto_bancario, simulacion.etapa_actual_index]
     );
-    const etapaActual = etapas[0];
 
-    // ===============================================
-    // 7️⃣ Obtener cantidad total de etapas
-    // ===============================================
-    const [totalEtapasResult] = await pool.query(
-      `SELECT COUNT(*) as total FROM etapas_conversacion WHERE id_producto_bancario = ?`,
+    const [[{ total: totalEtapas }]] = await pool.query(
+      'SELECT COUNT(*) AS total FROM etapas_conversacion WHERE id_producto_bancario = ?',
       [producto.id_producto_bancario]
     );
-    const totalEtapas = totalEtapasResult[0].total;
 
     // ===============================================
-    // 8️⃣ Agregar mensaje del asesor al historial
+    // 4️⃣ Obtener historial actual (ARREGLO CRÍTICO)
     // ===============================================
-    const [simulacionesConversacion] = await pool.query(
-      'SELECT conversacion_asesoria FROM simulaciones WHERE id_simulacion = ?',
-      [simulacion.id_simulacion]
-    );
-
-    let conversacionActual = [];
+    let historialConversacion = [];
     try {
-      conversacionActual = JSON.parse(simulacionesConversacion[0].conversacion_asesoria || '[]');
-    } catch {
-      conversacionActual = [];
+      let conversacionRaw = simulacion.conversacion_asesoria;
+
+      if (Buffer.isBuffer(conversacionRaw)) {
+        conversacionRaw = conversacionRaw.toString('utf8');
+      }
+
+      if (typeof conversacionRaw === 'string' && conversacionRaw.trim() !== '') {
+        historialConversacion = JSON.parse(conversacionRaw);
+      } else if (Array.isArray(conversacionRaw)) {
+        historialConversacion = conversacionRaw;
+      } else {
+        historialConversacion = [];
+      }
+    } catch (err) {
+      console.error('❌ Error parseando conversacion_asesoria:', err);
+      historialConversacion = [];
     }
 
+    // ===============================================
+    // LOG DE DEPURACIÓN (verifica acumulación)
+    // ===============================================
+    console.log('📜 Historial actual:', historialConversacion.length, 'mensajes');
+
+    // ===============================================
+    // 5️⃣ Guardar mensaje del asesor en el historial
+    // ===============================================
     const nuevoMensajeAsesor = {
       indiceEtapa: simulacion.etapa_actual_index,
-      totalEtapas: totalEtapas,
+      totalEtapas,
       nombreEtapa: etapaActual.nombre,
       objetivoEtapa: etapaActual.objetivo,
       emisor: 'Asesor',
@@ -538,49 +387,178 @@ exports.enviarMensaje = async (req, res) => {
       receptor: 'Cliente',
     };
 
-    conversacionActual.push(nuevoMensajeAsesor);
+    historialConversacion.push(nuevoMensajeAsesor);
 
-    await pool.query(`UPDATE simulaciones SET conversacion_asesoria = ? WHERE id_simulacion = ?`, [
-      JSON.stringify(conversacionActual),
-      simulacion.id_simulacion,
-    ]);
-
-    // ===============================================
-    // 9️⃣ Obtener historial actualizado (ya con el mensaje nuevo)
-    // ===============================================
-    const [simulacionActualizada] = await pool.query(
-      `SELECT conversacion_asesoria FROM simulaciones WHERE id_simulacion = ?`,
-      [simulacion.id_simulacion]
+    await pool.query(
+      `UPDATE simulaciones
+       SET conversacion_asesoria = ?, fecha_ultima_interaccion = CURRENT_TIMESTAMP
+       WHERE id_simulacion = ?`,
+      [JSON.stringify(historialConversacion), simulacion.id_simulacion]
     );
 
-    let historialConversacion = [];
+    // ===============================================
+    // 6️⃣ Pedir respuesta a Gemini 🤖
+    // ===============================================
+    let respuestaCliente;
     try {
-      historialConversacion = JSON.parse(simulacionActualizada[0].conversacion_asesoria || '[]');
-    } catch {
-      historialConversacion = [];
+      respuestaCliente = await geminiService.generarConversacionAsesorClientePorEtapa(
+        producto,
+        tipoClienteAleatorio,
+        perfilClienteAleatorio,
+        escenarioCliente,
+        historialConversacion,
+        etapaActual,
+        mensaje
+      );
+    } catch (error) {
+      console.error('❌ Error en Gemini:', error);
+      return res.status(500).json({
+        ok: false,
+        error: 'Error IA',
+        mensaje: 'Ocurrió un error al generar la respuesta del cliente con Gemini.',
+        detalle: error.message,
+      });
     }
 
     // ===============================================
-    // 🔟 Preparar datos para generar conversación IA
+    // 7️⃣ Guardar respuesta del cliente en la conversación
     // ===============================================
-    const datosConversacion = {
-      producto,
-      tipoClienteAleatorio,
-      perfilClienteAleatorio,
-      escenarioCliente,
-      historialConversacion,
-      etapaActual,
-      mensajeAsesor: mensaje,
+    const nuevoMensajeCliente = {
+      indiceEtapa: simulacion.etapa_actual_index,
+      totalEtapas,
+      nombreEtapa: etapaActual.nombre,
+      objetivoEtapa: etapaActual.objetivo,
+      emisor: 'Cliente',
+      mensaje: respuestaCliente.mensaje,
+      receptor: 'Asesor',
     };
 
+    historialConversacion.push(nuevoMensajeCliente);
+
+    await pool.query(
+      `UPDATE simulaciones
+       SET conversacion_asesoria = ?, fecha_ultima_interaccion = CURRENT_TIMESTAMP
+       WHERE id_simulacion = ?`,
+      [JSON.stringify(historialConversacion), simulacion.id_simulacion]
+    );
+
+    // ===============================================
+    // 8️⃣ DETERMINAR SI SE AVANZA DE ETAPA (USANDO HELPER)
+    // ===============================================
+    const { debeAvanzar, mensajesEtapa, minimoMensajes } = debeAvanzarDeEtapa(
+      etapaActual,
+      historialConversacion
+    );
+
+    const esUltimaEtapa = simulacion.etapa_actual_index === totalEtapas;
+
+    console.log('🔍 Etapa actual:', simulacion.etapa_actual_index);
+    console.log('📊 Mensajes en etapa:', mensajesEtapa.length, '/', minimoMensajes);
+    console.log('🏁 Total etapas:', totalEtapas);
+
+    let etapaCambiada = false;
+    let mensajeNuevaEtapaCliente = null;
+    let nuevaEtapaInfo = null;
+    let simulacionFinalizada = false;
+
+    if (debeAvanzar && esUltimaEtapa) {
+      // ===============================================
+      // 9️⃣ FINALIZAR SIMULACIÓN (última etapa completada)
+      // ===============================================
+      await pool.query(
+        `UPDATE simulaciones
+         SET estado = 'finalizada',
+             fecha_finalizacion = CURRENT_TIMESTAMP
+         WHERE id_simulacion = ?`,
+        [simulacion.id_simulacion]
+      );
+
+      simulacionFinalizada = true;
+      console.log(`✅ Simulación ${simulacion.id_simulacion} finalizada correctamente`);
+    } else if (debeAvanzar && simulacion.etapa_actual_index < totalEtapas) {
+      // ===============================================
+      // 🔟 AVANZAR A LA SIGUIENTE ETAPA
+      // ===============================================
+      const nuevoIndiceEtapa = simulacion.etapa_actual_index + 1;
+
+      const [[siguienteEtapa]] = await pool.query(
+        `SELECT * FROM etapas_conversacion
+         WHERE id_producto_bancario = ? AND numero_orden = ? LIMIT 1`,
+        [simulacion.id_producto_bancario, nuevoIndiceEtapa]
+      );
+
+      if (siguienteEtapa) {
+        await pool.query(
+          `UPDATE simulaciones
+           SET etapa_actual_index = ?, fecha_ultima_interaccion = CURRENT_TIMESTAMP
+           WHERE id_simulacion = ?`,
+          [nuevoIndiceEtapa, simulacion.id_simulacion]
+        );
+
+        etapaCambiada = true;
+        nuevaEtapaInfo = siguienteEtapa;
+        console.log(`➡️ Avanzando a etapa ${nuevoIndiceEtapa}: ${siguienteEtapa.nombre}`);
+
+        if (siguienteEtapa.quien_inicia === 'Cliente') {
+          try {
+            const primerMensajeNuevaEtapa =
+              await geminiService.generarPrimerMensajeDelClientePorEtapa(
+                producto,
+                tipoClienteAleatorio,
+                perfilClienteAleatorio,
+                escenarioCliente,
+                historialConversacion,
+                siguienteEtapa
+              );
+
+            const mensajeClienteNuevaEtapa = {
+              indiceEtapa: nuevoIndiceEtapa,
+              totalEtapas,
+              nombreEtapa: siguienteEtapa.nombre,
+              objetivoEtapa: siguienteEtapa.objetivo,
+              emisor: 'Cliente',
+              mensaje: primerMensajeNuevaEtapa.mensaje,
+              receptor: 'Asesor',
+            };
+
+            historialConversacion.push(mensajeClienteNuevaEtapa);
+
+            await pool.query(
+              `UPDATE simulaciones
+               SET conversacion_asesoria = ?, fecha_ultima_interaccion = CURRENT_TIMESTAMP
+               WHERE id_simulacion = ?`,
+              [JSON.stringify(historialConversacion), simulacion.id_simulacion]
+            );
+
+            mensajeNuevaEtapaCliente = mensajeClienteNuevaEtapa;
+          } catch (error) {
+            console.error('❌ Error al generar primer mensaje de nueva etapa:', error);
+          }
+        }
+      }
+    }
+
+    // ===============================================
+    // 1️⃣1️⃣ Respuesta final al frontend
+    // ===============================================
     return res.status(200).json({
       ok: true,
-      mensaje: 'Mensaje del asesor guardado y datos listos para generar la respuesta del cliente.',
+      mensaje: simulacionFinalizada
+        ? 'Simulación finalizada correctamente.'
+        : 'Mensaje procesado correctamente.',
       id_simulacion: simulacion.id_simulacion,
-      datosConversacion,
+      mensajes: {
+        asesor: nuevoMensajeAsesor,
+        cliente: nuevoMensajeCliente,
+      },
+      historialActualizado: historialConversacion,
+      simulacion_finalizada: simulacionFinalizada,
+      etapa_cambiada: etapaCambiada,
+      nueva_etapa: etapaCambiada ? nuevaEtapaInfo : null,
+      mensaje_nueva_etapa_cliente: mensajeNuevaEtapaCliente,
     });
   } catch (error) {
-    console.error('Error al enviar mensaje:', error);
+    console.error('❌ Error al enviar mensaje:', error);
     return res.status(500).json({
       ok: false,
       error: 'Error interno',
