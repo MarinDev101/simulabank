@@ -468,12 +468,45 @@ exports.enviarMensaje = async (req, res) => {
 
     historialConversacion.push(nuevoMensajeCliente);
 
+    // Guardar conversación actualizada
     await pool.query(
       `UPDATE simulaciones
        SET conversacion_asesoria = ?, fecha_ultima_interaccion = CURRENT_TIMESTAMP
        WHERE id_simulacion = ?`,
       [JSON.stringify(historialConversacion), simulacion.id_simulacion]
     );
+
+    // ===============================================
+    // 🚨 7.1 DETENER SIMULACIÓN SI SE SALE DEL CONTEXTO
+    // ===============================================
+    if (respuestaCliente.finalizar_simulacion === true) {
+      console.log('La IA detectó salida de contexto. Finalizando simulación.');
+
+      // Cambiar estado a finalizada (sin avanzar de etapa)
+      await pool.query(
+        `UPDATE simulaciones
+     SET estado = 'finalizada',
+         fecha_finalizacion = CURRENT_TIMESTAMP
+     WHERE id_simulacion = ?`,
+        [simulacion.id_simulacion]
+      );
+
+      return res.status(200).json({
+        ok: true,
+        simulacion_finalizada: true,
+        motivo_finalizacion: 'salida_contexto',
+        mensaje: 'Simulación finalizada: el asesor se salió del contexto.',
+        id_simulacion: simulacion.id_simulacion,
+        mensajes: {
+          asesor: nuevoMensajeAsesor,
+          cliente: nuevoMensajeCliente,
+        },
+        historialActualizado: historialConversacion,
+        etapa_cambiada: false,
+        nueva_etapa: null,
+        mensaje_nueva_etapa_cliente: null,
+      });
+    }
 
     // ===============================================
     // 8️⃣ DETERMINAR SI SE AVANZA DE ETAPA
