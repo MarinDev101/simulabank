@@ -12,7 +12,7 @@ const MAPA_PRODUCTOS = {
 
 const PRODUCTOS_VALIDOS = Object.keys(MAPA_PRODUCTOS);
 const MODOS_VALIDOS = ['aprendizaje', 'evaluativo'];
-const DESTINOS_VALIDOS = ['personal', 'salon_sena'];
+const DESTINOS_VALIDOS = ['personal', 'sala'];
 const INTERACCIONES_VALIDAS = ['automatico', 'silenciado'];
 
 /**

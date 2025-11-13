@@ -3,18 +3,9 @@ const geminiService = require('../services/gemini');
 const { default: fetch } = require('node-fetch');
 
 /**
- * http://localhost:3000/api/simulacion/iniciar
- * {
-  "configuracion": {
-    "producto": "cuenta_ahorros",
-    "modo": "aprendizaje",
-    "destino": "personal",
-    "interaccion": "automatico"
-  }
-}
- * El controlador recibe datos ya procesados y listos para usar.
+ * POST /api/simulacion/iniciar
+ * Inicia una nueva simulación
  */
-
 exports.iniciarSimulacion = async (req, res) => {
   try {
     const userId = req.user?.id || req.user?.userId;
@@ -133,7 +124,6 @@ exports.iniciarSimulacion = async (req, res) => {
     } catch (error) {
       console.error('Error al obtener avatar:', error);
     } finally {
-      // Valor por defecto si sigue siendo null
       if (!urlAvatar) {
         urlAvatar =
           escenarioCliente.genero.toLowerCase() === 'hombre'
@@ -158,10 +148,11 @@ exports.iniciarSimulacion = async (req, res) => {
         perfil_cliente,
         aspectos_clave_registrados,
         conversacion_asesoria,
+        recomendaciones_aprendizaje_ia,
         estado,
         etapa_actual_index
       )
-      VALUES (?, ?, 'especifico', ?, ?, ?, '{}', '[]', '[]', 'en_proceso', 1)`,
+      VALUES (?, ?, 'especifico', ?, ?, ?, '{}', '[]', '[]', '[]', 'en_proceso', 1)`,
       [userId, producto.id_producto_bancario, modo, destino, interaccion !== 'silenciado']
     );
 
@@ -190,7 +181,7 @@ exports.iniciarSimulacion = async (req, res) => {
       [
         idNuevaSimulacion,
         escenarioCliente.genero,
-        urlAvatar, // 👈 nueva columna con el avatar
+        urlAvatar,
         escenarioCliente.nombre,
         escenarioCliente.edad,
         escenarioCliente.profesion,
@@ -226,7 +217,7 @@ exports.iniciarSimulacion = async (req, res) => {
           tipoClienteAleatorio,
           perfilClienteAleatorio,
           escenarioCliente,
-          [], // historial vacío
+          [],
           etapaActual,
           { esPrimerMensaje: true }
         );
@@ -257,7 +248,61 @@ exports.iniciarSimulacion = async (req, res) => {
     }
 
     // =====================================================
-    // 9️⃣ Respuesta final al frontend
+    // 9️⃣ GENERAR ANÁLISIS INICIAL SI ES MODO APRENDIZAJE 📚
+    // =====================================================
+    let analisisInicialAprendizaje = null;
+
+    if (modo === 'aprendizaje' && etapaActual) {
+      try {
+        console.log('🎓 Generando análisis inicial de aprendizaje para etapa 1...');
+
+        // Historial inicial (puede estar vacío o con el primer mensaje del cliente)
+        const historialInicial = mensajeInicialCliente
+          ? [
+              {
+                indiceEtapa: 1,
+                totalEtapas: await obtenerTotalEtapas(producto.id_producto_bancario),
+                nombreEtapa: etapaActual.nombre,
+                objetivoEtapa: etapaActual.objetivo,
+                emisor: 'Cliente',
+                mensaje: mensajeInicialCliente.mensaje,
+                receptor: 'Asesor',
+              },
+            ]
+          : [];
+
+        const resultadoAnalisis =
+          await geminiService.generarAnalisisSimulacionPorEtapaModoAprendizaje(
+            producto,
+            tipoClienteAleatorio,
+            perfilClienteAleatorio,
+            escenarioCliente,
+            historialInicial,
+            etapaActual
+          );
+
+        analisisInicialAprendizaje = {
+          indiceEtapa: 1,
+          nombreEtapa: etapaActual.nombre,
+          objetivoEtapa: etapaActual.objetivo,
+          recomendacionParaAsesor: resultadoAnalisis.recomendaciones_aprendizaje,
+        };
+
+        // Guardar el análisis inicial en la base de datos
+        await pool.query(
+          'UPDATE simulaciones SET recomendaciones_aprendizaje_ia = ? WHERE id_simulacion = ?',
+          [JSON.stringify([analisisInicialAprendizaje]), idNuevaSimulacion]
+        );
+
+        console.log('✅ Análisis inicial guardado correctamente');
+      } catch (error) {
+        console.error('❌ Error al generar análisis inicial de aprendizaje:', error);
+        // No detener el flujo si falla el análisis
+      }
+    }
+
+    // =====================================================
+    // 🔟 Respuesta final al frontend
     // =====================================================
     return res.status(201).json({
       ok: true,
@@ -269,6 +314,7 @@ exports.iniciarSimulacion = async (req, res) => {
       escenario_cliente: { ...escenarioCliente, imagen: urlAvatar },
       etapa_inicial: etapaActual || null,
       primer_mensaje_cliente: mensajeInicialCliente || null,
+      analisis_aprendizaje: analisisInicialAprendizaje, // 👈 Enviar análisis al frontend
     });
   } catch (error) {
     console.error('Error al iniciar simulación:', error);
@@ -283,25 +329,13 @@ exports.iniciarSimulacion = async (req, res) => {
 
 /**
  * POST /api/simulacion/mensaje
- * Envía un mensaje del asesor (usuario) y recibe respuesta del cliente (IA)
- *
- * Body esperado:
- * {
- *   mensaje: "Cordial saludo, señor Sebastián..."
- * }
- *
- * El userId se obtiene del token JWT (req.user.id)
+ * Envía un mensaje del asesor y recibe respuesta del cliente
  */
-// ============================================================
-// HELPER: determina si se debe avanzar de etapa
-// ============================================================
 function debeAvanzarDeEtapa(etapaActual, historialConversacion) {
   const mensajesEtapa = historialConversacion.filter(
     (m) => m.indiceEtapa === etapaActual.numero_orden
   );
 
-  // cuando la etapa la inicia el cliente → 3 mensajes
-  // cuando la etapa la inicia el asesor → 2 mensajes
   const minimoMensajes = etapaActual.quien_inicia === 'Cliente' ? 3 : 2;
 
   return {
@@ -309,6 +343,14 @@ function debeAvanzarDeEtapa(etapaActual, historialConversacion) {
     mensajesEtapa,
     minimoMensajes,
   };
+}
+
+async function obtenerTotalEtapas(idProductoBancario) {
+  const [[{ total }]] = await pool.query(
+    'SELECT COUNT(*) AS total FROM etapas_conversacion WHERE id_producto_bancario = ?',
+    [idProductoBancario]
+  );
+  return total;
 }
 
 exports.enviarMensaje = async (req, res) => {
@@ -373,10 +415,7 @@ exports.enviarMensaje = async (req, res) => {
       [simulacion.id_producto_bancario, simulacion.etapa_actual_index]
     );
 
-    const [[{ total: totalEtapas }]] = await pool.query(
-      'SELECT COUNT(*) AS total FROM etapas_conversacion WHERE id_producto_bancario = ?',
-      [producto.id_producto_bancario]
-    );
+    const totalEtapas = await obtenerTotalEtapas(producto.id_producto_bancario);
 
     // ===============================================
     // 4️⃣ Obtener historial actual
@@ -430,7 +469,6 @@ exports.enviarMensaje = async (req, res) => {
     // ===============================================
     let respuestaCliente;
     try {
-      // 🎯 USANDO LA NUEVA FUNCIÓN COMBINADA CON mensajeAsesor
       respuestaCliente = await geminiService.generarMensajeCliente(
         producto,
         tipoClienteAleatorio,
@@ -439,8 +477,8 @@ exports.enviarMensaje = async (req, res) => {
         historialConversacion,
         etapaActual,
         {
-          esPrimerMensaje: false, // 👈 NO es primer mensaje
-          mensajeAsesor: mensaje.trim(), // 👈 Mensaje del asesor para responder
+          esPrimerMensaje: false,
+          mensajeAsesor: mensaje.trim(),
         }
       );
     } catch (error) {
@@ -468,7 +506,6 @@ exports.enviarMensaje = async (req, res) => {
 
     historialConversacion.push(nuevoMensajeCliente);
 
-    // Guardar conversación actualizada
     await pool.query(
       `UPDATE simulaciones
        SET conversacion_asesoria = ?, fecha_ultima_interaccion = CURRENT_TIMESTAMP
@@ -476,19 +513,48 @@ exports.enviarMensaje = async (req, res) => {
       [JSON.stringify(historialConversacion), simulacion.id_simulacion]
     );
 
-    // ===============================================
-    // 🚨 7.1 DETENER SIMULACIÓN SI SE SALE DEL CONTEXTO
-    // ===============================================
+    // ==============================================================
+    // MODIFICACIÓN PARA LA SECCIÓN 7.1 (Salida de contexto)
+    // ==============================================================
     if (respuestaCliente.finalizar_simulacion === true) {
-      console.log('La IA detectó salida de contexto. Finalizando simulación.');
+      console.log('🚨 La IA detectó salida de contexto. Finalizando simulación.');
 
-      // Cambiar estado a finalizada (sin avanzar de etapa)
+      // 🆕 Generar análisis de desempeño antes de finalizar
+      let analisisDesempeno = null;
+      try {
+        console.log('📊 Generando análisis de desempeño (salida de contexto)...');
+
+        const [todasLasEtapas] = await pool.query(
+          'SELECT * FROM etapas_conversacion WHERE id_producto_bancario = ? ORDER BY numero_orden',
+          [simulacion.id_producto_bancario]
+        );
+
+        analisisDesempeno = await geminiService.generarAnalisisDesempenoFinal(
+          producto,
+          tipoClienteAleatorio,
+          perfilClienteAleatorio,
+          escenarioCliente,
+          historialConversacion,
+          todasLasEtapas
+        );
+
+        console.log('✅ Análisis de desempeño generado');
+      } catch (error) {
+        console.error('❌ Error al generar análisis de desempeño:', error);
+        analisisDesempeno = {
+          error: true,
+          mensaje: 'No se pudo generar el análisis automático',
+          motivo_finalizacion: 'salida_contexto',
+        };
+      }
+
       await pool.query(
         `UPDATE simulaciones
      SET estado = 'finalizada',
-         fecha_finalizacion = CURRENT_TIMESTAMP
+         fecha_finalizacion = CURRENT_TIMESTAMP,
+         analisis_desempeno = ?
      WHERE id_simulacion = ?`,
-        [simulacion.id_simulacion]
+        [JSON.stringify(analisisDesempeno), simulacion.id_simulacion]
       );
 
       return res.status(200).json({
@@ -505,6 +571,8 @@ exports.enviarMensaje = async (req, res) => {
         etapa_cambiada: false,
         nueva_etapa: null,
         mensaje_nueva_etapa_cliente: null,
+        analisis_aprendizaje: null,
+        analisis_desempeno: analisisDesempeno, // 👈 Agregar análisis
       });
     }
 
@@ -526,17 +594,52 @@ exports.enviarMensaje = async (req, res) => {
     let mensajeNuevaEtapaCliente = null;
     let nuevaEtapaInfo = null;
     let simulacionFinalizada = false;
+    let nuevoAnalisisAprendizaje = null;
 
+    // ==============================================================
+    // MODIFICACIÓN PARA LA SECCIÓN 9 (Última etapa completada)
+    // ==============================================================
     if (debeAvanzar && esUltimaEtapa) {
       // ===============================================
       // 9️⃣ FINALIZAR SIMULACIÓN (última etapa completada)
       // ===============================================
+
+      // 🆕 Generar análisis de desempeño antes de finalizar
+      let analisisDesempeno = null;
+      try {
+        console.log('📊 Generando análisis de desempeño final...');
+
+        const [todasLasEtapas] = await pool.query(
+          'SELECT * FROM etapas_conversacion WHERE id_producto_bancario = ? ORDER BY numero_orden',
+          [simulacion.id_producto_bancario]
+        );
+
+        analisisDesempeno = await geminiService.generarAnalisisDesempenoFinal(
+          producto,
+          tipoClienteAleatorio,
+          perfilClienteAleatorio,
+          escenarioCliente,
+          historialConversacion,
+          todasLasEtapas
+        );
+
+        console.log('✅ Análisis de desempeño generado correctamente');
+      } catch (error) {
+        console.error('❌ Error al generar análisis de desempeño:', error);
+        analisisDesempeno = {
+          error: true,
+          mensaje: 'No se pudo generar el análisis automático',
+          motivo_finalizacion: 'completada',
+        };
+      }
+
       await pool.query(
         `UPDATE simulaciones
-         SET estado = 'finalizada',
-             fecha_finalizacion = CURRENT_TIMESTAMP
-         WHERE id_simulacion = ?`,
-        [simulacion.id_simulacion]
+     SET estado = 'finalizada',
+         fecha_finalizacion = CURRENT_TIMESTAMP,
+         analisis_desempeno = ?
+     WHERE id_simulacion = ?`,
+        [JSON.stringify(analisisDesempeno), simulacion.id_simulacion]
       );
 
       simulacionFinalizada = true;
@@ -565,9 +668,69 @@ exports.enviarMensaje = async (req, res) => {
         nuevaEtapaInfo = siguienteEtapa;
         console.log(`➡️ Avanzando a etapa ${nuevoIndiceEtapa}: ${siguienteEtapa.nombre}`);
 
+        // ===============================================
+        // 🔟.1️⃣ GENERAR ANÁLISIS DE APRENDIZAJE PARA LA NUEVA ETAPA 📚
+        // ===============================================
+        if (simulacion.modo === 'aprendizaje') {
+          try {
+            console.log(`🎓 Generando análisis de aprendizaje para etapa ${nuevoIndiceEtapa}...`);
+
+            const resultadoAnalisis =
+              await geminiService.generarAnalisisSimulacionPorEtapaModoAprendizaje(
+                producto,
+                tipoClienteAleatorio,
+                perfilClienteAleatorio,
+                escenarioCliente,
+                historialConversacion,
+                siguienteEtapa
+              );
+
+            nuevoAnalisisAprendizaje = {
+              indiceEtapa: nuevoIndiceEtapa,
+              nombreEtapa: siguienteEtapa.nombre,
+              objetivoEtapa: siguienteEtapa.objetivo,
+              recomendacionParaAsesor: resultadoAnalisis.recomendaciones_aprendizaje,
+            };
+
+            // Obtener análisis previos y agregar el nuevo
+            let analisisPrevios = [];
+            try {
+              let recomendacionesRaw = simulacion.recomendaciones_aprendizaje_ia;
+
+              if (Buffer.isBuffer(recomendacionesRaw)) {
+                recomendacionesRaw = recomendacionesRaw.toString('utf8');
+              }
+
+              if (typeof recomendacionesRaw === 'string' && recomendacionesRaw.trim() !== '') {
+                analisisPrevios = JSON.parse(recomendacionesRaw);
+              } else if (Array.isArray(recomendacionesRaw)) {
+                analisisPrevios = recomendacionesRaw;
+              }
+            } catch (err) {
+              console.error('⚠️ Error parseando análisis previos:', err);
+              analisisPrevios = [];
+            }
+
+            analisisPrevios.push(nuevoAnalisisAprendizaje);
+
+            // Guardar todos los análisis
+            await pool.query(
+              'UPDATE simulaciones SET recomendaciones_aprendizaje_ia = ? WHERE id_simulacion = ?',
+              [JSON.stringify(analisisPrevios), simulacion.id_simulacion]
+            );
+
+            console.log('✅ Análisis de aprendizaje guardado para nueva etapa');
+          } catch (error) {
+            console.error('❌ Error al generar análisis de aprendizaje:', error);
+            // No detener el flujo si falla el análisis
+          }
+        }
+
+        // ===============================================
+        // 🔟.2️⃣ GENERAR PRIMER MENSAJE SI EL CLIENTE INICIA
+        // ===============================================
         if (siguienteEtapa.quien_inicia === 'Cliente') {
           try {
-            // 🎯 USANDO LA NUEVA FUNCIÓN COMBINADA PARA NUEVA ETAPA
             const primerMensajeNuevaEtapa = await geminiService.generarMensajeCliente(
               producto,
               tipoClienteAleatorio,
@@ -575,7 +738,7 @@ exports.enviarMensaje = async (req, res) => {
               escenarioCliente,
               historialConversacion,
               siguienteEtapa,
-              { esPrimerMensaje: true } // 👈 Es primer mensaje de nueva etapa
+              { esPrimerMensaje: true }
             );
 
             const mensajeClienteNuevaEtapa = {
@@ -623,6 +786,8 @@ exports.enviarMensaje = async (req, res) => {
       etapa_cambiada: etapaCambiada,
       nueva_etapa: etapaCambiada ? nuevaEtapaInfo : null,
       mensaje_nueva_etapa_cliente: mensajeNuevaEtapaCliente,
+      analisis_aprendizaje: nuevoAnalisisAprendizaje, // 👈 Enviar análisis al frontend
+      analisis_desempeno: analisisDesempeno,
     });
   } catch (error) {
     console.error('❌ Error al enviar mensaje:', error);

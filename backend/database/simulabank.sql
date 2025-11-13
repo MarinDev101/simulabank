@@ -232,7 +232,7 @@ CREATE TABLE simulaciones (
   aspectos_clave_registrados JSON NOT NULL,
   conversacion_asesoria JSON NOT NULL,
   recomendaciones_aprendizaje_ia JSON,
-  opinion_ia TEXT,
+  analisis_desempeno TEXT,
   tiempo_duracion_segundos INT DEFAULT 0,
 
   -- Control
