@@ -3,6 +3,30 @@ const geminiService = require('../services/gemini');
 const { default: fetch } = require('node-fetch');
 
 /**
+ * Función auxiliar para calcular duración en segundos
+ */
+function calcularDuracionSegundos(fechaInicio) {
+  return Math.floor((new Date() - new Date(fechaInicio)) / 1000);
+}
+
+/**
+ * Función auxiliar para formatear duración en formato legible
+ */
+function formatearDuracion(segundos) {
+  const horas = Math.floor(segundos / 3600);
+  const minutos = Math.floor((segundos % 3600) / 60);
+  const segs = segundos % 60;
+
+  if (horas > 0) {
+    return `${horas}h ${minutos}m ${segs}s`;
+  } else if (minutos > 0) {
+    return `${minutos}m ${segs}s`;
+  } else {
+    return `${segs}s`;
+  }
+}
+
+/**
  * POST /api/simulacion/iniciar
  * Inicia una nueva simulación
  */
@@ -314,7 +338,7 @@ exports.iniciarSimulacion = async (req, res) => {
       escenario_cliente: { ...escenarioCliente, imagen: urlAvatar },
       etapa_inicial: etapaActual || null,
       primer_mensaje_cliente: mensajeInicialCliente || null,
-      analisis_aprendizaje: analisisInicialAprendizaje, // 👈 Enviar análisis al frontend
+      analisis_aprendizaje: analisisInicialAprendizaje,
     });
   } catch (error) {
     console.error('Error al iniciar simulación:', error);
@@ -519,13 +543,17 @@ exports.enviarMensaje = async (req, res) => {
     if (respuestaCliente.finalizar_simulacion === true) {
       console.log('⚠️ La IA detectó salida de contexto. Finalizando simulación.');
 
+      // 🆕 CALCULAR DURACIÓN
+      const duracionSegundos = calcularDuracionSegundos(simulacion.fecha_inicio);
+
       // Cambiar estado a finalizada (sin avanzar de etapa)
       await pool.query(
         `UPDATE simulaciones
          SET estado = 'finalizada',
+             tiempo_duracion_segundos = ?,
              fecha_finalizacion = CURRENT_TIMESTAMP
          WHERE id_simulacion = ?`,
-        [simulacion.id_simulacion]
+        [duracionSegundos, simulacion.id_simulacion]
       );
 
       return res.status(200).json({
@@ -534,6 +562,8 @@ exports.enviarMensaje = async (req, res) => {
         motivo_finalizacion: 'salida_contexto',
         mensaje: 'Simulación finalizada: el asesor se salió del contexto.',
         id_simulacion: simulacion.id_simulacion,
+        duracion_segundos: duracionSegundos,
+        duracion_formato: formatearDuracion(duracionSegundos),
         mensajes: {
           asesor: nuevoMensajeAsesor,
           cliente: nuevoMensajeCliente,
@@ -568,13 +598,16 @@ exports.enviarMensaje = async (req, res) => {
     let nuevaEtapaInfo = null;
     let simulacionFinalizada = false;
     let nuevoAnalisisAprendizaje = null;
-    let analisisDesempeno = null; // 👈 INICIALIZAR AQUÍ
+    let analisisDesempeno = null;
 
     // ===============================================
     // 9️⃣ ÚLTIMA ETAPA COMPLETADA → FINALIZAR
     // ===============================================
     if (debeAvanzar && esUltimaEtapa) {
       console.log('🏁 Última etapa completada. Finalizando simulación...');
+
+      // 🆕 CALCULAR DURACIÓN
+      const duracionSegundos = calcularDuracionSegundos(simulacion.fecha_inicio);
 
       // 🆕 Generar análisis de desempeño antes de finalizar
       try {
@@ -604,18 +637,20 @@ exports.enviarMensaje = async (req, res) => {
         };
       }
 
-      // Actualizar simulación como finalizada con análisis
+      // Actualizar simulación como finalizada con análisis y duración
       await pool.query(
         `UPDATE simulaciones
          SET estado = 'finalizada',
+             tiempo_duracion_segundos = ?,
              fecha_finalizacion = CURRENT_TIMESTAMP,
              analisis_desempeno = ?
          WHERE id_simulacion = ?`,
-        [JSON.stringify(analisisDesempeno), simulacion.id_simulacion]
+        [duracionSegundos, JSON.stringify(analisisDesempeno), simulacion.id_simulacion]
       );
 
       simulacionFinalizada = true;
       console.log(`✅ Simulación ${simulacion.id_simulacion} finalizada correctamente`);
+      console.log(`⏱️ Duración total: ${formatearDuracion(duracionSegundos)}`);
     } else if (debeAvanzar && simulacion.etapa_actual_index < totalEtapas) {
       // ===============================================
       // 🔟 AVANZAR A LA SIGUIENTE ETAPA
@@ -743,7 +778,7 @@ exports.enviarMensaje = async (req, res) => {
     // ===============================================
     // 1️⃣1️⃣ Respuesta final al frontend
     // ===============================================
-    return res.status(200).json({
+    const respuestaFinal = {
       ok: true,
       mensaje: simulacionFinalizada
         ? 'Simulación finalizada correctamente.'
@@ -760,7 +795,18 @@ exports.enviarMensaje = async (req, res) => {
       mensaje_nueva_etapa_cliente: mensajeNuevaEtapaCliente,
       analisis_aprendizaje: nuevoAnalisisAprendizaje,
       analisis_desempeno: analisisDesempeno,
-    });
+    };
+
+    // 🆕 Agregar información de duración solo si la simulación finalizó
+    if (simulacionFinalizada) {
+      const duracionSegundos = calcularDuracionSegundos(simulacion.fecha_inicio);
+      respuestaFinal.duracion_segundos = duracionSegundos;
+      respuestaFinal.duracion_formato = formatearDuracion(duracionSegundos);
+      respuestaFinal.etapas_completadas = simulacion.etapa_actual_index;
+      respuestaFinal.total_etapas = totalEtapas;
+    }
+
+    return res.status(200).json(respuestaFinal);
   } catch (error) {
     console.error('❌ Error al enviar mensaje:', error);
     return res.status(500).json({
@@ -892,7 +938,7 @@ exports.obtenerEstado = async (req, res) => {
     }
 
     // Calcular duración en segundos
-    const duracionSegundos = Math.floor((new Date() - new Date(simulacion.fecha_inicio)) / 1000);
+    const duracionSegundos = calcularDuracionSegundos(simulacion.fecha_inicio);
 
     return res.status(200).json({
       ok: true,
@@ -907,6 +953,7 @@ exports.obtenerEstado = async (req, res) => {
         etapa_actual_index: simulacion.etapa_actual_index,
         total_etapas: totalEtapas,
         duracion_segundos: duracionSegundos,
+        duracion_formato: formatearDuracion(duracionSegundos),
         fecha_inicio: simulacion.fecha_inicio,
         fecha_ultima_interaccion: simulacion.fecha_ultima_interaccion,
       },
@@ -957,7 +1004,7 @@ exports.finalizarSimulacion = async (req, res) => {
     }
 
     // Calcular duración total en segundos
-    const duracionSegundos = Math.floor((new Date() - new Date(simulacion.fecha_inicio)) / 1000);
+    const duracionSegundos = calcularDuracionSegundos(simulacion.fecha_inicio);
 
     // Obtener información del producto
     const [[producto]] = await pool.query(
@@ -990,7 +1037,7 @@ exports.finalizarSimulacion = async (req, res) => {
       historialConversacion = [];
     }
 
-    // Actualizar simulación como finalizada
+    // Actualizar simulación como finalizada con duración
     await pool.query(
       `UPDATE simulaciones
        SET estado = 'finalizada',
@@ -1004,6 +1051,7 @@ exports.finalizarSimulacion = async (req, res) => {
     const simulacionCompletada = simulacion.etapa_actual_index >= totalEtapas;
 
     console.log(`✅ Simulación ${simulacion.id_simulacion} finalizada manualmente por el usuario`);
+    console.log(`⏱️ Duración total: ${formatearDuracion(duracionSegundos)}`);
 
     return res.status(200).json({
       ok: true,
@@ -1034,20 +1082,3 @@ exports.finalizarSimulacion = async (req, res) => {
     });
   }
 };
-
-/**
- * Función auxiliar para formatear duración en formato legible
- */
-function formatearDuracion(segundos) {
-  const horas = Math.floor(segundos / 3600);
-  const minutos = Math.floor((segundos % 3600) / 60);
-  const segs = segundos % 60;
-
-  if (horas > 0) {
-    return `${horas}h ${minutos}m ${segs}s`;
-  } else if (minutos > 0) {
-    return `${minutos}m ${segs}s`;
-  } else {
-    return `${segs}s`;
-  }
-}
