@@ -513,48 +513,19 @@ exports.enviarMensaje = async (req, res) => {
       [JSON.stringify(historialConversacion), simulacion.id_simulacion]
     );
 
-    // ==============================================================
-    // MODIFICACIÓN PARA LA SECCIÓN 7.1 (Salida de contexto)
-    // ==============================================================
+    // ===============================================
+    // 🚨 7.1 DETENER SIMULACIÓN SI SE SALE DEL CONTEXTO
+    // ===============================================
     if (respuestaCliente.finalizar_simulacion === true) {
-      console.log('🚨 La IA detectó salida de contexto. Finalizando simulación.');
+      console.log('⚠️ La IA detectó salida de contexto. Finalizando simulación.');
 
-      // 🆕 Generar análisis de desempeño antes de finalizar
-      let analisisDesempeno = null;
-      try {
-        console.log('📊 Generando análisis de desempeño (salida de contexto)...');
-
-        const [todasLasEtapas] = await pool.query(
-          'SELECT * FROM etapas_conversacion WHERE id_producto_bancario = ? ORDER BY numero_orden',
-          [simulacion.id_producto_bancario]
-        );
-
-        analisisDesempeno = await geminiService.generarAnalisisDesempenoFinal(
-          producto,
-          tipoClienteAleatorio,
-          perfilClienteAleatorio,
-          escenarioCliente,
-          historialConversacion,
-          todasLasEtapas
-        );
-
-        console.log('✅ Análisis de desempeño generado');
-      } catch (error) {
-        console.error('❌ Error al generar análisis de desempeño:', error);
-        analisisDesempeno = {
-          error: true,
-          mensaje: 'No se pudo generar el análisis automático',
-          motivo_finalizacion: 'salida_contexto',
-        };
-      }
-
+      // Cambiar estado a finalizada (sin avanzar de etapa)
       await pool.query(
         `UPDATE simulaciones
-     SET estado = 'finalizada',
-         fecha_finalizacion = CURRENT_TIMESTAMP,
-         analisis_desempeno = ?
-     WHERE id_simulacion = ?`,
-        [JSON.stringify(analisisDesempeno), simulacion.id_simulacion]
+         SET estado = 'finalizada',
+             fecha_finalizacion = CURRENT_TIMESTAMP
+         WHERE id_simulacion = ?`,
+        [simulacion.id_simulacion]
       );
 
       return res.status(200).json({
@@ -571,8 +542,7 @@ exports.enviarMensaje = async (req, res) => {
         etapa_cambiada: false,
         nueva_etapa: null,
         mensaje_nueva_etapa_cliente: null,
-        analisis_aprendizaje: null,
-        analisis_desempeno: analisisDesempeno, // 👈 Agregar análisis
+        analisis_desempeno: null,
       });
     }
 
@@ -590,22 +560,23 @@ exports.enviarMensaje = async (req, res) => {
     console.log('📊 Mensajes en etapa:', mensajesEtapa.length, '/', minimoMensajes);
     console.log('🏁 Total etapas:', totalEtapas);
 
+    // ===============================================
+    // 🆕 INICIALIZAR VARIABLES DE CONTROL
+    // ===============================================
     let etapaCambiada = false;
     let mensajeNuevaEtapaCliente = null;
     let nuevaEtapaInfo = null;
     let simulacionFinalizada = false;
     let nuevoAnalisisAprendizaje = null;
+    let analisisDesempeno = null; // 👈 INICIALIZAR AQUÍ
 
-    // ==============================================================
-    // MODIFICACIÓN PARA LA SECCIÓN 9 (Última etapa completada)
-    // ==============================================================
+    // ===============================================
+    // 9️⃣ ÚLTIMA ETAPA COMPLETADA → FINALIZAR
+    // ===============================================
     if (debeAvanzar && esUltimaEtapa) {
-      // ===============================================
-      // 9️⃣ FINALIZAR SIMULACIÓN (última etapa completada)
-      // ===============================================
+      console.log('🏁 Última etapa completada. Finalizando simulación...');
 
       // 🆕 Generar análisis de desempeño antes de finalizar
-      let analisisDesempeno = null;
       try {
         console.log('📊 Generando análisis de desempeño final...');
 
@@ -629,16 +600,17 @@ exports.enviarMensaje = async (req, res) => {
         analisisDesempeno = {
           error: true,
           mensaje: 'No se pudo generar el análisis automático',
-          motivo_finalizacion: 'completada',
+          detalle: error.message,
         };
       }
 
+      // Actualizar simulación como finalizada con análisis
       await pool.query(
         `UPDATE simulaciones
-     SET estado = 'finalizada',
-         fecha_finalizacion = CURRENT_TIMESTAMP,
-         analisis_desempeno = ?
-     WHERE id_simulacion = ?`,
+         SET estado = 'finalizada',
+             fecha_finalizacion = CURRENT_TIMESTAMP,
+             analisis_desempeno = ?
+         WHERE id_simulacion = ?`,
         [JSON.stringify(analisisDesempeno), simulacion.id_simulacion]
       );
 
@@ -786,7 +758,7 @@ exports.enviarMensaje = async (req, res) => {
       etapa_cambiada: etapaCambiada,
       nueva_etapa: etapaCambiada ? nuevaEtapaInfo : null,
       mensaje_nueva_etapa_cliente: mensajeNuevaEtapaCliente,
-      analisis_aprendizaje: nuevoAnalisisAprendizaje, // 👈 Enviar análisis al frontend
+      analisis_aprendizaje: nuevoAnalisisAprendizaje,
       analisis_desempeno: analisisDesempeno,
     });
   } catch (error) {
@@ -800,87 +772,282 @@ exports.enviarMensaje = async (req, res) => {
   }
 };
 
-// ===============================================
-// 4️⃣ (Lógica posterior)
-// Aquí ya puedes:
-//  - Guardar el mensaje del asesor
-//  - Pedir respuesta IA con geminiService
-//  - Actualizar conversacion_asesoria
-// ===============================================
+/**
+ * GET /api/simulacion/estado
+ * Obtiene el estado actual de la simulación del usuario autenticado
+ */
+exports.obtenerEstado = async (req, res) => {
+  try {
+    const userId = req.user?.id || req.user?.userId;
 
-// /**
-//  * GET /api/simulacion/estado
-//  * Obtiene el estado actual de la simulación del usuario autenticado
-//  *
-//  * El userId se obtiene del token JWT (req.user.id)
-//  */
-// exports.obtenerEstado = async (req, res) => {
-//   try {
-//     // El userId viene del middleware authenticateJWT
-//     const userId = req.user?.id || req.user?.userId;
+    // Buscar simulación en proceso
+    const [simulaciones] = await pool.query(
+      'SELECT * FROM simulaciones WHERE id_aprendiz = ? AND estado = ? LIMIT 1',
+      [userId, 'en_proceso']
+    );
 
-//     if (!userId) {
-//       return res.status(401).json({
-//         error: 'Usuario no autenticado',
-//         mensaje: 'No se pudo obtener el ID del usuario del token',
-//       });
-//     }
+    const simulacion = simulaciones[0];
 
-//     const estado = obtenerEstadoSimulacion(userId);
+    if (!simulacion) {
+      return res.status(404).json({
+        ok: false,
+        error: 'Simulación no encontrada',
+        mensaje: 'No existe una simulación activa para este usuario',
+        accion: 'Inicie una nueva simulación con POST /api/simulacion/iniciar',
+      });
+    }
 
-//     // Si no hay simulación activa, devolver 404
-//     if (!estado.ok) {
-//       return res.status(404).json({
-//         ok: false,
-//         error: 'Simulación no encontrada',
-//         mensaje: 'No existe una simulación activa para este usuario',
-//         accion: 'Inicie una nueva simulación con POST /api/simulacion/iniciar',
-//       });
-//     }
+    // Obtener información del producto bancario
+    const [[producto]] = await pool.query(
+      'SELECT * FROM productos_bancarios WHERE id_producto_bancario = ?',
+      [simulacion.id_producto_bancario]
+    );
 
-//     res.json(estado);
-//   } catch (err) {
-//     console.error('Error en obtenerEstado:', err);
-//     res.status(500).json({
-//       error: 'Error al obtener estado',
-//       mensaje: err.message,
-//     });
-//   }
-// };
+    // Obtener información del cliente simulado
+    const [[clienteSimulado]] = await pool.query(
+      'SELECT * FROM clientes_simulados WHERE id_simulacion = ?',
+      [simulacion.id_simulacion]
+    );
 
-// /**
-//  * POST /api/simulacion/finalizar
-//  * Finaliza la simulación actual y devuelve un resumen
-//  *
-//  * El userId se obtiene del token JWT (req.user.id)
-//  */
-// exports.finalizarSimulacion = async (req, res) => {
-//   try {
-//     // El userId viene del middleware authenticateJWT
-//     const userId = req.user?.id || req.user?.userId;
+    // Obtener tipo de cliente
+    const [[tipoCliente]] = await pool.query(
+      'SELECT * FROM tipos_clientes WHERE id_tipo_cliente = ?',
+      [clienteSimulado.id_tipo_cliente]
+    );
 
-//     if (!userId) {
-//       return res.status(401).json({
-//         error: 'Usuario no autenticado',
-//         mensaje: 'No se pudo obtener el ID del usuario del token',
-//       });
-//     }
+    // Obtener perfil de cliente
+    const [[perfilCliente]] = await pool.query(
+      'SELECT * FROM perfiles_clientes WHERE id_perfil_cliente = ?',
+      [clienteSimulado.id_perfil_cliente]
+    );
 
-//     const resultado = finalizarSimulacion(userId);
-//     res.json(resultado);
-//   } catch (err) {
-//     console.error('Error en finalizarSimulacion:', err);
+    // Obtener etapa actual
+    const [[etapaActual]] = await pool.query(
+      `SELECT * FROM etapas_conversacion
+       WHERE id_producto_bancario = ? AND numero_orden = ? LIMIT 1`,
+      [simulacion.id_producto_bancario, simulacion.etapa_actual_index]
+    );
 
-//     if (err.message.includes('No existe una simulación activa')) {
-//       return res.status(404).json({
-//         error: 'Simulación no encontrada',
-//         mensaje: 'No existe una simulación activa para finalizar',
-//       });
-//     }
+    // Obtener total de etapas
+    const [[{ total: totalEtapas }]] = await pool.query(
+      'SELECT COUNT(*) AS total FROM etapas_conversacion WHERE id_producto_bancario = ?',
+      [simulacion.id_producto_bancario]
+    );
 
-//     res.status(500).json({
-//       error: 'Error al finalizar simulación',
-//       mensaje: err.message,
-//     });
-//   }
-// };
+    // Parsear historial de conversación
+    let historialConversacion = [];
+    try {
+      let conversacionRaw = simulacion.conversacion_asesoria;
+
+      if (Buffer.isBuffer(conversacionRaw)) {
+        conversacionRaw = conversacionRaw.toString('utf8');
+      }
+
+      if (typeof conversacionRaw === 'string' && conversacionRaw.trim() !== '') {
+        historialConversacion = JSON.parse(conversacionRaw);
+      } else if (Array.isArray(conversacionRaw)) {
+        historialConversacion = conversacionRaw;
+      }
+    } catch (err) {
+      console.error('⚠️ Error parseando conversacion_asesoria:', err);
+      historialConversacion = [];
+    }
+
+    // Parsear recomendaciones de aprendizaje
+    let recomendacionesAprendizaje = [];
+    try {
+      let recomendacionesRaw = simulacion.recomendaciones_aprendizaje_ia;
+
+      if (Buffer.isBuffer(recomendacionesRaw)) {
+        recomendacionesRaw = recomendacionesRaw.toString('utf8');
+      }
+
+      if (typeof recomendacionesRaw === 'string' && recomendacionesRaw.trim() !== '') {
+        recomendacionesAprendizaje = JSON.parse(recomendacionesRaw);
+      } else if (Array.isArray(recomendacionesRaw)) {
+        recomendacionesAprendizaje = recomendacionesRaw;
+      }
+    } catch (err) {
+      console.error('⚠️ Error parseando recomendaciones_aprendizaje_ia:', err);
+      recomendacionesAprendizaje = [];
+    }
+
+    // Parsear aspectos clave registrados
+    let aspectosClave = [];
+    try {
+      let aspectosRaw = simulacion.aspectos_clave_registrados;
+
+      if (Buffer.isBuffer(aspectosRaw)) {
+        aspectosRaw = aspectosRaw.toString('utf8');
+      }
+
+      if (typeof aspectosRaw === 'string' && aspectosRaw.trim() !== '') {
+        aspectosClave = JSON.parse(aspectosRaw);
+      } else if (Array.isArray(aspectosRaw)) {
+        aspectosClave = aspectosRaw;
+      }
+    } catch (err) {
+      console.error('⚠️ Error parseando aspectos_clave_registrados:', err);
+      aspectosClave = [];
+    }
+
+    // Calcular duración en segundos
+    const duracionSegundos = Math.floor((new Date() - new Date(simulacion.fecha_inicio)) / 1000);
+
+    return res.status(200).json({
+      ok: true,
+      mensaje: 'Estado de la simulación obtenido correctamente',
+      simulacion: {
+        id_simulacion: simulacion.id_simulacion,
+        estado: simulacion.estado,
+        modo: simulacion.modo,
+        destino_evidencia: simulacion.destino_evidencia,
+        sonido_habilitado: simulacion.sonido_habilitado,
+        producto_seleccion: simulacion.producto_seleccion,
+        etapa_actual_index: simulacion.etapa_actual_index,
+        total_etapas: totalEtapas,
+        duracion_segundos: duracionSegundos,
+        fecha_inicio: simulacion.fecha_inicio,
+        fecha_ultima_interaccion: simulacion.fecha_ultima_interaccion,
+      },
+      producto: producto,
+      cliente: {
+        ...clienteSimulado,
+        tipo_cliente: tipoCliente,
+        perfil_cliente: perfilCliente,
+      },
+      etapa_actual: etapaActual,
+      historial_conversacion: historialConversacion,
+      recomendaciones_aprendizaje: recomendacionesAprendizaje,
+      aspectos_clave: aspectosClave,
+    });
+  } catch (err) {
+    console.error('Error en obtenerEstado:', err);
+    return res.status(500).json({
+      ok: false,
+      error: 'Error al obtener estado',
+      mensaje: 'Error interno al obtener el estado de la simulación',
+      detalle: err.message,
+    });
+  }
+};
+
+/**
+ * POST /api/simulacion/finalizar
+ * Finaliza la simulación actual sin generar análisis de desempeño
+ */
+exports.finalizarSimulacion = async (req, res) => {
+  try {
+    const userId = req.user?.id || req.user?.userId;
+
+    // Buscar simulación en proceso
+    const [simulaciones] = await pool.query(
+      'SELECT * FROM simulaciones WHERE id_aprendiz = ? AND estado = ? LIMIT 1',
+      [userId, 'en_proceso']
+    );
+
+    const simulacion = simulaciones[0];
+
+    if (!simulacion) {
+      return res.status(404).json({
+        ok: false,
+        error: 'Simulación no encontrada',
+        mensaje: 'No existe una simulación activa para finalizar',
+      });
+    }
+
+    // Calcular duración total en segundos
+    const duracionSegundos = Math.floor((new Date() - new Date(simulacion.fecha_inicio)) / 1000);
+
+    // Obtener información del producto
+    const [[producto]] = await pool.query(
+      'SELECT nombre FROM productos_bancarios WHERE id_producto_bancario = ?',
+      [simulacion.id_producto_bancario]
+    );
+
+    // Obtener total de etapas del producto
+    const [[{ total: totalEtapas }]] = await pool.query(
+      'SELECT COUNT(*) AS total FROM etapas_conversacion WHERE id_producto_bancario = ?',
+      [simulacion.id_producto_bancario]
+    );
+
+    // Parsear historial de conversación
+    let historialConversacion = [];
+    try {
+      let conversacionRaw = simulacion.conversacion_asesoria;
+
+      if (Buffer.isBuffer(conversacionRaw)) {
+        conversacionRaw = conversacionRaw.toString('utf8');
+      }
+
+      if (typeof conversacionRaw === 'string' && conversacionRaw.trim() !== '') {
+        historialConversacion = JSON.parse(conversacionRaw);
+      } else if (Array.isArray(conversacionRaw)) {
+        historialConversacion = conversacionRaw;
+      }
+    } catch (err) {
+      console.error('⚠️ Error parseando conversacion_asesoria:', err);
+      historialConversacion = [];
+    }
+
+    // Actualizar simulación como finalizada
+    await pool.query(
+      `UPDATE simulaciones
+       SET estado = 'finalizada',
+           tiempo_duracion_segundos = ?,
+           fecha_finalizacion = CURRENT_TIMESTAMP
+       WHERE id_simulacion = ?`,
+      [duracionSegundos, simulacion.id_simulacion]
+    );
+
+    // Determinar si completó todas las etapas
+    const simulacionCompletada = simulacion.etapa_actual_index >= totalEtapas;
+
+    console.log(`✅ Simulación ${simulacion.id_simulacion} finalizada manualmente por el usuario`);
+
+    return res.status(200).json({
+      ok: true,
+      mensaje: 'Simulación finalizada correctamente',
+      simulacion: {
+        id_simulacion: simulacion.id_simulacion,
+        producto: producto.nombre,
+        modo: simulacion.modo,
+        duracion_segundos: duracionSegundos,
+        duracion_formato: formatearDuracion(duracionSegundos),
+        etapas_completadas: simulacion.etapa_actual_index,
+        total_etapas: totalEtapas,
+        simulacion_completada: simulacionCompletada,
+        total_mensajes: historialConversacion.length,
+        fecha_inicio: simulacion.fecha_inicio,
+        fecha_finalizacion: new Date(),
+      },
+      historial: historialConversacion,
+    });
+  } catch (err) {
+    console.error('Error en finalizarSimulacion:', err);
+
+    return res.status(500).json({
+      ok: false,
+      error: 'Error al finalizar simulación',
+      mensaje: 'Error interno al finalizar la simulación',
+      detalle: err.message,
+    });
+  }
+};
+
+/**
+ * Función auxiliar para formatear duración en formato legible
+ */
+function formatearDuracion(segundos) {
+  const horas = Math.floor(segundos / 3600);
+  const minutos = Math.floor((segundos % 3600) / 60);
+  const segs = segundos % 60;
+
+  if (horas > 0) {
+    return `${horas}h ${minutos}m ${segs}s`;
+  } else if (minutos > 0) {
+    return `${minutos}m ${segs}s`;
+  } else {
+    return `${segs}s`;
+  }
+}

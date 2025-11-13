@@ -809,57 +809,13 @@ Debes ser:
 Analiza el desempeño completo del asesor durante toda la simulación.
 
 Proporciona un análisis estructurado que incluya:
-1. **Resumen general del desempeño**
-2. **Análisis por etapa** (qué hizo bien, qué pudo mejorar)
-3. **Fortalezas identificadas** (al menos 3 aspectos positivos específicos)
-4. **Áreas de mejora** (al menos 3 aspectos a trabajar)
-5. **Puntuación cualitativa** (Excelente, Muy bueno, Bueno, Regular, Necesita mejorar)
-6. **Recomendaciones específicas** (3-5 acciones concretas para mejorar)
-7. **Aspectos destacados** (momentos específicos donde brilló o falló)
+1. **Puntuación cualitativa** (Excelente, Muy bueno, Bueno, Regular, Necesita mejorar)
+2. **Resumen general del desempeño**
 
 Responde **solo en formato JSON** con esta estructura:
 {
   "puntuacion_cualitativa": "Excelente|Muy bueno|Bueno|Regular|Necesita mejorar",
   "resumen_general": "Texto de 2-3 párrafos con visión general del desempeño",
-  "analisis_por_etapa": [
-    {
-      "etapa": "Nombre de la etapa",
-      "numero_etapa": 1,
-      "fortalezas": "Qué hizo bien en esta etapa",
-      "areas_mejora": "Qué pudo mejorar en esta etapa",
-      "cumplimiento_objetivo": "Alto|Medio|Bajo"
-    }
-  ],
-  "fortalezas_generales": [
-    "Fortaleza específica 1 con ejemplo",
-    "Fortaleza específica 2 con ejemplo",
-    "Fortaleza específica 3 con ejemplo"
-  ],
-  "areas_mejora_generales": [
-    "Área de mejora 1 con ejemplo específico",
-    "Área de mejora 2 con ejemplo específico",
-    "Área de mejora 3 con ejemplo específico"
-  ],
-  "recomendaciones_accion": [
-    "Recomendación accionable 1",
-    "Recomendación accionable 2",
-    "Recomendación accionable 3"
-  ],
-  "momentos_destacados": {
-    "mejores_momentos": [
-      "Descripción de momento positivo específico con cita textual"
-    ],
-    "momentos_criticos": [
-      "Descripción de momento que requirió mejor manejo con cita textual"
-    ]
-  },
-  "evaluacion_competencias": {
-    "empatia_cliente": "Alta|Media|Baja",
-    "conocimiento_producto": "Alto|Medio|Bajo",
-    "comunicacion_efectiva": "Alta|Media|Baja",
-    "manejo_objeciones": "Alto|Medio|Bajo",
-    "orientacion_cierre": "Alta|Media|Baja"
-  }
 }
 `.trim();
 
@@ -883,101 +839,8 @@ Responde **solo en formato JSON** con esta estructura:
         type: 'string',
         description: 'Resumen ejecutivo del desempeño',
       },
-      analisis_por_etapa: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            etapa: { type: 'string' },
-            numero_etapa: { type: 'integer' },
-            fortalezas: { type: 'string' },
-            areas_mejora: { type: 'string' },
-            cumplimiento_objetivo: {
-              type: 'string',
-              enum: ['Alto', 'Medio', 'Bajo'],
-            },
-          },
-          required: [
-            'etapa',
-            'numero_etapa',
-            'fortalezas',
-            'areas_mejora',
-            'cumplimiento_objetivo',
-          ],
-        },
-      },
-      fortalezas_generales: {
-        type: 'array',
-        items: { type: 'string' },
-        description: 'Lista de fortalezas identificadas',
-      },
-      areas_mejora_generales: {
-        type: 'array',
-        items: { type: 'string' },
-        description: 'Lista de áreas que requieren mejora',
-      },
-      recomendaciones_accion: {
-        type: 'array',
-        items: { type: 'string' },
-        description: 'Recomendaciones específicas y accionables',
-      },
-      momentos_destacados: {
-        type: 'object',
-        properties: {
-          mejores_momentos: {
-            type: 'array',
-            items: { type: 'string' },
-          },
-          momentos_criticos: {
-            type: 'array',
-            items: { type: 'string' },
-          },
-        },
-        required: ['mejores_momentos', 'momentos_criticos'],
-      },
-      evaluacion_competencias: {
-        type: 'object',
-        properties: {
-          empatia_cliente: {
-            type: 'string',
-            enum: ['Alta', 'Media', 'Baja'],
-          },
-          conocimiento_producto: {
-            type: 'string',
-            enum: ['Alto', 'Medio', 'Bajo'],
-          },
-          comunicacion_efectiva: {
-            type: 'string',
-            enum: ['Alta', 'Media', 'Baja'],
-          },
-          manejo_objeciones: {
-            type: 'string',
-            enum: ['Alto', 'Medio', 'Bajo'],
-          },
-          orientacion_cierre: {
-            type: 'string',
-            enum: ['Alta', 'Media', 'Baja'],
-          },
-        },
-        required: [
-          'empatia_cliente',
-          'conocimiento_producto',
-          'comunicacion_efectiva',
-          'manejo_objeciones',
-          'orientacion_cierre',
-        ],
-      },
     },
-    required: [
-      'puntuacion_cualitativa',
-      'resumen_general',
-      'analisis_por_etapa',
-      'fortalezas_generales',
-      'areas_mejora_generales',
-      'recomendaciones_accion',
-      'momentos_destacados',
-      'evaluacion_competencias',
-    ],
+    required: ['puntuacion_cualitativa', 'resumen_general'],
   };
 
   // Logging para debug
@@ -1006,21 +869,20 @@ Responde **solo en formato JSON** con esta estructura:
     const resultado = JSON.parse(response.text);
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('✅ Análisis de desempeño generado exitosamente');
+      console.log('Análisis de desempeño generado exitosamente');
       console.log('Puntuación:', resultado.puntuacion_cualitativa);
     }
 
     return resultado;
   } catch (error) {
-    console.error('❌ Error al generar análisis de desempeño final:', error);
+    console.error('Error al generar análisis de desempeño final:', error);
     throw new Error(`Error generando análisis de desempeño: ${error.message}`);
   }
 }
 
-// Agregar al final del archivo antes del module.exports
 module.exports = {
   generarEscenarioCliente,
   generarMensajeCliente,
   generarAnalisisSimulacionPorEtapaModoAprendizaje,
-  generarAnalisisDesempenoFinal, // 👈 Nueva función exportada
+  generarAnalisisDesempenoFinal,
 };

@@ -9,6 +9,7 @@ const { authenticateJWT } = require('../middlewares/jwt.middleware');
 const {
   validarDatosDeIniciarSimulacion,
   validarDatosDeEnviarMensaje,
+  validarUsuario,
 } = require('../validators/simulacion.validator');
 
 /**
@@ -55,11 +56,16 @@ function crearSimulacionRouter() {
    * Headers: Authorization: Bearer <token>
    * Response: { ok, estado, cliente, etapaActual, historialConversacion, ... }
    */
-  router.get('/estado', authenticateJWT, asyncHandler(simulacionController.obtenerEstado));
+  router.get(
+    '/estado',
+    authenticateJWT,
+    validarUsuario, // ✅ Valida que sea aprendiz
+    asyncHandler(simulacionController.obtenerEstado)
+  );
 
   /**
    * POST /api/simulacion/finalizar
-   * Finaliza la simulación actual y obtiene resumen
+   * Finaliza la simulación actual sin generar análisis de desempeño
    *
    * Headers: Authorization: Bearer <token>
    * Response: { ok, mensaje, duracion, etapasCompletadas, historial, ... }
@@ -67,6 +73,7 @@ function crearSimulacionRouter() {
   router.post(
     '/finalizar',
     authenticateJWT,
+    validarUsuario, // ✅ Valida que sea aprendiz
     asyncHandler(simulacionController.finalizarSimulacion)
   );
 
