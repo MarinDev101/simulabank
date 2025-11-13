@@ -39,7 +39,7 @@
               </div>
             </label>
 
-            <small *ngIf="formInitialized" class="block text-sm transition-all duration-200"
+            <small *ngIf="formInitialized" class="h-min-2 block text-sm transition-all duration-200"
               [class.text-red-600]="emailInvalid && loginForm.get('email')?.touched"
               [style.opacity]="emailInvalid && loginForm.get('email')?.touched ? '1' : '0'">
               <span *ngIf="loginForm.get('email')?.hasError('required')">El correo es requerido.</span>

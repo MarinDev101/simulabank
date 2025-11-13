@@ -1,2 +1,90 @@
-<!-- <p>inicio-aprendiz works!</p> -->
-<h1 class="text-2xl font-bold">Contenido principal PRUEBA PRUEBA</h1>
+<div class="flex flex-col gap-8 p-8">
+  <div class="grid grid-cols-3 gap-8">
+    <article
+      class="flex flex-col items-center p-5 gap-10 border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+      <p class="titulo-seccion font-medium text-elegant-700 text-[20px] dark:text-gray-200">Comienza simulando
+        asesorias bancarias virtuales con clientes generados con IA</p>
+      <img src="/images/ilustraciones/simulacion-inicio.png" alt="">
+      <button routerLink="/aprendiz/configuracion-simulacion"
+        class="cursor-pointer flex w-full max-w-55 items-center justify-center gap-3 rounded-full bg-[#009040] dark:bg-green-600 hover:dark:bg-green-700 p-2 transition-colors duration-200 hover:bg-[#007a33] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400">
+        <p class="text-white text-sm md:text-base">Empezar simulación</p>
+        <div class="bg-white w-6 h-6 md:w-7 md:h-7 p-1 rounded-full dark:bg-gray-700">
+          <span class="icon-[solar--play-linear] dark:text-indigo-300"></span>
+        </div>
+      </button>
+    </article>
+    <article
+      class="flex flex-col items-center gap-10 p-5 border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+      <p class="titulo-seccion font-medium text-elegant-700 text-[20px] dark:text-gray-200">SimulaBank es un banco
+        simulado. Tiene sus politicas y sus clientes</p>
+      <img src="/images/ilustraciones/poliinfo-incio.png" alt="">
+      <div class="flex justify-center gap-5 dark:text-gray-300 w-full">
+        <button [routerLink]="politicasRoute"
+          class="cursor-pointer w-[40%] flex items-center justify-center gap-3 rounded-full bg-[#0271b1] dark:bg-blue-600 hover:dark:bg-blue-700 p-2 transition-colors duration-200 hover:bg-[#00537a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
+          <p class="text-white text-sm md:text-base">Ver Politicas</p>
+          <span class="size-7 icon-[mdi--eye-outline] dark:text-indigo-300 text-white"></span>
+        </button>
+        <button [routerLink]="informacionRoute"
+          class="cursor-pointer w-[40%] flex items-center justify-center gap-3 rounded-full bg-[#0271b1] dark:bg-blue-600 hover:dark:bg-blue-700 p-2 transition-colors duration-200 hover:bg-[#00537a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
+          <p class="text-white text-sm md:text-base">Ver Informacion</p>
+          <span class="size-7 icon-[mdi--eye-outline] dark:text-indigo-300 text-white"></span>
+        </button>
+      </div>
+    </article>
+    <article class="p-10 border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+      <ul class="flex flex-col gap-1 items-center">
+        <li>
+          <div class="avatar ml-[5px]">
+            <div
+              class="w-30 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
+              <img [src]="usuario?.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
+                [alt]="nombreCompleto" />
+            </div>
+          </div>
+        </li>
+        <li class="text-center">
+          <p class="max-w-[200px] text-2xl truncate font-bold text-[#566577] dark:text-gray-200"
+            [title]="nombreCompleto">
+            {{ nombreCompleto }}
+          </p>
+        </li>
+        <li>
+          <span class="badge p-3.5 font-bold text-white" [ngClass]="rolBadge.color">
+            {{ rolBadge.text }}
+          </span>
+        </li>
+      </ul>
+      <div class="mt-5">
+        <p>Total Simulaciones:</p>
+        <ul class="grid grid-cols-2 gap-4 mt-2">
+          <li class="bg-[#ebebeb] rounded-lg flex flex-col items-center p-3 h-[185px] justify-center gap-2">
+            <p class="font-medium text-7xl">10</p>
+            <p class="text-elegant-500 text-center">Simulaciones<br>completadas</p>
+          </li>
+          <li class="bg-[#ebebeb] rounded-lg flex flex-col items-center p-3 h-[185px] justify-center gap-2">
+            <p class="font-medium text-7xl">8</p>
+            <p class="text-elegant-500 text-center">Logros<br>completados</p>
+          </li>
+        </ul>
+      </div>
+    </article>
+  </div>
+  <div>
+    <article class="border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+      <div class="p-2.5 border-b-2 border-[#E7E9EB] flex justify-center items-center dark:border-gray-700">
+        <p class="font-medium text-elegant-700 text-[20px] dark:text-gray-200">Logros exhibidos</p>
+      </div>
+      <div class="p-5 dark:text-gray-300">
+        <div class="flex flex-wrap gap-4 justify-center">
+          <div
+            class="w-40 h-47 border-2 border-[#E7E9EB] rounded-lg flex flex-col justify-between dark:border-gray-700">
+            <div class="flex justify-center items-center p-3 h-full">
+              <span class="icon-[mdi--trophy-outline] text-4xl text-yellow-500 mb-2"></span>
+            </div>
+            <div class="text-center p-2 border-t-2 border-[#E7E9EB] dark:border-gray-700">Tu primer simulación</div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
