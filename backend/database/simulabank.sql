@@ -172,9 +172,52 @@ CREATE TABLE salas_aprendices (
 
 CREATE TABLE productos_bancarios (
   id_producto_bancario INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  descripcion TEXT NOT NULL,
-  categoria ENUM('captacion', 'colocacion') NOT NULL
+  nombre VARCHAR(255) NOT NULL UNIQUE,
+  categoria ENUM('Captacion', 'Colocacion') NOT NULL,
+  concepto TEXT NOT NULL,
+  caracteristicas JSON NOT NULL,
+  beneficios JSON NOT NULL,
+  requisitos JSON NOT NULL
+);
+
+CREATE TABLE tipos_clientes (
+  id_tipo_cliente INT AUTO_INCREMENT PRIMARY KEY,
+  tipo VARCHAR(100) NOT NULL UNIQUE,
+  actua TEXT NOT NULL,
+  ejemplo TEXT NOT NULL
+);
+
+CREATE TABLE perfiles_clientes (
+  id_perfil_cliente INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL UNIQUE,
+  tipo_cliente TEXT NOT NULL,
+  rango_cop TEXT NOT NULL,
+  enfoque_atencion TEXT NOT NULL
+);
+
+CREATE TABLE perfiles_productos (
+  id_perfil_cliente INT NOT NULL,
+  id_producto_bancario INT NOT NULL,
+  PRIMARY KEY (id_perfil_cliente, id_producto_bancario),
+  FOREIGN KEY (id_perfil_cliente) REFERENCES perfiles_clientes(id_perfil_cliente)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (id_producto_bancario) REFERENCES productos_bancarios(id_producto_bancario)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE etapas_conversacion (
+  id_etapa_conversacion INT AUTO_INCREMENT PRIMARY KEY,
+  id_producto_bancario INT NOT NULL,
+  numero_orden INT NOT NULL,
+  nombre VARCHAR(100) NOT NULL,
+  objetivo TEXT NOT NULL,
+  quien_inicia ENUM('Asesor', 'Cliente') NOT NULL,
+  validaciones JSON NOT NULL,
+  sugerencias_aprendizaje JSON NOT NULL,
+  instrucciones_ia_cliente JSON NOT NULL,
+  FOREIGN KEY (id_producto_bancario) REFERENCES productos_bancarios(id_producto_bancario)
+    ON DELETE CASCADE,
+  CONSTRAINT uq_producto_orden UNIQUE (id_producto_bancario, numero_orden)
 );
 
 CREATE TABLE simulaciones (
@@ -189,14 +232,44 @@ CREATE TABLE simulaciones (
   aspectos_clave_registrados JSON NOT NULL,
   conversacion_asesoria JSON NOT NULL,
   recomendaciones_aprendizaje_ia JSON,
-  opinion_ia TEXT,
+  analisis_desempeno TEXT,
   tiempo_duracion_segundos INT DEFAULT 0,
-  FOREIGN KEY (id_producto_bancario)
-    REFERENCES productos_bancarios(id_producto_bancario)
-    ON DELETE RESTRICT,
-  FOREIGN KEY (id_aprendiz)
-    REFERENCES aprendices(id_aprendiz)
-    ON DELETE CASCADE
+
+  -- Control
+  etapa_actual_index INT DEFAULT 0,
+  estado ENUM('en_proceso', 'finalizada', 'pausada') DEFAULT 'en_proceso',
+
+  -- Tiempos
+  fecha_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_ultima_interaccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  fecha_finalizacion TIMESTAMP NULL,
+
+  -- Relaciones
+  FOREIGN KEY (id_aprendiz) REFERENCES aprendices(id_aprendiz) ON DELETE CASCADE,
+  FOREIGN KEY (id_producto_bancario) REFERENCES productos_bancarios(id_producto_bancario) ON DELETE RESTRICT
+);
+
+CREATE TABLE clientes_simulados (
+  id_cliente_simulado INT AUTO_INCREMENT PRIMARY KEY,
+  id_simulacion INT NOT NULL UNIQUE,  -- Relación 1:1
+  genero ENUM('hombre', 'mujer') NOT NULL,
+  urlAvatar VARCHAR(80),
+  nombre VARCHAR(255) NOT NULL,
+  edad VARCHAR(50) NOT NULL,
+  profesion VARCHAR(255) NOT NULL,
+  situacion_actual TEXT NOT NULL,
+  motivacion TEXT NOT NULL,
+  nivel_conocimiento VARCHAR(255) NOT NULL,
+  perfil_riesgo VARCHAR(255) NOT NULL,
+  objetivo TEXT NOT NULL,
+  escenario_narrativo TEXT NOT NULL,
+
+  id_tipo_cliente INT NULL,
+  id_perfil_cliente INT NULL,
+
+  FOREIGN KEY (id_simulacion) REFERENCES simulaciones(id_simulacion) ON DELETE CASCADE,
+  FOREIGN KEY (id_tipo_cliente) REFERENCES tipos_clientes(id_tipo_cliente) ON DELETE RESTRICT,
+  FOREIGN KEY (id_perfil_cliente) REFERENCES perfiles_clientes(id_perfil_cliente) ON DELETE RESTRICT
 );
 
 CREATE TABLE carpetas_personales (
