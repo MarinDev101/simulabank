@@ -1,0 +1,103 @@
+<div class="w-full bg-white rounded-xl p-4">
+
+  <!-- TABS -->
+  <div class="flex border-b border-gray-300">
+    <button (click)="changeTab('tab1')" class="px-5 py-2 text-sm font-medium transition border-b-2 rounded-t-md"
+      [class.bg-calm-100]="activeTab === 'tab1'" [class.border-indigo-500]="activeTab === 'tab1'"
+      [class.text-indigo-600]="activeTab === 'tab1'" [class.border-transparent]="activeTab !== 'tab1'">
+      Datos personales
+    </button>
+
+    <button (click)="changeTab('tab2')" class="px-5 py-2 text-sm font-medium transition border-b-2 rounded-t-md"
+      [class.bg-calm-100]="activeTab === 'tab2'" [class.border-indigo-500]="activeTab === 'tab2'"
+      [class.text-indigo-600]="activeTab === 'tab2'" [class.border-transparent]="activeTab !== 'tab2'">
+      Seguridad
+    </button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="p-8 w-[70vw] h-[70vh]" *ngIf="activeTab === 'tab1'">
+    <article class="flex gap-8">
+      <ul>
+        <li>
+          <div class="avatar">
+            <div
+              class="w-40 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
+              <img [src]="usuario?.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
+                [alt]="nombreCompleto" />
+            </div>
+          </div>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <p class="max-w-[500px] text-2xl truncate font-bold dark:text-gray-200" [title]="nombreCompleto">
+            Nombre:
+            {{ nombreCompleto }}
+          </p>
+        </li>
+        <li>
+          <p class="text-gray-700 font-medium">Correo electrónico: {{ correo }}</p>
+        </li>
+        <li class="flex items-center gap-2">
+          Rol:
+          <span class="badge p-2 font-bold text-white" [ngClass]="rolBadge.color">
+            {{ rolBadge.text }}
+          </span>
+        </li>
+        <li class="flex gap-5 mt-5">
+          <button
+            class="bg-sky-600 text-white p-1.5 rounded flex items-center gap-1 cursor-pointer hover:bg-sky-700 transition-colors 5s00ms">
+            <span class="icon-[material-symbols--image-outline] size-6"></span>
+            Cargar nueva foto</button>
+          <button
+            class="bg-red-500 text-white p-1.5 rounded flex items-center gap-1 cursor-pointer hover:bg-red-600 transition-colors 500ms">
+            <span class="icon-[material-symbols--delete-outline] size-6"></span>
+            Eliminar foto</button>
+        </li>
+        <li class="mt-1">
+          <p class="text-gray-600">Cargue el archivo en fomrato jpeg png y asesorese de que el tamaño de la imagen del
+            archivo sea inferior a 25MB</p>
+        </li>
+      </ul>
+    </article>
+    <article>
+      <div class="flex gap-6">
+        <!-- Nombre -->
+        <div class="flex-1 relative">
+          <label class="floating-label block relative">
+            <span class="text-base text-gray-600">Nombre</span>
+            <div class="relative">
+              <input type="text" formControlName="nombre" placeholder="Ingresa tu nombre"
+                class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 pr-10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+              <!-- Ícono fijo -->
+              <span
+                class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl pointer-events-none z-10"></span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Apellido -->
+        <div class="flex-1 relative">
+          <label class="floating-label block relative">
+            <span class="text-base text-gray-600">Apellido</span>
+            <div class="relative">
+              <input type="text" formControlName="apellido" placeholder="Ingresa tu apellido"
+                class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 pr-10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+              <!-- Ícono fijo -->
+              <span
+                class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl pointer-events-none z-10"></span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="p-8 w-[70vw] h-[70vh]" *ngIf="activeTab === 'tab2'">
+    <article></article>
+    <article></article>
+  </div>
+
+</div>

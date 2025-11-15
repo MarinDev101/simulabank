@@ -153,4 +153,12 @@ export class Sidebar implements OnInit, OnDestroy {
     }
     return `/${this.usuario.rol}/inicio`;
   }
+
+  // Método para obtener la ruta de configuracion
+  get configuracionRoute(): string {
+    if (!this.usuario?.rol) {
+      return '/inicio';
+    }
+    return `/${this.usuario.rol}/configuracion`;
+  }
 }

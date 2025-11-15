@@ -180,6 +180,11 @@ export class AuthService {
     return user?.rol || null;
   }
 
+  obtenerCorreo(): string | null {
+  const user = this.obtenerUsuario();
+  return user?.correo || null;
+}
+
   // ============================================
   // NAVEGACIÓN SEGÚN ROL
   // ============================================

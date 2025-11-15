@@ -36,7 +36,9 @@ export const routes: Routes = [
   {
     path: 'recuperar-contrasena',
     loadComponent: () =>
-      import('./pages/pagina/recuperar-contrasena/recuperar-contrasena').then((m) => m.RecuperarContrasena),
+      import('./pages/pagina/recuperar-contrasena/recuperar-contrasena').then(
+        (m) => m.RecuperarContrasena
+      ),
     title: 'Recuperar contraseña',
     canActivate: [publicGuard],
   },
@@ -79,6 +81,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/aprendiz/inicio-aprendiz/inicio-aprendiz').then((m) => m.InicioAprendiz),
         title: 'Inicio - Aprendiz',
+      },
+      {
+        path: 'configuracion',
+        loadComponent: () =>
+          import('./pages/pagina/configuracion/configuracion').then((m) => m.Configuracion),
+        title: 'Configuración - Aprendiz',
       },
       {
         path: 'configuracion-simulacion',
@@ -139,6 +147,12 @@ export const routes: Routes = [
         title: 'Inicio - Instructor',
       },
       {
+        path: 'configuracion',
+        loadComponent: () =>
+          import('./pages/pagina/configuracion/configuracion').then((m) => m.Configuracion),
+        title: 'Configuración - Aprendiz',
+      },
+      {
         path: 'informacion-plataforma',
         loadComponent: () =>
           import('./pages/aprendiz-instructor/informacion-plataforma/informacion-plataforma').then(
@@ -179,6 +193,12 @@ export const routes: Routes = [
             (m) => m.InicioAdministrador
           ),
         title: 'Inicio - Administrador',
+      },
+      {
+        path: 'configuracion',
+        loadComponent: () =>
+          import('./pages/pagina/configuracion/configuracion').then((m) => m.Configuracion),
+        title: 'Configuración - Aprendiz',
       },
     ],
   },
