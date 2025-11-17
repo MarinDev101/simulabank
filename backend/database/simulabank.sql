@@ -226,7 +226,7 @@ CREATE TABLE simulaciones (
   id_producto_bancario INT NOT NULL,
   producto_seleccion ENUM('especifico', 'aleatorio') NOT NULL,
   modo ENUM('aprendizaje', 'evaluativo') NOT NULL,
-  sonido_habilitado BOOLEAN DEFAULT TRUE,
+  sonido_interaccion ENUM('automatico', 'manual') NOT NULL,
   destino_evidencia ENUM('personal', 'sala') NOT NULL,
   perfil_cliente JSON NOT NULL,
   aspectos_clave_registrados JSON NOT NULL,

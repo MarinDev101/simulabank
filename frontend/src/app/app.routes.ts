@@ -36,7 +36,9 @@ export const routes: Routes = [
   {
     path: 'recuperar-contrasena',
     loadComponent: () =>
-      import('./pages/pagina/recuperar-contrasena/recuperar-contrasena').then((m) => m.RecuperarContrasena),
+      import('./pages/pagina/recuperar-contrasena/recuperar-contrasena').then(
+        (m) => m.RecuperarContrasena
+      ),
     title: 'Recuperar contraseña',
     canActivate: [publicGuard],
   },
@@ -83,15 +85,15 @@ export const routes: Routes = [
       {
         path: 'configuracion-simulacion',
         loadComponent: () =>
-          import('./pages/aprendiz/configuracion-simulacion/configuracion-simulacion').then(
-            (m) => m.ConfiguracionSimulacion
-          ),
+          import(
+            './pages/aprendiz/simulador-fases/configuracion-simulacion/configuracion-simulacion'
+          ).then((m) => m.ConfiguracionSimulacion),
         title: 'Configuración de simulación',
       },
       {
         path: 'simulador',
         loadComponent: () =>
-          import('./pages/aprendiz/simulador-plataforma/simulador-plataforma').then(
+          import('./pages/aprendiz/simulador-fases/simulador-plataforma/simulador-plataforma').then(
             (m) => m.SimuladorPlataforma
           ),
         title: 'Simulador',

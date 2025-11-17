@@ -13,7 +13,7 @@ const MAPA_PRODUCTOS = {
 const PRODUCTOS_VALIDOS = Object.keys(MAPA_PRODUCTOS);
 const MODOS_VALIDOS = ['aprendizaje', 'evaluativo'];
 const DESTINOS_VALIDOS = ['personal', 'sala'];
-const INTERACCIONES_VALIDAS = ['automatico', 'silenciado'];
+const INTERACCIONES_VALIDAS = ['automatico', 'manual'];
 
 /**
  * Middleware que valida la solicitud de iniciar simulación.
