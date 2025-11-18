@@ -83,19 +83,9 @@ export const routes: Routes = [
         title: 'Inicio - Aprendiz',
       },
       {
-        path: 'configuracion-simulacion',
-        loadComponent: () =>
-          import(
-            './pages/aprendiz/simulador-fases/configuracion-simulacion/configuracion-simulacion'
-          ).then((m) => m.ConfiguracionSimulacion),
-        title: 'Configuración de simulación',
-      },
-      {
         path: 'simulador',
         loadComponent: () =>
-          import('./pages/aprendiz/simulador-fases/simulador-plataforma/simulador-plataforma').then(
-            (m) => m.SimuladorPlataforma
-          ),
+          import('./pages/aprendiz/simulador/simulador').then((m) => m.Simulador),
         title: 'Simulador',
       },
       {

@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { SimulacionService, ConfiguracionSimulacion } from '@app/services/simulacion/simulacion';
 
 @Component({
   selector: 'app-configuracion-simulacion',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './configuracion-simulacion.html',
 })
-export class ConfiguracionSimulacion {
+export class ConfiguracionSimulacionComponent {
+  @Output() onIniciarSimulacion = new EventEmitter<any>();
+
   datosFormulario = {
     producto: '',
     modo: '',
@@ -15,18 +19,18 @@ export class ConfiguracionSimulacion {
     interaccion: '',
   };
 
-  // Definición de productos bancarios
-  private productosCaptacion = ['cuenta_ahorros', 'cuenta_corriente', 'cdt_digital'];
+  cargando = false;
+  error: string | null = null;
 
+  private productosCaptacion = ['cuenta_ahorros', 'cuenta_corriente', 'cdt_digital'];
   private productosColocacion = [
     'credito_libre_inversion',
     'credito_educativo_educaplus',
     'credito_rotativo_empresarial',
   ];
 
-  /**
-   * Selecciona un producto aleatorio según la categoría
-   */
+  constructor(private simulacionService: SimulacionService) {}
+
   private seleccionarProductoAleatorio(categoria: string): string {
     let productos: string[] = [];
 
@@ -41,7 +45,7 @@ export class ConfiguracionSimulacion {
         productos = this.productosColocacion;
         break;
       default:
-        return categoria; // Si es un producto específico, lo retorna tal cual
+        return categoria;
     }
 
     const indiceAleatorio = Math.floor(Math.random() * productos.length);
@@ -50,25 +54,31 @@ export class ConfiguracionSimulacion {
 
   enviarFormulario(form: NgForm) {
     if (form.valid) {
-      // Crear una copia de los datos del formulario
-      const datosEnvio = { ...this.datosFormulario };
+      this.error = null;
+      this.cargando = true;
 
-      // Si el producto es una categoría aleatoria, seleccionar uno específico
-      if (
-        datosEnvio.producto === 'todos-productos' ||
-        datosEnvio.producto === 'productos-captacion' ||
-        datosEnvio.producto === 'productos-colocacion'
-      ) {
-        datosEnvio.producto = this.seleccionarProductoAleatorio(datosEnvio.producto);
-      }
+      // Crear configuración
+      const configuracion: ConfiguracionSimulacion = {
+        producto: this.seleccionarProductoAleatorio(this.datosFormulario.producto) as any,
+        modo: this.datosFormulario.modo as 'aprendizaje' | 'evaluativo',
+        destino: this.datosFormulario.destino as 'personal' | 'sala',
+        interaccion: this.datosFormulario.interaccion as 'automatico' | 'manual',
+      };
 
-      console.log('Formulario enviado:', datosEnvio);
-      console.log('Producto seleccionado:', datosEnvio.producto);
+      console.log('🚀 Iniciando simulación con:', configuracion);
 
-      // Aquí puedes agregar la lógica para enviar los datos a tu servicio
-      // this.simulacionService.iniciarSimulacion(datosEnvio);
-    } else {
-      console.log('Formulario inválido');
+      this.simulacionService.iniciarSimulacion(configuracion).subscribe({
+        next: (response) => {
+          console.log('✅ Simulación iniciada exitosamente:', response);
+          this.cargando = false;
+          this.onIniciarSimulacion.emit(response);
+        },
+        error: (error) => {
+          console.error('❌ Error al iniciar simulación:', error);
+          this.cargando = false;
+          this.error = error.error?.mensaje || 'Error al iniciar la simulación';
+        },
+      });
     }
   }
 }

@@ -1,87 +1,45 @@
 <!-- DRAWER DE RECOMENDACIONES -->
 <div class="drawer z-40 drawer-end">
   <input id="drawer-recommendations" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content">
-    <!-- Este div está vacío pero es necesario -->
-  </div>
+  <div class="drawer-content"></div>
   <div class="drawer-side">
     <label for="drawer-recommendations" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
       <div
-        class="border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 p-4 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
+        class="border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 p-4 dark:border-slate-700"
       >
         <div class="mb-2 flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--bulb] size-5 text-amber-200 dark:text-amber-300"></span>
+            <span class="icon-[hugeicons--bulb] size-5 text-amber-200"></span>
             <h2 class="text-base font-bold text-white">Recomendaciones IA</h2>
           </div>
-          <label
-            for="drawer-recommendations"
-            class="btn btn-circle text-white btn-ghost btn-sm hover:bg-white/20"
+          <label for="drawer-recommendations" class="btn btn-circle text-white btn-ghost btn-sm"
             >✕</label
           >
         </div>
         <div class="divider m-0 divider-primary">
-          <span
-            class="rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white shadow-md ring-2 ring-white/30 backdrop-blur-sm"
-            >1. Saludo</span
-          >
+          <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white shadow-md">
+            {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
+          </span>
         </div>
       </div>
 
       <div
-        class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+        class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
       >
+        @if (recomendacionActual) {
         <div>
-          <h3
-            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
-          >
-            <span class="icon-[hugeicons--idea] size-4 text-blue-600 dark:text-blue-400"></span>
-            Consejos
+          <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
+            <span class="icon-[hugeicons--idea] size-4 text-blue-600"></span>
+            Recomendación para esta etapa
           </h3>
-          <ul class="space-y-3">
-            <li
-              class="flex items-start gap-3 rounded-lg border border-transparent p-3 text-sm transition-all hover:border-blue-200 hover:bg-blue-50 hover:shadow-sm dark:hover:border-blue-800 dark:hover:bg-slate-800"
-            >
-              <span
-                class="mt-0.5 size-5 shrink-0 text-emerald-600 icon-[hugeicons--check] dark:text-emerald-400"
-              ></span>
-              <span class="font-medium text-slate-700 dark:text-slate-300"
-                >Saluda de manera cordial y profesional</span
-              >
-            </li>
-            <li
-              class="flex items-start gap-3 rounded-lg border border-transparent p-3 text-sm transition-all hover:border-blue-200 hover:bg-blue-50 hover:shadow-sm dark:hover:border-blue-800 dark:hover:bg-slate-800"
-            >
-              <span
-                class="mt-0.5 size-5 shrink-0 text-emerald-600 icon-[hugeicons--check] dark:text-emerald-400"
-              ></span>
-              <span class="font-medium text-slate-700 dark:text-slate-300"
-                >Preséntate con tu nombre y cargo</span
-              >
-            </li>
-            <li
-              class="flex items-start gap-3 rounded-lg border border-transparent p-3 text-sm transition-all hover:border-blue-200 hover:bg-blue-50 hover:shadow-sm dark:hover:border-blue-800 dark:hover:bg-slate-800"
-            >
-              <span
-                class="mt-0.5 size-5 shrink-0 text-emerald-600 icon-[hugeicons--check] dark:text-emerald-400"
-              ></span>
-              <span class="font-medium text-slate-700 dark:text-slate-300"
-                >Haz sentir bienvenido al cliente</span
-              >
-            </li>
-            <li
-              class="flex items-start gap-3 rounded-lg border border-transparent p-3 text-sm transition-all hover:border-blue-200 hover:bg-blue-50 hover:shadow-sm dark:hover:border-blue-800 dark:hover:bg-slate-800"
-            >
-              <span
-                class="mt-0.5 size-5 shrink-0 text-emerald-600 icon-[hugeicons--check] dark:text-emerald-400"
-              ></span>
-              <span class="font-medium text-slate-700 dark:text-slate-300"
-                >Muestra disposición para ayudar</span
-              >
-            </li>
-          </ul>
+          <p class="text-sm leading-relaxed text-slate-700">
+            {{ recomendacionActual.recomendacionParaAsesor }}
+          </p>
         </div>
+        } @else {
+        <p class="text-center text-sm text-slate-500">No hay recomendaciones disponibles aún.</p>
+        }
       </div>
     </div>
   </div>
@@ -90,141 +48,86 @@
 <!-- DRAWER DE INFORMACIÓN DEL CLIENTE -->
 <div class="drawer z-40 drawer-end">
   <input id="drawer-client-info" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content">
-    <!-- Este div está vacío pero es necesario -->
-  </div>
+  <div class="drawer-content"></div>
   <div class="drawer-side">
     <label for="drawer-client-info" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
-      <div
-        class="border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 p-4 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
-      >
+      <div class="border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 p-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span
-              class="icon-[hugeicons--user-circle] size-5 text-teal-200 dark:text-teal-300"
-            ></span>
+            <span class="icon-[hugeicons--user-circle] size-5 text-teal-200"></span>
             <h2 class="text-base font-bold text-white">Información del Cliente</h2>
           </div>
-          <label
-            for="drawer-client-info"
-            class="btn btn-circle text-white btn-ghost btn-sm hover:bg-white/20"
+          <label for="drawer-client-info" class="btn btn-circle text-white btn-ghost btn-sm"
             >✕</label
           >
         </div>
       </div>
 
       <div
-        class="max-h-[calc(100vh-120px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+        class="max-h-[calc(100vh-120px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
       >
+        @if (infoCliente) {
         <div
-          class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800"
+          class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm"
         >
           <div class="avatar mb-3">
-            <div
-              class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2 ring-offset-white dark:ring-emerald-600 dark:ring-offset-slate-900"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop"
-                alt="Cliente"
-              />
+            <div class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2">
+              <img [src]="avatarCliente" [alt]="nombreCliente" />
             </div>
           </div>
-          <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">María García López</h3>
-          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">12345678-A</p>
+          <h3 class="text-lg font-bold text-slate-800">{{ infoCliente.nombre }}</h3>
+          <p class="text-sm font-medium text-slate-600">{{ infoCliente.edad }}</p>
           <span
-            class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md dark:from-amber-600 dark:to-orange-600"
-            >Premium</span
+            class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md"
           >
+            {{ infoCliente.profesion }}
+          </span>
         </div>
 
-        <div
-          class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
-        >
-          <h3
-            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
-          >
-            <span
-              class="icon-[hugeicons--call] size-4 text-emerald-600 dark:text-emerald-400"
-            ></span>
-            Contacto
+        <div class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
+            <span class="icon-[hugeicons--user] size-4 text-emerald-600"></span>
+            Perfil del Cliente
           </h3>
 
-          <div
-            class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-          >
+          <div class="flex items-start gap-3 rounded-lg p-2">
             <span
-              class="mt-0.5 icon-[hugeicons--call] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+              class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600"
             ></span>
             <div>
-              <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Teléfono</p>
-              <p class="text-sm font-medium text-slate-800 dark:text-slate-200">+34 612 345 678</p>
+              <p class="text-xs font-semibold text-slate-600">Situación Actual</p>
+              <p class="text-sm font-medium text-slate-800">{{ infoCliente.situacion_actual }}</p>
             </div>
           </div>
 
-          <div
-            class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-          >
-            <span
-              class="mt-0.5 icon-[hugeicons--mail-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-            ></span>
+          <div class="flex items-start gap-3 rounded-lg p-2">
+            <span class="mt-0.5 icon-[hugeicons--target-01] size-4 shrink-0 text-slate-600"></span>
             <div>
-              <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Email</p>
-              <p class="text-sm font-medium break-all text-slate-800 dark:text-slate-200">
-                maria.garcia@email.com
-              </p>
+              <p class="text-xs font-semibold text-slate-600">Objetivo</p>
+              <p class="text-sm font-medium text-slate-800">{{ infoCliente.objetivo }}</p>
             </div>
           </div>
 
-          <div
-            class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-          >
+          <div class="flex items-start gap-3 rounded-lg p-2">
             <span
-              class="mt-0.5 icon-[hugeicons--location-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+              class="mt-0.5 icon-[hugeicons--chart-increase] size-4 shrink-0 text-slate-600"
             ></span>
             <div>
-              <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Dirección</p>
-              <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Madrid, España</p>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
-        >
-          <h3
-            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
-          >
-            <span
-              class="icon-[hugeicons--credit-card] size-4 text-emerald-600 dark:text-emerald-400"
-            ></span>
-            Información Financiera
-          </h3>
-
-          <div
-            class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-          >
-            <span
-              class="mt-0.5 icon-[hugeicons--credit-card] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-            ></span>
-            <div>
-              <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Saldo Total</p>
-              <p class="text-lg font-bold text-emerald-600 dark:text-emerald-400">15.240 €</p>
+              <p class="text-xs font-semibold text-slate-600">Perfil de Riesgo</p>
+              <p class="text-sm font-medium text-slate-800">{{ infoCliente.perfil_riesgo }}</p>
             </div>
           </div>
 
-          <div
-            class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-          >
-            <span
-              class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-            ></span>
+          <div class="flex items-start gap-3 rounded-lg p-2">
+            <span class="mt-0.5 icon-[hugeicons--book-02] size-4 shrink-0 text-slate-600"></span>
             <div>
-              <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Cliente desde</p>
-              <p class="text-sm font-medium text-slate-800 dark:text-slate-200">2018</p>
+              <p class="text-xs font-semibold text-slate-600">Nivel de Conocimiento</p>
+              <p class="text-sm font-medium text-slate-800">{{ infoCliente.nivel_conocimiento }}</p>
             </div>
           </div>
         </div>
+        }
       </div>
     </div>
   </div>
@@ -236,10 +139,9 @@
 >
   <div class="container mx-auto px-4 py-4">
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <!-- Logo y título -->
       <div class="flex items-center gap-3">
         <div
-          class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/50 dark:from-blue-600 dark:to-indigo-700"
+          class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg"
         >
           <span class="icon-[hugeicons--bank] size-5 text-white"></span>
         </div>
@@ -247,66 +149,51 @@
           <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">
             Simulador de Asesoría Bancaria
           </h1>
-          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Entrenamiento con IA</p>
+          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+            {{ infoProducto?.nombre }}
+          </p>
         </div>
       </div>
 
-      <!-- Controles -->
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Selector de modo -->
-        <div class="flex gap-2">
-          <span
-            class="cursor-pointer rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow-md transition-all hover:shadow-lg dark:from-blue-600 dark:to-indigo-700"
-          >
-            <span class="mr-1 icon-[hugeicons--book-02] inline-block size-3"></span>
-            Aprendizaje
-          </span>
-          <span
-            class="cursor-pointer rounded-full border-2 border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-all hover:border-indigo-400 hover:bg-indigo-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:bg-slate-700"
-          >
-            <span class="mr-1 icon-[hugeicons--tick-02] inline-block size-3"></span>
-            Evaluativa
-          </span>
-        </div>
+        <span
+          class="cursor-default rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow-md"
+        >
+          <span class="mr-1 icon-[hugeicons--book-02] inline-block size-3"></span>
+          {{ modoSimulacion }}
+        </span>
 
-        <!-- Tiempo transcurrido -->
         <div
-          class="flex items-center gap-2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 shadow-sm dark:border-slate-600 dark:bg-slate-800"
+          class="flex items-center gap-2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 shadow-sm"
         >
-          <span class="icon-[hugeicons--clock-01] size-4 text-slate-600 dark:text-slate-400"></span>
-          <span class="text-sm font-bold text-slate-800 dark:text-slate-200">05:23</span>
+          <span class="icon-[hugeicons--clock-01] size-4 text-slate-600"></span>
+          <span class="text-sm font-bold text-slate-800">{{ tiempoTranscurrido }}</span>
         </div>
 
-        <!-- Botón de sonido -->
         <button
-          class="btn gap-2 rounded-lg border-2 border-slate-300 bg-white text-slate-700 shadow-sm transition-all btn-sm hover:border-blue-500 hover:bg-blue-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:bg-slate-700"
-        >
-          <span class="icon-[hugeicons--volume-high] size-4"></span>
-          <span class="hidden sm:inline">Sonido</span>
-        </button>
-
-        <!-- Botón de finalizar -->
-        <button
-          class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-md transition-all btn-sm hover:shadow-lg dark:from-red-600 dark:to-pink-700"
+          (click)="finalizarSimulacion()"
+          [disabled]="finalizandoSimulacion"
+          class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-md btn-sm hover:shadow-lg disabled:opacity-50"
         >
           <span class="icon-[hugeicons--stop] size-4"></span>
-          <span class="hidden sm:inline">Finalizar</span>
+          <span class="hidden sm:inline"
+            >{{ finalizandoSimulacion ? 'Finalizando...' : 'Finalizar' }}</span
+          >
         </button>
       </div>
     </div>
 
-    <!-- Botones de drawer para móvil -->
     <div class="mt-3 flex gap-2 lg:hidden">
       <label
         for="drawer-recommendations"
-        class="btn flex-1 gap-2 rounded-lg border-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-blue-600 dark:to-indigo-700"
+        class="btn flex-1 gap-2 rounded-lg border-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md btn-sm"
       >
         <span class="icon-[hugeicons--bulb] size-4"></span>
         Recomendaciones
       </label>
       <label
         for="drawer-client-info"
-        class="btn flex-1 gap-2 rounded-lg border-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-emerald-600 dark:to-teal-700"
+        class="btn flex-1 gap-2 rounded-lg border-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md btn-sm"
       >
         <span class="icon-[hugeicons--user-circle] size-4"></span>
         Cliente
@@ -317,220 +204,71 @@
 
 <!-- CONTENIDO PRINCIPAL -->
 <main class="container mx-auto max-w-7xl p-4">
+  @if (error) {
+  <div class="mb-4 alert alert-error">
+    <span>{{ error }}</span>
+  </div>
+  }
+
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
     <!-- PANEL DE RECOMENDACIONES (Desktop) -->
     <div class="hidden lg:order-1 lg:col-span-3 lg:block">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
-        <!-- Header -->
+      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl">
         <div
-          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
+          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500"
         >
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--bulb] size-5 text-amber-200 dark:text-amber-300"></span>
+            <span class="icon-[hugeicons--bulb] size-5 text-amber-200"></span>
             <h2 class="card-title text-base font-bold text-white">Recomendaciones IA</h2>
           </div>
         </div>
 
-        <!-- Barra de acciones -->
         <div
-          class="border-b border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
-        >
-          <div class="flex items-center justify-between gap-3">
-            <!-- Botón de reproducir audio -->
-            <button
-              class="btn min-w-0 flex-1 gap-2 border-0 bg-indigo-500 text-white shadow-md btn-sm hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700"
-              title="Reproducir consejos"
-            >
-              <span class="icon-[hugeicons--volume-high] size-4"></span>
-              <span class="truncate">Reproducir</span>
-            </button>
-
-            <!-- Botón de políticas -->
-            <button
-              onclick="modal_politicas.showModal()"
-              class="btn min-w-0 flex-1 gap-2 border-0 bg-amber-500 text-white shadow-md btn-sm hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700"
-              title="Ver políticas del banco"
-            >
-              <span class="icon-[hugeicons--file-02] size-4"></span>
-              <span class="truncate">Ver políticas</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Contenido principal -->
-        <div
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
         >
           <div class="divider m-0 my-2 gap-0 divider-primary">
-            <span
-              class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm"
-              >1. Saludo inicial</span
-            >
+            <span class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md">
+              {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
+            </span>
           </div>
-          <!-- Consejos principales -->
+
+          @if (esModoAprendizaje && recomendacionActual) {
           <div>
-            <h3
-              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
-            >
-              <span class="icon-[hugeicons--idea] size-4 text-blue-600 dark:text-blue-400"></span>
-              Consejos
+            <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
+              <span class="icon-[hugeicons--idea] size-4 text-blue-600"></span>
+              Recomendación
             </h3>
-            <ul class="space-y-2">
-              <li class="flex gap-2 text-sm">
-                <span class="font-medium text-slate-700 dark:text-slate-300"
-                  >Saluda de manera cordial y profesional</span
-                >
-              </li>
-            </ul>
+            <p class="text-sm leading-relaxed text-slate-700">
+              {{ recomendacionActual.recomendacionParaAsesor }}
+            </p>
           </div>
+          } @else {
+          <p class="text-center text-sm text-slate-500">
+            {{ esModoAprendizaje ? 'Esperando interacción...' : 'Modo evaluativo - Sin
+            recomendaciones' }}
+          </p>
+          }
         </div>
       </div>
     </div>
 
-    <!-- Modal de Políticas del Banco -->
-    <dialog id="modal_politicas" class="modal">
-      <div
-        class="modal-box max-w-2xl border border-slate-300 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
-      >
-        <form method="dialog">
-          <button
-            class="btn absolute top-3 right-3 btn-circle text-slate-600 btn-ghost btn-sm hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
-          >
-            ✕
-          </button>
-        </form>
-
-        <!-- Header del modal con gradiente -->
-        <div
-          class="-mx-6 -mt-6 mb-6 rounded-t-2xl border-b border-slate-200 bg-gradient-to-r from-indigo-500 to-purple-600 p-6 dark:border-slate-700 dark:from-indigo-600 dark:to-purple-700"
-        >
-          <h3 class="flex items-center gap-3 text-xl font-bold text-white">
-            <span
-              class="icon-[hugeicons--file-02] size-6 text-purple-200 dark:text-purple-300"
-            ></span>
-            Políticas del Banco
-          </h3>
-          <p class="mt-2 text-sm font-medium text-indigo-100 dark:text-indigo-200">
-            Normativas y procedimientos institucionales
-          </p>
-        </div>
-
-        <div class="max-h-96 space-y-4 overflow-y-auto pr-2">
-          <div
-            class="group rounded-xl border-l-4 border-blue-500 bg-blue-50 py-4 pr-4 pl-4 shadow-md transition-all hover:shadow-lg dark:border-blue-600 dark:bg-blue-950/40"
-          >
-            <h4
-              class="mb-2 flex items-center gap-2 text-base font-bold text-blue-900 dark:text-blue-200"
-            >
-              <span
-                class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white shadow-sm dark:bg-blue-600"
-                >1</span
-              >
-              Política de Atención al Cliente
-            </h4>
-            <p class="text-sm leading-relaxed text-blue-800 dark:text-blue-300">
-              Todos los clientes deben ser tratados con respeto y profesionalismo. Se debe mantener
-              un tono cordial en todo momento y garantizar la resolución efectiva de sus consultas.
-            </p>
-          </div>
-
-          <div
-            class="group rounded-xl border-l-4 border-purple-500 bg-purple-50 py-4 pr-4 pl-4 shadow-md transition-all hover:shadow-lg dark:border-purple-600 dark:bg-purple-950/40"
-          >
-            <h4
-              class="mb-2 flex items-center gap-2 text-base font-bold text-purple-900 dark:text-purple-200"
-            >
-              <span
-                class="flex h-7 w-7 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white shadow-sm dark:bg-purple-600"
-                >2</span
-              >
-              Política de Privacidad
-            </h4>
-            <p class="text-sm leading-relaxed text-purple-800 dark:text-purple-300">
-              La información personal de los clientes es confidencial y debe ser manejada con el
-              máximo cuidado. Nunca se debe compartir información sensible sin autorización expresa.
-            </p>
-          </div>
-
-          <div
-            class="group rounded-xl border-l-4 border-emerald-500 bg-emerald-50 py-4 pr-4 pl-4 shadow-md transition-all hover:shadow-lg dark:border-emerald-600 dark:bg-emerald-950/40"
-          >
-            <h4
-              class="mb-2 flex items-center gap-2 text-base font-bold text-emerald-900 dark:text-emerald-200"
-            >
-              <span
-                class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white shadow-sm dark:bg-emerald-600"
-                >3</span
-              >
-              Política de Seguridad
-            </h4>
-            <p class="text-sm leading-relaxed text-emerald-800 dark:text-emerald-300">
-              Se deben seguir todos los protocolos de seguridad establecidos. Verificar la identidad
-              del cliente antes de proporcionar información sobre cuentas o realizar transacciones.
-            </p>
-          </div>
-
-          <div
-            class="group rounded-xl border-l-4 border-cyan-500 bg-cyan-50 py-4 pr-4 pl-4 shadow-md transition-all hover:shadow-lg dark:border-cyan-600 dark:bg-cyan-950/40"
-          >
-            <h4
-              class="mb-2 flex items-center gap-2 text-base font-bold text-cyan-900 dark:text-cyan-200"
-            >
-              <span
-                class="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-500 text-xs font-bold text-white shadow-sm dark:bg-cyan-600"
-                >4</span
-              >
-              Política de Comunicación
-            </h4>
-            <p class="text-sm leading-relaxed text-cyan-800 dark:text-cyan-300">
-              Mantener una comunicación clara y transparente. Explicar los procedimientos y términos
-              en un lenguaje comprensible para el cliente.
-            </p>
-          </div>
-        </div>
-
-        <div class="modal-action mt-6">
-          <form method="dialog">
-            <button
-              class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-indigo-500 to-purple-600 px-6 text-white shadow-md transition-all btn-sm hover:shadow-lg dark:from-indigo-600 dark:to-purple-700"
-            >
-              <span class="icon-[hugeicons--tick-02] size-4"></span>
-              Entendido
-            </button>
-          </form>
-        </div>
-      </div>
-      <form method="dialog" class="modal-backdrop bg-black/60 backdrop-blur-sm">
-        <button>close</button>
-      </form>
-    </dialog>
-
     <!-- PANEL DE CHAT -->
     <div class="order-1 lg:order-2 lg:col-span-6">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
-        <!-- Header del chat -->
+      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl">
         <div
-          class="flex h-[60px] items-center border-b border-slate-200 bg-gradient-to-r from-purple-500 to-pink-500 px-3 dark:border-slate-700 dark:from-purple-600 dark:to-pink-700"
+          class="flex h-[60px] items-center border-b border-slate-200 bg-gradient-to-r from-purple-500 to-pink-500 px-3"
         >
           <div class="flex w-full items-center justify-between">
             <div class="flex items-center gap-3">
               <div class="avatar">
-                <div class="w-10 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
-                  <img
-                    id="chatAvatar"
-                    src="https://randomuser.me/api/portraits/men/94.jpg"
-                    alt="Cliente"
-                  />
+                <div class="w-10 rounded-full ring ring-primary ring-offset-2">
+                  <img [src]="avatarCliente" [alt]="nombreCliente" />
                 </div>
               </div>
-              <div class="flex items-center gap-2">
-                <span id="chatNombre" class="font-medium text-white">Cliente: Juan Pérez</span>
-              </div>
+              <span class="font-medium text-white">Cliente: {{ nombreCliente }}</span>
             </div>
             <div class="flex items-center gap-2">
-              <span
-                class="icon-[hugeicons--message-02] size-5 text-pink-200 dark:text-pink-300"
-              ></span>
+              <span class="icon-[hugeicons--message-02] size-5 text-pink-200"></span>
               <h2 class="card-title text-base font-bold text-white">Chat de Asesoría</h2>
             </div>
           </div>
@@ -538,168 +276,137 @@
 
         <!-- Mensajes -->
         <div
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          #chatContainer
+          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
         >
+          @for (indiceEtapa of indicesEtapas; track indiceEtapa) { @let mensajesEtapa =
+          mensajesPorEtapa[indiceEtapa]; @let primerMensaje = mensajesEtapa[0];
+
           <div
-            class="relative my-6 flex items-center justify-center font-semibold text-gray-600 before:absolute before:top-1/2 before:right-0 before:left-0 before:z-[1] before:h-[2px] before:bg-[linear-gradient(90deg,transparent_0%,#e5e7eb_15%,#e5e7eb_85%,transparent_100%)] before:content-[''] dark:before:bg-[linear-gradient(90deg,transparent_0%,#4b5563_15%,#4b5563_85%,transparent_100%)]"
+            class="relative my-6 flex items-center justify-center font-semibold text-gray-600 before:absolute before:top-1/2 before:right-0 before:left-0 before:z-[1] before:h-[2px] before:bg-[linear-gradient(90deg,transparent_0%,#e5e7eb_15%,#e5e7eb_85%,transparent_100%)] before:content-['']"
           >
             <span
-              class="relative z-[2] flex items-center gap-2 rounded-full border-2 border-gray-200 bg-white px-6 py-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300"
+              class="relative z-[2] flex items-center gap-2 rounded-full border-2 border-gray-200 bg-white px-6 py-2"
             >
               <span class="icon-[hugeicons--flag-02] size-4"></span>
-              Saludo inicial
+              {{ primerMensaje.nombreEtapa }}
               <span
-                class="relative z-[2] ml-2 flex inline-flex items-center gap-1 gap-2 rounded-full border-2 border-gray-200 bg-gray-100 bg-white px-3 px-6 py-1 py-2 text-xs font-medium text-gray-500 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                >Etapa 1</span
+                class="relative z-[2] ml-2 flex items-center gap-2 rounded-full border-2 border-gray-200 bg-gray-100 px-3 py-1 text-xs font-medium text-gray-500"
               >
+                Etapa {{ primerMensaje.indiceEtapa }}
+              </span>
             </span>
           </div>
 
+          @for (mensaje of mensajesEtapa; track $index) { @if (mensaje.emisor === 'Cliente') {
           <div class="relative chat-start chat">
-            <!-- Avatar alineado arriba -->
             <div class="avatar chat-image mt-[22px] self-start">
-              <div
-                class="mt-0 w-10 rounded-full ring ring-emerald-500 ring-offset-2 ring-offset-base-100"
-              >
-                <img
-                  alt="Cliente"
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop"
-                />
+              <div class="mt-0 w-10 rounded-full ring ring-emerald-500 ring-offset-2">
+                <img [src]="avatarCliente" [alt]="nombreCliente" />
               </div>
             </div>
 
-            <!-- Chat Header -->
-            <div
-              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
-            >
+            <div class="chat-header mb-1 flex items-center gap-2 text-slate-700">
               <button
+                (click)="reproducirAudio(mensaje.mensaje)"
                 class="btn h-auto min-h-0 p-0 btn-ghost btn-xs hover:bg-transparent"
                 title="Reproducir mensaje"
               >
                 <span
-                  class="icon-[hugeicons--volume-high] size-4 text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300"
+                  class="icon-[hugeicons--volume-high] size-4 text-emerald-500 hover:text-emerald-600"
                 ></span>
               </button>
               <span>Cliente</span>
             </div>
 
-            <!-- Contenedor de burbuja y colita -->
             <div class="relative max-w-[85%]">
-              <!-- Colita detrás -->
               <div
-                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"
+                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50"
               ></div>
-
-              <!-- Burbuja -->
               <div
-                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-900 shadow-sm dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
+                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-900 shadow-sm"
               >
-                <span class="relative z-10">
-                  Gracias por atenderme. Quiero consultar sobre algunos productos que tienen.
-                </span>
+                <span class="relative z-10">{{ mensaje.mensaje }}</span>
               </div>
             </div>
           </div>
-
-          <!-- Mensaje del asesor -->
+          } @else {
           <div class="relative chat-end chat">
-            <!-- Avatar alineado arriba -->
             <div class="avatar chat-image mt-[22px] self-start">
-              <div
-                class="mt-0 w-10 rounded-full ring ring-blue-500 ring-offset-2 ring-offset-base-100"
-              >
+              <div class="mt-0 w-10 rounded-full ring ring-blue-500 ring-offset-2">
                 <img
-                  alt="Asesor"
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop"
+                  alt="Asesor"
                 />
               </div>
             </div>
 
-            <!-- Chat Header -->
-            <div
-              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
-            >
+            <div class="chat-header mb-1 flex items-center gap-2 text-slate-700">
               <span>Asesor</span>
             </div>
 
-            <!-- Contenedor de burbuja y colita -->
             <div class="relative max-w-[85%]">
-              <!-- Colita detrás (posicionada a la DERECHA) -->
               <div
-                class="absolute top-4 -right-[6px] z-0 h-3 w-3 rotate-45 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
+                class="absolute top-4 -right-[6px] z-0 h-3 w-3 rotate-45 border border-blue-200 bg-blue-50"
               ></div>
-
-              <!-- Burbuja -->
               <div
-                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-2 text-blue-900 shadow-sm dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
+                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-2 text-blue-900 shadow-sm"
               >
-                <span class="relative z-10">
-                  Buenos días, soy Juan Pérez, asesor bancario. ¿En qué puedo ayudarle hoy?
-                </span>
+                <span class="relative z-10">{{ mensaje.mensaje }}</span>
               </div>
             </div>
           </div>
+          } } } @if (enviandoMensaje) {
+          <div class="flex items-center justify-center gap-2 py-4">
+            <span class="loading loading-md loading-dots"></span>
+            <span class="text-sm text-slate-600">Esperando respuesta del cliente...</span>
+          </div>
+          }
         </div>
 
         <!-- Input de mensaje -->
-        <div
-          class="flex flex-col gap-2 border-t border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
-        >
+        <div class="flex flex-col gap-2 border-t border-slate-200 bg-slate-50 p-4">
           <div class="flex w-full gap-2">
             <details #etapa class="relative">
               <summary
-                class="btn cursor-pointer gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md select-none hover:from-purple-600 hover:to-pink-600 dark:from-purple-600 dark:to-pink-700 dark:hover:from-purple-700 dark:hover:to-pink-800"
+                class="btn cursor-pointer gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md select-none hover:from-purple-600 hover:to-pink-600"
               >
                 <span class="icon-[hugeicons--information-circle] size-4"></span>
                 <span class="hidden sm:inline">Indicaciones</span>
               </summary>
 
-              <!-- Contenido hacia arriba -->
               <div
                 class="card absolute bottom-full left-0 z-20 mb-2 w-64 rounded-sm bg-base-100 p-4 shadow-xl"
               >
-                <h3 class="mb-2 text-lg font-bold">Indicaciones por etapa</h3>
-
-                <!-- Reemplazo de <p> para evitar NG5002 -->
-                <div class="text-sm opacity-80">
-                  Aqui van las indicaciones de la etapa de lo que el asesor debe responder
-                </div>
-
-                <!-- Botón "Entendido" que cierra el dropdown -->
-                <button
-                  class="btn mt-3 w-full btn-sm btn-primary"
-                  (click)="etapa.removeAttribute('open')"
-                >
+                <h3 class="mb-2 text-lg font-bold">Objetivo de la etapa</h3>
+                <div class="text-sm opacity-80">{{ objetivoEtapaActual }}</div>
+                <button class="btn mt-3 w-full btn-sm btn-primary" (click)="cerrarIndicaciones()">
                   Entendido
                 </button>
               </div>
             </details>
 
-            <p
-              id="indicacion"
-              class="flex-1 rounded-sm bg-blue-50 p-2 text-sm text-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
-            >
-              <strong>Etapa actual:</strong> Saludo inicial
+            <p class="flex-1 rounded-sm bg-blue-50 p-2 text-sm text-blue-800">
+              <strong>Etapa actual:</strong> {{ nombreEtapaActual }}
             </p>
           </div>
+
           <div class="flex gap-2">
             <textarea
+              [(ngModel)]="mensajeAsesor"
+              (keydown.enter)="$event.preventDefault(); enviarMensaje()"
+              [disabled]="enviandoMensaje || finalizandoSimulacion"
               placeholder="Escribe tu mensaje al cliente..."
-              class="textarea h-25 flex-1 resize-none border-slate-300 bg-white text-slate-900 placeholder-slate-500 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-purple-400"
+              class="textarea h-25 flex-1 resize-none border-slate-300 bg-white text-slate-900 placeholder-slate-500 shadow-sm focus:border-purple-500 focus:outline-none disabled:opacity-50"
             ></textarea>
             <div class="flex flex-col justify-between">
               <button
-                class="btn gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 dark:from-purple-600 dark:to-pink-700 dark:hover:from-purple-700 dark:hover:to-pink-800"
+                (click)="enviarMensaje()"
+                [disabled]="!mensajeAsesor.trim() || enviandoMensaje || finalizandoSimulacion"
+                class="btn gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
               >
                 <span class="icon-[hugeicons--sent] size-4"></span>
                 <span class="hidden sm:inline">Enviar</span>
-              </button>
-              <div class="divider my-2 h-0"></div>
-              <button
-                class="btn gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 dark:from-purple-600 dark:to-pink-700 dark:hover:from-purple-700 dark:hover:to-pink-800"
-              >
-                <span class="icon-[hugeicons--mic-01] size-4"></span>
-                <span class="hidden sm:inline">Dictar</span>
               </button>
             </div>
           </div>
@@ -709,130 +416,60 @@
 
     <!-- PANEL DE INFORMACIÓN DEL CLIENTE (Desktop) -->
     <div class="hidden lg:order-3 lg:col-span-3 lg:block">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
+      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl">
         <div
-          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
+          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500"
         >
           <div class="flex items-center gap-2">
-            <span
-              class="icon-[hugeicons--user-circle] size-5 text-teal-200 dark:text-teal-300"
-            ></span>
+            <span class="icon-[hugeicons--user-circle] size-5 text-teal-200"></span>
             <h2 class="card-title text-base font-bold text-white">Información del Cliente</h2>
           </div>
         </div>
 
         <div
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
         >
-          <!-- Foto y nombre -->
+          @if (infoCliente) {
           <div
-            class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800"
+            class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm"
           >
             <div class="avatar mb-3">
-              <div
-                class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2 ring-offset-white dark:ring-emerald-600 dark:ring-offset-slate-900"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop"
-                  alt="Cliente"
-                />
+              <div class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2">
+                <img [src]="avatarCliente" [alt]="nombreCliente" />
               </div>
             </div>
-            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">María García López</h3>
-            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">28 años</p>
+            <h3 class="text-lg font-bold text-slate-800">{{ infoCliente.nombre }}</h3>
+            <p class="text-sm font-medium text-slate-600">
+              {{ infoCliente.edad }} - {{ infoCliente.profesion }}
+            </p>
           </div>
 
-          <!-- Datos de contacto -->
-          <div
-            class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
-          >
-            <h3
-              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
-            >
-              <span
-                class="icon-[hugeicons--call] size-4 text-emerald-600 dark:text-emerald-400"
-              ></span>
-              Contacto
+          <div class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
+              <span class="icon-[hugeicons--user] size-4 text-emerald-600"></span>
+              Perfil
             </h3>
 
-            <div
-              class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-            >
-              <span
-                class="mt-0.5 icon-[hugeicons--call] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-              ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Teléfono</p>
-                <p class="text-slate-800dark:text-slate-200 text-sm font-medium">+34 612 345 678</p>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-slate-600">Situación:</span>
+                <span class="text-slate-800">{{ infoCliente.situacion_actual }}</span>
               </div>
-            </div>
-
-            <div
-              class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-            >
-              <span
-                class="mt-0.5 icon-[hugeicons--mail-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-              ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Email</p>
-                <p class="text-sm font-medium break-all text-slate-800 dark:text-slate-200">
-                  maria.garcia@email.com
-                </p>
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-slate-600">Objetivo:</span>
+                <span class="text-slate-800">{{ infoCliente.objetivo }}</span>
               </div>
-            </div>
-
-            <div
-              class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-            >
-              <span
-                class="mt-0.5 icon-[hugeicons--location-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-              ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Dirección</p>
-                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">Madrid, España</p>
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-slate-600">Riesgo:</span>
+                <span class="text-slate-800">{{ infoCliente.perfil_riesgo }}</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-slate-600">Conocimiento:</span>
+                <span class="text-slate-800">{{ infoCliente.nivel_conocimiento }}</span>
               </div>
             </div>
           </div>
-
-          <!-- Información financiera -->
-          <div
-            class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
-          >
-            <h3
-              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
-            >
-              <span
-                class="icon-[hugeicons--credit-card] size-4 text-emerald-600 dark:text-emerald-400"
-              ></span>
-              Información Financiera
-            </h3>
-
-            <div
-              class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-            >
-              <span
-                class="mt-0.5 icon-[hugeicons--credit-card] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-              ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Saldo Total</p>
-                <p class="text-lg font-bold text-emerald-600 dark:text-emerald-400">15.240 €</p>
-              </div>
-            </div>
-
-            <div
-              class="flex items-start gap-3 rounded-lg border border-transparent p-2 transition-all hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
-            >
-              <span
-                class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
-              ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  Cliente desde
-                </p>
-                <p class="text-sm font-medium text-slate-800 dark:text-slate-200">2018</p>
-              </div>
-            </div>
-          </div>
+          }
         </div>
       </div>
     </div>
