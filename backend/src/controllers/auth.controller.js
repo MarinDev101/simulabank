@@ -415,9 +415,59 @@ class AuthController {
     }
   }
 
+  async changePassword(req, res) {
+    const userId = req.user && req.user.id;
+    const { current_password, new_password } = req.body;
+
+    if (!userId) return res.status(401).json({ success: false, error: 'No autenticado' });
+    if (!current_password || !new_password) {
+      return res
+        .status(400)
+        .json({ success: false, error: 'Contraseña actual y nueva son requeridas' });
+    }
+
+    try {
+      const query = 'SELECT contrasena FROM ?? WHERE ?? = ? LIMIT 1';
+      const [rows] = await pool.query(query, [TABLAS.USUARIOS, CAMPOS_ID.USUARIO, userId]);
+      if (!rows.length)
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
+
+      const hashed = rows[0].contrasena;
+      const match = await bcrypt.compare(current_password, hashed);
+      if (!match)
+        return res.status(401).json({ success: false, error: 'Contraseña actual incorrecta' });
+
+      if (new_password.length < 8) {
+        return res
+          .status(400)
+          .json({ success: false, error: 'La nueva contraseña debe tener al menos 8 caracteres' });
+      }
+
+      const newHashed = await bcrypt.hash(new_password, 10);
+      await pool.query('UPDATE ?? SET contrasena = ?, fecha_actualizacion = NOW() WHERE ?? = ?', [
+        TABLAS.USUARIOS,
+        newHashed,
+        CAMPOS_ID.USUARIO,
+        userId,
+      ]);
+
+      // Opcional: revocar sesiones activas
+      try {
+        await tokenService.revokeAll(userId);
+      } catch (e) {
+        console.warn('No se pudieron revocar sesiones al cambiar contraseña', e);
+      }
+
+      return res.json({ success: true, message: 'Contraseña cambiada exitosamente' });
+    } catch (error) {
+      console.error('Error en changePassword:', error);
+      return res.status(500).json({ success: false, error: 'Error al cambiar la contraseña' });
+    }
+  }
+
   async actualizarPerfilInicial(req, res) {
     const userId = req.body.userId;
-    const { foto_perfil, fecha_nacimiento, genero } = req.body;
+    const { foto_perfil, fecha_nacimiento, genero, nombres, apellidos, eliminar_foto } = req.body;
 
     // Si se envió un archivo usando multipart/form-data (campo 'foto'), convertirlo a base64
     // y establecer el valor para guardar en la DB.
@@ -447,9 +497,16 @@ class AuthController {
       const datosActualizar = {};
       // Usar el valor actualizado en req.body (puede haber sido establecido desde req.file)
       const fotoValor = req.body.foto_perfil || foto_perfil;
-      if (fotoValor) datosActualizar.foto_perfil = fotoValor;
+      if (typeof eliminar_foto !== 'undefined' && eliminar_foto) {
+        // Marcar para eliminar la foto (se setea NULL en DB)
+        datosActualizar.foto_perfil = null;
+      } else if (fotoValor) {
+        datosActualizar.foto_perfil = fotoValor;
+      }
       if (fecha_nacimiento) datosActualizar.fecha_nacimiento = fecha_nacimiento;
       if (genero) datosActualizar.genero = genero;
+      if (nombres) datosActualizar.nombres = nombres;
+      if (apellidos) datosActualizar.apellidos = apellidos;
 
       // Si no hay datos para actualizar, retornar éxito
       if (Object.keys(datosActualizar).length === 0) {

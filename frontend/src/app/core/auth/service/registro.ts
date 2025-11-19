@@ -39,6 +39,9 @@ export interface ActualizarPerfilRequest {
   foto_perfil?: string;
   fecha_nacimiento?: string;
   genero?: string;
+  nombres?: string;
+  apellidos?: string;
+  eliminar_foto?: boolean;
 }
 
 export interface ActualizarPerfilResponse {

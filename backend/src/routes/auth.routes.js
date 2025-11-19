@@ -98,6 +98,11 @@ function crearAuthRouter() {
     asyncHandler(authController.actualizarPerfilInicial.bind(authController))
   );
   router.post(
+    '/change-password',
+    authenticateJWT,
+    asyncHandler(authController.changePassword.bind(authController))
+  );
+  router.post(
     '/logoutAll',
     authenticateJWT,
     asyncHandler(authController.logoutAll.bind(authController))

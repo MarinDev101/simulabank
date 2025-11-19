@@ -9,12 +9,19 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB por archivo por defecto
   fileFilter: (req, file, cb) => {
-    const allowedExt = ['.png', '.jpg', '.jpeg', '.webp'];
-    const ext = path.extname(file.originalname).toLowerCase();
-    if (!allowedExt.includes(ext)) {
-      return cb(new Error('Tipo de archivo no permitido'));
+    // Aceptar por tipo MIME cuando sea una imagen (más fiable si el cliente no envía extensión)
+    if (file && file.mimetype && file.mimetype.startsWith('image/')) {
+      return cb(null, true);
     }
-    cb(null, true);
+
+    // Backup: aceptar algunas extensiones comunes si por alguna razón no hay mimetype
+    const allowedExt = ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.heic', '.jfif'];
+    const ext = path.extname(file.originalname || '').toLowerCase();
+    if (ext && allowedExt.includes(ext)) {
+      return cb(null, true);
+    }
+
+    return cb(new Error('Tipo de archivo no permitido'));
   },
 });
 
