@@ -142,18 +142,117 @@ export class Configuracion implements OnInit {
       this.fotoPreview = e.target.result;
       this.fotoChanged = true;
       this.eliminarPending = false; // if new photo selected, cancel delete
+      // Subir la foto inmediatamente al seleccionarla
+      try {
+        this.subirFotoInmediata();
+      } catch (err) {
+        console.error('Error al iniciar subida inmediata', err);
+      }
     };
     reader.readAsDataURL(file);
   }
-
   eliminarFoto() {
     if (!this.usuario) return;
-    if (!confirm('¿Deseas eliminar la foto? (El cambio se aplicará al confirmar Actualizar)'))
-      return;
-    this.fotoFile = null;
-    this.fotoPreview = null;
-    this.eliminarPending = true;
-    this.fotoChanged = false;
+    if (!confirm('¿Deseas eliminar la foto? Se eliminará inmediatamente.')) return;
+    // Llamada inmediata para eliminar la foto
+    if (!this.usuario) return;
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    const form = new FormData();
+    form.append('userId', String(this.usuario.id));
+    form.append('eliminar_foto', 'true');
+
+    this.registroService.actualizarPerfilInicial(form as any).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        this.fotoFile = null;
+        this.fotoPreview = null;
+        this.fotoChanged = false;
+        this.eliminarPending = false;
+
+        const base = this.usuario || this.authService.obtenerUsuario() || ({} as Usuario);
+        let fotoFinal: string | null | undefined = null;
+        if (res && res.datos && Object.prototype.hasOwnProperty.call(res.datos, 'foto_perfil')) {
+          fotoFinal = res.datos.foto_perfil; // may be null when deleted
+        }
+
+        const nuevo = {
+          ...base,
+          foto_perfil: fotoFinal,
+        } as Usuario;
+        try {
+          localStorage.setItem('user_data', JSON.stringify(nuevo));
+        } catch (e) {
+          console.warn('No se pudo guardar user_data en localStorage', e);
+        }
+        this.usuario = nuevo;
+        this.successMessage = 'Foto eliminada correctamente.';
+        setTimeout(() => {
+          try {
+            window.location.reload();
+          } catch (e) {
+            location.reload();
+          }
+        }, 600);
+      },
+      error: (err) => {
+        console.error('Error eliminando foto', err);
+        this.isLoading = false;
+        this.errorMessage = 'No se pudo eliminar la foto. Intenta de nuevo.';
+      },
+    });
+  }
+
+  subirFotoInmediata() {
+    if (!this.usuario || !this.fotoFile) return;
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    const form = new FormData();
+    form.append('userId', String(this.usuario.id));
+    form.append('foto', this.fotoFile, this.fotoFile.name);
+
+    this.registroService.actualizarPerfilInicial(form as any).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        this.fotoChanged = false;
+        this.eliminarPending = false;
+
+        const base = this.usuario || this.authService.obtenerUsuario() || ({} as Usuario);
+        let fotoFinal: string | null | undefined = base.foto_perfil;
+        if (res && res.datos && Object.prototype.hasOwnProperty.call(res.datos, 'foto_perfil')) {
+          fotoFinal = res.datos.foto_perfil;
+        } else if (this.fotoPreview) {
+          fotoFinal = this.fotoPreview;
+        }
+
+        const nuevo = {
+          ...base,
+          foto_perfil: fotoFinal,
+        } as Usuario;
+        try {
+          localStorage.setItem('user_data', JSON.stringify(nuevo));
+        } catch (e) {
+          console.warn('No se pudo guardar user_data en localStorage', e);
+        }
+        this.usuario = nuevo;
+        this.successMessage = 'Foto actualizada correctamente.';
+        setTimeout(() => {
+          try {
+            window.location.reload();
+          } catch (e) {
+            location.reload();
+          }
+        }, 700);
+      },
+      error: (err) => {
+        console.error('Error subiendo foto', err);
+        this.isLoading = false;
+        this.errorMessage = 'No se pudo subir la foto. Intenta de nuevo.';
+      },
+    });
   }
 
   // Nombre/apellido validations (template-driven compatible with mensajes similares a datos-basicos)
