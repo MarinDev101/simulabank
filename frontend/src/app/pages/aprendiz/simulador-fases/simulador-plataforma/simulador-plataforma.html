@@ -305,7 +305,7 @@
         >
           <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
             <span
-              class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm dark:bg-slate-800 dark:text-slate-200"
+              class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm"
             >
               {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
             </span>
@@ -520,7 +520,7 @@
         <div
           #chatContainer
           (scroll)="onChatScroll()"
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto scroll-smooth bg-gradient-to-b from-slate-50 to-white p-4 dark:from-[#0b1220] dark:to-[#071025]"
+          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto scroll-smooth bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
         >
           <!-- Mostrar marcador de la etapa actual aunque no haya mensajes aún -->
           @if (indicesEtapas.length === 0 && etapaActual) {
@@ -882,18 +882,18 @@
 <!-- MODAL DE POLÍTICAS DEL BANCO -->
 <dialog #modalPoliticas class="modal">
   <div
-    class="modal-box max-w-2xl border border-slate-300 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
+    class="modal-box max-w-2xl border bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
   >
     <form method="dialog">
       <button
-        class="btn absolute top-3 right-3 btn-circle text-slate-600 btn-ghost btn-sm hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+        class="btn absolute top-3 right-3 btn-circle text-slate-600 btn-sm hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
       >
         ✕
       </button>
     </form>
 
     <div
-      class="-mx-6 -mt-6 mb-6 rounded-t-2xl border-b border-slate-200 bg-gradient-to-r from-indigo-500 to-purple-600 p-6 dark:border-slate-700 dark:from-indigo-600 dark:to-purple-700"
+      class="-mx-6 -mt-6 mb-6 border-b border-slate-200 bg-gradient-to-r from-indigo-500 to-purple-600 p-6 dark:border-slate-700 dark:from-indigo-600 dark:to-purple-700"
     >
       <h3 class="flex items-center gap-3 text-xl font-bold text-white">
         <span class="icon-[hugeicons--file-02] size-6 text-purple-200 dark:text-purple-300"></span>
@@ -905,77 +905,7 @@
     </div>
 
     <div class="max-h-96 space-y-4 overflow-y-auto pr-2">
-      <div
-        class="policy-card group rounded-xl border-l-4 border-blue-500 bg-blue-50 py-4 pr-4 pl-4 shadow-md dark:border-blue-600 dark:bg-blue-950/40"
-      >
-        <h4
-          class="mb-2 flex items-center gap-2 text-base font-bold text-blue-900 dark:text-blue-200"
-        >
-          <span
-            class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white shadow-sm dark:bg-blue-600"
-            >1</span
-          >
-          Política de Atención al Cliente
-        </h4>
-        <p class="text-sm leading-relaxed text-blue-800 dark:text-blue-300">
-          Todos los clientes deben ser tratados con respeto y profesionalismo. Se debe mantener un
-          tono cordial en todo momento y garantizar la resolución efectiva de sus consultas.
-        </p>
-      </div>
-
-      <div
-        class="policy-card group rounded-xl border-l-4 border-purple-500 bg-purple-50 py-4 pr-4 pl-4 shadow-md dark:border-purple-600 dark:bg-purple-950/40"
-      >
-        <h4
-          class="mb-2 flex items-center gap-2 text-base font-bold text-purple-900 dark:text-purple-200"
-        >
-          <span
-            class="flex h-7 w-7 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white shadow-sm dark:bg-purple-600"
-            >2</span
-          >
-          Política de Privacidad
-        </h4>
-        <p class="text-sm leading-relaxed text-purple-800 dark:text-purple-300">
-          La información personal de los clientes es confidencial y debe ser manejada con el máximo
-          cuidado. Nunca se debe compartir información sensible sin autorización expresa.
-        </p>
-      </div>
-
-      <div
-        class="policy-card group rounded-xl border-l-4 border-emerald-500 bg-emerald-50 py-4 pr-4 pl-4 shadow-md dark:border-emerald-600 dark:bg-emerald-950/40"
-      >
-        <h4
-          class="mb-2 flex items-center gap-2 text-base font-bold text-emerald-900 dark:text-emerald-200"
-        >
-          <span
-            class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white shadow-sm dark:bg-emerald-600"
-            >3</span
-          >
-          Política de Seguridad
-        </h4>
-        <p class="text-sm leading-relaxed text-emerald-800 dark:text-emerald-300">
-          Se deben seguir todos los protocolos de seguridad establecidos. Verificar la identidad del
-          cliente antes de proporcionar información sobre cuentas o realizar transacciones.
-        </p>
-      </div>
-
-      <div
-        class="policy-card group rounded-xl border-l-4 border-cyan-500 bg-cyan-50 py-4 pr-4 pl-4 shadow-md dark:border-cyan-600 dark:bg-cyan-950/40"
-      >
-        <h4
-          class="mb-2 flex items-center gap-2 text-base font-bold text-cyan-900 dark:text-cyan-200"
-        >
-          <span
-            class="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-500 text-xs font-bold text-white shadow-sm dark:bg-cyan-600"
-            >4</span
-          >
-          Política de Comunicación
-        </h4>
-        <p class="text-sm leading-relaxed text-cyan-800 dark:text-cyan-300">
-          Mantener una comunicación clara y transparente. Explicar los procedimientos y términos en
-          un lenguaje comprensible para el cliente.
-        </p>
-      </div>
+      <app-politicas-plataforma></app-politicas-plataforma>
     </div>
 
     <div class="modal-action mt-6">

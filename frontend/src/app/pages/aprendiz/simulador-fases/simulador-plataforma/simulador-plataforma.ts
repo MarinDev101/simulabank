@@ -21,6 +21,7 @@ import {
   AnalisisDesempeno,
 } from '@app/services/simulacion/simulacion';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
+import { PoliticasPlataforma } from '@app/pages/aprendiz-instructor/politicas-plataforma/politicas-plataforma';
 
 interface MensajeSistema {
   tipo: 'info' | 'warning' | 'success' | 'error';
@@ -31,7 +32,7 @@ interface MensajeSistema {
 @Component({
   selector: 'app-simulador-plataforma',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PoliticasPlataforma],
   templateUrl: './simulador-plataforma.html',
   styleUrls: ['./simulador-plataforma.css'],
 })
@@ -945,16 +946,12 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
 
   get avatarCliente(): string {
     return (
-      this.estadoSimulacion?.escenario_cliente?.imagen ||
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop'
+      this.estadoSimulacion?.escenario_cliente?.imagen || '/images/ilustraciones/perfil_default.png'
     );
   }
 
   get avatarAsesor(): string {
-    return (
-      this.usuarioActual?.foto_perfil ||
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop'
-    );
+    return this.usuarioActual?.foto_perfil || '/images/ilustraciones/perfil_default.png';
   }
 
   get nombreAsesor(): string {

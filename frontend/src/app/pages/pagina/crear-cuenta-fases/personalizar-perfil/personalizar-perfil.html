@@ -1,12 +1,16 @@
-<div class="flex flex-col gap-3 w-full h-full bg-white rounded-xl p-15 shadow-md">
-  <div class="flex gap-2 items-center">
+<div class="flex h-full w-full flex-col gap-3 rounded-xl bg-white p-15 shadow-md">
+  <div class="flex items-center gap-2">
     <span
-      class="flex justify-center items-center font-bold bg-[#333333] text-white rounded-full w-6 h-6 text-sm">3</span>
+      class="flex h-6 w-6 items-center justify-center rounded-full bg-[#333333] text-sm font-bold text-white"
+      >3</span
+    >
     <p class="text-base md:text-inherit dark:text-gray-200">Personalizar Perfil</p>
   </div>
 
-  <p>¡Ya casi terminamos! Completa tu perfil para mejorar tu experiencia. Este paso es opcional y podrás hacerlo más
-    adelante.</p>
+  <p>
+    ¡Ya casi terminamos! Completa tu perfil para mejorar tu experiencia. Este paso es opcional y
+    podrás hacerlo más adelante.
+  </p>
 
   <!-- Mensaje de error -->
   @if (errorMessage) {
@@ -21,19 +25,29 @@
   <form class="flex flex-col gap-4">
     <article>
       <p class="mb-2 font-medium">Personaliza tu foto de perfil:</p>
-      <ul class="flex flex-col gap-2 items-center mt-5">
+      <ul class="mt-5 flex flex-col items-center gap-2">
         <li>
           <div class="avatar ml-[5px]">
             <div
-              class="w-22 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
-              <img [src]="fotoPerfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'" />
+              class="w-22 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
+            >
+              <img [src]="fotoPerfil || '/images/ilustraciones/perfil_default.png'" />
             </div>
           </div>
         </li>
         <li>
-          <input type="file" #fileInput accept="image/*" (change)="onFotoSeleccionada($event)" class="hidden" />
-          <button type="button" (click)="fileInput.click()"
-            class="flex justify-center items-center gap-2 w-[150px] bg-[#01162E] hover:bg-[#012042] text-white p-1 rounded-lg">
+          <input
+            type="file"
+            #fileInput
+            accept="image/*"
+            (change)="onFotoSeleccionada($event)"
+            class="hidden"
+          />
+          <button
+            type="button"
+            (click)="fileInput.click()"
+            class="flex w-[150px] items-center justify-center gap-2 rounded-lg bg-[#01162E] p-1 text-white hover:bg-[#012042]"
+          >
             <p>Añadir Foto</p>
             <span class="icon-[subway--brush]"></span>
           </button>
@@ -44,10 +58,10 @@
     <!-- Fecha de nacimiento -->
     <article class="mt-6">
       <p class="mb-2 font-medium">Selecciona tu fecha de nacimiento:</p>
-      <div class="flex justify-center gap-5 mt-5">
+      <div class="mt-5 flex justify-center gap-5">
         <!-- Día -->
         <div class="flex flex-col">
-          <label for="dia" class="text-gray-600 mb-1">Día:</label>
+          <label for="dia" class="mb-1 text-gray-600">Día:</label>
           <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia" class="select w-24">
             <option value="" disabled selected>--</option>
             <option *ngFor="let dia of dias" [value]="dia">{{ dia }}</option>
@@ -56,7 +70,7 @@
 
         <!-- Mes -->
         <div class="flex flex-col">
-          <label for="mes" class="text-gray-600 mb-1">Mes:</label>
+          <label for="mes" class="mb-1 text-gray-600">Mes:</label>
           <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes" class="select w-36">
             <option value="" disabled selected>--</option>
             <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nombre }}</option>
@@ -65,7 +79,7 @@
 
         <!-- Año -->
         <div class="flex flex-col">
-          <label for="anio" class="text-gray-600 mb-1">Año:</label>
+          <label for="anio" class="mb-1 text-gray-600">Año:</label>
           <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio" class="select w-28">
             <option value="" disabled selected>--</option>
             <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
@@ -77,35 +91,58 @@
     <!-- Género -->
     <article class="mt-6">
       <p class="mb-2 font-medium">Selecciona el género con el que te identificas:</p>
-      <div class="flex justify-center gap-8 mt-5">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="radio" name="radio-3" class="radio radio-neutral" [(ngModel)]="genero" value="femenino" />
+      <div class="mt-5 flex justify-center gap-8">
+        <label class="flex cursor-pointer items-center gap-2">
+          <input
+            type="radio"
+            name="radio-3"
+            class="radio radio-neutral"
+            [(ngModel)]="genero"
+            value="femenino"
+          />
           <span>Femenino</span>
         </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="radio" name="radio-3" class="radio radio-neutral" [(ngModel)]="genero" value="masculino" />
+        <label class="flex cursor-pointer items-center gap-2">
+          <input
+            type="radio"
+            name="radio-3"
+            class="radio radio-neutral"
+            [(ngModel)]="genero"
+            value="masculino"
+          />
           <span>Masculino</span>
         </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="radio" name="radio-3" class="radio radio-neutral" [(ngModel)]="genero" value="otro" />
+        <label class="flex cursor-pointer items-center gap-2">
+          <input
+            type="radio"
+            name="radio-3"
+            class="radio radio-neutral"
+            [(ngModel)]="genero"
+            value="otro"
+          />
           <span>Otro</span>
         </label>
       </div>
     </article>
   </form>
 
-  <div class="flex justify-around mt-15">
-    <button type="button" (click)="guardarPerfil()"
-      class="cursor-pointer w-[200px] bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg" [disabled]="isLoading">
+  <div class="mt-15 flex justify-around">
+    <button
+      type="button"
+      (click)="guardarPerfil()"
+      class="w-[200px] cursor-pointer rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+      [disabled]="isLoading"
+    >
       @if (isLoading) {
       <span class="loading loading-sm loading-spinner"></span>
-      Guardando...
-      } @else {
-      Guardar y Finalizar
-      }
+      Guardando... } @else { Guardar y Finalizar }
     </button>
-    <button type="button" (click)="omitirPaso()"
-      class="cursor-pointer w-[200px] border border-black hover:bg-gray-100 p-2 rounded-lg" [disabled]="isLoading">
+    <button
+      type="button"
+      (click)="omitirPaso()"
+      class="w-[200px] cursor-pointer rounded-lg border border-black p-2 hover:bg-gray-100"
+      [disabled]="isLoading"
+    >
       Omitir por ahora
     </button>
   </div>
