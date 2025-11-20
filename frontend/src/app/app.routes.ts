@@ -86,7 +86,8 @@ export const routes: Routes = [
         path: 'simulador',
         loadComponent: () =>
           import('./pages/aprendiz/simulador/simulador').then((m) => m.Simulador),
-        title: 'Simulador',
+        title: 'Simulador', // opcional (fallback)
+        data: { headerText: 'Simulador de Asesoría Bancaria' }, // preferido ahora
       },
       {
         path: 'informacion-plataforma',

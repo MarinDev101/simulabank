@@ -594,6 +594,19 @@ exports.enviarMensaje = async (req, res) => {
 
     const totalEtapas = await obtenerTotalEtapas(producto.id_producto_bancario);
 
+    // Guardar: si no existe la etapa actual, evitar crash y devolver mensaje claro
+    if (!etapaActual) {
+      console.error(
+        `❌ Etapa actual no encontrada. id_producto_bancario=${simulacion.id_producto_bancario}, indice=${simulacion.etapa_actual_index}`
+      );
+      return res.status(500).json({
+        ok: false,
+        error: 'Etapa no encontrada',
+        mensaje:
+          'No se encontró la etapa actual de la simulación en el servidor. Verifica la configuración del producto y las etapas asociadas.',
+      });
+    }
+
     // ===============================================
     // 4️⃣ Obtener historial actual
     // ===============================================

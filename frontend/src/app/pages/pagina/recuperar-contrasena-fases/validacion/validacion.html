@@ -1,12 +1,15 @@
-<div class="flex flex-col gap-3 w-full h-full bg-white rounded-xl p-15 shadow-md">
-  <div class="flex gap-2 items-center">
-    <span class="flex justify-center items-center font-bold bg-[#333333] text-white rounded-full w-6 h-6 text-sm">
+<div class="flex h-full w-full flex-col gap-3 rounded-xl bg-white p-15 shadow-md">
+  <div class="flex items-center gap-2">
+    <span
+      class="flex h-6 w-6 items-center justify-center rounded-full bg-[#333333] text-sm font-bold text-white"
+    >
       2
     </span>
     <p class="text-base md:text-inherit dark:text-gray-200">Validar Cuenta</p>
   </div>
 
-  <p>¡Hemos enviado un correo electrónico con un código de verificación de 6 dígitos a tu dirección
+  <p>
+    ¡Hemos enviado un correo electrónico con un código de verificación de 6 dígitos a tu dirección
     <strong>{{ correoUsuario }}</strong>!
   </p>
   <p class="text-sm text-gray-600">*El código caduca en 5 minutos*</p>
@@ -25,43 +28,52 @@
   @if (resendMessage) {
   <div class="rounded-lg border border-green-200 bg-green-50 p-4">
     <div class="flex items-start">
-      <span class="mt-0.5 mr-3 icon-[hugeicons--check-circle] text-xl text-green-600"></span>
+      <span class="mt-0.5 mr-3 icon-[hugeicons--checkmark-circle-02] text-xl text-green-600"></span>
       <p class="text-sm text-green-800">{{ resendMessage }}</p>
     </div>
   </div>
   }
 
   <form [formGroup]="pinForm" class="flex justify-center">
-    <div #inputsContainer class="flex gap-3 justify-center mt-3" (paste)="onPaste($event)">
-      <input *ngFor="let ctrl of pinControls; let i = index" maxlength="1" type="text"
-        formControlName="{{ 'digit' + i }}" (input)="onInput($event, i)" (keydown)="onKeyDown($event, i)"
-        class="w-12 h-12 border border-gray-400 text-center text-xl rounded-md focus:border-[#01162E] focus:ring-2 focus:ring-[#01162E] outline-none" />
+    <div #inputsContainer class="mt-3 flex justify-center gap-3" (paste)="onPaste($event)">
+      <input
+        *ngFor="let ctrl of pinControls; let i = index"
+        maxlength="1"
+        type="text"
+        formControlName="{{ 'digit' + i }}"
+        (input)="onInput($event, i)"
+        (keydown)="onKeyDown($event, i)"
+        class="h-12 w-12 rounded-md border border-gray-400 text-center text-xl outline-none focus:border-[#01162E] focus:ring-2 focus:ring-[#01162E]"
+      />
     </div>
   </form>
 
-  <button (click)="verificarCodigo()" class="cursor-pointer mt-5 bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg"
-    [disabled]="isLoading">
+  <button
+    (click)="verificarCodigo()"
+    class="mt-5 cursor-pointer rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+    [disabled]="isLoading"
+  >
     @if (isLoading) {
     <span class="loading loading-sm loading-spinner"></span>
-    Verificando...
-    } @else {
-    Verificar
-    }
+    Verificando... } @else { Verificar }
   </button>
 
   <div class="flex justify-around">
-    <button class="cursor-pointer mt-5 w-[150px] bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg" (click)="emitirVolver()"
-      [disabled]="isLoading">
+    <button
+      class="mt-5 w-[150px] cursor-pointer rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+      (click)="emitirVolver()"
+      [disabled]="isLoading"
+    >
       Volver
     </button>
-    <button class="cursor-pointer mt-5 w-[150px] border border-black hover:bg-gray-100 p-2 rounded-lg" (click)="reenviarCodigo()"
-      [disabled]="isResending || isLoading">
+    <button
+      class="mt-5 w-[150px] cursor-pointer rounded-lg border border-black p-2 hover:bg-gray-100"
+      (click)="reenviarCodigo()"
+      [disabled]="isResending || isLoading"
+    >
       @if (isResending) {
       <span class="loading loading-sm loading-spinner"></span>
-      Reenviando...
-      } @else {
-      Reenviar código
-      }
+      Reenviando... } @else { Reenviar código }
     </button>
   </div>
 </div>

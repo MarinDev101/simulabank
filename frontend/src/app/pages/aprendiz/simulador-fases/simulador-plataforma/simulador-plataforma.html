@@ -1,131 +1,249 @@
-<!-- DRAWER DE RECOMENDACIONES -->
+<!-- DRAWER DE RECOMENDACIONES (Solo en modo aprendizaje) - DISEÑO MEJORADO -->
+@if (esModoAprendizaje) {
 <div class="drawer z-40 drawer-end">
   <input id="drawer-recommendations" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content"></div>
-  <div class="drawer-side">
-    <label for="drawer-recommendations" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
+  <div class="drawer-side z-40">
+    <label
+      for="drawer-recommendations"
+      aria-label="close sidebar"
+      class="drawer-overlay bg-black/60 backdrop-blur-sm"
+    ></label>
+    <div class="menu min-h-full w-full bg-white p-0 lg:w-80 dark:bg-slate-900">
+      <!-- Header idéntico a desktop -->
       <div
-        class="border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 p-4 dark:border-slate-700"
+        class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
       >
-        <div class="mb-2 flex items-center justify-between">
+        <div class="flex w-full items-center justify-between px-4">
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--bulb] size-5 text-amber-200"></span>
-            <h2 class="text-base font-bold text-white">Recomendaciones IA</h2>
+            <span class="icon-[hugeicons--bulb] size-5 text-amber-200 dark:text-amber-300"></span>
+            <h2 class="text-base font-bold text-white">Aprendizaje</h2>
           </div>
-          <label for="drawer-recommendations" class="btn btn-circle text-white btn-ghost btn-sm"
-            >✕</label
+          <label
+            for="drawer-recommendations"
+            class="btn btn-circle text-white btn-ghost btn-sm hover:bg-white/20 dark:hover:bg-white/20"
           >
+            ✕
+          </label>
         </div>
-        <div class="divider m-0 divider-primary">
-          <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white shadow-md">
+      </div>
+      <!-- Barra de acciones -->
+      <div
+        class="border-b border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <button
+            (click)="recomendacionActual && reproducirAudioManual(recomendacionActual.recomendacionParaAsesor)"
+            [disabled]="!recomendacionActual"
+            class="btn min-w-0 flex-1 gap-2 border-0 bg-indigo-500 text-white shadow-md btn-sm hover:bg-indigo-600 disabled:opacity-50 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+            title="Reproducir consejos"
+          >
+            <span class="icon-[hugeicons--volume-high] size-4"></span>
+            <span class="truncate">Reproducir</span>
+          </button>
+
+          <button
+            (click)="abrirModalPoliticas()"
+            class="btn min-w-0 flex-1 gap-2 border-0 bg-amber-500 text-white shadow-md btn-sm hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700"
+            title="Ver políticas del banco"
+          >
+            <span class="icon-[hugeicons--file-02] size-4"></span>
+            <span class="truncate">Ver políticas</span>
+          </button>
+        </div>
+      </div>
+      <!-- Divider con etapa actual -->
+      <div
+        class="border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
+      >
+        <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
+          <span
+            class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm dark:bg-slate-800 dark:text-slate-200"
+          >
             {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
           </span>
         </div>
       </div>
 
+      <!-- Contenido de recomendaciones -->
       <div
-        class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
+        class="max-h-[calc(100vh-220px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
       >
         @if (recomendacionActual) {
         <div>
-          <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
-            <span class="icon-[hugeicons--idea] size-4 text-blue-600"></span>
-            Recomendación para esta etapa
+          <h3
+            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+          >
+            <span class="icon-[hugeicons--idea] size-4 text-blue-600 dark:text-blue-400"></span>
+            Recomendaciones IA
           </h3>
-          <p class="text-sm leading-relaxed text-slate-700">
-            {{ recomendacionActual.recomendacionParaAsesor }}
-          </p>
+          <div
+            class="rounded-lg border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-800 dark:bg-blue-900/30"
+          >
+            <p class="text-sm leading-relaxed text-blue-900 dark:text-blue-100">
+              {{ recomendacionActual.recomendacionParaAsesor }}
+            </p>
+          </div>
         </div>
         } @else {
-        <p class="text-center text-sm text-slate-500">No hay recomendaciones disponibles aún.</p>
+        <div class="flex flex-col items-center justify-center py-12 text-center">
+          <span
+            class="mb-4 icon-[hugeicons--loading-03] size-16 animate-spin text-slate-300 dark:text-slate-600"
+          ></span>
+          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+            Esperando interacción...
+          </p>
+        </div>
         }
       </div>
     </div>
   </div>
 </div>
+}
 
-<!-- DRAWER DE INFORMACIÓN DEL CLIENTE -->
+<!-- DRAWER DE INFORMACIÓN DEL CLIENTE - DISEÑO MEJORADO -->
 <div class="drawer z-40 drawer-end">
   <input id="drawer-client-info" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content"></div>
-  <div class="drawer-side">
-    <label for="drawer-client-info" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
-      <div class="border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 p-4">
-        <div class="flex items-center justify-between">
+  <div class="drawer-side z-40">
+    <label
+      for="drawer-client-info"
+      aria-label="close sidebar"
+      class="drawer-overlay bg-black/60 backdrop-blur-sm"
+    ></label>
+    <div class="menu min-h-full w-full bg-white p-0 lg:w-80 dark:bg-slate-900">
+      <!-- Header idéntico a desktop -->
+      <div
+        class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
+      >
+        <div class="flex w-full items-center justify-between px-4">
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--user-circle] size-5 text-teal-200"></span>
+            <span
+              class="icon-[hugeicons--user-circle] size-5 text-teal-200 dark:text-teal-300"
+            ></span>
             <h2 class="text-base font-bold text-white">Información del Cliente</h2>
           </div>
-          <label for="drawer-client-info" class="btn btn-circle text-white btn-ghost btn-sm"
-            >✕</label
+          <label
+            for="drawer-client-info"
+            class="btn btn-circle text-white btn-ghost btn-sm hover:bg-white/20 dark:hover:bg-white/20"
           >
+            ✕
+          </label>
         </div>
       </div>
 
+      <!-- Contenido del cliente -->
       <div
-        class="max-h-[calc(100vh-120px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
+        class="max-h-[calc(100vh-60px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
       >
         @if (infoCliente) {
+        <!-- Avatar y datos básicos -->
         <div
-          class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm"
+          class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800"
         >
           <div class="avatar mb-3">
-            <div class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2">
+            <div
+              class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2 ring-offset-white dark:ring-emerald-600 dark:ring-offset-slate-900"
+            >
               <img [src]="avatarCliente" [alt]="nombreCliente" />
             </div>
           </div>
-          <h3 class="text-lg font-bold text-slate-800">{{ infoCliente.nombre }}</h3>
-          <p class="text-sm font-medium text-slate-600">{{ infoCliente.edad }}</p>
+          <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">
+            {{ infoCliente.nombre }}
+          </h3>
+          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+            {{ infoCliente.edad }}
+          </p>
           <span
-            class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md"
+            class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md dark:from-amber-600 dark:to-orange-600"
           >
             {{ infoCliente.profesion }}
           </span>
         </div>
 
-        <div class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
-            <span class="icon-[hugeicons--user] size-4 text-emerald-600"></span>
+        <!-- Perfil del cliente -->
+        <div
+          class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+        >
+          <h3
+            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+          >
+            <span
+              class="icon-[hugeicons--user] size-4 text-emerald-600 dark:text-emerald-400"
+            ></span>
             Perfil del Cliente
           </h3>
 
-          <div class="flex items-start gap-3 rounded-lg p-2">
+          <div class="space-y-2 text-sm">
+            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <span
+                class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+              ></span>
+              <div>
+                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Situación</p>
+                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.situacion_actual }}</p>
+              </div>
+            </div>
+
+            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <span
+                class="mt-0.5 icon-[hugeicons--target-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+              ></span>
+              <div>
+                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Motivación</p>
+                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
+              </div>
+            </div>
+
+            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <span
+                class="mt-0.5 icon-[hugeicons--flag-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+              ></span>
+              <div>
+                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Objetivo</p>
+                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
+              </div>
+            </div>
+
+            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <span
+                class="mt-0.5 icon-[hugeicons--chart-increase] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+              ></span>
+              <div>
+                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Riesgo</p>
+                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
+              </div>
+            </div>
+
+            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <span
+                class="mt-0.5 icon-[hugeicons--book-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+              ></span>
+              <div>
+                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Conocimiento</p>
+                <p class="text-slate-800 dark:text-slate-200">
+                  {{ infoCliente.nivel_conocimiento }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escenario -->
+        <div
+          class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+        >
+          <h3
+            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+          >
             <span
-              class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600"
+              class="icon-[hugeicons--information-circle] size-4 text-emerald-600 dark:text-emerald-400"
             ></span>
-            <div>
-              <p class="text-xs font-semibold text-slate-600">Situación Actual</p>
-              <p class="text-sm font-medium text-slate-800">{{ infoCliente.situacion_actual }}</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3 rounded-lg p-2">
-            <span class="mt-0.5 icon-[hugeicons--target-01] size-4 shrink-0 text-slate-600"></span>
-            <div>
-              <p class="text-xs font-semibold text-slate-600">Objetivo</p>
-              <p class="text-sm font-medium text-slate-800">{{ infoCliente.objetivo }}</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3 rounded-lg p-2">
-            <span
-              class="mt-0.5 icon-[hugeicons--chart-increase] size-4 shrink-0 text-slate-600"
-            ></span>
-            <div>
-              <p class="text-xs font-semibold text-slate-600">Perfil de Riesgo</p>
-              <p class="text-sm font-medium text-slate-800">{{ infoCliente.perfil_riesgo }}</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3 rounded-lg p-2">
-            <span class="mt-0.5 icon-[hugeicons--book-02] size-4 shrink-0 text-slate-600"></span>
-            <div>
-              <p class="text-xs font-semibold text-slate-600">Nivel de Conocimiento</p>
-              <p class="text-sm font-medium text-slate-800">{{ infoCliente.nivel_conocimiento }}</p>
-            </div>
-          </div>
+            Escenario
+          </h3>
+          <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            {{ infoCliente.escenario_narrativo }}
+          </p>
         </div>
         }
       </div>
@@ -133,143 +251,267 @@
   </div>
 </div>
 
-<!-- HEADER -->
-<header
-  class="border-b border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-900"
->
-  <div class="container mx-auto px-4 py-4">
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <div class="flex items-center gap-3">
-        <div
-          class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg"
-        >
-          <span class="icon-[hugeicons--bank] size-5 text-white"></span>
-        </div>
-        <div>
-          <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">
-            Simulador de Asesoría Bancaria
-          </h1>
-          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
-            {{ infoProducto?.nombre }}
-          </p>
-        </div>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-3">
-        <span
-          class="cursor-default rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow-md"
-        >
-          <span class="mr-1 icon-[hugeicons--book-02] inline-block size-3"></span>
-          {{ modoSimulacion }}
-        </span>
-
-        <div
-          class="flex items-center gap-2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 shadow-sm"
-        >
-          <span class="icon-[hugeicons--clock-01] size-4 text-slate-600"></span>
-          <span class="text-sm font-bold text-slate-800">{{ tiempoTranscurrido }}</span>
-        </div>
-
-        <button
-          (click)="finalizarSimulacion()"
-          [disabled]="finalizandoSimulacion"
-          class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-md btn-sm hover:shadow-lg disabled:opacity-50"
-        >
-          <span class="icon-[hugeicons--stop] size-4"></span>
-          <span class="hidden sm:inline"
-            >{{ finalizandoSimulacion ? 'Finalizando...' : 'Finalizar' }}</span
-          >
-        </button>
-      </div>
-    </div>
-
-    <div class="mt-3 flex gap-2 lg:hidden">
-      <label
-        for="drawer-recommendations"
-        class="btn flex-1 gap-2 rounded-lg border-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md btn-sm"
-      >
-        <span class="icon-[hugeicons--bulb] size-4"></span>
-        Recomendaciones
-      </label>
-      <label
-        for="drawer-client-info"
-        class="btn flex-1 gap-2 rounded-lg border-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md btn-sm"
-      >
-        <span class="icon-[hugeicons--user-circle] size-4"></span>
-        Cliente
-      </label>
-    </div>
-  </div>
-</header>
-
 <!-- CONTENIDO PRINCIPAL -->
-<main class="container mx-auto max-w-7xl p-4">
+<main class="container mx-auto max-w-7xl p-4 dark:bg-slate-900 dark:text-slate-100">
   @if (error) {
-  <div class="mb-4 alert alert-error">
+  <div class="fade-in mb-4 alert alert-error shadow-lg dark:bg-red-900 dark:text-red-200">
+    <span class="icon-[hugeicons--alert-circle] size-5"></span>
     <span>{{ error }}</span>
   </div>
   }
 
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
-    <!-- PANEL DE RECOMENDACIONES (Desktop) -->
+    <!-- PANEL DE RECOMENDACIONES (Desktop - Solo en modo aprendizaje) -->
+    @if (esModoAprendizaje) {
     <div class="hidden lg:order-1 lg:col-span-3 lg:block">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl">
+      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
         <div
-          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500"
+          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
         >
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--bulb] size-5 text-amber-200"></span>
-            <h2 class="card-title text-base font-bold text-white">Recomendaciones IA</h2>
+            <span class="icon-[hugeicons--bulb] size-5 text-amber-200 dark:text-amber-300"></span>
+            <h2 class="card-title text-base font-bold text-white">Aprendizaje</h2>
           </div>
         </div>
 
+        <!-- Barra de acciones -->
         <div
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
+          class="border-b border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
         >
-          <div class="divider m-0 my-2 gap-0 divider-primary">
-            <span class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md">
+          <div class="flex items-center justify-between gap-3">
+            <button
+              (click)="recomendacionActual && reproducirAudioManual(recomendacionActual.recomendacionParaAsesor)"
+              [disabled]="!recomendacionActual"
+              class="btn min-w-0 flex-1 gap-2 border-0 bg-indigo-500 text-white shadow-md btn-sm hover:bg-indigo-600 disabled:opacity-50 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+              title="Reproducir consejos"
+            >
+              <span class="icon-[hugeicons--volume-high] size-4"></span>
+              <span class="truncate">Reproducir</span>
+            </button>
+
+            <button
+              (click)="abrirModalPoliticas()"
+              class="btn min-w-0 flex-1 gap-2 border-0 bg-amber-500 text-white shadow-md btn-sm hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700"
+              title="Ver políticas del banco"
+            >
+              <span class="icon-[hugeicons--file-02] size-4"></span>
+              <span class="truncate">Ver políticas</span>
+            </button>
+          </div>
+        </div>
+        <!-- Divider con etapa actual -->
+        <div
+          class="border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
+        >
+          <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
+            <span
+              class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm dark:bg-slate-800 dark:text-slate-200"
+            >
               {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
             </span>
           </div>
+        </div>
 
-          @if (esModoAprendizaje && recomendacionActual) {
+        <!-- Contenido de recomendaciones -->
+        <div
+          class="max-h-[calc(100vh-220px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+        >
+          @if (recomendacionActual) {
           <div>
-            <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
-              <span class="icon-[hugeicons--idea] size-4 text-blue-600"></span>
-              Recomendación
+            <h3
+              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+            >
+              <span class="icon-[hugeicons--idea] size-4 text-blue-600 dark:text-blue-400"></span>
+              Recomendaciones IA
             </h3>
-            <p class="text-sm leading-relaxed text-slate-700">
-              {{ recomendacionActual.recomendacionParaAsesor }}
-            </p>
+            <div
+              class="rounded-lg border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-800 dark:bg-blue-900/30"
+            >
+              <p class="text-sm leading-relaxed text-blue-900 dark:text-blue-100">
+                {{ recomendacionActual.recomendacionParaAsesor }}
+              </p>
+            </div>
           </div>
           } @else {
-          <p class="text-center text-sm text-slate-500">
-            {{ esModoAprendizaje ? 'Esperando interacción...' : 'Modo evaluativo - Sin
-            recomendaciones' }}
-          </p>
+          <div class="flex flex-col items-center justify-center py-12 text-center">
+            <span
+              class="mb-4 icon-[hugeicons--loading-03] size-16 animate-spin text-slate-300 dark:text-slate-600"
+            ></span>
+            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+              Esperando interacción...
+            </p>
+          </div>
           }
         </div>
       </div>
     </div>
+    }
 
     <!-- PANEL DE CHAT -->
-    <div class="order-1 lg:order-2 lg:col-span-6">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl">
+    <div class="order-1 lg:order-2" [class]="esModoAprendizaje ? 'lg:col-span-6' : 'lg:col-span-9'">
+      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
         <div
-          class="flex h-[60px] items-center border-b border-slate-200 bg-gradient-to-r from-purple-500 to-pink-500 px-3"
+          class="flex h-[60px] items-center border-b border-slate-200 bg-gradient-to-r from-purple-500 to-pink-500 px-3 dark:border-slate-700 dark:from-purple-600 dark:to-pink-700"
         >
           <div class="flex w-full items-center justify-between">
             <div class="flex items-center gap-3">
               <div class="avatar">
-                <div class="w-10 rounded-full ring ring-primary ring-offset-2">
+                <div class="w-10 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
                   <img [src]="avatarCliente" [alt]="nombreCliente" />
                 </div>
               </div>
-              <span class="font-medium text-white">Cliente: {{ nombreCliente }}</span>
+              <div class="flex items-center gap-2">
+                <span
+                  class="icon-[hugeicons--message-02] size-5 text-pink-200 dark:text-pink-300"
+                ></span>
+                <h2 class="card-title hidden text-base font-bold text-white sm:block">
+                  {{ nombreCliente }}
+                </h2>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="icon-[hugeicons--message-02] size-5 text-pink-200"></span>
-              <h2 class="card-title text-base font-bold text-white">Chat de Asesoría</h2>
+
+            <!-- Botones de drawer para móvil (solo mostrar en móvil) -->
+            <div class="flex gap-2 lg:hidden">
+              @if (esModoAprendizaje) {
+              <label
+                for="drawer-recommendations"
+                class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-blue-600 dark:to-indigo-700"
+              >
+                <span class="icon-[hugeicons--bulb] size-4"></span>
+                <span class="hidden sm:inline">Aprendizaje</span>
+              </label>
+              }
+              <label
+                for="drawer-client-info"
+                class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-emerald-600 dark:to-teal-700"
+              >
+                <span class="icon-[hugeicons--user-circle] size-4"></span>
+                <span class="hidden sm:inline">Cliente</span>
+              </label>
+            </div>
+            <div class="flex gap-2">
+              <!-- Botón de análisis (siempre visible, habilitado solo cuando hay datos) -->
+              <button
+                (click)="analisisDesempeno ? mostrarModalAnalisisDesempeno(datosFinalizacion) : mostrarModalResumen()"
+                [disabled]="!modoSoloLectura || !datosFinalizacion"
+                class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md btn-sm hover:shadow-lg disabled:opacity-50 dark:from-cyan-600 dark:to-blue-700"
+                title="Ver análisis de desempeño"
+              >
+                <span class="icon-[hugeicons--audit-02] size-4"></span>
+                <span class="hidden sm:inline">Análisis</span>
+              </button>
+
+              <!-- Menú desplegable (siempre visible) -->
+              <div class="dropdown dropdown-end">
+                <div
+                  tabindex="0"
+                  role="button"
+                  class="btn gap-2 rounded-lg border-0 bg-[#6b21a8] text-white shadow-md btn-sm hover:bg-[#7c2dbe] dark:bg-[#6b21a8] dark:hover:bg-[#7c2dbe]"
+                >
+                  <span class="icon-[hugeicons--menu-01] size-4"></span>
+                </div>
+                <ul
+                  tabindex="-1"
+                  class="dropdown-content menu z-[100] mt-3 w-64 rounded-box bg-white p-2 shadow-xl dark:bg-slate-800"
+                >
+                  <!-- Sección: Controles -->
+                  <li class="menu-title">
+                    <span class="text-slate-600 dark:text-slate-400">Controles</span>
+                  </li>
+
+                  <!-- Tiempo transcurrido -->
+                  <li class="disabled">
+                    <a class="flex items-center justify-between">
+                      <span class="flex items-center gap-2">
+                        <span class="icon-[hugeicons--clock-01] size-4"></span>
+                        Tiempo
+                      </span>
+                      <span class="tiempo-real text-sm font-bold">{{ tiempoTranscurrido }}</span>
+                    </a>
+                  </li>
+
+                  <!-- Botón de sonido -->
+                  <li>
+                    <button (click)="toggleSonido()" class="flex items-center justify-between">
+                      <span class="flex items-center gap-2">
+                        <span
+                          class="size-4"
+                          [class]="sonidoHabilitado ? 'icon-[hugeicons--volume-high]' : 'icon-[hugeicons--volume-mute-02]'"
+                        ></span>
+                        {{ sonidoHabilitado ? 'Sonido' : 'Silenciado' }}
+                      </span>
+                      <input
+                        type="checkbox"
+                        [checked]="sonidoHabilitado"
+                        class="pointer-events-none toggle toggle-primary toggle-sm"
+                        readonly
+                      />
+                    </button>
+                  </li>
+
+                  <!-- Botón de análisis (si está en modo solo lectura) -->
+                  <li *ngIf="modoSoloLectura && datosFinalizacion">
+                    <button
+                      (click)="analisisDesempeno ? mostrarModalAnalisisDesempeno(datosFinalizacion) : mostrarModalResumen()"
+                    >
+                      <span class="icon-[hugeicons--audit-02] size-4"></span>
+                      Ver Análisis
+                    </button>
+                  </li>
+
+                  <!-- Botón de finalizar -->
+                  <li>
+                    <button
+                      (click)="confirmarFinalizacion()"
+                      [disabled]="finalizandoSimulacion"
+                      class="text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                    >
+                      <span class="icon-[hugeicons--stop] size-4"></span>
+                      {{ finalizandoSimulacion ? 'Finalizando...' : 'Finalizar' }}
+                    </button>
+                  </li>
+
+                  <!-- Divider -->
+                  <li><hr class="my-2 border-slate-200 dark:border-slate-700" /></li>
+
+                  <!-- Sección: Estado -->
+                  <li class="menu-title">
+                    <span class="text-slate-600 dark:text-slate-400">Estado</span>
+                  </li>
+
+                  <!-- Modo de simulación -->
+                  <li class="disabled">
+                    <a class="flex items-center justify-between">
+                      <span class="flex items-center gap-2">
+                        <span
+                          class="size-4"
+                          [class]="esModoAprendizaje ? 'icon-[hugeicons--book-02]' : 'icon-[hugeicons--tick-02]'"
+                        ></span>
+                        {{ modoSimulacion }}
+                      </span>
+                      <span
+                        class="badge badge-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                        [class]="esModoAprendizaje ? 'badge-primary' : 'badge-secondary'"
+                      >
+                        {{ esModoAprendizaje ? 'Aprendizaje' : 'Evaluación' }}
+                      </span>
+                    </a>
+                  </li>
+
+                  <!-- Estado de sincronización -->
+                  <li class="disabled">
+                    <a class="flex items-center justify-between">
+                      <span class="flex items-center gap-2">
+                        <span
+                          class="icon-[hugeicons--refresh] size-4 text-green-600 dark:text-green-400"
+                        ></span>
+                        Sincronizado
+                      </span>
+                      <span class="badge badge-sm badge-success">En línea</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -277,43 +519,66 @@
         <!-- Mensajes -->
         <div
           #chatContainer
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
+          (scroll)="onChatScroll()"
+          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto scroll-smooth bg-gradient-to-b from-slate-50 to-white p-4 dark:from-[#0b1220] dark:to-[#071025]"
         >
-          @for (indiceEtapa of indicesEtapas; track indiceEtapa) { @let mensajesEtapa =
-          mensajesPorEtapa[indiceEtapa]; @let primerMensaje = mensajesEtapa[0];
-
+          <!-- Mostrar marcador de la etapa actual aunque no haya mensajes aún -->
+          @if (indicesEtapas.length === 0 && etapaActual) {
           <div
-            class="relative my-6 flex items-center justify-center font-semibold text-gray-600 before:absolute before:top-1/2 before:right-0 before:left-0 before:z-[1] before:h-[2px] before:bg-[linear-gradient(90deg,transparent_0%,#e5e7eb_15%,#e5e7eb_85%,transparent_100%)] before:content-['']"
+            class="etapa-marker fade-in relative my-6 flex items-center justify-center font-semibold text-slate-600 dark:text-slate-400"
           >
             <span
-              class="relative z-[2] flex items-center gap-2 rounded-full border-2 border-gray-200 bg-white px-6 py-2"
+              class="relative z-10 inline-flex items-center gap-2 rounded-full border-2 border-slate-200 bg-white px-3 py-1.5 font-semibold text-slate-700 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200"
             >
               <span class="icon-[hugeicons--flag-02] size-4"></span>
-              {{ primerMensaje.nombreEtapa }}
+              {{ nombreEtapaActual }}
               <span
-                class="relative z-[2] ml-2 flex items-center gap-2 rounded-full border-2 border-gray-200 bg-gray-100 px-3 py-1 text-xs font-medium text-gray-500"
+                class="ml-2 inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300"
+                >Etapa {{ indiceEtapaActual }}</span
               >
-                Etapa {{ primerMensaje.indiceEtapa }}
-              </span>
+            </span>
+          </div>
+          } @for (indiceEtapa of indicesEtapas; track indiceEtapa) { @let mensajesEtapa =
+          mensajesPorEtapa[indiceEtapa]; @let primerMensaje = mensajesEtapa[0];
+
+          <!-- Marcador de etapa -->
+          <div
+            class="etapa-marker fade-in relative my-6 flex items-center justify-center font-semibold text-slate-600 dark:text-slate-400"
+          >
+            <span
+              class="relative z-10 inline-flex items-center gap-2 rounded-full border-2 border-slate-200 bg-white px-3 py-1.5 font-semibold text-slate-700 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200"
+            >
+              <span class="icon-[hugeicons--flag-02] size-4"></span>
+              {{ (mensajesEtapa && mensajesEtapa.length) ? primerMensaje.nombreEtapa :
+              (etapaActual?.nombre || 'Etapa') }}
+              <span
+                class="ml-2 inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300"
+                >Etapa {{ indiceEtapa }}</span
+              >
             </span>
           </div>
 
-          @for (mensaje of mensajesEtapa; track $index) { @if (mensaje.emisor === 'Cliente') {
-          <div class="relative chat-start chat">
+          @for (mensaje of mensajesEtapa; track $index) { @if (mensaje.receptor === 'Asesor') {
+          <!-- Mensaje del Cliente -->
+          <div class="fade-in relative chat-start chat">
             <div class="avatar chat-image mt-[22px] self-start">
-              <div class="mt-0 w-10 rounded-full ring ring-emerald-500 ring-offset-2">
+              <div
+                class="mt-0 w-10 rounded-full ring ring-emerald-500 ring-offset-2 ring-offset-base-100 dark:ring-emerald-600"
+              >
                 <img [src]="avatarCliente" [alt]="nombreCliente" />
               </div>
             </div>
 
-            <div class="chat-header mb-1 flex items-center gap-2 text-slate-700">
+            <div
+              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
+            >
               <button
-                (click)="reproducirAudio(mensaje.mensaje)"
+                (click)="reproducirAudioManual(mensaje.mensaje)"
                 class="btn h-auto min-h-0 p-0 btn-ghost btn-xs hover:bg-transparent"
                 title="Reproducir mensaje"
               >
                 <span
-                  class="icon-[hugeicons--volume-high] size-4 text-emerald-500 hover:text-emerald-600"
+                  class="icon-[hugeicons--volume-high] size-4 text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300"
                 ></span>
               </button>
               <span>Cliente</span>
@@ -321,92 +586,158 @@
 
             <div class="relative max-w-[85%]">
               <div
-                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50"
+                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-900 shadow-sm"
+                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-900 shadow-sm dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
               >
                 <span class="relative z-10">{{ mensaje.mensaje }}</span>
               </div>
             </div>
           </div>
           } @else {
-          <div class="relative chat-end chat">
+          <!-- Mensaje del Asesor -->
+          <div class="fade-in relative chat-end chat">
             <div class="avatar chat-image mt-[22px] self-start">
-              <div class="mt-0 w-10 rounded-full ring ring-blue-500 ring-offset-2">
-                <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop"
-                  alt="Asesor"
-                />
+              <div
+                class="mt-0 w-10 rounded-full ring ring-blue-500 ring-offset-2 ring-offset-base-100 dark:ring-blue-600"
+              >
+                <img [src]="avatarAsesor" alt="Asesor" />
               </div>
             </div>
 
-            <div class="chat-header mb-1 flex items-center gap-2 text-slate-700">
+            <div
+              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
+            >
               <span>Asesor</span>
             </div>
 
             <div class="relative max-w-[85%]">
               <div
-                class="absolute top-4 -right-[6px] z-0 h-3 w-3 rotate-45 border border-blue-200 bg-blue-50"
+                class="absolute top-4 -right-[6px] z-0 h-3 w-3 rotate-45 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-2 text-blue-900 shadow-sm"
+                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-2 text-blue-900 shadow-sm dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
               >
                 <span class="relative z-10">{{ mensaje.mensaje }}</span>
               </div>
             </div>
           </div>
-          } } } @if (enviandoMensaje) {
-          <div class="flex items-center justify-center gap-2 py-4">
-            <span class="loading loading-md loading-dots"></span>
-            <span class="text-sm text-slate-600">Esperando respuesta del cliente...</span>
+          } } }
+
+          <!-- NOTA: los mensajes de sistema (alertas/info) ya no se muestran dentro del flujo de chat
+               según configuración solicitada. Se mantienen en memoria para otros usos (toasts/header).
+          -->
+
+          <!-- Indicador de escritura: mostrar avatar/label según quien esté escribiendo -->
+          @if (indicadorEmisor) {
+          <div class="fade-in relative chat-start chat">
+            <div class="avatar chat-image mt-[22px] self-start">
+              <div
+                class="mt-0 w-10 rounded-full ring ring-emerald-500 ring-offset-2 ring-offset-base-100 dark:ring-emerald-600"
+              >
+                <img
+                  [src]="indicadorEmisor === 'Cliente' ? avatarCliente : avatarAsesor"
+                  [alt]="indicadorEmisor === 'Cliente' ? nombreCliente : nombreAsesor"
+                />
+              </div>
+            </div>
+
+            <div
+              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
+            >
+              <span>{{ indicadorEmisor }}</span>
+            </div>
+
+            <div class="relative max-w-[85%]">
+              <div
+                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"
+              ></div>
+              <div
+                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-900 shadow-sm dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
+              >
+                <div class="flex gap-1">
+                  <div class="typing-indicator"></div>
+                  <div class="typing-indicator"></div>
+                  <div class="typing-indicator"></div>
+                </div>
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- Input de mensaje -->
-        <div class="flex flex-col gap-2 border-t border-slate-200 bg-slate-50 p-4">
+        <div
+          class="flex flex-col gap-2 border-t border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
+        >
           <div class="flex w-full gap-2">
             <details #etapa class="relative">
               <summary
-                class="btn cursor-pointer gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md select-none hover:from-purple-600 hover:to-pink-600"
+                class="btn cursor-pointer gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md select-none hover:from-purple-600 hover:to-pink-600 dark:from-purple-600 dark:to-pink-700 dark:hover:from-purple-700 dark:hover:to-pink-800"
               >
                 <span class="icon-[hugeicons--information-circle] size-4"></span>
                 <span class="hidden sm:inline">Indicaciones</span>
               </summary>
 
               <div
-                class="card absolute bottom-full left-0 z-20 mb-2 w-64 rounded-sm bg-base-100 p-4 shadow-xl"
+                class="card absolute bottom-full left-0 z-20 mb-2 w-64 rounded-sm bg-base-100 p-4 shadow-xl dark:bg-slate-800"
               >
-                <h3 class="mb-2 text-lg font-bold">Objetivo de la etapa</h3>
-                <div class="text-sm opacity-80">{{ objetivoEtapaActual }}</div>
+                <h3 class="mb-2 text-lg font-bold dark:text-white">Objetivo de la etapa</h3>
+                <div class="text-sm opacity-80 dark:text-slate-300">{{ objetivoEtapaActual }}</div>
                 <button class="btn mt-3 w-full btn-sm btn-primary" (click)="cerrarIndicaciones()">
                   Entendido
                 </button>
               </div>
             </details>
 
-            <p class="flex-1 rounded-sm bg-blue-50 p-2 text-sm text-blue-800">
+            <p
+              class="flex-1 rounded-sm bg-blue-50 p-2 text-sm text-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
+            >
               <strong>Etapa actual:</strong> {{ nombreEtapaActual }}
             </p>
           </div>
 
           <div class="flex gap-2">
             <textarea
+              #mensajeTextarea
               [(ngModel)]="mensajeAsesor"
-              (keydown.enter)="$event.preventDefault(); enviarMensaje()"
-              [disabled]="enviandoMensaje || finalizandoSimulacion"
+              (input)="onTextareaInput($event)"
+              (click)="onTextareaCaretChange($event)"
+              (keyup)="onTextareaCaretChange($event)"
+              (keydown)="onTextareaKeyDown($event)"
+              [disabled]="modoSoloLectura || enviandoMensaje || finalizandoSimulacion"
               placeholder="Escribe tu mensaje al cliente..."
-              class="textarea h-25 flex-1 resize-none border-slate-300 bg-white text-slate-900 placeholder-slate-500 shadow-sm focus:border-purple-500 focus:outline-none disabled:opacity-50"
+              class="textarea h-25 flex-1 resize-none border-slate-300 bg-white text-slate-900 placeholder-slate-500 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none disabled:opacity-50 dark:border-slate-600 dark:bg-[#0f1724] dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-purple-400"
             ></textarea>
-            <div class="flex flex-col justify-between">
+            <div class="flex flex-col justify-between gap-2">
               <button
                 (click)="enviarMensaje()"
-                [disabled]="!mensajeAsesor.trim() || enviandoMensaje || finalizandoSimulacion"
-                class="btn gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
+                [disabled]="modoSoloLectura || !mensajeAsesor.trim() || enviandoMensaje || finalizandoSimulacion"
+                class="btn gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 dark:from-purple-600 dark:to-pink-700 dark:hover:from-purple-700 dark:hover:to-pink-800"
               >
+                @if (enviandoMensaje) {
+                <span class="loading loading-sm loading-spinner"></span>
+                } @else {
                 <span class="icon-[hugeicons--sent] size-4"></span>
-                <span class="hidden sm:inline">Enviar</span>
+                }
+                <span class="hidden sm:inline"
+                  >{{ enviandoMensaje ? 'Enviando...' : 'Enviar' }}</span
+                >
+              </button>
+              <div class="divider my-0 h-0 dark:border-slate-700"></div>
+              <button
+                (click)="toggleDictado()"
+                [disabled]="modoSoloLectura || enviandoMensaje || finalizandoSimulacion"
+                [ngClass]="grabandoVoz ? 'bg-gradient-to-r from-red-600 to-red-700 text-white border-0 shadow-md inline-flex items-center justify-center dark:from-red-700 dark:to-red-800' : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-md hover:from-purple-700 hover:to-pink-700 dark:from-purple-700 dark:to-pink-800'"
+                class="btn gap-2 disabled:opacity-50"
+                title="Dictar mensaje por voz"
+              >
+                <span
+                  class="icon-[hugeicons--mic-01] inline-block size-4 transition-transform duration-[120ms] ease-in-out"
+                  [class.pulse-mic]="grabandoVoz"
+                ></span>
+                <span *ngIf="!grabandoVoz" class="hidden sm:inline">Dictar</span>
               </button>
             </div>
           </div>
@@ -416,58 +747,130 @@
 
     <!-- PANEL DE INFORMACIÓN DEL CLIENTE (Desktop) -->
     <div class="hidden lg:order-3 lg:col-span-3 lg:block">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl">
+      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
         <div
-          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500"
+          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
         >
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--user-circle] size-5 text-teal-200"></span>
+            <span
+              class="icon-[hugeicons--user-circle] size-5 text-teal-200 dark:text-teal-300"
+            ></span>
             <h2 class="card-title text-base font-bold text-white">Información del Cliente</h2>
           </div>
         </div>
 
         <div
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4"
+          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
         >
           @if (infoCliente) {
           <div
-            class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm"
+            class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800"
           >
             <div class="avatar mb-3">
-              <div class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2">
+              <div
+                class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2 ring-offset-white dark:ring-emerald-600 dark:ring-offset-slate-900"
+              >
                 <img [src]="avatarCliente" [alt]="nombreCliente" />
               </div>
             </div>
-            <h3 class="text-lg font-bold text-slate-800">{{ infoCliente.nombre }}</h3>
-            <p class="text-sm font-medium text-slate-600">
-              {{ infoCliente.edad }} - {{ infoCliente.profesion }}
+            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">
+              {{ infoCliente.nombre }}
+            </h3>
+            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+              {{ infoCliente.edad }}
             </p>
+            <span
+              class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md dark:from-amber-600 dark:to-orange-600"
+            >
+              {{ infoCliente.profesion }}
+            </span>
           </div>
 
-          <div class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <h3 class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800">
-              <span class="icon-[hugeicons--user] size-4 text-emerald-600"></span>
-              Perfil
+          <div
+            class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+          >
+            <h3
+              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+            >
+              <span
+                class="icon-[hugeicons--user] size-4 text-emerald-600 dark:text-emerald-400"
+              ></span>
+              Perfil del Cliente
             </h3>
 
             <div class="space-y-2 text-sm">
-              <div class="flex items-start gap-2">
-                <span class="font-semibold text-slate-600">Situación:</span>
-                <span class="text-slate-800">{{ infoCliente.situacion_actual }}</span>
+              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+                <span
+                  class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                ></span>
+                <div>
+                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Situación</p>
+                  <p class="text-slate-800 dark:text-slate-200">
+                    {{ infoCliente.situacion_actual }}
+                  </p>
+                </div>
               </div>
-              <div class="flex items-start gap-2">
-                <span class="font-semibold text-slate-600">Objetivo:</span>
-                <span class="text-slate-800">{{ infoCliente.objetivo }}</span>
+
+              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+                <span
+                  class="mt-0.5 icon-[hugeicons--target-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                ></span>
+                <div>
+                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Motivación</p>
+                  <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
+                </div>
               </div>
-              <div class="flex items-start gap-2">
-                <span class="font-semibold text-slate-600">Riesgo:</span>
-                <span class="text-slate-800">{{ infoCliente.perfil_riesgo }}</span>
+
+              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+                <span
+                  class="mt-0.5 icon-[hugeicons--flag-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                ></span>
+                <div>
+                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Objetivo</p>
+                  <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
+                </div>
               </div>
-              <div class="flex items-start gap-2">
-                <span class="font-semibold text-slate-600">Conocimiento:</span>
-                <span class="text-slate-800">{{ infoCliente.nivel_conocimiento }}</span>
+
+              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+                <span
+                  class="mt-0.5 icon-[hugeicons--chart-increase] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                ></span>
+                <div>
+                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Riesgo</p>
+                  <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
+                </div>
+              </div>
+
+              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+                <span
+                  class="mt-0.5 icon-[hugeicons--book-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                ></span>
+                <div>
+                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                    Conocimiento
+                  </p>
+                  <p class="text-slate-800 dark:text-slate-200">
+                    {{ infoCliente.nivel_conocimiento }}
+                  </p>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div
+            class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+          >
+            <h3
+              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+            >
+              <span
+                class="icon-[hugeicons--information-circle] size-4 text-emerald-600 dark:text-emerald-400"
+              ></span>
+              Escenario
+            </h3>
+            <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+              {{ infoCliente.escenario_narrativo }}
+            </p>
           </div>
           }
         </div>
@@ -475,3 +878,245 @@
     </div>
   </div>
 </main>
+
+<!-- MODAL DE POLÍTICAS DEL BANCO -->
+<dialog #modalPoliticas class="modal">
+  <div
+    class="modal-box max-w-2xl border border-slate-300 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
+  >
+    <form method="dialog">
+      <button
+        class="btn absolute top-3 right-3 btn-circle text-slate-600 btn-ghost btn-sm hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+      >
+        ✕
+      </button>
+    </form>
+
+    <div
+      class="-mx-6 -mt-6 mb-6 rounded-t-2xl border-b border-slate-200 bg-gradient-to-r from-indigo-500 to-purple-600 p-6 dark:border-slate-700 dark:from-indigo-600 dark:to-purple-700"
+    >
+      <h3 class="flex items-center gap-3 text-xl font-bold text-white">
+        <span class="icon-[hugeicons--file-02] size-6 text-purple-200 dark:text-purple-300"></span>
+        Políticas del Banco
+      </h3>
+      <p class="mt-2 text-sm font-medium text-indigo-100 dark:text-indigo-200">
+        Normativas y procedimientos institucionales
+      </p>
+    </div>
+
+    <div class="max-h-96 space-y-4 overflow-y-auto pr-2">
+      <div
+        class="policy-card group rounded-xl border-l-4 border-blue-500 bg-blue-50 py-4 pr-4 pl-4 shadow-md dark:border-blue-600 dark:bg-blue-950/40"
+      >
+        <h4
+          class="mb-2 flex items-center gap-2 text-base font-bold text-blue-900 dark:text-blue-200"
+        >
+          <span
+            class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white shadow-sm dark:bg-blue-600"
+            >1</span
+          >
+          Política de Atención al Cliente
+        </h4>
+        <p class="text-sm leading-relaxed text-blue-800 dark:text-blue-300">
+          Todos los clientes deben ser tratados con respeto y profesionalismo. Se debe mantener un
+          tono cordial en todo momento y garantizar la resolución efectiva de sus consultas.
+        </p>
+      </div>
+
+      <div
+        class="policy-card group rounded-xl border-l-4 border-purple-500 bg-purple-50 py-4 pr-4 pl-4 shadow-md dark:border-purple-600 dark:bg-purple-950/40"
+      >
+        <h4
+          class="mb-2 flex items-center gap-2 text-base font-bold text-purple-900 dark:text-purple-200"
+        >
+          <span
+            class="flex h-7 w-7 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white shadow-sm dark:bg-purple-600"
+            >2</span
+          >
+          Política de Privacidad
+        </h4>
+        <p class="text-sm leading-relaxed text-purple-800 dark:text-purple-300">
+          La información personal de los clientes es confidencial y debe ser manejada con el máximo
+          cuidado. Nunca se debe compartir información sensible sin autorización expresa.
+        </p>
+      </div>
+
+      <div
+        class="policy-card group rounded-xl border-l-4 border-emerald-500 bg-emerald-50 py-4 pr-4 pl-4 shadow-md dark:border-emerald-600 dark:bg-emerald-950/40"
+      >
+        <h4
+          class="mb-2 flex items-center gap-2 text-base font-bold text-emerald-900 dark:text-emerald-200"
+        >
+          <span
+            class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white shadow-sm dark:bg-emerald-600"
+            >3</span
+          >
+          Política de Seguridad
+        </h4>
+        <p class="text-sm leading-relaxed text-emerald-800 dark:text-emerald-300">
+          Se deben seguir todos los protocolos de seguridad establecidos. Verificar la identidad del
+          cliente antes de proporcionar información sobre cuentas o realizar transacciones.
+        </p>
+      </div>
+
+      <div
+        class="policy-card group rounded-xl border-l-4 border-cyan-500 bg-cyan-50 py-4 pr-4 pl-4 shadow-md dark:border-cyan-600 dark:bg-cyan-950/40"
+      >
+        <h4
+          class="mb-2 flex items-center gap-2 text-base font-bold text-cyan-900 dark:text-cyan-200"
+        >
+          <span
+            class="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-500 text-xs font-bold text-white shadow-sm dark:bg-cyan-600"
+            >4</span
+          >
+          Política de Comunicación
+        </h4>
+        <p class="text-sm leading-relaxed text-cyan-800 dark:text-cyan-300">
+          Mantener una comunicación clara y transparente. Explicar los procedimientos y términos en
+          un lenguaje comprensible para el cliente.
+        </p>
+      </div>
+    </div>
+
+    <div class="modal-action mt-6">
+      <button
+        (click)="cerrarModalPoliticas()"
+        class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-indigo-500 to-purple-600 px-6 text-white shadow-md transition-all btn-sm hover:shadow-lg dark:from-indigo-600 dark:to-purple-700"
+      >
+        <span class="icon-[hugeicons--tick-02] size-4"></span>
+        Entendido
+      </button>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop bg-black/60 backdrop-blur-sm">
+    <button>close</button>
+  </form>
+</dialog>
+
+<!-- MODAL DE FINALIZAR -->
+<dialog #modalFinalizar class="modal">
+  <div class="modal-box dark:bg-slate-900">
+    <h3 class="text-lg font-bold dark:text-white">Finalizar simulación</h3>
+    <p class="py-4 dark:text-slate-300">
+      ¿Estás seguro de que deseas finalizar la simulación? Se perderá el progreso actual.
+    </p>
+    <div class="modal-action">
+      <button (click)="cerrarModalFinalizar()" class="btn btn-ghost dark:text-slate-300">
+        Cancelar
+      </button>
+      <button (click)="finalizarSimulacion()" class="btn ml-2 text-white btn-error">
+        Finalizar
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<!-- MODAL DE ANÁLISIS DE DESEMPEÑO -->
+<dialog #modalAnalisis class="modal">
+  <div class="modal-box max-w-3xl dark:bg-slate-900">
+    <!-- Botón de cerrar (X) -->
+    <button
+      type="button"
+      (click)="volverAVerSimulacion()"
+      class="btn absolute top-3 right-3 btn-circle text-slate-600 btn-ghost btn-sm hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700"
+    >
+      ✕
+    </button>
+
+    <!-- Título -->
+    <h3 class="mb-4 text-lg font-bold dark:text-white">
+      <span class="mr-2 icon-[hugeicons--audit-02] inline-block size-6"></span>
+      Análisis de Desempeño
+    </h3>
+
+    <!-- Contenido del análisis -->
+    @if (analisisDesempeno) {
+    <!-- Puntuación General -->
+    <div
+      class="card mb-4 border-2"
+      [class]="configAnalisis.bgClass + ' border-' + configAnalisis.color"
+    >
+      <div class="card-body">
+        <div class="flex items-center justify-between">
+          <h4 class="card-title text-lg dark:text-white">Puntuación General</h4>
+          <div class="text-4xl">{{ configAnalisis.emoji }}</div>
+        </div>
+        <div class="badge badge-lg" [class]="'badge-' + configAnalisis.color">
+          {{ analisisDesempeno.puntuacion_cualitativa }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen General -->
+    <div class="card mb-4 bg-base-200 dark:bg-slate-800">
+      <div class="card-body">
+        <h4 class="card-title text-lg dark:text-white">
+          <span class="icon-[hugeicons--file-search] size-5"></span>
+          Resumen del Desempeño
+        </h4>
+        <p class="text-sm leading-relaxed dark:text-slate-300">
+          {{ analisisDesempeno.resumen_general }}
+        </p>
+      </div>
+    </div>
+    } @else {
+    <!-- Mensaje cuando no hay análisis de desempeño -->
+    <div class="card mb-4 bg-base-200 dark:bg-slate-800">
+      <div class="card-body">
+        <p class="text-center text-sm dark:text-slate-300">
+          La simulación ha finalizado. Revisa las estadísticas a continuación.
+        </p>
+      </div>
+    </div>
+    }
+
+    <!-- Estadísticas -->
+    @if (datosFinalizacion) {
+    <div class="mb-4 grid grid-cols-2 gap-4">
+      <div class="stat rounded-lg bg-base-200 dark:bg-slate-800">
+        <div class="stat-title dark:text-slate-400">Duración</div>
+        <div class="stat-value text-2xl dark:text-white">
+          {{ datosFinalizacion.duracion_formato || datosFinalizacion.simulacion?.duracion_formato ||
+          'N/A' }}
+        </div>
+        <div class="stat-desc dark:text-slate-500">
+          {{ datosFinalizacion.duracion_segundos || datosFinalizacion.simulacion?.duracion_segundos
+          || 0 }} segundos
+        </div>
+      </div>
+      <div class="stat rounded-lg bg-base-200 dark:bg-slate-800">
+        <div class="stat-title dark:text-slate-400">Etapas</div>
+        <div class="stat-value text-2xl dark:text-white">
+          {{ datosFinalizacion.etapas_completadas ||
+          datosFinalizacion.simulacion?.etapas_completadas || indiceEtapaActual }}/{{ totalEtapas ||
+          datosFinalizacion.simulacion?.total_etapas }}
+        </div>
+        <div class="stat-desc dark:text-slate-500">Completadas</div>
+      </div>
+    </div>
+
+    @if (datosFinalizacion.motivo_finalizacion === 'salida_contexto') {
+    <div class="mb-4 alert alert-warning dark:bg-amber-900 dark:text-amber-200">
+      <span class="icon-[hugeicons--alert-circle] size-5"></span>
+      <span>Simulación terminada por salida de contexto</span>
+    </div>
+    } }
+
+    <!-- Botones de acción -->
+    <div class="modal-action flex gap-2">
+      <button type="button" (click)="volverAVerSimulacion()" class="btn flex-1 btn-ghost">
+        <span class="icon-[hugeicons--eye] size-4"></span>
+        Volver (solo lectura)
+      </button>
+      <button type="button" (click)="iniciarNuevaSimulacion()" class="btn flex-1 btn-primary">
+        <span class="icon-[hugeicons--refresh] size-4"></span>
+        Finalizar y volver a configurar
+      </button>
+    </div>
+  </div>
+
+  <!-- Backdrop del modal -->
+  <form method="dialog" class="modal-backdrop bg-black/60 backdrop-blur-sm">
+    <button type="button" (click)="salirDeSimulacion()">close</button>
+  </form>
+</dialog>
