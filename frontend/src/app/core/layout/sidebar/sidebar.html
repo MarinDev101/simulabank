@@ -38,7 +38,7 @@
       </div>
     </app-header-plataforma>
 
-    <div class="bg-[#F9F9FA] dark:bg-gray-900">
+    <div class="flex-1 bg-[#F9F9FA] p-4 md:p-4 lg:p-4 dark:bg-gray-900">
       <ng-content></ng-content>
     </div>
   </div>
@@ -177,6 +177,7 @@
             @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
             <li role="none">
               <button
+                routerLink="/aprendiz/mi-personal"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Mi Personal'"
                 [matTooltipDisabled]="!isDrawerClosed"
@@ -194,32 +195,6 @@
                   class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
                 >
                   Mi Personal
-                </span>
-              </button>
-            </li>
-            }
-
-            <!-- Mi Sala -->
-            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
-            <li role="none">
-              <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Mi Sala'"
-                [matTooltipDisabled]="!isDrawerClosed"
-                matTooltipPosition="right"
-                [matTooltipShowDelay]="500"
-                role="menuitem"
-                tabindex="0"
-                aria-label="Ir a Mi Sala"
-              >
-                <span
-                  class="icon-[hugeicons--user-group-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"
-                ></span>
-                <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
-                >
-                  Mi Sala
                 </span>
               </button>
             </li>
@@ -274,32 +249,6 @@
                 </span>
               </button>
             </li>
-
-            <!-- Mis Logros (solo para aprendices) -->
-            @if (shouldShowMenuItem(['aprendiz'])) {
-            <li role="none">
-              <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Mis Logros'"
-                [matTooltipDisabled]="!isDrawerClosed"
-                matTooltipPosition="right"
-                [matTooltipShowDelay]="500"
-                role="menuitem"
-                tabindex="0"
-                aria-label="Ir a Mis Logros"
-              >
-                <span
-                  class="icon-[hugeicons--award-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"
-                ></span>
-                <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
-                >
-                  Mis Logros
-                </span>
-              </button>
-            </li>
-            }
           </ul>
         </div>
 

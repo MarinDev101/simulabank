@@ -90,6 +90,12 @@ export const routes: Routes = [
         data: { headerText: 'Simulador de Asesoría Bancaria' }, // preferido ahora
       },
       {
+        path: 'mi-personal',
+        loadComponent: () =>
+          import('./pages/aprendiz/mi-personal/mi-personal').then((m) => m.MiPersonal),
+        title: 'Mi Personal',
+      },
+      {
         path: 'informacion-plataforma',
         loadComponent: () =>
           import('./pages/aprendiz-instructor/informacion-plataforma/informacion-plataforma').then(
