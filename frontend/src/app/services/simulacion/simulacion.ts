@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap, catchError, throwError, fromEvent, merge } from 'rxjs';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AuthService } from '@app/core/auth/service/auth';
+import { environment } from '../../../environments/environment';
 
 // ============================================
 // INTERFACES (mantener las existentes)
@@ -176,7 +177,7 @@ export interface FinalizarSimulacionResponse {
   providedIn: 'root',
 })
 export class SimulacionService {
-  private apiUrl = 'http://localhost:3000/api/simulacion';
+  private apiUrl = `${environment.apiBaseUrl}/simulacion`;
   private simulacionActivaKey = 'simulacion_activa';
   private estadoSimulacionKey = 'estado_simulacion';
   private ultimaSincronizacionKey = 'ultima_sincronizacion';

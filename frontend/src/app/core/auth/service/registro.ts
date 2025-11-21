@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 
 export interface InicioRegistroRequest {
@@ -51,7 +52,7 @@ export interface ActualizarPerfilResponse {
   providedIn: 'root',
 })
 export class RegistroService {
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = `${environment.apiBaseUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 

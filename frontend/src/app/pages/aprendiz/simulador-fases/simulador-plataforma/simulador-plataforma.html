@@ -9,7 +9,7 @@
       aria-label="close sidebar"
       class="drawer-overlay bg-black/60 backdrop-blur-sm"
     ></label>
-    <div class="menu min-h-full w-full bg-white p-0 lg:w-80 dark:bg-slate-900">
+    <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
       <!-- Header idéntico a desktop -->
       <div
         class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
@@ -33,13 +33,20 @@
       >
         <div class="flex items-center justify-between gap-3">
           <button
-            (click)="recomendacionActual && reproducirAudioManual(recomendacionActual.recomendacionParaAsesor)"
+            (click)="recomendacionActual && toggleAudio(recomendacionActual.recomendacionParaAsesor, 'rec')"
             [disabled]="!recomendacionActual"
-            class="btn min-w-0 flex-1 gap-2 border-0 bg-indigo-500 text-white shadow-md btn-sm hover:bg-indigo-600 disabled:opacity-50 dark:bg-indigo-600 dark:hover:bg-indigo-700"
-            title="Reproducir consejos"
+            [class]="
+              'btn min-w-0 flex-1 gap-2 border-0 text-white shadow-md btn-sm disabled:opacity-50 ' +
+              (isPlaying('rec')
+                ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700'
+                : 'bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700')
+            "
+            [attr.title]="isPlaying('rec') ? 'Detener' : 'Reproducir'"
           >
-            <span class="icon-[hugeicons--volume-high] size-4"></span>
-            <span class="truncate">Reproducir</span>
+            <span
+              [class]="isPlaying('rec') ? 'icon-[hugeicons--stop] size-4' : 'icon-[hugeicons--volume-high] size-4'"
+            ></span>
+            <span class="truncate">{{ isPlaying('rec') ? 'Detener' : 'Reproducir' }}</span>
           </button>
 
           <button
@@ -47,7 +54,7 @@
             class="btn min-w-0 flex-1 gap-2 border-0 bg-amber-500 text-white shadow-md btn-sm hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700"
             title="Ver políticas del banco"
           >
-            <span class="icon-[hugeicons--file-02] size-4"></span>
+            <span class="icon-[hugeicons--bank] size-4"></span>
             <span class="truncate">Ver políticas</span>
           </button>
         </div>
@@ -58,7 +65,7 @@
       >
         <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
           <span
-            class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm dark:bg-slate-800 dark:text-slate-200"
+            class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm"
           >
             {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
           </span>
@@ -111,7 +118,7 @@
       aria-label="close sidebar"
       class="drawer-overlay bg-black/60 backdrop-blur-sm"
     ></label>
-    <div class="menu min-h-full w-full bg-white p-0 lg:w-80 dark:bg-slate-900">
+    <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
       <!-- Header idéntico a desktop -->
       <div
         class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
@@ -280,13 +287,20 @@
         >
           <div class="flex items-center justify-between gap-3">
             <button
-              (click)="recomendacionActual && reproducirAudioManual(recomendacionActual.recomendacionParaAsesor)"
+              (click)="recomendacionActual && toggleAudio(recomendacionActual.recomendacionParaAsesor, 'rec')"
               [disabled]="!recomendacionActual"
-              class="btn min-w-0 flex-1 gap-2 border-0 bg-indigo-500 text-white shadow-md btn-sm hover:bg-indigo-600 disabled:opacity-50 dark:bg-indigo-600 dark:hover:bg-indigo-700"
-              title="Reproducir consejos"
+              [class]="
+                'btn min-w-0 flex-1 gap-2 border-0 text-white shadow-md btn-sm disabled:opacity-50 ' +
+                (isPlaying('rec')
+                  ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700'
+                  : 'bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700')
+              "
+              [attr.title]="isPlaying('rec') ? 'Detener reproducción' : 'Reproducir consejos'"
             >
-              <span class="icon-[hugeicons--volume-high] size-4"></span>
-              <span class="truncate">Reproducir</span>
+              <span
+                [class]="isPlaying('rec') ? 'icon-[hugeicons--stop] size-4' : 'icon-[hugeicons--volume-high] size-4'"
+              ></span>
+              <span class="truncate">{{ isPlaying('rec') ? 'Detener' : 'Reproducir' }}</span>
             </button>
 
             <button
@@ -294,7 +308,7 @@
               class="btn min-w-0 flex-1 gap-2 border-0 bg-amber-500 text-white shadow-md btn-sm hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700"
               title="Ver políticas del banco"
             >
-              <span class="icon-[hugeicons--file-02] size-4"></span>
+              <span class="icon-[hugeicons--bank] size-4"></span>
               <span class="truncate">Ver políticas</span>
             </button>
           </div>
@@ -370,25 +384,6 @@
               </div>
             </div>
 
-            <!-- Botones de drawer para móvil (solo mostrar en móvil) -->
-            <div class="flex gap-2 lg:hidden">
-              @if (esModoAprendizaje) {
-              <label
-                for="drawer-recommendations"
-                class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-blue-600 dark:to-indigo-700"
-              >
-                <span class="icon-[hugeicons--bulb] size-4"></span>
-                <span class="hidden sm:inline">Aprendizaje</span>
-              </label>
-              }
-              <label
-                for="drawer-client-info"
-                class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-emerald-600 dark:to-teal-700"
-              >
-                <span class="icon-[hugeicons--user-circle] size-4"></span>
-                <span class="hidden sm:inline">Cliente</span>
-              </label>
-            </div>
             <div class="flex gap-2">
               <!-- Botón de análisis (siempre visible, habilitado solo cuando hay datos) -->
               <button
@@ -400,6 +395,26 @@
                 <span class="icon-[hugeicons--audit-02] size-4"></span>
                 <span class="hidden sm:inline">Análisis</span>
               </button>
+
+              <!-- Botones de drawer para móvil (solo mostrar en móvil) -->
+              <div class="flex gap-2 lg:hidden">
+                @if (esModoAprendizaje) {
+                <label
+                  for="drawer-recommendations"
+                  class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-blue-600 dark:to-indigo-700"
+                >
+                  <span class="icon-[hugeicons--bulb] size-4"></span>
+                  <span class="hidden sm:inline">Aprendizaje</span>
+                </label>
+                }
+                <label
+                  for="drawer-client-info"
+                  class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-emerald-600 dark:to-teal-700"
+                >
+                  <span class="icon-[hugeicons--user-circle] size-4"></span>
+                  <span class="hidden sm:inline">Cliente</span>
+                </label>
+              </div>
 
               <!-- Menú desplegable (siempre visible) -->
               <div class="dropdown dropdown-end">
@@ -573,12 +588,15 @@
               class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
             >
               <button
-                (click)="reproducirAudioManual(mensaje.mensaje)"
-                class="btn h-auto min-h-0 p-0 btn-ghost btn-xs hover:bg-transparent"
-                title="Reproducir mensaje"
+                (click)="toggleAudio(mensaje.mensaje, 'msg-' + indiceEtapa + '-' + $index)"
+                class="btn h-auto min-h-0 p-0 btn-xs"
+                [ngClass]="isPlaying('msg-' + indiceEtapa + '-' + $index) ? 'bg-red-500 text-white rounded-full px-1' : 'btn-ghost'"
+                [title]="isPlaying('msg-' + indiceEtapa + '-' + $index) ? 'Detener' : 'Reproducir'"
               >
                 <span
-                  class="icon-[hugeicons--volume-high] size-4 text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300"
+                  [class]="isPlaying('msg-' + indiceEtapa + '-' + $index)
+                    ? 'icon-[hugeicons--stop] size-4 text-white'
+                    : 'icon-[hugeicons--volume-high] size-4 text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300'"
                 ></span>
               </button>
               <span>Cliente</span>
@@ -896,7 +914,7 @@
       class="-mx-6 -mt-6 mb-6 border-b border-slate-200 bg-gradient-to-r from-indigo-500 to-purple-600 p-6 dark:border-slate-700 dark:from-indigo-600 dark:to-purple-700"
     >
       <h3 class="flex items-center gap-3 text-xl font-bold text-white">
-        <span class="icon-[hugeicons--file-02] size-6 text-purple-200 dark:text-purple-300"></span>
+        <span class="icon-[hugeicons--bank] size-6 text-purple-200 dark:text-purple-300"></span>
         Políticas del Banco
       </h3>
       <p class="mt-2 text-sm font-medium text-indigo-100 dark:text-indigo-200">

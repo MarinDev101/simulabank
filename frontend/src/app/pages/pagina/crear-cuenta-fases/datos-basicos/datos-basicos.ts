@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha-2';
 import { RegistroService } from '@app/core/auth/service/registro';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-datos-basicos',
@@ -25,7 +26,7 @@ export class DatosBasicos {
   isLoading = false;
   errorMessage = '';
 
-  siteKey = '6Ld1Y_krAAAAANnFX7riXM65MWDSuQMmEm1krU33';
+  siteKey = environment.recaptchaSiteKey;
 
   indicaciones = {
     longitud: false,

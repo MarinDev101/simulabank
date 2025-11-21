@@ -8,6 +8,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewChecked,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +28,13 @@ interface MensajeSistema {
   tipo: 'info' | 'warning' | 'success' | 'error';
   mensaje: string;
   timestamp: Date;
+}
+
+interface AudioQueueItem {
+  id: string;
+  texto: string;
+  isLastOfPreviousStage: boolean;
+  isFirstOfNewStage: boolean;
 }
 
 @Component({
@@ -70,13 +78,11 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
   private shouldScrollToBottom = false;
   private isNearBottom = true;
 
-  // Reconocimiento de voz - CORREGIDO
+  // Reconocimiento de voz
   private recognition: any = null;
   grabandoVoz = false;
-  // Control de sesión
   private dictadoSessionId = 0;
   private reconocimientoActivo = false;
-  // Posición del cursor en el textarea
   private caretStart = 0;
   private caretEnd = 0;
 
@@ -89,10 +95,7 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
     const value = event.target.value || '';
     this.mensajeAsesor = value;
 
-    // Si el usuario borró el texto y el dictado ya no está presente,
-    // limpiar el buffer temporal para evitar que reaparezca.
     try {
-      // Actualizar posición del cursor
       const ta = event.target as HTMLTextAreaElement;
       this.caretStart = typeof ta.selectionStart === 'number' ? ta.selectionStart : 0;
       this.caretEnd = typeof ta.selectionEnd === 'number' ? ta.selectionEnd : this.caretStart;
@@ -101,9 +104,15 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
     }
   }
 
-  // Cola de audio
-  private colaAudio: string[] = [];
-  private reproduciendoAudio = false;
+  // Estado de audio con cola de reproducción
+  public audioActualId: string | null = null;
+  private audioQueue: AudioQueueItem[] = [];
+  private isProcessingQueue = false;
+  private currentUtterance: SpeechSynthesisUtterance | null = null;
+  private manualStop = false; // Flag para saber si el usuario detuvo manualmente
+
+  // Tracking de etapa anterior para detectar cambios
+  private etapaAnteriorIndex: number | null = null;
 
   // Subscripciones
   private subscriptions = new Subscription();
@@ -119,7 +128,8 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
 
   constructor(
     private simulacionService: SimulacionService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -147,8 +157,14 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
       this.recognition.stop();
     }
     if ('speechSynthesis' in window) {
-      speechSynthesis.cancel();
+      try {
+        speechSynthesis.cancel();
+      } catch (e) {
+        console.warn(e);
+      }
     }
+    this.audioActualId = null;
+    this.audioQueue = [];
     this.drawerListeners.forEach((remove) => remove());
   }
 
@@ -216,24 +232,16 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
   private suscribirACambios() {
     const sub = this.simulacionService.estadoSimulacion$.subscribe((estado) => {
       if (estado) {
-        const prevIndex = this.estadoSimulacion?.simulacion?.etapa_actual_index || null;
+        const prevIndex = this.etapaAnteriorIndex;
         console.log('🔄 Estado actualizado desde servicio');
-        try {
-          console.log(
-            '📥 Mensajes recibidos (muestra):',
-            (estado.historial_conversacion || []).map((m) => ({
-              emisor: m.emisor,
-              receptor: m.receptor,
-              text: m.mensaje?.slice(0, 60),
-            }))
-          );
-        } catch (e) {
-          console.warn('No se pudo imprimir muestra de mensajes del estado:', e);
-        }
+
         this.actualizarEstadoLocal(estado);
 
         const newIndex = estado.simulacion?.etapa_actual_index || null;
+
+        // Detectar cambio de etapa
         if (prevIndex !== null && newIndex !== null && prevIndex !== newIndex) {
+          console.log(`🎯 Cambio de etapa detectado: ${prevIndex} → ${newIndex}`);
           this.agregarMensajeSistema(
             'info',
             `➡ Se inició la etapa: ${estado.etapa_actual.nombre}`
@@ -244,7 +252,17 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
           }
           this.etapaActual = estado.etapa_actual;
           this.shouldScrollToBottom = true;
+
+          // Programar reproducción en cadena si el sonido está habilitado
+          if (this.sonidoHabilitado) {
+            setTimeout(() => {
+              this.reproducirMensajesCambioEtapa(prevIndex, newIndex);
+            }, 500);
+          }
         }
+
+        // Actualizar etapa anterior para próxima comparación
+        this.etapaAnteriorIndex = newIndex;
       }
     });
     this.subscriptions.add(sub);
@@ -254,7 +272,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
     const mensajesAnteriores = this.historialMensajes.length;
 
     this.estadoSimulacion = estado;
-    // CORRECCIÓN: Usar directamente el historial del servidor
     this.historialMensajes = estado.historial_conversacion || [];
     this.etapaActual = estado.etapa_actual;
     this.recomendaciones = estado.recomendaciones_aprendizaje || [];
@@ -276,10 +293,196 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
         }
       }
     }
+
+    // Inicializar etapaAnteriorIndex si es null
+    if (this.etapaAnteriorIndex === null) {
+      this.etapaAnteriorIndex = estado.simulacion?.etapa_actual_index || null;
+    }
   }
 
   // ============================================
-  // RECONOCIMIENTO DE VOZ - COMPLETAMENTE REDISEÑADO
+  // REPRODUCCIÓN EN CADENA AL CAMBIAR ETAPA
+  // ============================================
+
+  private reproducirMensajesCambioEtapa(etapaAnterior: number, etapaNueva: number) {
+    console.log('🎵 Iniciando reproducción en cadena por cambio de etapa');
+
+    // Buscar el último mensaje del cliente de la etapa anterior
+    const mensajesEtapaAnterior = this.historialMensajes.filter(
+      (m) => m.indiceEtapa === etapaAnterior && m.receptor === 'Asesor'
+    );
+
+    // Buscar el primer mensaje del cliente de la nueva etapa
+    const mensajesEtapaNueva = this.historialMensajes.filter(
+      (m) => m.indiceEtapa === etapaNueva && m.receptor === 'Asesor'
+    );
+
+    const ultimoMensajeAnterior =
+      mensajesEtapaAnterior.length > 0
+        ? mensajesEtapaAnterior[mensajesEtapaAnterior.length - 1]
+        : null;
+
+    const primerMensajeNuevo = mensajesEtapaNueva.length > 0 ? mensajesEtapaNueva[0] : null;
+
+    if (!ultimoMensajeAnterior && !primerMensajeNuevo) {
+      console.log('⚠️ No hay mensajes para reproducir en el cambio de etapa');
+      return;
+    }
+
+    // Construir la cola de reproducción
+    const queue: AudioQueueItem[] = [];
+
+    if (ultimoMensajeAnterior) {
+      const idUltimoAnterior = this.construirIdMensaje(ultimoMensajeAnterior, etapaAnterior);
+      queue.push({
+        id: idUltimoAnterior,
+        texto: ultimoMensajeAnterior.mensaje,
+        isLastOfPreviousStage: true,
+        isFirstOfNewStage: false,
+      });
+      console.log('📝 Agregado a cola: último mensaje etapa anterior', idUltimoAnterior);
+    }
+
+    if (primerMensajeNuevo) {
+      const idPrimeroNuevo = this.construirIdMensaje(primerMensajeNuevo, etapaNueva);
+      queue.push({
+        id: idPrimeroNuevo,
+        texto: primerMensajeNuevo.mensaje,
+        isLastOfPreviousStage: false,
+        isFirstOfNewStage: true,
+      });
+      console.log('📝 Agregado a cola: primer mensaje etapa nueva', idPrimeroNuevo);
+    }
+
+    // Iniciar reproducción de la cola
+    this.reproducirCola(queue);
+  }
+
+  private construirIdMensaje(mensaje: MensajeConversacion, etapaIdx: number): string {
+    const mensajesEnEtapa = this.historialMensajes.filter(
+      (m) => m.indiceEtapa === etapaIdx && m.receptor === 'Asesor'
+    );
+    const position = mensajesEnEtapa.findIndex(
+      (m) => m.mensaje === mensaje.mensaje && m.indiceEtapa === mensaje.indiceEtapa
+    );
+    return `msg-${etapaIdx}-${position >= 0 ? position : 0}`;
+  }
+
+  private reproducirCola(queue: AudioQueueItem[]) {
+    if (queue.length === 0) {
+      console.log('✅ Cola de reproducción vacía');
+      return;
+    }
+
+    // Si ya hay algo reproduciéndose, detenerlo primero
+    if (this.audioActualId !== null) {
+      console.log('⏹️ Deteniendo reproducción actual antes de iniciar cola');
+      this.detenerAudioActual();
+    }
+
+    this.audioQueue = [...queue];
+    this.isProcessingQueue = true;
+    this.manualStop = false;
+
+    console.log(`🎬 Iniciando cola de ${this.audioQueue.length} mensajes`);
+    this.procesarSiguienteEnCola();
+  }
+
+  private procesarSiguienteEnCola() {
+    // Si el usuario detuvo manualmente o no hay más items, terminar
+    if (this.manualStop || this.audioQueue.length === 0) {
+      console.log('🏁 Fin de cola de reproducción', {
+        manualStop: this.manualStop,
+        queueLength: this.audioQueue.length,
+      });
+      this.isProcessingQueue = false;
+      this.audioQueue = [];
+      return;
+    }
+
+    const item = this.audioQueue.shift();
+    if (!item) {
+      this.isProcessingQueue = false;
+      return;
+    }
+
+    console.log('▶️ Reproduciendo desde cola:', item.id);
+
+    const utterance = new SpeechSynthesisUtterance(item.texto);
+    utterance.lang = 'es-ES';
+    utterance.rate = 0.9;
+
+    utterance.onend = () => {
+      console.log('✅ Reproducción completada:', item.id);
+
+      // Solo continuar con el siguiente si no fue detenido manualmente
+      if (!this.manualStop && this.audioActualId === item.id) {
+        this.audioActualId = null;
+
+        try {
+          this.cdr.detectChanges();
+        } catch (e) {}
+
+        // Pequeña pausa entre mensajes
+        setTimeout(() => {
+          this.procesarSiguienteEnCola();
+        }, 300);
+      } else {
+        console.log('⏸️ No continuar cola (manualStop o ID cambió)');
+        this.audioActualId = null;
+        this.isProcessingQueue = false;
+        this.audioQueue = [];
+
+        try {
+          this.cdr.detectChanges();
+        } catch (e) {}
+      }
+    };
+
+    utterance.onerror = (e) => {
+      console.error('❌ Error en reproducción de cola:', e);
+      this.audioActualId = null;
+      this.isProcessingQueue = false;
+      this.audioQueue = [];
+
+      try {
+        this.cdr.detectChanges();
+      } catch (err) {}
+    };
+
+    this.audioActualId = item.id;
+    this.currentUtterance = utterance;
+
+    try {
+      this.cdr.detectChanges();
+    } catch (e) {}
+
+    speechSynthesis.speak(utterance);
+  }
+
+  private detenerAudioActual() {
+    this.manualStop = true;
+
+    try {
+      speechSynthesis.cancel();
+    } catch (e) {
+      console.warn('Error cancelando síntesis:', e);
+    }
+
+    this.audioActualId = null;
+    this.currentUtterance = null;
+    this.isProcessingQueue = false;
+    this.audioQueue = [];
+
+    try {
+      this.cdr.detectChanges();
+    } catch (e) {}
+
+    console.log('⏹️ Audio detenido y cola limpiada');
+  }
+
+  // ============================================
+  // RECONOCIMIENTO DE VOZ
   // ============================================
 
   private inicializarReconocimientoVoz() {
@@ -301,21 +504,18 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
       if (!this.reconocimientoActivo) return;
 
       try {
-        // Construir el texto solo desde los resultados nuevos para esta llamada
         let textoCompleto = '';
 
         const startIndex = typeof event.resultIndex === 'number' ? event.resultIndex : 0;
         for (let i = startIndex; i < event.results.length; i++) {
           const result = event.results[i];
           if (result && result[0] && result[0].transcript) {
-            // Si es final, lo añadimos; si no, lo ignoramos (interim no se guarda en buffer permanente)
             if (result.isFinal) {
               textoCompleto += result[0].transcript + ' ';
             }
           }
         }
 
-        // Insertar directamente el texto final en la posición del cursor
         if (textoCompleto.trim()) {
           this.insertAtCaret(textoCompleto.trim());
         }
@@ -398,7 +598,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
       this.reconocimientoActivo = false;
       this.grabandoVoz = false;
       this.recognition.stop();
-      // No transferimos nada aquí: las transcripciones ya se insertan en vivo
       this.agregarMensajeSistema('success', '✓ Dictado detenido');
     } catch (e) {
       console.warn('Error al detener reconocimiento:', e);
@@ -407,7 +606,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
     }
   }
 
-  /** Insertar texto en la posición actual del cursor dentro del textarea */
   private insertAtCaret(text: string) {
     try {
       let el: HTMLTextAreaElement | null = null;
@@ -424,7 +622,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
       const before = this.mensajeAsesor.slice(0, start);
       const after = this.mensajeAsesor.slice(end);
 
-      // Asegurar espacios alrededor según contexto para evitar que las palabras se peguen
       let prefix = '';
       let suffix = '';
 
@@ -436,12 +633,10 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
         suffix = ' ';
       }
 
-      // Si estamos insertando al final y no hay sufijo, añadimos espacio final
       if (after.length === 0 && suffix === '') {
         suffix = ' ';
       }
 
-      // Insertar el texto ajustado con posibles espacios
       this.mensajeAsesor = before + (prefix ? prefix : '') + text + (suffix ? suffix : '') + after;
 
       const newPos = (before + (prefix ? prefix : '') + text).length;
@@ -454,92 +649,84 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
       this.caretStart = this.caretEnd = newPos;
     } catch (e) {
       console.warn('Error insertando dictado en caret:', e);
-      // Fallback: concatenar al final
       this.mensajeAsesor = (this.mensajeAsesor + ' ' + text).trim();
     }
   }
 
   // ============================================
-  // REPRODUCCIÓN DE AUDIO
+  // REPRODUCCIÓN DE AUDIO (botones individuales)
   // ============================================
 
-  private agregarAudioACola(texto: string) {
-    this.colaAudio.push(texto);
-    if (!this.reproduciendoAudio) {
-      this.reproducirSiguienteAudio();
-    }
-  }
+  toggleAudio(texto: string, id: string): void {
+    console.log('toggleAudio llamado:', { id, audioActualId: this.audioActualId });
 
-  private reproducirSiguienteAudio() {
-    if (this.colaAudio.length === 0) {
-      this.reproduciendoAudio = false;
+    if (!('speechSynthesis' in window)) {
+      console.warn('speechSynthesis no disponible');
       return;
     }
 
-    this.reproduciendoAudio = true;
-    const texto = this.colaAudio.shift()!;
-
-    if ('speechSynthesis' in window) {
-      speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(texto);
-      utterance.lang = 'es-ES';
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-
-      utterance.onend = () => {
-        setTimeout(() => {
-          this.reproducirSiguienteAudio();
-        }, 500);
-      };
-
-      utterance.onerror = () => {
-        console.error('Error al reproducir audio');
-        this.reproducirSiguienteAudio();
-      };
-
-      speechSynthesis.speak(utterance);
+    // Si es el mismo que está sonando, detenerlo
+    if (this.audioActualId === id) {
+      console.log('Deteniendo audio actual');
+      this.detenerAudioActual();
+      return;
     }
+
+    // Si hay otro sonando (incluyendo cola), detenerlo primero
+    if (this.audioActualId !== null || this.isProcessingQueue) {
+      console.log('Deteniendo audio previo:', this.audioActualId);
+      this.detenerAudioActual();
+    }
+
+    // Reproducir el nuevo
+    console.log('Iniciando reproducción individual:', id);
+    this.manualStop = false; // Reset del flag
+
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.lang = 'es-ES';
+    utterance.rate = 0.9;
+
+    utterance.onend = () => {
+      console.log('Audio terminado:', id);
+      if (this.audioActualId === id) {
+        this.audioActualId = null;
+        try {
+          this.cdr.detectChanges();
+        } catch (e) {}
+      }
+    };
+
+    utterance.onerror = (e) => {
+      console.error('Error en audio:', e);
+      if (this.audioActualId === id) {
+        this.audioActualId = null;
+        try {
+          this.cdr.detectChanges();
+        } catch (err) {}
+      }
+    };
+
+    this.audioActualId = id;
+    this.currentUtterance = utterance;
+
+    try {
+      this.cdr.detectChanges();
+    } catch (e) {}
+
+    speechSynthesis.speak(utterance);
   }
 
-  reproducirAudio(mensaje: string) {
-    if (!this.sonidoHabilitado) return;
-
-    if ('speechSynthesis' in window) {
-      speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(mensaje);
-      utterance.lang = 'es-ES';
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-
-      speechSynthesis.speak(utterance);
-    }
-  }
-
-  reproducirAudioManual(mensaje: string) {
-    if ('speechSynthesis' in window) {
-      speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(mensaje);
-      utterance.lang = 'es-ES';
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-
-      speechSynthesis.speak(utterance);
-    }
+  isPlaying(id: string): boolean {
+    return this.audioActualId === id;
   }
 
   // ============================================
-  // ENVÍO DE MENSAJES - CORREGIDO
+  // ENVÍO DE MENSAJES
   // ============================================
 
   async enviarMensaje() {
-    // Usar solo el contenido actual del textarea (las transcripciones se insertan en vivo)
     const mensaje = (this.mensajeAsesor || '').trim();
 
-    // Si el micrófono está activo, detenerlo inmediatamente al enviar
-    // Esto asegura que no se sigan acumulando resultados de voz después del envío
     try {
       if (this.reconocimientoActivo || this.grabandoVoz) {
         this.detenerDictado();
@@ -563,19 +750,15 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
 
     this.enviandoMensaje = true;
     this.mostrarIndicadorEscritura = true;
-    // No mostrar que el asesor está "typing" en el chat. Después de enviar,
-    // mostramos al cliente como escribiendo mientras esperamos la respuesta.
     this.indicadorEmisor = null;
     this.error = null;
 
-    // Añadir el mensaje localmente para mostrarlo de forma optimista
     try {
       const mensajeLocal: MensajeConversacion = {
         indiceEtapa: this.indiceEtapaActual,
         totalEtapas: this.totalEtapas,
         nombreEtapa: this.nombreEtapaActual,
         objetivoEtapa: this.objetivoEtapaActual,
-        // El emisor debe ser el Asesor (el usuario) y el receptor el Cliente
         emisor: 'Asesor',
         mensaje: mensaje,
         receptor: 'Cliente',
@@ -587,7 +770,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
       console.warn('No se pudo añadir mensaje localmente:', e);
     }
 
-    // Limpiar input (el dictado ya se insertó directamente en mensajeAsesor)
     this.mensajeAsesor = '';
 
     console.log('📤 Enviando mensaje:', mensaje);
@@ -598,37 +780,54 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
       const sub = enviarObservable.subscribe({
         next: (response) => {
           console.log('✅ Respuesta recibida:', response);
-          try {
-            console.log(
-              '📥 Historial desde servidor (muestra):',
-              (response.historialActualizado || []).map((m) => ({
-                emisor: m.emisor,
-                receptor: m.receptor,
-                text: m.mensaje?.slice(0, 60),
-              }))
-            );
-          } catch (e) {
-            console.warn('No se pudo imprimir historial actualizado:', e);
-          }
 
           this.enviandoMensaje = false;
           this.mostrarIndicadorEscritura = false;
           this.indicadorEmisor = null;
 
-          // CORRECCIÓN: Usar el historial del servidor directamente (sin deduplicar)
           if (response.historialActualizado && Array.isArray(response.historialActualizado)) {
             this.historialMensajes = response.historialActualizado;
           }
 
-          // Reproducir audio si está habilitado
+          // Reproducir audio automáticamente si está habilitado Y no hay cambio de etapa
+          // (si hay cambio de etapa, la reproducción en cadena se maneja en suscribirACambios)
           const textoAudio = response.mensajes?.cliente?.mensaje || response.mensaje || '';
-          if (this.sonidoHabilitado && textoAudio) {
+          const huboCambioEtapa = response.etapa_cambiada;
+
+          if (this.sonidoHabilitado && textoAudio && !huboCambioEtapa) {
             setTimeout(() => {
-              this.agregarAudioACola(textoAudio);
+              if (this.audioActualId === null && !this.isProcessingQueue) {
+                try {
+                  const historial = this.historialMensajes || [];
+                  let lastClientMsg: any = null;
+                  for (let i = historial.length - 1; i >= 0; i--) {
+                    const m = historial[i];
+                    if (m && m.receptor === 'Asesor') {
+                      lastClientMsg = m;
+                      break;
+                    }
+                  }
+
+                  if (lastClientMsg) {
+                    const etapaIdx = lastClientMsg.indiceEtapa;
+                    const mensajesEnEtapa = historial.filter(
+                      (m) => m.indiceEtapa === etapaIdx && m.receptor === 'Asesor'
+                    );
+                    const position = mensajesEnEtapa.findIndex((m) => m === lastClientMsg);
+                    const msgId = `msg-${etapaIdx}-${position}`;
+                    this.toggleAudio(textoAudio, msgId);
+                    return;
+                  }
+                } catch (e) {
+                  console.warn('No se pudo asociar reproducción automática a mensaje:', e);
+                }
+
+                const fallbackId = 'auto-' + Date.now();
+                this.toggleAudio(textoAudio, fallbackId);
+              }
             }, 500);
           }
 
-          // Actualizar etapa si cambió
           if (response.nueva_etapa) {
             this.etapaActual = response.nueva_etapa;
 
@@ -640,7 +839,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
             }
           }
 
-          // Verificar finalización
           if (response.simulacion_finalizada) {
             this.manejarFinalizacionSimulacion(response);
           }
@@ -660,7 +858,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
             this.error = error.error?.mensaje || 'Error al enviar el mensaje';
           }
 
-          // Restaurar el mensaje en el textarea
           this.mensajeAsesor = mensaje;
 
           this.agregarMensajeSistema(
@@ -672,8 +869,6 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
 
       this.subscriptions.add(sub);
 
-      // Indicador: el cliente (simulado) comienza a "escribir" mientras procesamos la respuesta
-      // Esto evita que parezca que tú (Asesor) estás escribiendo después de enviar.
       this.indicadorEmisor = 'Cliente';
     } catch (error: any) {
       console.error('❌ Error inesperado al enviar mensaje:', error);

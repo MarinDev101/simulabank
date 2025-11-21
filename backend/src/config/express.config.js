@@ -11,6 +11,8 @@ const { isDevelopment, server } = require('./env.config');
 
 function createExpressApp() {
   const app = express();
+  //! MUCHO CUIDADO SOLO PRUEBA
+  app.set('trust proxy', 1);
 
   // Oculta cabecera "X-Powered-By"
   app.disable('x-powered-by');
