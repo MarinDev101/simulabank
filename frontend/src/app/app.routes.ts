@@ -189,10 +189,10 @@ export const routes: Routes = [
       {
         path: 'inicio',
         loadComponent: () =>
-          import('./pages/administrador/inicio-administrador/inicio-administrador').then(
-            (m) => m.InicioAdministrador
+          import('./pages/administrador/gestion-aprendices/gestion-aprendices').then(
+            (m) => m.GestionAprendices
           ),
-        title: 'Inicio - Administrador',
+        title: 'Gestion - Aprendices',
       },
       {
         path: 'configuracion',

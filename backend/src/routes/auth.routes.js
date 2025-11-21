@@ -11,6 +11,7 @@ const { requireAdmin } = require('../middlewares/admin.middleware');
 const {
   runValidation,
   registerRules,
+  registerAdminRules,
   loginRules,
   refreshRules,
   sessionIdParam,
@@ -36,6 +37,12 @@ function crearAuthRouter() {
     loginRules(),
     runValidation,
     asyncHandler(authController.login.bind(authController))
+  );
+  router.post(
+    '/register-admin',
+    registerAdminRules(),
+    runValidation,
+    asyncHandler(authController.registrarAdmin.bind(authController))
   );
   router.post(
     '/refresh',

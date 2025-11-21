@@ -65,6 +65,26 @@
         <!-- Menú de Navegación Principal -->
         <div class="w-full flex-1">
           <ul class="nunito-sans-body menu w-full" role="menubar" aria-label="Menú principal">
+
+            @if (shouldShowMenuItem(['administrador'])) {
+            <!-- Inicio -->
+            <li role="none">
+              <button [routerLink]=""
+                class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+                [matTooltip]="'Inicio'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
+                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Inicio">
+                <span
+                  class="icon-[hugeicons--students] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
+                  aria-hidden="true"></span>
+                <span
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                  Aprendices
+                </span>
+              </button>
+            </li>
+          }
+
+            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
             <!-- Inicio -->
             <li role="none">
               <button [routerLink]="inicioRoute"
@@ -80,6 +100,7 @@
                 </span>
               </button>
             </li>
+          }
 
             <!-- Simulación (solo para aprendices) -->
             @if (shouldShowMenuItem(['aprendiz'])) {
@@ -135,6 +156,7 @@
             </li>
             }
 
+            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
             <!-- Políticas -->
             <li role="none">
               <button [routerLink]="politicasRoute"
@@ -150,7 +172,9 @@
                 </span>
               </button>
             </li>
+          }
 
+            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
             <!-- Información -->
             <li role="none">
               <button [routerLink]="informacionRoute"
@@ -166,6 +190,7 @@
                 </span>
               </button>
             </li>
+          }
 
             <!-- Mis Logros (solo para aprendices) -->
             @if (shouldShowMenuItem(['aprendiz'])) {

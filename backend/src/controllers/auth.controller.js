@@ -241,6 +241,93 @@ class AuthController {
     }
   }
 
+  async registrarAdmin(req, res) {
+    const { correo, nombres, apellidos, contrasena } = req.body;
+
+    // Validación básica
+    if (!correo || !contrasena || !nombres || !apellidos) {
+      return res.status(400).json({
+        success: false,
+        error: 'correo, contrasena, nombres y apellidos son requeridos',
+      });
+    }
+
+    try {
+      // Verificar si el correo existe
+      const queryVerificarCorreo = 'SELECT ?? FROM ?? WHERE correo_electronico = ? LIMIT 1';
+      const [exists] = await pool.query(queryVerificarCorreo, [
+        CAMPOS_ID.USUARIO,
+        TABLAS.USUARIOS,
+        correo,
+      ]);
+
+      if (exists.length > 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Correo ya registrado',
+        });
+      }
+
+      // Crear usuario con contraseña hasheada
+      const hashed = await bcrypt.hash(contrasena, 10);
+      const nuevoUsuario = mapUsuarioToDb({
+        correo_electronico: correo,
+        contrasena: hashed,
+        nombres,
+        apellidos,
+        fecha_creacion: new Date(),
+        fecha_actualizacion: new Date(),
+        estado: ESTADOS.ACTIVO,
+      });
+
+      const conn = await pool.getConnection();
+      try {
+        await conn.beginTransaction();
+
+        // Insertar usuario
+        const [insertRes] = await conn.query('INSERT INTO ?? SET ?', [
+          TABLAS.USUARIOS,
+          nuevoUsuario,
+        ]);
+        const userId = insertRes.insertId;
+
+        // Insertar en tabla de administradores
+        await conn.query('INSERT INTO ?? (??) VALUES (?)', [
+          TABLAS.ADMINISTRADORES,
+          CAMPOS_ID.ADMINISTRADOR,
+          userId,
+        ]);
+
+        await conn.commit();
+
+        return res.status(201).json({
+          success: true,
+          message: 'Administrador creado exitosamente',
+          id: userId,
+          rol: ROLES.ADMINISTRADOR,
+          usuario: {
+            id: userId,
+            correo,
+            nombres,
+            apellidos,
+            rol: ROLES.ADMINISTRADOR,
+          },
+        });
+      } catch (err) {
+        await conn.rollback();
+        throw err;
+      } finally {
+        conn.release();
+      }
+    } catch (error) {
+      console.error('Error en registrarAdmin:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al crear administrador. Intenta nuevamente.',
+      });
+    }
+  }
+
   // Agregar estos métodos al auth.controller.js existente
 
   async solicitarRecuperacion(req, res) {

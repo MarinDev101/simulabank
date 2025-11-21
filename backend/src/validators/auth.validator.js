@@ -32,6 +32,15 @@ const registerRules = () => [
     }),
 ];
 
+const registerAdminRules = () => [
+  body('nombres').isString().isLength({ min: 2 }).withMessage('nombres inválidos'),
+  body('apellidos').isString().isLength({ min: 2 }).withMessage('apellidos inválidos'),
+  body('correo').isEmail().withMessage('correo inválido'),
+  body('contrasena')
+    .isLength({ min: 8 })
+    .withMessage('contraseña debe tener al menos 8 caracteres'),
+];
+
 const loginRules = () => [
   body('correo').isEmail().withMessage('correo inválido'),
   body('contrasena').isLength({ min: 6 }).withMessage('contrasena muy corta'),
@@ -65,6 +74,7 @@ const restablecerContrasenaRules = () => [
 module.exports = {
   runValidation,
   registerRules,
+  registerAdminRules,
   loginRules,
   refreshRules,
   sessionIdParam,
