@@ -285,7 +285,10 @@ CREATE TABLE carpetas_personales (
 CREATE TABLE evidencias_personales (
   id_simulacion INT PRIMARY KEY,
   id_carpeta_personal INT NULL,
+  numero_evidencia INT NOT NULL,
   fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  estado ENUM('visible', 'archivada') DEFAULT 'visible',
+  peso_pdf_kb BIGINT NULL,
   FOREIGN KEY (id_simulacion) REFERENCES simulaciones(id_simulacion)
     ON DELETE CASCADE,
   FOREIGN KEY (id_carpeta_personal) REFERENCES carpetas_personales(id_carpeta_personal)

@@ -7,5 +7,6 @@ const router = express.Router();
 // ni envía respuesta, la petición queda colgada.
 router.use('/auth', require('./auth.routes')());
 router.use('/simulacion', require('./simulacion.routes')());
+router.use('/evidencias', require('./evidencias.routes')());
 
 module.exports = router;
