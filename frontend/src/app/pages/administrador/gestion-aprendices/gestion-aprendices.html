@@ -1,1 +1,366 @@
-<p>gestion-aprendices works!</p>
+<div class="h-full w-full rounded-xl bg-white p-8 dark:bg-gray-800">
+  <section class="container mx-auto">
+    <!-- Encabezado -->
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <div>
+        <div class="flex items-center gap-x-3">
+          <h2 class="text-lg font-medium text-gray-800 dark:text-white">Gestión de Aprendices</h2>
+          <span
+            class="rounded-full bg-blue-100 px-3 py-1 text-xs text-blue-600 dark:bg-gray-800 dark:text-blue-400"
+          >
+            {{ aprendicesFiltrados.length }} Aprendices
+          </span>
+        </div>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
+          Administra los aprendices registrados en la plataforma SimulaBank
+        </p>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="mt-6 md:flex md:items-center md:justify-between">
+      <!-- Filtros de estado -->
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <!-- Búsqueda -->
+        <div class="relative">
+          <input
+            type="text"
+            [value]="filtroBusqueda"
+            (input)="onBuscarChange($event)"
+            placeholder="Buscar por nombre o correo..."
+            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 pl-10 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 sm:w-64"
+          />
+          <span class="icon-[heroicons-outline--magnifying-glass] absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></span>
+        </div>
+
+        <!-- Filtros de estado -->
+        <div
+          class="inline-flex divide-x overflow-hidden rounded-lg border bg-white rtl:flex-row-reverse dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900"
+        >
+          <button
+            (click)="cambiarFiltroEstado('activos')"
+            [class.bg-gray-100]="filtroEstado === 'activos'"
+            [class.dark:bg-gray-800]="filtroEstado === 'activos'"
+            class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-100 sm:text-sm dark:text-gray-300 dark:hover:bg-gray-800"
+          >
+            Activos
+          </button>
+          <button
+            (click)="cambiarFiltroEstado('inactivos')"
+            [class.bg-gray-100]="filtroEstado === 'inactivos'"
+            [class.dark:bg-gray-800]="filtroEstado === 'inactivos'"
+            class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-100 sm:text-sm dark:text-gray-300 dark:hover:bg-gray-800"
+          >
+            Inactivos
+          </button>
+          <button
+            (click)="cambiarFiltroEstado('todos')"
+            [class.bg-gray-100]="filtroEstado === 'todos'"
+            [class.dark:bg-gray-800]="filtroEstado === 'todos'"
+            class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-100 sm:text-sm dark:text-gray-300 dark:hover:bg-gray-800"
+          >
+            Ver todos
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros de fecha -->
+      <div class="relative mt-4 flex items-center gap-3 md:mt-0">
+        <label class="flex flex-col">
+          <span class="text-sm text-gray-700 dark:text-gray-200">Desde</span>
+          <input
+            type="date"
+            [value]="filtroFechaDesde"
+            (change)="onFechaDesdeChange($event)"
+            class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
+          />
+        </label>
+        <label class="flex flex-col">
+          <span class="text-sm text-gray-700 dark:text-gray-200">Hasta</span>
+          <input
+            type="date"
+            [value]="filtroFechaHasta"
+            (change)="onFechaHastaChange($event)"
+            class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
+          />
+        </label>
+      </div>
+    </div>
+
+    <!-- Estados de carga -->
+    <div *ngIf="cargando" class="mt-6 flex justify-center">
+      <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
+    </div>
+
+    <div *ngIf="error" class="mt-6 rounded-lg bg-red-50 p-4 dark:bg-red-900/20">
+      <p class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
+    </div>
+
+    <!-- Tabla de aprendices -->
+    <div *ngIf="!cargando && !error" class="mt-6 flex flex-col">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+          <div class="overflow-hidden border border-gray-200 md:rounded-lg dark:border-gray-700">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead class="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                    Aprendiz
+                  </th>
+                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                    Correo
+                  </th>
+                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                    Estado
+                  </th>
+                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                    Fecha Registro
+                  </th>
+                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                    Último Acceso
+                  </th>
+                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+                <!-- Mensaje si no hay aprendices -->
+                <tr *ngIf="aprendicesPaginados.length === 0">
+                  <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                    No se encontraron aprendices con los filtros seleccionados
+                  </td>
+                </tr>
+
+                <!-- Filas de aprendices -->
+                <tr *ngFor="let aprendiz of aprendicesPaginados">
+                  <td class="px-4 py-4 text-sm font-medium whitespace-nowrap text-gray-700">
+                    <div class="inline-flex items-center gap-x-3">
+                      <div class="flex items-center gap-x-2">
+                        <!-- Avatar -->
+                        <div class="avatar">
+                          <div class="h-8 w-8 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
+                            <img
+                              [src]="aprendiz.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
+                              [alt]="aprendiz.nombres"
+                              class="h-full w-full object-cover"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <h2 class="font-normal text-gray-800 dark:text-white">
+                            {{ aprendiz.nombres }} {{ aprendiz.apellidos }}
+                          </h2>
+                          <p class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                            ID: {{ aprendiz.id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-4 text-sm whitespace-nowrap text-gray-700 dark:text-gray-200">
+                    {{ aprendiz.correo }}
+                  </td>
+                  <td class="px-4 py-4 text-sm whitespace-nowrap">
+                    <span
+                      [ngClass]="getColorEstado(aprendiz.estado)"
+                      class="rounded-full px-3 py-1 text-xs font-medium"
+                    >
+                      {{ getTextoEstado(aprendiz.estado) }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-300">
+                    {{ formatearFecha(aprendiz.fecha_creacion) }}
+                  </td>
+                  <td class="px-4 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-300">
+                    {{ aprendiz.ultimo_acceso ? formatearFecha(aprendiz.ultimo_acceso) : 'Nunca' }}
+                  </td>
+                  <td class="px-4 py-4 text-sm whitespace-nowrap">
+                    <div class="flex items-center gap-x-2">
+                      <!-- Editar -->
+                      <button
+                        (click)="editarAprendiz(aprendiz)"
+                        class="flex items-center rounded-full bg-blue-100/60 px-3 py-1 text-xs text-blue-500 transition-colors hover:bg-blue-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        title="Editar"
+                      >
+                        <span class="icon-[heroicons-outline--pencil] h-5 w-5"></span>
+                      </button>
+
+                      <!-- Inhabilitar/Habilitar -->
+                      <button
+                        *ngIf="aprendiz.estado === 'activo'"
+                        (click)="inhabilitarAprendiz(aprendiz)"
+                        class="flex items-center rounded-full bg-red-100/60 px-3 py-1 text-xs text-red-500 transition-colors hover:bg-red-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        title="Inhabilitar"
+                      >
+                        <span class="icon-[heroicons-outline--user-minus] h-5 w-5"></span>
+                      </button>
+
+                      <button
+                        *ngIf="aprendiz.estado === 'inactivo'"
+                        (click)="habilitarAprendiz(aprendiz)"
+                        class="flex items-center rounded-full bg-green-100/60 px-3 py-1 text-xs text-green-500 transition-colors hover:bg-green-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        title="Habilitar"
+                      >
+                        <span class="icon-[heroicons-outline--user-plus] h-5 w-5"></span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div
+      *ngIf="!cargando && aprendicesFiltrados.length > 0"
+      class="mt-6 sm:flex sm:items-center sm:justify-between"
+    >
+      <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+        <label for="itemsPerPage" class="font-medium text-gray-700 dark:text-gray-100">
+          Aprendices por página
+        </label>
+
+        <div class="dropdown dropdown-right dropdown-center" [class.dropdown-open]="isOpen">
+          <div
+            tabindex="0"
+            (click)="toggleDropdown()"
+            class="flex h-10 min-w-20 cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-3 text-gray-700 select-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+          >
+            <span>{{ selectedValue }}</span>
+            <span class="icon-[heroicons--chevron-right]"></span>
+          </div>
+
+          <ul
+            tabindex="0"
+            class="dropdown-content menu z-1 w-32 rounded-lg bg-base-100 p-2 shadow dark:bg-gray-800"
+          >
+            <li><a (click)="selectValue(5, $event)">5</a></li>
+            <li><a (click)="selectValue(10, $event)">10</a></li>
+            <li><a (click)="selectValue(15, $event)">15</a></li>
+            <li><a (click)="selectValue(20, $event)">20</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-4 flex items-center gap-x-4 sm:mt-0">
+        <div class="text-sm text-gray-500 dark:text-gray-400">
+          Página
+          <span class="font-medium text-gray-700 dark:text-gray-100">
+            {{ paginaActual }} de {{ totalPaginas || 1 }}
+          </span>
+        </div>
+        <button
+          (click)="paginaAnterior()"
+          [disabled]="paginaActual === 1"
+          [class.opacity-50]="paginaActual === 1"
+          [class.cursor-not-allowed]="paginaActual === 1"
+          class="flex w-1/2 items-center justify-center gap-x-2 rounded-md border bg-white px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 hover:bg-gray-100 disabled:hover:bg-white sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:disabled:hover:bg-gray-900"
+        >
+          <span class="icon-[heroicons--chevron-left] h-5 w-5 rtl:-scale-x-100"></span>
+          <span>Anterior</span>
+        </button>
+
+        <button
+          (click)="paginaSiguiente()"
+          [disabled]="paginaActual === totalPaginas"
+          [class.opacity-50]="paginaActual === totalPaginas"
+          [class.cursor-not-allowed]="paginaActual === totalPaginas"
+          class="flex w-1/2 items-center justify-center gap-x-2 rounded-md border bg-white px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 hover:bg-gray-100 disabled:hover:bg-white sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:disabled:hover:bg-gray-900"
+        >
+          <span>Siguiente</span>
+          <span class="icon-[heroicons--chevron-right] h-5 w-5 rtl:-scale-x-100"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Modal de edición -->
+<div
+  *ngIf="aprendizEditando"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-all duration-300 dark:bg-black/75"
+>
+  <div
+    class="w-full max-w-2xl rounded-xl bg-white shadow-2xl ring-1 ring-black/5 transition-all duration-300 dark:bg-gray-800 dark:ring-white/10"
+  >
+    <!-- Header del modal -->
+    <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        Editar Aprendiz
+      </h3>
+      <button
+        (click)="cancelarEdicion()"
+        class="rounded-lg p-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+      >
+        <span class="icon-[heroicons-outline--x-mark] h-5 w-5"></span>
+      </button>
+    </div>
+
+    <!-- Formulario de edición -->
+    <div class="p-6">
+      <form class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombres</label>
+            <input
+              type="text"
+              [(ngModel)]="aprendizEditando.nombres"
+              name="nombres"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellidos</label>
+            <input
+              type="text"
+              [(ngModel)]="aprendizEditando.apellidos"
+              name="apellidos"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo</label>
+          <input
+            type="email"
+            [(ngModel)]="aprendizEditando.correo"
+            name="correo"
+            class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estado</label>
+          <select
+            [(ngModel)]="aprendizEditando.estado"
+            name="estado"
+            class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer del modal -->
+    <div class="flex justify-end gap-3 border-t border-gray-200 px-6 py-4 dark:border-gray-700">
+      <button
+        (click)="cancelarEdicion()"
+        class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+      >
+        Cancelar
+      </button>
+      <button
+        (click)="guardarAprendiz()"
+        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+      >
+        Guardar Cambios
+      </button>
+    </div>
+  </div>
+</div>
