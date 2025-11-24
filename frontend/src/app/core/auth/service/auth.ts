@@ -14,6 +14,10 @@ export interface Usuario {
   fecha_nacimiento?: string;
   genero?: string;
   preferencia_tema?: string;
+  estado: 'activo' | 'inactivo'; // Cambiar a obligatorio
+  fecha_creacion: string; // Cambiar a obligatorio
+  ultimo_acceso?: string;
+  fecha_actualizacion?: string;
 }
 
 export interface LoginResponse {
