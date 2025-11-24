@@ -1,17 +1,24 @@
 const jsPdfConfig = require('../config/jspdf.config');
+const fs = require('fs');
+const path = require('path');
 
-// Colores del tema
+// Paleta de colores profesional mejorada
 const COLORES = {
   primario: [41, 98, 255],
-  secundario: [99, 102, 241],
-  exito: [34, 197, 94],
-  advertencia: [251, 191, 36],
+  primarioOscuro: [30, 70, 200],
+  primarioClaro: [219, 234, 254],
   texto: [31, 41, 55],
+  textoSecundario: [75, 85, 99],
   textoClaro: [107, 114, 128],
-  fondo: [249, 250, 251],
-  fondoSeccion: [239, 246, 255],
+  fondoGris: [249, 250, 251],
+  fondoGrisOscuro: [243, 244, 246],
   blanco: [255, 255, 255],
   linea: [229, 231, 235],
+  lineaOscura: [156, 163, 175],
+  azulClaro: [239, 246, 255],
+  verdeClaro: [240, 253, 244],
+  verde: [34, 197, 94],
+  naranja: [251, 146, 60],
 };
 
 /**
@@ -19,7 +26,21 @@ const COLORES = {
  */
 function dividirTexto(doc, texto, maxWidth) {
   if (!texto) return [];
-  return doc.splitTextToSize(String(texto), maxWidth);
+  const textoLimpio = String(texto).replace(/\s+/g, ' ').trim();
+  return doc.splitTextToSize(textoLimpio, maxWidth);
+}
+
+/**
+ * Mide la altura real que ocupará un texto
+ */
+function medirAlturaTexto(doc, texto, maxWidth, fontSize = 9, lineHeightFactor = 1.3) {
+  const prevSize = doc.internal.getFontSize();
+  doc.setFontSize(fontSize);
+  const lineas = dividirTexto(doc, texto, maxWidth);
+  const alturaPorLinea = fontSize * 0.352778 * lineHeightFactor;
+  const alturaTotal = lineas.length * alturaPorLinea + 1;
+  doc.setFontSize(prevSize);
+  return { lineas, altura: alturaTotal, numLineas: lineas.length };
 }
 
 /**
@@ -38,176 +59,187 @@ function formatearFecha(fecha) {
 }
 
 /**
- * Dibuja un ícono simple usando formas geométricas
- */
-function dibujarIcono(doc, tipo, x, y, size = 4) {
-  doc.setLineWidth(0.3);
-
-  switch (tipo) {
-    case 'info':
-      doc.setDrawColor(...COLORES.primario);
-      doc.setFillColor(...COLORES.primario);
-      doc.circle(x, y, size, 'FD');
-      doc.setTextColor(...COLORES.blanco);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'bold');
-      doc.text('i', x, y + 1, { align: 'center' });
-      break;
-    case 'cliente':
-      doc.setDrawColor(...COLORES.secundario);
-      doc.setFillColor(...COLORES.secundario);
-      doc.circle(x, y - 1, size / 2, 'FD');
-      doc.roundedRect(x - size / 2, y + 0.5, size, size / 1.5, 1, 1, 'FD');
-      break;
-    case 'banco':
-      doc.setDrawColor(...COLORES.primario);
-      doc.setFillColor(...COLORES.primario);
-      doc.rect(x - size / 2, y - size / 3, size, size, 'FD');
-      doc.setFillColor(...COLORES.blanco);
-      doc.rect(x - size / 4, y, size / 2, size / 2, 'F');
-      break;
-    case 'chat':
-      doc.setDrawColor(...COLORES.exito);
-      doc.setFillColor(...COLORES.exito);
-      doc.roundedRect(x - size / 2, y - size / 2, size, size, 1, 1, 'FD');
-      break;
-    case 'estadisticas':
-      doc.setDrawColor(...COLORES.advertencia);
-      doc.setFillColor(...COLORES.advertencia);
-      for (let i = 0; i < 3; i++) {
-        const altura = (i + 1) * (size / 3);
-        doc.rect(x - size / 2 + i * (size / 2.5), y + size / 2 - altura, size / 4, altura, 'FD');
-      }
-      break;
-    case 'libro':
-      doc.setDrawColor(...COLORES.secundario);
-      doc.setFillColor(...COLORES.secundario);
-      doc.rect(x - size / 2, y - size / 2, size, size * 0.8, 'FD');
-      doc.setFillColor(...COLORES.blanco);
-      doc.rect(x - size / 4, y - size / 4, size / 2, 0.5, 'F');
-      doc.rect(x - size / 4, y, size / 2, 0.5, 'F');
-      break;
-  }
-}
-
-/**
- * Dibuja encabezado de página
+ * Dibuja encabezado de página mejorado
  */
 function dibujarEncabezado(doc, datos, pageWidth) {
-  // Fondo del encabezado con degradado simulado
+  // Fondo del encabezado
   doc.setFillColor(...COLORES.primario);
-  doc.rect(0, 0, pageWidth, 35, 'F');
+  doc.rect(0, 0, pageWidth, 32, 'F');
 
-  // Línea decorativa superior
-  doc.setFillColor(...COLORES.secundario);
-  doc.rect(0, 0, pageWidth, 2, 'F');
+  // Logo a la izquierda - más grande y centrado verticalmente
+  try {
+    const logoPath = path.resolve(__dirname, '../constants/imgs/imagotipo_simulabank.png');
+    if (fs.existsSync(logoPath)) {
+      const imgData = fs.readFileSync(logoPath).toString('base64');
+      const logoWidth = 58;
+      const logoHeight = logoWidth / 7.95;
+      const logoY = (32 - logoHeight) / 2; // Centrado vertical
+      doc.addImage('data:image/png;base64,' + imgData, 'PNG', 14, logoY, logoWidth, logoHeight);
+    } else {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.setTextColor(...COLORES.blanco);
+      doc.text('SimulaBank', 14, 18);
+    }
+  } catch {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(...COLORES.blanco);
+    doc.text('SimulaBank', 14, 18);
+  }
 
-  // Título principal
+  // Información a la derecha
+  const margenDerecho = pageWidth - 14;
+
+  // Número de evidencia
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(22);
   doc.setTextColor(...COLORES.blanco);
-  doc.text('SIMULABANK', 14, 15);
+  const numeroEvidencia =
+    'Evidencia #' + String(datos.evidencia.numeroEvidencia || datos.simulacion.id);
+  doc.text(numeroEvidencia, margenDerecho, 11, { align: 'right' });
 
   // Subtítulo
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Evidencia de Simulación de Asesoría Bancaria', 14, 24);
-
-  // Info derecha con diseño mejorado
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'bold');
-  doc.text(
-    `Evidencia #${datos.evidencia.numeroEvidencia || datos.simulacion.id}`,
-    pageWidth - 14,
-    15,
-    { align: 'right' }
-  );
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
-  doc.text(formatearFecha(datos.simulacion.fechaFinalizacion), pageWidth - 14, 22, {
-    align: 'right',
-  });
+  doc.setTextColor(...COLORES.blanco);
+  doc.text('Evidencia de Simulación de Asesoría Bancaria', margenDerecho, 18, { align: 'right' });
 
-  // Línea decorativa inferior
-  doc.setFillColor(...COLORES.advertencia);
-  doc.rect(0, 33, pageWidth, 2, 'F');
+  // Fecha
+  doc.setFontSize(7.5);
+  const fechaTexto = formatearFecha(datos.simulacion.fechaFinalizacion);
+  doc.text(fechaTexto, margenDerecho, 24, { align: 'right' });
 
-  return 45;
+  return 38;
 }
 
 /**
- * Dibuja título de sección con icono
+ * Dibuja título de sección con estilo moderno
  */
-function dibujarTituloSeccion(doc, titulo, y, pageWidth, icono = null) {
-  // Fondo con sombra simulada
-  doc.setFillColor(220, 220, 220);
-  doc.roundedRect(14.5, y + 0.5, pageWidth - 28, 10, 2, 2, 'F');
-
-  doc.setFillColor(...COLORES.fondoSeccion);
-  doc.roundedRect(14, y, pageWidth - 28, 10, 2, 2, 'F');
-
-  // Barra lateral de color
-  doc.setFillColor(...COLORES.primario);
-  doc.roundedRect(14, y, 3, 10, 1, 1, 'F');
-
-  // Icono si se especifica
-  if (icono) {
-    dibujarIcono(doc, icono, 22, y + 5);
-  }
+function dibujarTituloSeccion(doc, titulo, y, pageWidth, compacto = false) {
+  const margen = 14;
+  const anchoUtil = pageWidth - margen * 2;
 
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
+  doc.setFontSize(compacto ? 11 : 12);
   doc.setTextColor(...COLORES.primario);
-  doc.text(titulo, icono ? 28 : 22, y + 7);
+  const lineasTitulo = dividirTexto(doc, titulo, anchoUtil);
+  doc.text(lineasTitulo, margen, y);
 
-  return y + 16;
-}
-
-/**
- * Dibuja campo clave-valor con mejor diseño
- */
-function dibujarCampo(doc, etiqueta, valor, x, y, maxWidth = 120) {
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
-  doc.setTextColor(...COLORES.textoClaro);
-  doc.text(etiqueta, x, y);
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(...COLORES.texto);
-  const lineas = dividirTexto(doc, valor || 'N/A', maxWidth);
-  doc.text(lineas, x, y + 5);
-
-  return y + 5 + lineas.length * 4;
-}
-
-/**
- * Verifica si necesita nueva página
- */
-function verificarPagina(doc, y, alturaRequerida, pageHeight, pageWidth, datos) {
-  if (y + alturaRequerida > pageHeight - 20) {
-    doc.addPage();
-    dibujarPiePagina(doc, pageWidth, pageHeight);
-    return 20;
-  }
-  return y;
-}
-
-/**
- * Dibuja pie de página mejorado
- */
-function dibujarPiePagina(doc, pageWidth, pageHeight) {
-  const paginas = doc.internal.getNumberOfPages();
+  const alturaUsada = lineasTitulo.length * (compacto ? 3.8 : 4.2);
 
   // Línea decorativa
+  doc.setDrawColor(...COLORES.primario);
+  doc.setLineWidth(1.5);
+  doc.line(margen, y + alturaUsada, margen + 40, y + alturaUsada);
+
+  return y + alturaUsada + (compacto ? 6 : 10);
+}
+
+/**
+ * Dibuja una tarjeta de información moderna
+ */
+function dibujarTarjeta(doc, x, y, ancho, alto, colorFondo = COLORES.fondoGris) {
+  // Tarjeta principal con bordes redondeados simulados
+  doc.setFillColor(...colorFondo);
+  doc.rect(x, y, ancho, alto, 'F');
+
+  // Borde sutil
   doc.setDrawColor(...COLORES.linea);
-  doc.setLineWidth(0.5);
+  doc.setLineWidth(0.3);
+  doc.rect(x, y, ancho, alto, 'S');
+}
+
+/**
+ * Dibuja estadística destacada con altura dinámica y versión compacta
+ */
+function dibujarEstadistica(doc, x, y, ancho, label, valor, compacto = false) {
+  const padding = compacto ? 3 : 4;
+  const anchoTexto = ancho - padding * 2;
+
+  // Medir altura necesaria para el valor
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(compacto ? 9 : 10);
+  const medidaValor = medirAlturaTexto(doc, String(valor), anchoTexto, compacto ? 9 : 10, 1.1);
+
+  // Medir altura necesaria para el label
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.5);
+  const medidaLabel = medirAlturaTexto(doc, label.toUpperCase(), anchoTexto, 6.5, 1.1);
+
+  const alto = medidaValor.altura + medidaLabel.altura + padding * 2;
+
+  // Fondo de la tarjeta
+  dibujarTarjeta(doc, x, y, ancho, alto, COLORES.blanco);
+
+  // Valor principal
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(compacto ? 9 : 10);
+  doc.setTextColor(...COLORES.texto);
+  doc.text(medidaValor.lineas, x + padding, y + padding + 2.5);
+
+  // Label
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.5);
+  doc.setTextColor(...COLORES.textoClaro);
+  doc.text(medidaLabel.lineas, x + padding, y + padding + medidaValor.altura + 1);
+
+  return y + alto;
+}
+
+/**
+ * Dibuja sección de información con etiquetas - versión una columna
+ */
+function dibujarSeccionInfo(doc, x, y, ancho, items) {
+  let yActual = y;
+
+  items.forEach((item, index) => {
+    if (index > 0) yActual += 3;
+
+    // Label en color secundario
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(...COLORES.textoClaro);
+    const lineasLabel = dividirTexto(doc, item.label.toUpperCase(), ancho);
+    doc.text(lineasLabel, x, yActual);
+    yActual += lineasLabel.length * 2.4 + 1.5;
+
+    // Valor principal
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(...COLORES.texto);
+    const lineasValor = dividirTexto(doc, item.value || 'N/A', ancho);
+    doc.text(lineasValor, x, yActual);
+    yActual += lineasValor.length * 3.2 + 1.5;
+  });
+
+  return yActual;
+}
+
+/**
+ * Verifica si necesita nueva página y dibuja pie de página si es necesario
+ */
+function verificarYAgregarPagina(doc, y, alturaRequerida, pageHeight, pageWidth, numeroPagina) {
+  if (y + alturaRequerida > pageHeight - 30) {
+    dibujarPiePagina(doc, pageWidth, pageHeight, numeroPagina);
+    doc.addPage();
+    return { y: 20, numeroPagina: numeroPagina + 1 };
+  }
+  return { y, numeroPagina };
+}
+
+/**
+ * Dibuja pie de página
+ */
+function dibujarPiePagina(doc, pageWidth, pageHeight, numeroPagina) {
+  doc.setDrawColor(...COLORES.linea);
+  doc.setLineWidth(0.3);
   doc.line(14, pageHeight - 15, pageWidth - 14, pageHeight - 15);
 
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
+  doc.setFontSize(7.5);
   doc.setTextColor(...COLORES.textoClaro);
-  doc.text(`Página ${paginas}`, 14, pageHeight - 10);
+  doc.text('Página ' + String(numeroPagina), 14, pageHeight - 10);
   doc.text('SimulaBank - Plataforma de Simulación Bancaria', pageWidth / 2, pageHeight - 10, {
     align: 'center',
   });
@@ -217,27 +249,55 @@ function dibujarPiePagina(doc, pageWidth, pageHeight) {
 }
 
 /**
- * Dibuja tarjeta de estadística
+ * Dibuja un mensaje del chat con mejor claridad visual
  */
-function dibujarTarjetaEstadistica(doc, label, value, x, y, ancho, color) {
-  // Sombra
-  doc.setFillColor(220, 220, 220);
-  doc.roundedRect(x + 0.5, y + 0.5, ancho, 20, 2, 2, 'F');
+function dibujarMensajeChat(doc, msg, y, pageWidth, margen, esAsesor) {
+  const anchoMax = pageWidth - margen * 2;
+  const anchoMensaje = anchoMax * 0.72;
+  const padding = 5;
 
-  // Tarjeta
-  doc.setFillColor(...color);
-  doc.roundedRect(x, y, ancho, 20, 2, 2, 'F');
+  // Medir altura del mensaje
+  const medida = medirAlturaTexto(doc, msg.mensaje, anchoMensaje - padding * 2, 9, 1.3);
+  const alturaMensaje = medida.altura + padding * 2 + 5;
 
-  // Valor
-  doc.setTextColor(...COLORES.blanco);
+  // Posiciones según emisor
+  let xInicio, xTexto, alignEmisor;
+  if (esAsesor) {
+    xInicio = pageWidth - margen - anchoMensaje;
+    xTexto = xInicio + padding;
+    alignEmisor = 'right';
+  } else {
+    xInicio = margen;
+    xTexto = xInicio + padding;
+    alignEmisor = 'left';
+  }
+
+  // Fondo del mensaje
+  const colorFondo = esAsesor ? COLORES.azulClaro : COLORES.fondoGris;
+  doc.setFillColor(...colorFondo);
+  doc.rect(xInicio, y, anchoMensaje, alturaMensaje, 'F');
+
+  // Borde del mensaje
+  const colorBorde = esAsesor ? COLORES.primario : COLORES.linea;
+  doc.setDrawColor(...colorBorde);
+  doc.setLineWidth(0.5);
+  doc.rect(xInicio, y, anchoMensaje, alturaMensaje, 'S');
+
+  // Etiqueta del emisor
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(16);
-  doc.text(String(value), x + ancho / 2, y + 10, { align: 'center' });
-
-  // Etiqueta
   doc.setFontSize(7);
+  doc.setTextColor(...(esAsesor ? COLORES.primario : COLORES.textoSecundario));
+  const xEmisor = esAsesor ? xInicio + anchoMensaje - padding : xTexto;
+  const emisorTexto = String(msg.emisor || '').toUpperCase();
+  doc.text(emisorTexto, xEmisor, y + 4.5, { align: alignEmisor });
+
+  // Contenido del mensaje
   doc.setFont('helvetica', 'normal');
-  doc.text(label, x + ancho / 2, y + 16, { align: 'center' });
+  doc.setFontSize(9);
+  doc.setTextColor(...COLORES.texto);
+  doc.text(medida.lineas, xTexto, y + 10);
+
+  return alturaMensaje + 4;
 }
 
 /**
@@ -249,321 +309,464 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
   const pageHeight = doc.internal.pageSize.getHeight();
   const margen = 14;
   const anchoUtil = pageWidth - margen * 2;
+  let numeroPagina = 1;
 
+  // ==================== PÁGINA 1: RESUMEN EJECUTIVO Y PERFIL DEL CLIENTE ====================
   let y = dibujarEncabezado(doc, datos, pageWidth);
 
-  // SECCIÓN 1: INFORMACIÓN GENERAL
-  y = dibujarTituloSeccion(doc, 'INFORMACIÓN GENERAL', y, pageWidth, 'info');
+  // Título principal
+  y = dibujarTituloSeccion(doc, 'Resumen de Simulación', y, pageWidth, true);
 
-  // Cuadro de resumen con sombra
-  doc.setFillColor(220, 220, 220);
-  doc.roundedRect(margen + 0.5, y + 0.5, anchoUtil, 35, 3, 3, 'F');
-  doc.setFillColor(...COLORES.fondo);
-  doc.roundedRect(margen, y, anchoUtil, 35, 3, 3, 'F');
+  // Tarjeta principal con información del aprendiz (más compacta)
+  const paddingTarjeta = 4;
 
-  const col1 = margen + 5;
-  const col2 = pageWidth / 2 + 10;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  const medidaNombreAprendiz = medirAlturaTexto(
+    doc,
+    datos.aprendiz.nombreCompleto,
+    anchoUtil - paddingTarjeta * 2,
+    10,
+    1.1
+  );
 
-  let yInfo = y + 8;
-  dibujarCampo(doc, 'Aprendiz:', datos.aprendiz.nombreCompleto, col1, yInfo, 80);
-  dibujarCampo(doc, 'Producto Bancario:', datos.producto.nombre, col2, yInfo, 80);
+  const altoTarjetaPrincipal = 8 + medidaNombreAprendiz.altura + paddingTarjeta * 2;
 
-  yInfo += 15;
-  dibujarCampo(doc, 'Modo de Simulación:', datos.simulacion.modo?.toUpperCase(), col1, yInfo, 80);
-  dibujarCampo(doc, 'Duración Total:', datos.simulacion.duracionFormato, col2, yInfo, 80);
+  dibujarTarjeta(doc, margen, y, anchoUtil, altoTarjetaPrincipal, COLORES.primarioClaro);
 
-  y += 45;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(...COLORES.primario);
+  doc.text('APRENDIZ', margen + paddingTarjeta, y + paddingTarjeta + 2.5);
 
-  // Estadísticas con diseño mejorado
-  const stats = [
-    {
-      label: 'Etapas',
-      value: `${datos.simulacion.etapaActualIndex}/${datos.simulacion.totalEtapas}`,
-    },
-    { label: 'Mensajes', value: datos.conversacion.length },
-    { label: 'Categoría', value: datos.producto.categoria },
-    { label: 'Estado', value: datos.simulacion.estado?.toUpperCase() },
-  ];
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(...COLORES.texto);
+  doc.text(medidaNombreAprendiz.lineas, margen + paddingTarjeta, y + paddingTarjeta + 7);
 
-  const anchoStat = (anchoUtil - 15) / 4;
-  stats.forEach((stat, i) => {
-    const xStat = margen + i * (anchoStat + 5);
-    const color = i % 2 === 0 ? COLORES.primario : COLORES.secundario;
-    dibujarTarjetaEstadistica(doc, stat.label, stat.value, xStat, y, anchoStat, color);
-  });
+  y += altoTarjetaPrincipal + 6;
 
-  y += 30;
+  // Estadísticas en dos filas (más compactas)
+  const espacioEntreStats = 3;
+  const anchoStat = (anchoUtil - espacioEntreStats * 2) / 3;
 
-  // SECCIÓN 2: ESCENARIO DEL CLIENTE
-  y = verificarPagina(doc, y, 80, pageHeight, pageWidth, datos);
-  y = dibujarTituloSeccion(doc, 'ESCENARIO DEL CLIENTE SIMULADO', y, pageWidth, 'cliente');
+  // Primera fila de estadísticas
+  let yStats = y;
+  const altoStat1 =
+    dibujarEstadistica(
+      doc,
+      margen,
+      yStats,
+      anchoStat,
+      'Modo',
+      datos.simulacion.modo || 'N/A',
+      true
+    ) - yStats;
+  const etapasTexto =
+    String(datos.simulacion.etapaActualIndex) + '/' + String(datos.simulacion.totalEtapas);
+  const altoStat2 =
+    dibujarEstadistica(
+      doc,
+      margen + anchoStat + espacioEntreStats,
+      yStats,
+      anchoStat,
+      'Duración',
+      datos.simulacion.duracionFormato,
+      true
+    ) - yStats;
+  const altoStat3 =
+    dibujarEstadistica(
+      doc,
+      margen + (anchoStat + espacioEntreStats) * 2,
+      yStats,
+      anchoStat,
+      'Etapas',
+      etapasTexto,
+      true
+    ) - yStats;
 
-  doc.setFillColor(220, 220, 220);
-  doc.roundedRect(margen + 0.5, y + 0.5, anchoUtil, 70, 3, 3, 'F');
-  doc.setFillColor(...COLORES.fondo);
-  doc.roundedRect(margen, y, anchoUtil, 70, 3, 3, 'F');
+  const altoMaxStats = Math.max(altoStat1, altoStat2, altoStat3);
+  y += altoMaxStats + 4;
 
-  let yCliente = y + 8;
+  // Segunda fila de estadísticas (Producto)
+  yStats = y;
+  const anchoStatProducto = (anchoUtil - espacioEntreStats) / 2;
+
+  const altoStat4 =
+    dibujarEstadistica(
+      doc,
+      margen,
+      yStats,
+      anchoStatProducto,
+      'Producto',
+      datos.producto.nombre,
+      true
+    ) - yStats;
+  const altoStat5 =
+    dibujarEstadistica(
+      doc,
+      margen + anchoStatProducto + espacioEntreStats,
+      yStats,
+      anchoStatProducto,
+      'Categoría',
+      datos.producto.categoria,
+      true
+    ) - yStats;
+
+  const altoMaxStats2 = Math.max(altoStat4, altoStat5);
+  y += altoMaxStats2 + 8;
+
+  // ==================== PERFIL DEL CLIENTE ====================
+  y = dibujarTituloSeccion(doc, 'Perfil del Cliente Simulado', y, pageWidth, true);
+
   const cliente = datos.clienteSimulado;
 
-  // Nombre destacado
+  // Calcular altura de la tarjeta del cliente (más compacta)
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(13);
-  doc.setTextColor(...COLORES.primario);
-  doc.text(`${cliente.nombre} (${cliente.edad} años)`, col1, yCliente);
+  doc.setFontSize(10);
+  const medidaNombreCliente = medirAlturaTexto(
+    doc,
+    cliente.nombre,
+    anchoUtil - paddingTarjeta * 2,
+    10,
+    1.1
+  );
 
-  yCliente += 8;
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(...COLORES.texto);
-  doc.text(`${cliente.profesion} | ${cliente.genero}`, col1, yCliente);
-
-  yCliente += 10;
-  yCliente = dibujarCampo(
+  doc.setFontSize(8.5);
+  const medidaEdad = medirAlturaTexto(
     doc,
-    'Situación Actual:',
-    cliente.situacionActual,
-    col1,
-    yCliente,
-    anchoUtil - 20
+    String(cliente.edad) + ' años',
+    anchoUtil - paddingTarjeta * 2,
+    8.5,
+    1.1
   );
-  yCliente = dibujarCampo(
+
+  const lineasprofesion = dividirTexto(
     doc,
-    'Motivación:',
-    cliente.motivacion,
-    col1,
-    yCliente + 3,
-    anchoUtil - 20
+    String(cliente.profesion),
+    anchoUtil - paddingTarjeta * 2
   );
+  const alturaProfesion = lineasprofesion.length * 3;
 
-  yCliente += 5;
-  doc.setFont('helvetica', 'italic');
-  doc.setFontSize(8);
-  doc.setTextColor(...COLORES.textoClaro);
-  doc.text(
-    `Nivel: ${cliente.nivelConocimiento} | Perfil de riesgo: ${cliente.perfilRiesgo}`,
-    col1,
-    yCliente
-  );
+  const infoExtra = String(cliente.genero) + ' - ' + String(cliente.nivelConocimiento);
+  const lineasInfoExtra = dividirTexto(doc, infoExtra, anchoUtil - paddingTarjeta * 2);
+  const alturaInfoExtra = lineasInfoExtra.length * 3;
 
-  y += 80;
+  const altoTarjetaCliente =
+    paddingTarjeta * 2 +
+    medidaNombreCliente.altura +
+    medidaEdad.altura +
+    alturaProfesion +
+    alturaInfoExtra +
+    6;
 
-  // Tipo y Perfil
-  y = verificarPagina(doc, y, 30, pageHeight, pageWidth, datos);
+  dibujarTarjeta(doc, margen, y, anchoUtil, altoTarjetaCliente, COLORES.azulClaro);
 
-  // Tarjeta Tipo de Cliente
-  doc.setFillColor(255, 251, 235);
-  doc.roundedRect(margen, y, anchoUtil / 2 - 5, 25, 2, 2, 'F');
-  doc.setDrawColor(251, 191, 36);
-  doc.setLineWidth(0.5);
-  doc.roundedRect(margen, y, anchoUtil / 2 - 5, 25, 2, 2, 'S');
-  dibujarCampo(
-    doc,
-    'Tipo de Cliente:',
-    datos.tipoCliente.tipo,
-    margen + 5,
-    y + 8,
-    anchoUtil / 2 - 15
-  );
-
-  // Tarjeta Perfil
-  doc.setFillColor(236, 253, 245);
-  doc.roundedRect(pageWidth / 2 + 2, y, anchoUtil / 2 - 5, 25, 2, 2, 'F');
-  doc.setDrawColor(34, 197, 94);
-  doc.setLineWidth(0.5);
-  doc.roundedRect(pageWidth / 2 + 2, y, anchoUtil / 2 - 5, 25, 2, 2, 'S');
-  dibujarCampo(
-    doc,
-    'Perfil:',
-    datos.perfilCliente.nombre,
-    pageWidth / 2 + 7,
-    y + 8,
-    anchoUtil / 2 - 15
-  );
-
-  y += 35;
-
-  // SECCIÓN 3: PRODUCTO BANCARIO
-  y = verificarPagina(doc, y, 50, pageHeight, pageWidth, datos);
-  y = dibujarTituloSeccion(doc, 'PRODUCTO BANCARIO', y, pageWidth, 'banco');
-
-  doc.setFillColor(220, 220, 220);
-  doc.roundedRect(margen + 0.5, y + 0.5, anchoUtil, 45, 3, 3, 'F');
-  doc.setFillColor(...COLORES.fondo);
-  doc.roundedRect(margen, y, anchoUtil, 45, 3, 3, 'F');
-
-  let yProd = y + 8;
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12);
-  doc.setTextColor(...COLORES.primario);
-  doc.text(`${datos.producto.nombre}`, col1, yProd);
-
-  doc.setFontSize(9);
-  doc.setTextColor(...COLORES.secundario);
-  doc.text(`Categoría: ${datos.producto.categoria}`, col1, yProd + 5);
-
-  yProd += 12;
-  const conceptoLineas = dividirTexto(doc, datos.producto.concepto, anchoUtil - 20);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
+  doc.setFontSize(10);
   doc.setTextColor(...COLORES.texto);
-  doc.text(conceptoLineas.slice(0, 4), col1, yProd);
+  doc.text(medidaNombreCliente.lineas, margen + paddingTarjeta, y + paddingTarjeta + 3.5);
 
-  y += 55;
+  let yCliente = y + paddingTarjeta + 3.5 + medidaNombreCliente.altura + 2;
 
-  // SECCIÓN 4: CONVERSACIÓN
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.setTextColor(...COLORES.textoSecundario);
+  doc.text(String(cliente.edad) + ' años', margen + paddingTarjeta, yCliente);
+  yCliente += 3;
+
+  doc.text(lineasprofesion, margen + paddingTarjeta, yCliente);
+  yCliente += alturaProfesion;
+
+  doc.text(lineasInfoExtra, margen + paddingTarjeta, yCliente);
+
+  y += altoTarjetaCliente + 6;
+
+  // Información del cliente en UNA COLUMNA (sin concepto producto)
+  const itemsCliente = [
+    { label: 'Situación Actual', value: cliente.situacionActual },
+    { label: 'Motivación', value: cliente.motivacion },
+    { label: 'Perfil de Riesgo', value: cliente.perfilRiesgo },
+    { label: 'Tipo de Cliente', value: datos.tipoCliente.tipo },
+    { label: 'Perfil Asignado', value: datos.perfilCliente.nombre },
+  ];
+
+  y = dibujarSeccionInfo(doc, margen + 2, y, anchoUtil - 4, itemsCliente);
+
+  // Dibujar pie de página en la primera página
+  dibujarPiePagina(doc, pageWidth, pageHeight, numeroPagina);
+
+  // ==================== CONVERSACIÓN (NUEVA PÁGINA SIN ENCABEZADO) ====================
   doc.addPage();
-  dibujarPiePagina(doc, pageWidth, pageHeight);
-  y = 20;
-  y = dibujarTituloSeccion(doc, 'HISTORIAL DE CONVERSACIÓN', y, pageWidth, 'chat');
+  numeroPagina++;
+  y = 20; // Iniciar sin encabezado
+
+  y = dibujarTituloSeccion(doc, 'Historial de Conversación', y, pageWidth);
 
   let etapaAnterior = null;
 
+  // Crear un mapa de recomendaciones por etapa
+  const recomendacionesPorEtapa = {};
+  if (datos.recomendaciones?.length > 0) {
+    datos.recomendaciones.forEach((rec) => {
+      recomendacionesPorEtapa[rec.indiceEtapa] = rec;
+    });
+  }
+
   for (const msg of datos.conversacion) {
     const esAsesor = msg.emisor === 'Asesor';
-    const alturaEstimada = dividirTexto(doc, msg.mensaje, anchoUtil - 30).length * 4 + 20;
 
-    y = verificarPagina(doc, y, alturaEstimada, pageHeight, pageWidth, datos);
-
-    // Indicador de etapa
+    // Separador de etapa y recomendación
     if (msg.indiceEtapa && msg.indiceEtapa !== etapaAnterior) {
-      doc.setFillColor(...COLORES.secundario);
-      doc.roundedRect(margen, y, anchoUtil, 8, 1, 1, 'F');
+      // Calcular altura de la tarjeta de etapa
+      const etapaTexto = 'ETAPA ' + String(msg.indiceEtapa) + ': ' + String(msg.nombreEtapa || '');
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(7);
-      doc.setTextColor(...COLORES.blanco);
-      doc.text(`ETAPA ${msg.indiceEtapa}: ${msg.nombreEtapa?.toUpperCase()}`, margen + 5, y + 5.5);
-      y += 12;
+      doc.setFontSize(9.5);
+      const lineasEtapa = dividirTexto(doc, etapaTexto, anchoUtil - 8);
+      const altoTarjetaEtapa = Math.max(14, lineasEtapa.length * 4 + 6);
+
+      // Verificar espacio para tarjeta de etapa
+      const verificacion = verificarYAgregarPagina(
+        doc,
+        y,
+        altoTarjetaEtapa + 10,
+        pageHeight,
+        pageWidth,
+        numeroPagina
+      );
+      y = verificacion.y;
+      numeroPagina = verificacion.numeroPagina;
+
+      // Tarjeta de etapa mejorada sin badge
+      dibujarTarjeta(doc, margen, y, anchoUtil, altoTarjetaEtapa, COLORES.primarioClaro);
+
+      // Nombre de etapa centrado verticalmente en la tarjeta
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9.5);
+      doc.setTextColor(...COLORES.primario);
+      const yTextoEtapa = y + altoTarjetaEtapa / 2 + lineasEtapa.length * 2;
+      doc.text(lineasEtapa, margen + 6, yTextoEtapa);
+
+      y += altoTarjetaEtapa + 6;
+
+      // Mostrar recomendación de aprendizaje para esta etapa
+      const recomendacion = recomendacionesPorEtapa[msg.indiceEtapa];
+      if (recomendacion && recomendacion.recomendacionParaAsesor) {
+        const recLineas = dividirTexto(doc, recomendacion.recomendacionParaAsesor, anchoUtil - 12);
+        const alturaRec = recLineas.length * 3.8 + 16;
+
+        const verificacionRec = verificarYAgregarPagina(
+          doc,
+          y,
+          alturaRec + 8,
+          pageHeight,
+          pageWidth,
+          numeroPagina
+        );
+        y = verificacionRec.y;
+        numeroPagina = verificacionRec.numeroPagina;
+
+        // Tarjeta de recomendación
+        dibujarTarjeta(doc, margen, y, anchoUtil, alturaRec, COLORES.verdeClaro);
+
+        // Ícono o badge de recomendación
+        doc.setFillColor(...COLORES.verde);
+        doc.circle(margen + 8, y + 7, 2.5, 'F');
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...COLORES.verde);
+        doc.text('RECOMENDACIÓN DE APRENDIZAJE', margen + 13, y + 8);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...COLORES.texto);
+        doc.text(recLineas, margen + 6, y + 14);
+
+        y += alturaRec + 6;
+      }
+
       etapaAnterior = msg.indiceEtapa;
     }
 
-    // Burbuja de mensaje
-    const xBurbuja = esAsesor ? margen + 20 : margen;
-    const anchoBurbuja = anchoUtil - 25;
-    const colorFondo = esAsesor ? [219, 234, 254] : [243, 244, 246];
-    const colorBorde = esAsesor ? COLORES.primario : COLORES.linea;
+    // Calcular altura aproximada del mensaje
+    const anchoMax = pageWidth - margen * 2;
+    const anchoMensaje = anchoMax * 0.72;
+    const medida = medirAlturaTexto(doc, msg.mensaje, anchoMensaje - 10, 9, 1.3);
+    const alturaEstimada = medida.altura + 22;
 
-    const lineasMsg = dividirTexto(doc, msg.mensaje, anchoBurbuja - 10);
-    const alturaBurbuja = lineasMsg.length * 4 + 12;
+    // Verificar si necesita nueva página
+    const verificacionMsg = verificarYAgregarPagina(
+      doc,
+      y,
+      alturaEstimada,
+      pageHeight,
+      pageWidth,
+      numeroPagina
+    );
+    y = verificacionMsg.y;
+    numeroPagina = verificacionMsg.numeroPagina;
 
-    // Sombra
-    doc.setFillColor(220, 220, 220);
-    doc.roundedRect(xBurbuja + 0.5, y + 0.5, anchoBurbuja, alturaBurbuja, 3, 3, 'F');
-
-    // Burbuja
-    doc.setFillColor(...colorFondo);
-    doc.roundedRect(xBurbuja, y, anchoBurbuja, alturaBurbuja, 3, 3, 'F');
-
-    // Borde
-    doc.setDrawColor(...colorBorde);
-    doc.setLineWidth(0.3);
-    doc.roundedRect(xBurbuja, y, anchoBurbuja, alturaBurbuja, 3, 3, 'S');
-
-    // Emisor
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(...(esAsesor ? COLORES.primario : COLORES.textoClaro));
-    doc.text(msg.emisor, xBurbuja + 5, y + 6);
-
-    // Mensaje
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(...COLORES.texto);
-    doc.text(lineasMsg, xBurbuja + 5, y + 12);
-
-    y += alturaBurbuja + 5;
+    // Dibujar mensaje
+    const alturaUsada = dibujarMensajeChat(doc, msg, y, pageWidth, margen, esAsesor);
+    y += alturaUsada;
   }
 
-  // SECCIÓN 5: ANÁLISIS DE DESEMPEÑO
+  // Dibujar pie de página en la última página de conversación
+  dibujarPiePagina(doc, pageWidth, pageHeight, numeroPagina);
+
+  // ==================== ANÁLISIS DE DESEMPEÑO (SI EXISTE) ====================
   if (datos.analisisDesempeno && !datos.analisisDesempeno.error) {
     doc.addPage();
-    dibujarPiePagina(doc, pageWidth, pageHeight);
-    y = 20;
-    y = dibujarTituloSeccion(doc, 'ANÁLISIS DE DESEMPEÑO', y, pageWidth, 'estadisticas');
+    numeroPagina++;
+    y = 20; // Sin encabezado
+
+    y = dibujarTituloSeccion(doc, 'Análisis de Desempeño', y, pageWidth);
 
     const analisis = datos.analisisDesempeno;
 
     // Puntuación destacada
     if (analisis.puntuacion_cualitativa) {
-      doc.setFillColor(...COLORES.exito);
-      doc.roundedRect(margen, y, anchoUtil, 15, 3, 3, 'F');
+      const altoBadge = 20;
+
+      const verificacion = verificarYAgregarPagina(
+        doc,
+        y,
+        altoBadge + 5,
+        pageHeight,
+        pageWidth,
+        numeroPagina
+      );
+      y = verificacion.y;
+      numeroPagina = verificacion.numeroPagina;
+
+      dibujarTarjeta(doc, margen, y, anchoUtil, altoBadge, COLORES.verde);
+
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
+      doc.setFontSize(9);
       doc.setTextColor(...COLORES.blanco);
-      doc.text('CALIFICACIÓN:', margen + 5, y + 7);
+      doc.text('CALIFICACIÓN OBTENIDA', margen + 6, y + 8);
+
       doc.setFontSize(12);
-      doc.text(analisis.puntuacion_cualitativa.toUpperCase(), margen + 5, y + 12);
-      y += 20;
+      const puntuacionLineas = dividirTexto(doc, analisis.puntuacion_cualitativa, anchoUtil - 12);
+      doc.text(puntuacionLineas, margen + 6, y + 15);
+
+      y += altoBadge + 12;
     }
 
-    // Resumen
+    // Resumen general
     if (analisis.resumen_general) {
-      doc.setFillColor(220, 220, 220);
-      doc.roundedRect(margen + 0.5, y + 0.5, anchoUtil, 50, 3, 3, 'F');
-      doc.setFillColor(...COLORES.fondo);
-      doc.roundedRect(margen, y, anchoUtil, 50, 3, 3, 'F');
+      const resumenLineas = dividirTexto(doc, analisis.resumen_general, anchoUtil);
+      const alturaResumen = resumenLineas.length * 3.8 + 12;
+
+      const verificacion = verificarYAgregarPagina(
+        doc,
+        y,
+        alturaResumen + 10,
+        pageHeight,
+        pageWidth,
+        numeroPagina
+      );
+      y = verificacion.y;
+      numeroPagina = verificacion.numeroPagina;
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(9);
       doc.setTextColor(...COLORES.primario);
-      doc.text('RESUMEN GENERAL:', margen + 5, y + 7);
+      doc.text('RESUMEN GENERAL', margen, y);
+      y += 7;
 
-      const resumenLineas = dividirTexto(doc, analisis.resumen_general, anchoUtil - 15);
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(...COLORES.texto);
-      doc.text(resumenLineas.slice(0, 8), margen + 5, y + 13);
+      doc.text(resumenLineas, margen, y);
+
+      y += resumenLineas.length * 3.8 + 12;
     }
-  }
 
-  // SECCIÓN 6: RECOMENDACIONES
-  if (datos.recomendaciones?.length > 0) {
-    y = verificarPagina(doc, y + 60, 50, pageHeight, pageWidth, datos);
-    y = dibujarTituloSeccion(doc, 'RECOMENDACIONES DE APRENDIZAJE', y + 60, pageWidth, 'libro');
+    // Fortalezas
+    if (analisis.fortalezas?.length > 0) {
+      const verificacion = verificarYAgregarPagina(doc, y, 25, pageHeight, pageWidth, numeroPagina);
+      y = verificacion.y;
+      numeroPagina = verificacion.numeroPagina;
 
-    for (const rec of datos.recomendaciones) {
-      y = verificarPagina(doc, y, 35, pageHeight, pageWidth, datos);
-
-      // Encabezado de etapa
-      doc.setFillColor(254, 243, 199);
-      doc.roundedRect(margen, y, anchoUtil, 8, 1, 1, 'F');
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8);
-      doc.setTextColor(...COLORES.texto);
-      doc.text(`Etapa ${rec.indiceEtapa}: ${rec.nombreEtapa}`, margen + 5, y + 5.5);
-      y += 12;
+      doc.setFontSize(9);
+      doc.setTextColor(...COLORES.verde);
+      doc.text('FORTALEZAS IDENTIFICADAS', margen, y);
+      y += 7;
 
-      // Recomendación
-      if (rec.recomendacionParaAsesor) {
-        doc.setFillColor(255, 255, 255);
-        const recLineas = dividirTexto(doc, rec.recomendacionParaAsesor, anchoUtil - 15);
-        const alturaRec = recLineas.slice(0, 5).length * 4 + 8;
+      analisis.fortalezas.forEach((fortaleza) => {
+        const lineas = dividirTexto(doc, '• ' + String(fortaleza), anchoUtil - 4);
+        const alturaItem = lineas.length * 3.8 + 3;
 
-        doc.roundedRect(margen, y, anchoUtil, alturaRec, 2, 2, 'F');
-        doc.setDrawColor(...COLORES.linea);
-        doc.setLineWidth(0.3);
-        doc.roundedRect(margen, y, anchoUtil, alturaRec, 2, 2, 'S');
+        const verificacionItem = verificarYAgregarPagina(
+          doc,
+          y,
+          alturaItem + 5,
+          pageHeight,
+          pageWidth,
+          numeroPagina
+        );
+        y = verificacionItem.y;
+        numeroPagina = verificacionItem.numeroPagina;
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
         doc.setTextColor(...COLORES.texto);
-        doc.text(recLineas.slice(0, 5), margen + 5, y + 5);
-        y += alturaRec + 5;
-      }
-    }
-  }
+        doc.text(lineas, margen + 2, y);
+        y += alturaItem;
+      });
 
-  // Pie de página final
-  dibujarPiePagina(doc, pageWidth, pageHeight);
+      y += 10;
+    }
+
+    // Áreas de mejora
+    if (analisis.areas_mejora?.length > 0) {
+      const verificacion = verificarYAgregarPagina(doc, y, 25, pageHeight, pageWidth, numeroPagina);
+      y = verificacion.y;
+      numeroPagina = verificacion.numeroPagina;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...COLORES.naranja);
+      doc.text('ÁREAS DE MEJORA', margen, y);
+      y += 7;
+
+      analisis.areas_mejora.forEach((area) => {
+        const lineas = dividirTexto(doc, '• ' + String(area), anchoUtil - 4);
+        const alturaItem = lineas.length * 3.8 + 3;
+
+        const verificacionItem = verificarYAgregarPagina(
+          doc,
+          y,
+          alturaItem + 5,
+          pageHeight,
+          pageWidth,
+          numeroPagina
+        );
+        y = verificacionItem.y;
+        numeroPagina = verificacionItem.numeroPagina;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...COLORES.texto);
+        doc.text(lineas, margen + 2, y);
+        y += alturaItem;
+      });
+    }
+
+    // Dibujar pie de página en la última página de análisis
+    dibujarPiePagina(doc, pageWidth, pageHeight, numeroPagina);
+  }
 
   // Generar buffer
   const pdfBytes = doc.output('arraybuffer');
   const peso = pdfBytes.byteLength;
-
   if (obtenerPeso) {
     return { peso, pesoKb: Math.round(peso / 1024) };
   }
-
   return {
     buffer: Buffer.from(pdfBytes),
     peso,

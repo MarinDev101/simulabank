@@ -206,17 +206,6 @@ async function crearEvidenciaPersonal(idSimulacion, idAprendiz) {
       console.log(`ℹ️ Ya existe evidencia para simulación ${idSimulacion}`);
       return { yaExiste: true, idSimulacion };
     }
-
-    // Obtener número secuencial de evidencia para este aprendiz
-    const [[{ total }]] = await pool.query(
-      `SELECT COUNT(*) as total FROM evidencias_personales ep
-       INNER JOIN simulaciones s ON s.id_simulacion = ep.id_simulacion
-       WHERE s.id_aprendiz = ?`,
-      [idAprendiz]
-    );
-
-    const numeroEvidencia = total + 1;
-
     // Obtener datos completos para generar el PDF y calcular peso
     const datosSimulacion = await obtenerDatosParaPdf(idSimulacion);
 
@@ -236,13 +225,45 @@ async function crearEvidenciaPersonal(idSimulacion, idAprendiz) {
       // Continuar sin el peso si falla
     }
 
-    // Crear registro de evidencia personal
-    await pool.query(
-      `INSERT INTO evidencias_personales
-       (id_simulacion, id_carpeta_personal, numero_evidencia, estado, peso_pdf_kb)
-       VALUES (?, NULL, ?, 'visible', ?)`,
-      [idSimulacion, numeroEvidencia, pesoKb]
-    );
+    // Obtener número secuencial de evidencia para este aprendiz
+    // Usamos un lock nombrado por aprendiz para evitar condición de carrera
+    const lockName = `evidencia_aprendiz_${idAprendiz}`;
+    // Intentar obtener el lock con timeout de 10 segundos
+    const [[{ locked }]] = await pool.query('SELECT GET_LOCK(?, 10) as locked', [lockName]);
+    if (!locked) {
+      console.error(
+        `❌ No se pudo obtener lock para aprendiz ${idAprendiz}. Abortando creación de evidencia.`
+      );
+      return null;
+    }
+
+    let numeroEvidencia;
+    try {
+      const [[{ max }]] = await pool.query(
+        `SELECT COALESCE(MAX(ep.numero_evidencia), 0) as max
+         FROM evidencias_personales ep
+         INNER JOIN simulaciones s ON s.id_simulacion = ep.id_simulacion
+         WHERE s.id_aprendiz = ?`,
+        [idAprendiz]
+      );
+
+      numeroEvidencia = (max || 0) + 1;
+
+      // Crear registro de evidencia personal
+      await pool.query(
+        `INSERT INTO evidencias_personales
+         (id_simulacion, id_carpeta_personal, numero_evidencia, estado, peso_pdf_kb)
+         VALUES (?, NULL, ?, 'visible', ?)`,
+        [idSimulacion, numeroEvidencia, pesoKb]
+      );
+    } finally {
+      // Liberar el lock siempre
+      try {
+        await pool.query('SELECT RELEASE_LOCK(?)', [lockName]);
+      } catch (releaseErr) {
+        console.error('⚠️ Error liberando lock:', releaseErr);
+      }
+    }
 
     console.log(`✅ Evidencia personal #${numeroEvidencia} creada para simulación ${idSimulacion}`);
 
