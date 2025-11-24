@@ -1,5 +1,6 @@
 const { pool } = require('../config/database.config');
 const geminiService = require('../services/gemini');
+const pdfService = require('../services/pdf');
 const { default: fetch } = require('node-fetch');
 
 /**
@@ -56,6 +57,204 @@ function parsearJSON(data, nombreCampo = 'campo', valorPorDefecto = []) {
   } catch (err) {
     console.error(`⚠️ Error parseando ${nombreCampo}:`, err);
     return valorPorDefecto;
+  }
+}
+
+/**
+ * Obtiene datos completos de simulación para generar PDF
+ * (versión simplificada para uso interno)
+ */
+async function obtenerDatosParaPdf(idSimulacion) {
+  const [[simulacion]] = await pool.query('SELECT * FROM simulaciones WHERE id_simulacion = ?', [
+    idSimulacion,
+  ]);
+  if (!simulacion) return null;
+
+  const [[usuario]] = await pool.query(
+    'SELECT id_usuario, correo_electronico, nombres, apellidos FROM usuarios WHERE id_usuario = ?',
+    [simulacion.id_aprendiz]
+  );
+
+  const [[producto]] = await pool.query(
+    'SELECT * FROM productos_bancarios WHERE id_producto_bancario = ?',
+    [simulacion.id_producto_bancario]
+  );
+
+  const [[clienteSimulado]] = await pool.query(
+    'SELECT * FROM clientes_simulados WHERE id_simulacion = ?',
+    [idSimulacion]
+  );
+
+  const [[tipoCliente]] = await pool.query(
+    'SELECT * FROM tipos_clientes WHERE id_tipo_cliente = ?',
+    [clienteSimulado?.id_tipo_cliente]
+  );
+
+  const [[perfilCliente]] = await pool.query(
+    'SELECT * FROM perfiles_clientes WHERE id_perfil_cliente = ?',
+    [clienteSimulado?.id_perfil_cliente]
+  );
+
+  const [etapas] = await pool.query(
+    'SELECT * FROM etapas_conversacion WHERE id_producto_bancario = ? ORDER BY numero_orden',
+    [simulacion.id_producto_bancario]
+  );
+
+  return {
+    simulacion: {
+      id: simulacion.id_simulacion,
+      modo: simulacion.modo,
+      estado: simulacion.estado,
+      productoSeleccion: simulacion.producto_seleccion,
+      destinoEvidencia: simulacion.destino_evidencia,
+      sonidoInteraccion: simulacion.sonido_interaccion,
+      etapaActualIndex: simulacion.etapa_actual_index,
+      totalEtapas: etapas.length,
+      duracionSegundos: simulacion.tiempo_duracion_segundos,
+      duracionFormato: formatearDuracion(simulacion.tiempo_duracion_segundos || 0),
+      fechaInicio: simulacion.fecha_inicio,
+      fechaFinalizacion: simulacion.fecha_finalizacion,
+    },
+    aprendiz: {
+      id: usuario?.id_usuario,
+      nombres: usuario?.nombres,
+      apellidos: usuario?.apellidos,
+      correo: usuario?.correo_electronico,
+      nombreCompleto: `${usuario?.nombres || ''} ${usuario?.apellidos || ''}`.trim(),
+    },
+    producto: {
+      id: producto?.id_producto_bancario,
+      nombre: producto?.nombre,
+      categoria: producto?.categoria,
+      concepto: producto?.concepto,
+      caracteristicas: parsearJSON(producto?.caracteristicas, []),
+      beneficios: parsearJSON(producto?.beneficios, []),
+      requisitos: parsearJSON(producto?.requisitos, []),
+    },
+    clienteSimulado: {
+      genero: clienteSimulado?.genero,
+      avatar: clienteSimulado?.urlAvatar,
+      nombre: clienteSimulado?.nombre,
+      edad: clienteSimulado?.edad,
+      profesion: clienteSimulado?.profesion,
+      situacionActual: clienteSimulado?.situacion_actual,
+      motivacion: clienteSimulado?.motivacion,
+      nivelConocimiento: clienteSimulado?.nivel_conocimiento,
+      perfilRiesgo: clienteSimulado?.perfil_riesgo,
+      objetivo: clienteSimulado?.objetivo,
+      escenarioNarrativo: clienteSimulado?.escenario_narrativo,
+    },
+    tipoCliente: {
+      id: tipoCliente?.id_tipo_cliente,
+      tipo: tipoCliente?.tipo,
+      actua: tipoCliente?.actua,
+      ejemplo: tipoCliente?.ejemplo,
+    },
+    perfilCliente: {
+      id: perfilCliente?.id_perfil_cliente,
+      nombre: perfilCliente?.nombre,
+      tipoCliente: perfilCliente?.tipo_cliente,
+      rangoCop: perfilCliente?.rango_cop,
+      enfoqueAtencion: perfilCliente?.enfoque_atencion,
+    },
+    etapas,
+    conversacion: parsearJSON(simulacion.conversacion_asesoria, []),
+    recomendaciones: parsearJSON(simulacion.recomendaciones_aprendizaje_ia, []),
+    aspectosClave: parsearJSON(simulacion.aspectos_clave_registrados, []),
+    analisisDesempeno: parsearJSON(simulacion.analisis_desempeno, null),
+    evidencia: { numeroEvidencia: null, fechaAgregado: null, estado: null, carpeta: null },
+  };
+}
+
+/**
+ * Crea la evidencia personal al finalizar una simulación
+ * Solo se crea si destino_evidencia = 'personal'
+ * @param {number} idSimulacion - ID de la simulación finalizada
+ * @param {number} idAprendiz - ID del aprendiz
+ * @returns {Object|null} - Datos de la evidencia creada o null si no aplica
+ */
+async function crearEvidenciaPersonal(idSimulacion, idAprendiz) {
+  try {
+    // Verificar que la simulación exista y su destino sea 'personal'
+    const [[simulacion]] = await pool.query(
+      `SELECT id_simulacion, destino_evidencia, estado
+       FROM simulaciones
+       WHERE id_simulacion = ? AND id_aprendiz = ?`,
+      [idSimulacion, idAprendiz]
+    );
+
+    if (!simulacion) {
+      console.log(`⚠️ Simulación ${idSimulacion} no encontrada para crear evidencia`);
+      return null;
+    }
+
+    // Solo crear evidencia si el destino es 'personal'
+    if (simulacion.destino_evidencia !== 'personal') {
+      console.log(
+        `ℹ️ Simulación ${idSimulacion} tiene destino '${simulacion.destino_evidencia}', no se crea evidencia personal`
+      );
+      return null;
+    }
+
+    // Verificar que no exista ya una evidencia para esta simulación
+    const [[evidenciaExistente]] = await pool.query(
+      'SELECT id_simulacion FROM evidencias_personales WHERE id_simulacion = ?',
+      [idSimulacion]
+    );
+
+    if (evidenciaExistente) {
+      console.log(`ℹ️ Ya existe evidencia para simulación ${idSimulacion}`);
+      return { yaExiste: true, idSimulacion };
+    }
+
+    // Obtener número secuencial de evidencia para este aprendiz
+    const [[{ total }]] = await pool.query(
+      `SELECT COUNT(*) as total FROM evidencias_personales ep
+       INNER JOIN simulaciones s ON s.id_simulacion = ep.id_simulacion
+       WHERE s.id_aprendiz = ?`,
+      [idAprendiz]
+    );
+
+    const numeroEvidencia = total + 1;
+
+    // Obtener datos completos para generar el PDF y calcular peso
+    const datosSimulacion = await obtenerDatosParaPdf(idSimulacion);
+
+    if (!datosSimulacion) {
+      console.error(`❌ No se pudieron obtener datos de simulación ${idSimulacion}`);
+      return null;
+    }
+
+    // Generar PDF solo para obtener el peso (no el buffer completo)
+    let pesoKb = null;
+    try {
+      const { pesoKb: peso } = await pdfService.generarPdfEvidencia(datosSimulacion, true);
+      pesoKb = peso;
+      console.log(`📄 Peso del PDF calculado: ${pesoKb} KB`);
+    } catch (pdfError) {
+      console.error('⚠️ Error calculando peso del PDF:', pdfError.message);
+      // Continuar sin el peso si falla
+    }
+
+    // Crear registro de evidencia personal
+    await pool.query(
+      `INSERT INTO evidencias_personales
+       (id_simulacion, id_carpeta_personal, numero_evidencia, estado, peso_pdf_kb)
+       VALUES (?, NULL, ?, 'visible', ?)`,
+      [idSimulacion, numeroEvidencia, pesoKb]
+    );
+
+    console.log(`✅ Evidencia personal #${numeroEvidencia} creada para simulación ${idSimulacion}`);
+
+    return {
+      idSimulacion,
+      numeroEvidencia,
+      pesoKb,
+      estado: 'visible',
+    };
+  } catch (error) {
+    console.error(`❌ Error creando evidencia personal para simulación ${idSimulacion}:`, error);
+    return null;
   }
 }
 
@@ -534,6 +733,7 @@ exports.enviarMensaje = async (req, res) => {
   try {
     const userId = req.user?.id || req.user?.userId;
     const { mensaje } = req.body;
+    let evidenciaCreada = null;
 
     // ===============================================
     // 1️⃣ Validar mensaje no vacío
@@ -706,6 +906,9 @@ exports.enviarMensaje = async (req, res) => {
         [duracionSegundos, simulacion.id_simulacion]
       );
 
+      // 👈 NUEVO: Crear evidencia personal
+      const evidenciaCreada = await crearEvidenciaPersonal(simulacion.id_simulacion, userId);
+
       return res.status(200).json({
         ok: true,
         simulacion_finalizada: true,
@@ -714,6 +917,7 @@ exports.enviarMensaje = async (req, res) => {
         id_simulacion: simulacion.id_simulacion,
         duracion_segundos: duracionSegundos,
         duracion_formato: formatearDuracion(duracionSegundos),
+        evidencia: evidenciaCreada, // 👈 NUEVO
         mensajes: {
           asesor: nuevoMensajeAsesor,
           cliente: nuevoMensajeCliente,
@@ -796,6 +1000,12 @@ exports.enviarMensaje = async (req, res) => {
          WHERE id_simulacion = ?`,
         [duracionSegundos, JSON.stringify(analisisDesempeno), simulacion.id_simulacion]
       );
+      // 👈 NUEVO: Crear evidencia personal al finalizar por completar todas las etapas
+      try {
+        evidenciaCreada = await crearEvidenciaPersonal(simulacion.id_simulacion, userId);
+      } catch (errEvid) {
+        console.error('⚠️ Error creando evidencia en finalización automática:', errEvid);
+      }
 
       simulacionFinalizada = true;
       console.log(`✅ Simulación ${simulacion.id_simulacion} finalizada correctamente`);
@@ -932,6 +1142,7 @@ exports.enviarMensaje = async (req, res) => {
       mensaje_nueva_etapa_cliente: mensajeNuevaEtapaCliente,
       analisis_aprendizaje: nuevoAnalisisAprendizaje,
       analisis_desempeno: analisisDesempeno,
+      evidencia_creada: evidenciaCreada,
     };
 
     // Agregar información de duración solo si la simulación finalizó
@@ -1055,6 +1266,14 @@ exports.finalizarSimulacion = async (req, res) => {
       [duracionSegundos, simulacion.id_simulacion]
     );
 
+    // 👈 NUEVO: Crear evidencia personal al finalizar manualmente
+    let evidenciaCreada = null;
+    try {
+      evidenciaCreada = await crearEvidenciaPersonal(simulacion.id_simulacion, userId);
+    } catch (errEvid) {
+      console.error('⚠️ Error creando evidencia en finalización manual:', errEvid);
+    }
+
     // Determinar si completó todas las etapas
     const simulacionCompletada = simulacion.etapa_actual_index >= totalEtapas;
 
@@ -1064,6 +1283,7 @@ exports.finalizarSimulacion = async (req, res) => {
     return res.status(200).json({
       ok: true,
       mensaje: 'Simulación finalizada correctamente',
+      evidencia: evidenciaCreada,
       simulacion: {
         id_simulacion: simulacion.id_simulacion,
         producto: producto.nombre,

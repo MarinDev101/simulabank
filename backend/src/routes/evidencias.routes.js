@@ -19,35 +19,35 @@ function crearEvidenciasRouter() {
   );
 
   router.get(
-    '/ver',
+    '/ver/:id_simulacion',
     authenticateJWT,
     validarAprendiz,
     asyncHandler(evidenciasController.verEvidencia)
   );
 
   router.get(
-    '/descargar',
+    '/descargar/:id_simulacion',
     authenticateJWT,
     validarAprendiz,
     asyncHandler(evidenciasController.descargarEvidencia)
   );
 
-  router.post(
+  router.patch(
     '/archivar',
     authenticateJWT,
     validarAprendiz,
     asyncHandler(evidenciasController.archivarEvidencia)
   );
 
-  router.post(
+  router.patch(
     '/desarchivar',
     authenticateJWT,
     validarAprendiz,
     asyncHandler(evidenciasController.desarchivarEvidencia)
   );
 
-  router.post(
-    '/eliminar',
+  router.delete(
+    '/eliminar/:id_simulacion',
     authenticateJWT,
     validarAprendiz,
     asyncHandler(evidenciasController.eliminarEvidencia)

@@ -180,21 +180,30 @@ async function obtenerDatosCompletosSimulacion(idSimulacion, idAprendiz) {
 class EvidenciasController {
   async listarEvidencias(req, res) {
     try {
-      const userId = req.user?.id || req.user?.userId;
+      const userId = req.user.id || req.user.userId;
 
       const [evidencias] = await pool.query(
-        `SELECT ep.*, s.modo, s.fecha_finalizacion, s.tiempo_duracion_segundos,
-                pb.nombre as producto_nombre, cp.nombre as carpeta_nombre
-         FROM evidencias_personales ep
-         INNER JOIN simulaciones s ON s.id_simulacion = ep.id_simulacion
-         INNER JOIN productos_bancarios pb ON pb.id_producto_bancario = s.id_producto_bancario
-         LEFT JOIN carpetas_personales cp ON cp.id_carpeta_personal = ep.id_carpeta_personal
-         WHERE s.id_aprendiz = ? AND ep.estado = 'visible'
-         ORDER BY ep.fecha_agregado DESC`,
+        `SELECT ep.*, s.modo, s.tiempo_duracion_segundos,
+              pb.nombre as producto_nombre, cp.nombre as carpeta_nombre
+          FROM evidencias_personales ep
+          INNER JOIN simulaciones s ON s.id_simulacion = ep.id_simulacion
+          INNER JOIN productos_bancarios pb ON pb.id_producto_bancario = s.id_producto_bancario
+          LEFT JOIN carpetas_personales cp ON cp.id_carpeta_personal = ep.id_carpeta_personal
+          WHERE s.id_aprendiz = ?
+          ORDER BY ep.fecha_agregado DESC`,
         [userId]
       );
 
-      return res.json({ ok: true, evidencias });
+      // Añadir `nombreSugerido` a cada evidencia (basado en numero_evidencia, fallback a id_simulacion)
+      const evidenciasConNombre = evidencias.map((e) => {
+        const numero = e.numero_evidencia ?? e.id_simulacion;
+        return {
+          ...e,
+          nombreSugerido: `evidencia_${numero}.pdf`,
+        };
+      });
+
+      return res.json({ ok: true, evidencias: evidenciasConNombre });
     } catch (err) {
       console.error('Error listando evidencias:', err);
       return res.status(500).json({ ok: false, error: err.message });
@@ -203,8 +212,8 @@ class EvidenciasController {
 
   async verEvidencia(req, res) {
     try {
-      const userId = req.user?.id || req.user?.userId;
-      const { id_simulacion } = req.query;
+      const userId = req.user.id || req.user.userId;
+      const { id_simulacion } = req.params;
 
       if (!id_simulacion) {
         return res.status(400).json({ ok: false, error: 'id_simulacion requerido' });
@@ -216,7 +225,15 @@ class EvidenciasController {
         return res.status(404).json({ ok: false, error: 'Evidencia no encontrada' });
       }
 
-      return res.json({ ok: true, datos });
+      const { buffer } = await pdfService.generarPdfEvidencia(datos, false);
+
+      const base64 = buffer.toString('base64');
+
+      return res.json({
+        ok: true,
+        pdfBase64: base64,
+        nombreSugerido: `evidencia_${datos.evidencia?.numeroEvidencia ?? id_simulacion}.pdf`,
+      });
     } catch (err) {
       console.error('Error viendo evidencia:', err);
       return res.status(500).json({ ok: false, error: err.message });
@@ -225,8 +242,8 @@ class EvidenciasController {
 
   async descargarEvidencia(req, res) {
     try {
-      const userId = req.user?.id || req.user?.userId;
-      const { id_simulacion } = req.query;
+      const userId = req.user.id || req.user.userId;
+      const { id_simulacion } = req.params;
 
       if (!id_simulacion) {
         return res.status(400).json({ ok: false, error: 'id_simulacion requerido' });
@@ -239,17 +256,17 @@ class EvidenciasController {
         return res.status(404).json({ ok: false, error: 'Evidencia no encontrada' });
       }
 
-      // Generar PDF con todos los datos
-      const { buffer, peso } = await pdfService.generarPdfEvidencia(datos);
+      // Generar PDF con todos los datos (obtenerPeso = false para obtener buffer)
+      const { buffer, pesoKb } = await pdfService.generarPdfEvidencia(datos, false);
 
-      // Actualizar peso en BD
+      // Actualizar peso en BD si cambió
       await pool.query('UPDATE evidencias_personales SET peso_pdf_kb = ? WHERE id_simulacion = ?', [
-        Math.round(peso / 1024),
+        pesoKb,
         id_simulacion,
       ]);
 
-      // Nombre del archivo
-      const nombreArchivo = `evidencia_${datos.producto.nombre?.replace(/\s+/g, '_')}_${id_simulacion}.pdf`;
+      // Nombre del archivo: usar numero_evidencia si está disponible, si no fallback a id_simulacion
+      const nombreArchivo = `evidencia_${datos.evidencia?.numeroEvidencia ?? id_simulacion}.pdf`;
 
       // Enviar PDF
       res.setHeader('Content-Type', 'application/pdf');
@@ -265,7 +282,7 @@ class EvidenciasController {
 
   async archivarEvidencia(req, res) {
     try {
-      const userId = req.user?.id || req.user?.userId;
+      const userId = req.user.id || req.user.userId;
       const { id_simulacion } = req.body;
 
       await pool.query(
@@ -284,7 +301,7 @@ class EvidenciasController {
 
   async desarchivarEvidencia(req, res) {
     try {
-      const userId = req.user?.id || req.user?.userId;
+      const userId = req.user.id || req.user.userId;
       const { id_simulacion } = req.body;
 
       await pool.query(
@@ -303,8 +320,8 @@ class EvidenciasController {
 
   async eliminarEvidencia(req, res) {
     try {
-      const userId = req.user?.id || req.user?.userId;
-      const { id_simulacion } = req.body;
+      const userId = req.user.id || req.user.userId;
+      const { id_simulacion } = req.params;
 
       await pool.query(
         `DELETE ep FROM evidencias_personales ep
