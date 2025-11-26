@@ -89,20 +89,22 @@ export const routes: Routes = [
         title: 'Configuración - Aprendiz',
       },
       {
-        path: 'configuracion-simulacion',
-        loadComponent: () =>
-          import('./pages/aprendiz/configuracion-simulacion/configuracion-simulacion').then(
-            (m) => m.ConfiguracionSimulacion
-          ),
-        title: 'Configuración de simulación',
-      },
-      {
         path: 'simulador',
         loadComponent: () =>
-          import('./pages/aprendiz/simulador-plataforma/simulador-plataforma').then(
-            (m) => m.SimuladorPlataforma
-          ),
-        title: 'Simulador',
+          import('./pages/aprendiz/simulador/simulador').then((m) => m.Simulador),
+        title: 'Simulador', // opcional (fallback)
+        data: { headerText: 'Simulador de Asesoría Bancaria' }, // preferido ahora
+      },
+      {
+        path: 'mi-personal',
+        loadComponent: () =>
+          import('./pages/aprendiz/mi-personal/mi-personal').then((m) => m.MiPersonal),
+        title: 'Mi Personal',
+      },
+      {
+        path: 'logros',
+        loadComponent: () => import('./pages/aprendiz/logros/logros').then((m) => m.Logros),
+        title: 'Logros',
       },
       {
         path: 'informacion-plataforma',
@@ -150,7 +152,7 @@ export const routes: Routes = [
         path: 'configuracion',
         loadComponent: () =>
           import('./pages/pagina/configuracion/configuracion').then((m) => m.Configuracion),
-        title: 'Configuración - Aprendiz',
+        title: 'Configuración - Instructor',
       },
       {
         path: 'informacion-plataforma',

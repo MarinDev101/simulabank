@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 import { Observable, BehaviorSubject, tap, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -39,7 +40,7 @@ export interface RefreshResponse {
 export class AuthService {
   // Los services se encargan de la lógica de negocio y comunicación con el backend
 
-  private apiUrl = 'http://localhost:3000/api/auth'; // Endpoint del backend. URL base de la API
+  private apiUrl = `${environment.apiBaseUrl}/auth`; // Endpoint del backend. URL base de la API
   private tokenKey = 'access_token'; // clave para almacenar el token en localStorage
   private refreshTokenKey = 'refresh_token'; // clave para almacenar el refresh token en localStorage
   private userKey = 'user_data'; // clave para almacenar los datos del usuario en localStorage

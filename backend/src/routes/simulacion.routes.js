@@ -9,8 +9,9 @@ const { authenticateJWT } = require('../middlewares/jwt.middleware');
 const {
   validarDatosDeIniciarSimulacion,
   validarDatosDeEnviarMensaje,
-  validarUsuario,
 } = require('../validators/simulacion.validator');
+
+const { validarAprendiz } = require('../validators/user.validator');
 
 /**
  * Función que crea y retorna el router de simulación
@@ -59,7 +60,7 @@ function crearSimulacionRouter() {
   router.get(
     '/estado',
     authenticateJWT,
-    validarUsuario, // ✅ Valida que sea aprendiz
+    validarAprendiz, // ✅ Valida que sea aprendiz
     asyncHandler(simulacionController.obtenerEstado)
   );
 
@@ -73,7 +74,7 @@ function crearSimulacionRouter() {
   router.post(
     '/finalizar',
     authenticateJWT,
-    validarUsuario, // ✅ Valida que sea aprendiz
+    validarAprendiz, // ✅ Valida que sea aprendiz
     asyncHandler(simulacionController.finalizarSimulacion)
   );
 

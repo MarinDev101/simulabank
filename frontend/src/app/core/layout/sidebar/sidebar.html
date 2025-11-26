@@ -15,7 +15,7 @@
       </div>
     </app-header-plataforma>
 
-    <div class="flex flex-1 items-center justify-center bg-[#F9F9FA] dark:bg-gray-900">
+    <div class="flex-1 bg-[#F9F9FA] p-4 md:p-4 lg:p-4 dark:bg-gray-900">
       <ng-content></ng-content>
     </div>
   </div>
@@ -105,7 +105,8 @@
             <!-- Simulación (solo para aprendices) -->
             @if (shouldShowMenuItem(['aprendiz'])) {
             <li role="none">
-              <button routerLink="/aprendiz/configuracion-simulacion"
+              <button
+                routerLink="/aprendiz/simulador"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Simulación'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
                 [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Simulación">
@@ -124,6 +125,7 @@
             @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
             <li role="none">
               <button
+                routerLink="/aprendiz/mi-personal"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
                 [matTooltip]="'Mi Personal'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
                 [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Mi Personal">
@@ -138,19 +140,28 @@
             </li>
             }
 
-            <!-- Mi Sala -->
-            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
+            <!-- Mis Logros (solo para aprendices) -->
+            @if (shouldShowMenuItem(['aprendiz'])) {
             <li role="none">
               <button
+                routerLink="/aprendiz/logros"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Mi Sala'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Mi Sala">
+                [matTooltip]="'Mis Logros'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Mis Logros"
+              >
                 <span
-                  class="icon-[hugeicons--user-group-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
+                  class="icon-[hugeicons--award-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
+                  aria-hidden="true"
+                ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
-                  Mi Sala
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
+                  Mis Logros
                 </span>
               </button>
             </li>
@@ -190,25 +201,6 @@
                 </span>
               </button>
             </li>
-            }
-
-            <!-- Mis Logros (solo para aprendices) -->
-            @if (shouldShowMenuItem(['aprendiz'])) {
-            <li role="none">
-              <button
-                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Mis Logros'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Mis Logros">
-                <span
-                  class="icon-[hugeicons--award-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
-                <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
-                  Mis Logros
-                </span>
-              </button>
-            </li>
-            }
           </ul>
         </div>
 
@@ -221,9 +213,12 @@
             <div class="group flex h-18 w-full items-center justify-start bg-white dark:bg-gray-900">
               <div class="avatar ml-[5px]">
                 <div
-                  class="w-10 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
-                  <img [src]="usuario?.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
-                    [alt]="nombreCompleto" />
+                  class="w-10 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
+                >
+                  <img
+                    [src]="usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'"
+                    [alt]="nombreCompleto"
+                  />
                 </div>
               </div>
               <span class="ml-4 w-full animate-fade-right animate-duration-150 is-drawer-close:hidden">

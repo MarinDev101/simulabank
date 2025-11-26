@@ -8,6 +8,7 @@ const PRODUCTOS_BANCARIOS = require('../informacion-simulacion/productosBancario
 const TIPOS_CLIENTES = require('../informacion-simulacion/tiposClientes.constants');
 const PERFILES_CLIENTES = require('../informacion-simulacion/perfilesClientes.constants');
 const ETAPAS_PRODUCTOS = require('../informacion-simulacion/etapasConversacion.constants');
+const LOGROS = require('../informacion-adicional/logros-simulaciones');
 
 // =========================================================
 // Logger simple para el script
@@ -273,6 +274,55 @@ async function insertarEtapasConversacion() {
 }
 
 /**
+ * Inserta logros definidos en `informacion-adicional/logros-simulaciones.js`
+ */
+async function insertarLogros() {
+  logger.info('Insertando logros...');
+  const connection = await pool.getConnection();
+
+  try {
+    let insertados = 0;
+    let omitidos = 0;
+
+    for (const [nombre, datos] of Object.entries(LOGROS)) {
+      // Verificar si el logro ya existe
+      const [existe] = await connection.query('SELECT id_logro FROM logros WHERE nombre = ?', [
+        nombre,
+      ]);
+
+      if (existe.length > 0) {
+        logger.warn(`Logro "${nombre}" ya existe. Omitiendo...`);
+        omitidos++;
+        continue;
+      }
+
+      // Insertar logro
+      await connection.query(
+        `INSERT INTO logros (nombre, imagen, descripcion, criterios_desbloqueo, condicion_tipo)
+         VALUES (?, ?, ?, ?, ?)`,
+        [
+          nombre,
+          datos.imagen || null,
+          datos.descripcion || null,
+          JSON.stringify(datos.criterios_desbloqueo || {}),
+          datos.condicion_tipo || null,
+        ]
+      );
+
+      insertados++;
+      logger.success(`Logro "${nombre}" insertado correctamente`);
+    }
+
+    logger.success(`Logros: ${insertados} insertados, ${omitidos} omitidos`);
+  } catch (error) {
+    logger.error(`Error al insertar logros: ${error.message}`);
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
+/**
  * Muestra un resumen de los datos en la base de datos
  */
 async function mostrarResumen() {
@@ -285,6 +335,7 @@ async function mostrarResumen() {
     const [perfiles] = await connection.query('SELECT COUNT(*) as total FROM perfiles_clientes');
     const [relaciones] = await connection.query('SELECT COUNT(*) as total FROM perfiles_productos');
     const [etapas] = await connection.query('SELECT COUNT(*) as total FROM etapas_conversacion');
+    const [logros] = await connection.query('SELECT COUNT(*) as total FROM logros');
 
     logger.info('='.repeat(60));
     logger.info('RESUMEN DE DATOS EN LA BASE DE DATOS:');
@@ -294,6 +345,7 @@ async function mostrarResumen() {
     logger.info(`Perfiles de clientes:       ${perfiles[0].total}`);
     logger.info(`Relaciones perfil-producto: ${relaciones[0].total}`);
     logger.info(`Etapas de conversación:     ${etapas[0].total}`);
+    logger.info(`Logros:                     ${logros[0].total}`);
     logger.info('='.repeat(60));
   } catch (error) {
     logger.error(`Error al generar resumen: ${error.message}`);
@@ -318,6 +370,7 @@ async function poblarBaseDatos() {
     await insertarProductosBancarios();
     await insertarTiposClientes();
     await insertarPerfilesClientes();
+    await insertarLogros();
     await insertarEtapasConversacion();
 
     // Mostrar resumen

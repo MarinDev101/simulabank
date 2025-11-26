@@ -1,50 +1,67 @@
-<div class="flex flex-col gap-8 p-8">
+<div class="flex h-full flex-col gap-8">
   <div class="grid grid-cols-3 gap-8">
     <article
-      class="flex flex-col items-center p-5 gap-10 border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
-      <p class="titulo-seccion font-medium text-elegant-700 text-[20px] dark:text-gray-200">Comienza simulando
-        asesorias bancarias virtuales con clientes generados con IA</p>
-      <img src="/images/ilustraciones/simulacion-inicio.png" alt="">
-      <button routerLink="/aprendiz/configuracion-simulacion"
-        class="cursor-pointer flex w-full max-w-55 items-center justify-center gap-3 rounded-full bg-[#009040] dark:bg-green-600 hover:dark:bg-green-700 p-2 transition-colors duration-200 hover:bg-[#007a33] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400">
-        <p class="text-white text-sm md:text-base">Empezar simulación</p>
-        <div class="bg-white w-6 h-6 md:w-7 md:h-7 p-1 rounded-full dark:bg-gray-700">
+      class="flex flex-col items-center gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-5 dark:border-gray-700 dark:bg-gray-800"
+    >
+      <p class="titulo-seccion text-[20px] font-medium text-elegant-700 dark:text-gray-200">
+        Comienza simulando asesorias bancarias virtuales con clientes generados con IA
+      </p>
+      <img src="/images/ilustraciones/simulacion-inicio.png" alt="" />
+      <button
+        routerLink="/aprendiz/simulador"
+        class="flex w-full max-w-55 cursor-pointer items-center justify-center gap-3 rounded-full bg-[#009040] p-2 transition-colors duration-200 hover:bg-[#007a33] focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:outline-none dark:bg-green-600 hover:dark:bg-green-700"
+      >
+        <p class="text-sm text-white md:text-base">Empezar simulación</p>
+        <div class="h-6 w-6 rounded-full bg-white p-1 md:h-7 md:w-7 dark:bg-gray-700">
           <span class="icon-[solar--play-linear] dark:text-indigo-300"></span>
         </div>
       </button>
     </article>
     <article
-      class="flex flex-col items-center gap-10 p-5 border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
-      <p class="titulo-seccion font-medium text-elegant-700 text-[20px] dark:text-gray-200">SimulaBank es un banco
-        simulado. Tiene sus politicas y sus clientes</p>
-      <img src="/images/ilustraciones/poliinfo-incio.png" alt="">
-      <div class="flex justify-center gap-5 dark:text-gray-300 w-full">
-        <button [routerLink]="politicasRoute"
-          class="cursor-pointer w-[40%] flex items-center justify-center gap-3 rounded-full bg-[#0271b1] dark:bg-blue-600 hover:dark:bg-blue-700 p-2 transition-colors duration-200 hover:bg-[#00537a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
-          <p class="text-white text-sm md:text-base">Ver Politicas</p>
-          <span class="size-7 icon-[mdi--eye-outline] dark:text-indigo-300 text-white"></span>
+      class="flex flex-col items-center gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-5 dark:border-gray-700 dark:bg-gray-800"
+    >
+      <p class="titulo-seccion text-[20px] font-medium text-elegant-700 dark:text-gray-200">
+        SimulaBank es un banco simulado. Tiene sus politicas y sus clientes
+      </p>
+      <img src="/images/ilustraciones/poliinfo-incio.png" alt="" />
+      <div class="flex w-full justify-center gap-5 dark:text-gray-300">
+        <button
+          [routerLink]="politicasRoute"
+          class="flex w-[40%] cursor-pointer items-center justify-center gap-3 rounded-full bg-[#0271b1] p-2 transition-colors duration-200 hover:bg-[#00537a] focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none dark:bg-blue-600 hover:dark:bg-blue-700"
+        >
+          <p class="text-sm text-white md:text-base">Ver Politicas</p>
+          <span class="icon-[mdi--eye-outline] size-7 text-white dark:text-indigo-300"></span>
         </button>
-        <button [routerLink]="informacionRoute"
-          class="cursor-pointer w-[40%] flex items-center justify-center gap-3 rounded-full bg-[#0271b1] dark:bg-blue-600 hover:dark:bg-blue-700 p-2 transition-colors duration-200 hover:bg-[#00537a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
-          <p class="text-white text-sm md:text-base">Ver Informacion</p>
-          <span class="size-7 icon-[mdi--eye-outline] dark:text-indigo-300 text-white"></span>
+        <button
+          [routerLink]="informacionRoute"
+          class="flex w-[40%] cursor-pointer items-center justify-center gap-3 rounded-full bg-[#0271b1] p-2 transition-colors duration-200 hover:bg-[#00537a] focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none dark:bg-blue-600 hover:dark:bg-blue-700"
+        >
+          <p class="text-sm text-white md:text-base">Ver Informacion</p>
+          <span class="icon-[mdi--eye-outline] size-7 text-white dark:text-indigo-300"></span>
         </button>
       </div>
     </article>
-    <article class="p-10 border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
-      <ul class="flex flex-col gap-1 items-center">
+    <article
+      class="rounded-lg border-2 border-[#E7E9EB] bg-white p-10 dark:border-gray-700 dark:bg-gray-800"
+    >
+      <ul class="flex flex-col items-center gap-1">
         <li>
           <div class="avatar ml-[5px]">
             <div
-              class="w-30 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
-              <img [src]="usuario?.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
-                [alt]="nombreCompleto" />
+              class="w-30 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
+            >
+              <img
+                [src]="usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'"
+                [alt]="nombreCompleto"
+              />
             </div>
           </div>
         </li>
         <li class="text-center">
-          <p class="max-w-[200px] text-2xl truncate font-bold text-[#566577] dark:text-gray-200"
-            [title]="nombreCompleto">
+          <p
+            class="max-w-[200px] truncate text-2xl font-bold text-[#566577] dark:text-gray-200"
+            [title]="nombreCompleto"
+          >
             {{ nombreCompleto }}
           </p>
         </li>
@@ -55,36 +72,67 @@
         </li>
       </ul>
       <div class="mt-5">
-        <p>Total Simulaciones:</p>
-        <ul class="grid grid-cols-2 gap-4 mt-2">
+        <p>Estadisticas:</p>
+        <ul class="mt-2 grid grid-cols-2 gap-4">
           <li
-            class="bg-[#ebebeb] dark:bg-gray-700 rounded-lg flex flex-col items-center p-3 h-[185px] justify-center gap-2">
-            <p class="font-medium text-7xl text-[#111827] dark:text-gray-200">10</p>
-            <p class="text-elegant-500 text-center dark:text-gray-300">Simulaciones<br>completadas</p>
+            class="flex h-[185px] flex-col items-center justify-center gap-2 rounded-lg bg-[#ebebeb] p-3"
+          >
+            <p class="text-7xl font-medium">{{ totalSimulacionesCompletadas }}</p>
+            <p class="text-center text-elegant-500">
+              Simulaciones<br />completadas<br />exitosamente
+            </p>
           </li>
           <li
-            class="bg-[#ebebeb] dark:bg-gray-700 rounded-lg flex flex-col items-center p-3 h-[185px] justify-center gap-2">
-            <p class="font-medium text-7xl text-[#111827] dark:text-gray-200">8</p>
-            <p class="text-elegant-500 text-center dark:text-gray-300">Logros<br>completados</p>
+            class="flex h-[185px] flex-col items-center justify-center gap-2 rounded-lg bg-[#ebebeb] p-3"
+          >
+            <p class="text-7xl font-medium">{{ totalLogrosCompletados }}</p>
+            <p class="text-center text-elegant-500">Logros<br />completados<br />exitosamente</p>
           </li>
         </ul>
       </div>
     </article>
   </div>
   <div>
-    <article class="border-2 border-[#E7E9EB] rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
-      <div class="p-2.5 border-b-2 border-[#E7E9EB] flex justify-center items-center dark:border-gray-700">
-        <p class="font-medium text-elegant-700 text-[20px] dark:text-gray-200">Logros exhibidos</p>
+    <article
+      class="rounded-lg border-2 border-[#E7E9EB] bg-white dark:border-gray-700 dark:bg-gray-800"
+    >
+      <div
+        class="flex items-center justify-center border-b-2 border-[#E7E9EB] p-2.5 dark:border-gray-700"
+      >
+        <p class="text-[20px] font-medium text-elegant-700 dark:text-gray-200">Logros exhibidos</p>
       </div>
-      <div class="p-5 dark:text-gray-300">
-        <div class="flex flex-wrap gap-4 justify-center">
-          <div
-            class="w-40 h-47 border-2 border-[#E7E9EB] rounded-lg flex flex-col justify-between dark:border-gray-700">
-            <div class="flex justify-center items-center p-3 h-full">
-              <span class="icon-[mdi--trophy-outline] text-4xl text-yellow-500 mb-2"></span>
+      <div class="flex-grow overflow-auto p-5 dark:text-gray-300">
+        <div class="mx-auto flex max-w-6xl flex-col items-center gap-4">
+          <ng-container *ngIf="logrosAprendiz?.length; else sinLogrosInicio">
+            <div class="flex w-full flex-wrap justify-center gap-4">
+              <ng-container *ngFor="let logro of logrosAprendiz">
+                <div
+                  class="flex w-52 flex-col overflow-hidden rounded-lg border-2 border-[#E7E9EB] dark:border-gray-700"
+                >
+                  <div
+                    class="flex h-40 items-center justify-center overflow-hidden bg-gray-100 p-3 dark:bg-gray-900"
+                  >
+                    <img
+                      [src]="logro.imagen"
+                      class="max-h-full max-w-full object-contain drop-shadow-lg"
+                      [alt]="logro.nombre"
+                    />
+                  </div>
+                  <div
+                    class="flex h-20 items-center justify-center border-t-2 border-[#E7E9EB] bg-white p-2 text-center dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <p class="text-sm">{{ logro.nombre }}</p>
+                  </div>
+                </div>
+              </ng-container>
             </div>
-            <div class="text-center p-2 border-t-2 border-[#E7E9EB] dark:border-gray-700">Tu primer simulación</div>
-          </div>
+          </ng-container>
+          <ng-template #sinLogrosInicio>
+            <p class="max-w-xl text-center text-sm text-elegant-500 dark:text-gray-400">
+              No tienes logros. Ve a la sección de logros de la plataforma para enterarte qué debes
+              hacer.
+            </p>
+          </ng-template>
         </div>
       </div>
     </article>

@@ -109,13 +109,12 @@ CREATE TABLE sesiones_usuarios (
 CREATE TABLE logros (
   id_logro INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
+  imagen TEXT NOT NULL,
   descripcion TEXT NOT NULL,
-  criterio_desbloqueo JSON NOT NULL,
+  criterios_desbloqueo JSON NOT NULL,
   condicion_tipo ENUM(
     'simulaciones_completadas',
-    'simulaciones_aprobadas',
     'simulaciones_evaluativas',
-    'simulaciones_aleatorias',
     'simulaciones_agrupadas'
   ) NOT NULL
 );
@@ -226,7 +225,7 @@ CREATE TABLE simulaciones (
   id_producto_bancario INT NOT NULL,
   producto_seleccion ENUM('especifico', 'aleatorio') NOT NULL,
   modo ENUM('aprendizaje', 'evaluativo') NOT NULL,
-  sonido_habilitado BOOLEAN DEFAULT TRUE,
+  sonido_interaccion ENUM('automatico', 'manual') NOT NULL,
   destino_evidencia ENUM('personal', 'sala') NOT NULL,
   perfil_cliente JSON NOT NULL,
   aspectos_clave_registrados JSON NOT NULL,
@@ -285,7 +284,10 @@ CREATE TABLE carpetas_personales (
 CREATE TABLE evidencias_personales (
   id_simulacion INT PRIMARY KEY,
   id_carpeta_personal INT NULL,
+  numero_evidencia INT NOT NULL,
   fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  estado ENUM('visible', 'archivada') DEFAULT 'visible',
+  peso_pdf_kb BIGINT NULL,
   FOREIGN KEY (id_simulacion) REFERENCES simulaciones(id_simulacion)
     ON DELETE CASCADE,
   FOREIGN KEY (id_carpeta_personal) REFERENCES carpetas_personales(id_carpeta_personal)

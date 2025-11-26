@@ -1,1 +1,6 @@
-export const environment = {};
+export const environment = {
+  // Base URL de la API (usar sin '/api' si prefieres concatenar explicitamente)
+  apiBaseUrl: 'https://r8x566j8-3000.use2.devtunnels.ms/api',
+  // reCAPTCHA site key pública (frontend)
+  recaptchaSiteKey: '6LcukxMsAAAAAL2kjKDVX-ERpaO4X2ZiDplYqglM',
+};
