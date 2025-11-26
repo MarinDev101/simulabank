@@ -1,15 +1,38 @@
 <div class="drawer overflow-visible lg:drawer-open">
-  <input id="my-drawer" type="checkbox" class="drawer-toggle" checked (change)="checkDrawerState()" />
+  <input
+    id="my-drawer"
+    type="checkbox"
+    class="drawer-toggle"
+    checked
+    (change)="checkDrawerState()"
+  />
 
   <div class="drawer-content flex flex-col overflow-visible">
     <app-header-plataforma>
       <div class="p-2 lg:hidden">
-        <label for="my-drawer" class="drawer-button btn btn-circle btn-ghost focus:ring-0 focus:outline-none"
-          tabindex="0" role="button" aria-label="Abrir menú de navegación" (keydown.enter)="toggleDrawer()"
-          (keydown.space)="toggleDrawer()">
-          <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        <label
+          for="my-drawer"
+          class="drawer-button btn btn-circle btn-ghost focus:ring-0 focus:outline-none"
+          tabindex="0"
+          role="button"
+          aria-label="Abrir menú de navegación"
+          (keydown.enter)="toggleDrawer()"
+          (keydown.space)="toggleDrawer()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
           </svg>
         </label>
       </div>
@@ -21,42 +44,75 @@
   </div>
 
   <div class="drawer-side overflow-visible">
-    <label for="my-drawer" aria-label="Cerrar menú lateral" class="drawer-overlay" tabindex="-1"></label>
+    <label
+      for="my-drawer"
+      aria-label="Cerrar menú lateral"
+      class="drawer-overlay"
+      tabindex="-1"
+    ></label>
 
     <nav
       class="group/sidebar flex h-full flex-col items-start overflow-visible border-r-2 border-r-[#E7E9EB] bg-white dark:border-r-gray-700 dark:bg-gray-900 is-drawer-close:w-17 is-drawer-open:w-64 is-drawer-open:transition-all is-drawer-open:duration-150"
-      aria-label="Navegación principal" role="navigation">
+      aria-label="Navegación principal"
+      role="navigation"
+    >
       <div
-        class="scrollbar-thin flex h-full w-full flex-col items-start overflow-x-hidden scrollbar-corner-black scrollbar-thumb-green-600 scrollbar-track-gray-200 dark:scrollbar-thumb-green-500 dark:scrollbar-track-gray-800 is-drawer-close:overflow-y-auto is-drawer-open:overflow-y-auto">
+        class="scrollbar-thin flex h-full w-full flex-col items-start overflow-x-hidden scrollbar-corner-black scrollbar-thumb-green-600 scrollbar-track-gray-200 dark:scrollbar-thumb-green-500 dark:scrollbar-track-gray-800 is-drawer-close:overflow-y-auto is-drawer-open:overflow-y-auto"
+      >
         <!-- Header del Sidebar -->
         <div
-          class="group z-1500 flex h-[65px] w-full shrink-0 items-center border-b-2 border-b-[#E7E9EB] bg-white pt-2 pb-2 pl-[15px] text-[#566577] transition-colors duration-200 dark:border-b-gray-700 dark:bg-gray-900 dark:text-gray-300 is-drawer-open:justify-start">
+          class="group z-1500 flex h-[65px] w-full shrink-0 items-center border-b-2 border-b-[#E7E9EB] bg-white pt-2 pb-2 pl-[15px] text-[#566577] transition-colors duration-200 dark:border-b-gray-700 dark:bg-gray-900 dark:text-gray-300 is-drawer-open:justify-start"
+        >
           <div class="relative h-10 w-9">
-            <img src="images/isotipo/isotipo_simulabank_sidebar.svg"
+            <img
+              src="images/isotipo/isotipo_simulabank_sidebar.svg"
               class="h-10 w-9 transition-opacity duration-200 dark:brightness-200 lg:is-drawer-close:group-hover/sidebar:opacity-0"
-              alt="Logo SimulaBank" />
+              alt="Logo SimulaBank"
+            />
 
             <div
               class="pointer-events-none absolute top-0 left-0 w-9 opacity-0 transition-opacity duration-200 pointer-coarse:lg:is-drawer-close:translate-x-4 has-hover:lg:is-drawer-close:group-hover/sidebar:pointer-events-auto has-hover:lg:is-drawer-close:group-hover/sidebar:opacity-100 no-hover:lg:is-drawer-close:pointer-events-auto no-hover:lg:is-drawer-close:opacity-100"
-              [matTooltip]="'Mostrar barra lateral'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-              [matTooltipShowDelay]="500">
-              <label for="my-drawer" class="drawer-button btn btn-circle w-full focus:ring-0 focus:outline-none"
-                tabindex="0" role="button" aria-label="Mostrar barra lateral" (keydown.enter)="toggleDrawer()"
-                (keydown.space)="toggleDrawer()">
+              [matTooltip]="'Mostrar barra lateral'"
+              [matTooltipDisabled]="!isDrawerClosed"
+              matTooltipPosition="right"
+              [matTooltipShowDelay]="500"
+            >
+              <label
+                for="my-drawer"
+                class="drawer-button btn btn-circle w-full focus:ring-0 focus:outline-none"
+                tabindex="0"
+                role="button"
+                aria-label="Mostrar barra lateral"
+                (keydown.enter)="toggleDrawer()"
+                (keydown.space)="toggleDrawer()"
+              >
                 <span class="icon-[hugeicons--sidebar-left-01] text-2xl" aria-hidden="true"></span>
               </label>
             </div>
           </div>
 
-          <img src="images/imagotipo/imagotipo_simulabank_sidebar.svg"
-            class="h-[15px] pl-2 dark:brightness-200 is-drawer-close:hidden" alt="SimulaBank" />
+          <img
+            src="images/imagotipo/imagotipo_simulabank_sidebar.svg"
+            class="h-[15px] pl-2 dark:brightness-200 is-drawer-close:hidden"
+            alt="SimulaBank"
+          />
 
-          <div class="ml-auto is-drawer-close:hidden" [matTooltip]="'Ocultar barra lateral'"
-            [matTooltipDisabled]="isDrawerClosed" matTooltipPosition="right" [matTooltipShowDelay]="500">
-            <label for="my-drawer"
+          <div
+            class="ml-auto is-drawer-close:hidden"
+            [matTooltip]="'Ocultar barra lateral'"
+            [matTooltipDisabled]="isDrawerClosed"
+            matTooltipPosition="right"
+            [matTooltipShowDelay]="500"
+          >
+            <label
+              for="my-drawer"
               class="drawer-button btn btn-circle btn-ghost focus:ring-0 focus:outline-none dark:hover:bg-gray-800"
-              tabindex="0" role="button" aria-label="Ocultar barra lateral" (keydown.enter)="toggleDrawer()"
-              (keydown.space)="toggleDrawer()">
+              tabindex="0"
+              role="button"
+              aria-label="Ocultar barra lateral"
+              (keydown.enter)="toggleDrawer()"
+              (keydown.space)="toggleDrawer()"
+            >
               <span class="icon-[hugeicons--sidebar-left-01] text-2xl" aria-hidden="true"></span>
             </label>
           </div>
@@ -65,84 +121,108 @@
         <!-- Menú de Navegación Principal -->
         <div class="w-full flex-1">
           <ul class="nunito-sans-body menu w-full" role="menubar" aria-label="Menú principal">
-
-            @if (shouldShowMenuItem(['administrador'])) {
-            <!-- Inicio -->
-            <li role="none">
-              <button [routerLink]="inicioRoute"
+            <!-- Inicio (solo para administrador) -->
+            <li role="none" *ngIf="shouldShowMenuItem(['administrador'])">
+              <button
+                [routerLink]="inicioRoute"
                 class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Inicio'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Inicio">
+                [matTooltip]="'Inicio'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Inicio"
+              >
                 <span
                   class="icon-[hugeicons--students] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
+                  aria-hidden="true"
+                ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
                   Aprendices
                 </span>
               </button>
             </li>
-            }
 
-            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
-            <!-- Inicio -->
-            <li role="none">
-              <button [routerLink]="inicioRoute"
+            <!-- Inicio (para aprendices e instructores) -->
+            <li role="none" *ngIf="shouldShowMenuItem(['aprendiz', 'instructor'])">
+              <button
+                [routerLink]="inicioRoute"
                 class="group flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Inicio'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Inicio">
+                [matTooltip]="'Inicio'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Inicio"
+              >
                 <span
                   class="icon-[hugeicons--home-12] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
+                  aria-hidden="true"
+                ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
                   Inicio
                 </span>
               </button>
             </li>
-            }
 
             <!-- Simulación (solo para aprendices) -->
-            @if (shouldShowMenuItem(['aprendiz'])) {
-            <li role="none">
+            <li role="none" *ngIf="shouldShowMenuItem(['aprendiz'])">
               <button
                 routerLink="/aprendiz/simulador"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Simulación'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Simulación">
+                [matTooltip]="'Simulación'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Simulación"
+              >
                 <span
                   class="icon-[hugeicons--vr-glasses] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
+                  aria-hidden="true"
+                ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
                   Simulación
                 </span>
               </button>
             </li>
-            }
 
             <!-- Mi Personal (solo para aprendices e instructores) -->
-            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
-            <li role="none">
+            <li role="none" *ngIf="shouldShowMenuItem(['aprendiz', 'instructor'])">
               <button
                 routerLink="/aprendiz/mi-personal"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Mi Personal'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Mi Personal">
+                [matTooltip]="'Mi Personal'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Mi Personal"
+              >
                 <span
                   class="icon-[hugeicons--user-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
+                  aria-hidden="true"
+                ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
                   Mi Personal
                 </span>
               </button>
             </li>
-            }
 
             <!-- Mis Logros (solo para aprendices) -->
-            @if (shouldShowMenuItem(['aprendiz'])) {
-            <li role="none">
+            <li role="none" *ngIf="shouldShowMenuItem(['aprendiz'])">
               <button
                 routerLink="/aprendiz/logros"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
@@ -165,38 +245,52 @@
                 </span>
               </button>
             </li>
-            }
 
-            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
-            <!-- Políticas -->
-            <li role="none">
-              <button [routerLink]="politicasRoute"
+            <!-- Políticas (para aprendices e instructores) -->
+            <li role="none" *ngIf="shouldShowMenuItem(['aprendiz', 'instructor'])">
+              <button
+                [routerLink]="politicasRoute"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Políticas'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Políticas">
+                [matTooltip]="'Políticas'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Políticas"
+              >
                 <span
                   class="icon-[hugeicons--bank] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
+                  aria-hidden="true"
+                ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
                   Políticas
                 </span>
               </button>
             </li>
-            }
 
-            @if (shouldShowMenuItem(['aprendiz', 'instructor'])) {
-            <!-- Información -->
-            <li role="none">
-              <button [routerLink]="informacionRoute"
+            <!-- Información (para aprendices e instructores) -->
+            <li role="none" *ngIf="shouldShowMenuItem(['aprendiz', 'instructor'])">
+              <button
+                [routerLink]="informacionRoute"
                 class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-                [matTooltip]="'Información'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-                [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Información">
+                [matTooltip]="'Información'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Información"
+              >
                 <span
                   class="icon-[hugeicons--document-validation] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                  aria-hidden="true"></span>
+                  aria-hidden="true"
+                ></span>
                 <span
-                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
                   Información
                 </span>
               </button>
@@ -207,10 +301,14 @@
         <!-- Menú de Usuario y Configuración -->
         <ul
           class="nunito-sans-body menu w-full shrink-0 border-t-2 border-t-[#E7E9EB] bg-white dark:border-t-gray-700 dark:bg-gray-900"
-          role="menubar" aria-label="Menú de usuario">
+          role="menubar"
+          aria-label="Menú de usuario"
+        >
           <!-- Perfil de Usuario -->
           <div class="relative bg-white dark:bg-gray-900">
-            <div class="group flex h-18 w-full items-center justify-start bg-white dark:bg-gray-900">
+            <div
+              class="group flex h-18 w-full items-center justify-start bg-white dark:bg-gray-900"
+            >
               <div class="avatar ml-[5px]">
                 <div
                   class="w-10 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
@@ -221,8 +319,13 @@
                   />
                 </div>
               </div>
-              <span class="ml-4 w-full animate-fade-right animate-duration-150 is-drawer-close:hidden">
-                <p class="max-w-[130px] truncate font-bold text-[#566577] dark:text-gray-200" [title]="nombreCompleto">
+              <span
+                class="ml-4 w-full animate-fade-right animate-duration-150 is-drawer-close:hidden"
+              >
+                <p
+                  class="max-w-[130px] truncate font-bold text-[#566577] dark:text-gray-200"
+                  [title]="nombreCompleto"
+                >
                   {{ nombreCompleto }}
                 </p>
                 <span class="badge font-bold text-white" [ngClass]="rolBadge.color">
@@ -234,21 +337,31 @@
 
           <!-- Cambiar tema -->
           <li role="none">
-            <button (click)="toggleTheme()"
+            <button
+              (click)="toggleTheme()"
               class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
               [matTooltip]="currentTheme === 'light' ? 'Modo Claro' : 'Modo Oscuro'"
-              [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right" [matTooltipShowDelay]="500"
-              role="menuitem" tabindex="0"
+              [matTooltipDisabled]="!isDrawerClosed"
+              matTooltipPosition="right"
+              [matTooltipShowDelay]="500"
+              role="menuitem"
+              tabindex="0"
               [attr.aria-label]="'Cambiar a ' + (currentTheme === 'light' ? 'modo oscuro' : 'modo claro')"
-              [attr.aria-pressed]="currentTheme === 'dark'">
-              <span *ngIf="currentTheme === 'light'"
-                class="icon-[hugeicons--sun-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                aria-hidden="true"></span>
-              <span *ngIf="currentTheme === 'dark'"
-                class="icon-[hugeicons--moon-02] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                aria-hidden="true"></span>
+              [attr.aria-pressed]="currentTheme === 'dark'"
+            >
               <span
-                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                *ngIf="currentTheme === 'light'"
+                class="icon-[hugeicons--sun-03] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
+                aria-hidden="true"
+              ></span>
+              <span
+                *ngIf="currentTheme === 'dark'"
+                class="icon-[hugeicons--moon-02] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+              >
                 {{ currentTheme === 'light' ? 'Modo Claro' : 'Modo Oscuro' }}
               </span>
             </button>
@@ -256,15 +369,24 @@
 
           <!-- Configuración -->
           <li role="none">
-            <button [routerLink]="configuracionRoute"
+            <button
+              [routerLink]="configuracionRoute"
               class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-              [matTooltip]="'Configuración'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-              [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Ir a Configuración">
+              [matTooltip]="'Configuración'"
+              [matTooltipDisabled]="!isDrawerClosed"
+              matTooltipPosition="right"
+              [matTooltipShowDelay]="500"
+              role="menuitem"
+              tabindex="0"
+              aria-label="Ir a Configuración"
+            >
               <span
                 class="icon-[hugeicons--settings-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                aria-hidden="true"></span>
+                aria-hidden="true"
+              ></span>
               <span
-                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+              >
                 Configuración
               </span>
             </button>
@@ -272,15 +394,24 @@
 
           <!-- Cerrar sesión -->
           <li role="none">
-            <button (click)="cerrarSesion()"
+            <button
+              (click)="cerrarSesion()"
               class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
-              [matTooltip]="'Cerrar sesión'" [matTooltipDisabled]="!isDrawerClosed" matTooltipPosition="right"
-              [matTooltipShowDelay]="500" role="menuitem" tabindex="0" aria-label="Cerrar sesión">
+              [matTooltip]="'Cerrar sesión'"
+              [matTooltipDisabled]="!isDrawerClosed"
+              matTooltipPosition="right"
+              [matTooltipShowDelay]="500"
+              role="menuitem"
+              tabindex="0"
+              aria-label="Cerrar sesión"
+            >
               <span
                 class="icon-[hugeicons--logout-square-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
-                aria-hidden="true"></span>
+                aria-hidden="true"
+              ></span>
               <span
-                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden">
+                class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+              >
                 Cerrar sesión
               </span>
             </button>

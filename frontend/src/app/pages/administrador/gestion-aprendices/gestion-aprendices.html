@@ -28,9 +28,11 @@
             [value]="filtroBusqueda"
             (input)="onBuscarChange($event)"
             placeholder="Buscar por nombre o correo..."
-            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 pl-10 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 sm:w-64"
+            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 pl-10 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none sm:w-64 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
           />
-          <span class="icon-[heroicons-outline--magnifying-glass] absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></span>
+          <span
+            class="absolute top-1/2 left-3 icon-[heroicons-outline--magnifying-glass] h-4 w-4 -translate-y-1/2 text-gray-400"
+          ></span>
         </div>
 
         <!-- Filtros de estado -->
@@ -104,30 +106,53 @@
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead class="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                  <th
+                    scope="col"
+                    class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                  >
                     Aprendiz
                   </th>
-                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                  <th
+                    scope="col"
+                    class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                  >
                     Correo
                   </th>
-                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                  <th
+                    scope="col"
+                    class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                  >
                     Estado
                   </th>
-                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                  <th
+                    scope="col"
+                    class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                  >
                     Fecha Registro
                   </th>
-                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                  <th
+                    scope="col"
+                    class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                  >
                     Último Acceso
                   </th>
-                  <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400">
+                  <th
+                    scope="col"
+                    class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
+                  >
                     Acciones
                   </th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+              <tbody
+                class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900"
+              >
                 <!-- Mensaje si no hay aprendices -->
                 <tr *ngIf="aprendicesPaginados.length === 0">
-                  <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                  <td
+                    colspan="6"
+                    class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400"
+                  >
                     No se encontraron aprendices con los filtros seleccionados
                   </td>
                 </tr>
@@ -139,9 +164,11 @@
                       <div class="flex items-center gap-x-2">
                         <!-- Avatar -->
                         <div class="avatar">
-                          <div class="h-8 w-8 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
+                          <div
+                            class="h-8 w-8 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
+                          >
                             <img
-                              [src]="aprendiz.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
+                              [src]="aprendiz.foto_perfil || '/images/ilustraciones/perfil_default.png'"
                               [alt]="aprendiz.nombres"
                               class="h-full w-full object-cover"
                             />
@@ -194,7 +221,7 @@
                         class="flex items-center rounded-full bg-red-100/60 px-3 py-1 text-xs text-red-500 transition-colors hover:bg-red-200 dark:bg-gray-800 dark:hover:bg-gray-700"
                         title="Inhabilitar"
                       >
-                        <span class="icon-[heroicons-outline--user-minus] h-5 w-5"></span>
+                        <span class="icon-[heroicons-outline--user-remove] h-5 w-5"></span>
                       </button>
 
                       <button
@@ -203,7 +230,7 @@
                         class="flex items-center rounded-full bg-green-100/60 px-3 py-1 text-xs text-green-500 transition-colors hover:bg-green-200 dark:bg-gray-800 dark:hover:bg-gray-700"
                         title="Habilitar"
                       >
-                        <span class="icon-[heroicons-outline--user-plus] h-5 w-5"></span>
+                        <span class="icon-[heroicons-outline--user-add] h-5 w-5"></span>
                       </button>
                     </div>
                   </td>
@@ -289,10 +316,10 @@
     class="w-full max-w-2xl rounded-xl bg-white shadow-2xl ring-1 ring-black/5 transition-all duration-300 dark:bg-gray-800 dark:ring-white/10"
   >
     <!-- Header del modal -->
-    <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-        Editar Aprendiz
-      </h3>
+    <div
+      class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700"
+    >
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Editar Aprendiz</h3>
       <button
         (click)="cancelarEdicion()"
         class="rounded-lg p-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -306,7 +333,9 @@
       <form class="space-y-4">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombres</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Nombres</label
+            >
             <input
               type="text"
               [(ngModel)]="aprendizEditando.nombres"
@@ -315,7 +344,9 @@
             />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellidos</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Apellidos</label
+            >
             <input
               type="text"
               [(ngModel)]="aprendizEditando.apellidos"

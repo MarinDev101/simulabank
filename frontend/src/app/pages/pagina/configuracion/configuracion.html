@@ -1,30 +1,41 @@
-<div class="w-full bg-white rounded-xl h-full dark:bg-gray-800">
-
+<div class="h-full w-full rounded-xl bg-white dark:bg-gray-800">
   <!-- TABS -->
   <div class="flex border-b border-gray-300 dark:border-gray-700">
-    <button (click)="changeTab('tab1')"
-      class="hover:bg-calm-50 cursor-pointer px-5 py-2 text-sm font-medium transition border-b-2 rounded-t-md"
-      [class.bg-calm-100]="activeTab === 'tab1'" [class.border-indigo-500]="activeTab === 'tab1'"
-      [class.text-indigo-600]="activeTab === 'tab1'" [class.border-transparent]="activeTab !== 'tab1'">
+    <button
+      (click)="changeTab('tab1')"
+      class="cursor-pointer rounded-t-md border-b-2 px-5 py-2 text-sm font-medium transition hover:bg-calm-50"
+      [class.bg-calm-100]="activeTab === 'tab1'"
+      [class.border-indigo-500]="activeTab === 'tab1'"
+      [class.text-indigo-600]="activeTab === 'tab1'"
+      [class.border-transparent]="activeTab !== 'tab1'"
+    >
       Datos personales
     </button>
 
-    <button (click)="changeTab('tab2')"
-      class="hover:bg-calm-50 cursor-pointer px-5 py-2 text-sm font-medium transition border-b-2 rounded-t-md"
-      [class.bg-calm-100]="activeTab === 'tab2'" [class.border-indigo-500]="activeTab === 'tab2'"
-      [class.text-indigo-600]="activeTab === 'tab2'" [class.border-transparent]="activeTab !== 'tab2'">
+    <button
+      (click)="changeTab('tab2')"
+      class="cursor-pointer rounded-t-md border-b-2 px-5 py-2 text-sm font-medium transition hover:bg-calm-50"
+      [class.bg-calm-100]="activeTab === 'tab2'"
+      [class.border-indigo-500]="activeTab === 'tab2'"
+      [class.text-indigo-600]="activeTab === 'tab2'"
+      [class.border-transparent]="activeTab !== 'tab2'"
+    >
       Seguridad
     </button>
   </div>
 
   <!-- TAB 1 -->
-  <div class="p-8 w-[70vw] min-h-[640px]" *ngIf="activeTab === 'tab1'">
-    <div *ngIf="successMessage && activeTab === 'tab1'"
-      class="mb-4 p-3 rounded bg-green-50 border border-green-200 text-green-800 dark:bg-green-900 dark:border-green-800 dark:text-green-200">
+  <div class="min-h-[640px] w-[70vw] p-8" *ngIf="activeTab === 'tab1'">
+    <div
+      *ngIf="successMessage && activeTab === 'tab1'"
+      class="mb-4 rounded border border-green-200 bg-green-50 p-3 text-green-800 dark:border-green-800 dark:bg-green-900 dark:text-green-200"
+    >
       {{ successMessage }}
     </div>
-    <div *ngIf="errorMessage && activeTab === 'tab1'"
-      class="mb-4 p-3 rounded bg-red-50 border border-red-200 text-red-800 dark:bg-red-900 dark:border-red-800 dark:text-red-200">
+    <div
+      *ngIf="errorMessage && activeTab === 'tab1'"
+      class="mb-4 rounded border border-red-200 bg-red-50 p-3 text-red-800 dark:border-red-800 dark:bg-red-900 dark:text-red-200"
+    >
       {{ errorMessage }}
     </div>
     <article class="flex gap-8">
@@ -32,23 +43,29 @@
         <li>
           <div class="avatar">
             <div
-              class="w-40 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
+              class="w-40 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
+            >
               <img
-                [src]="fotoPreview || usuario?.foto_perfil || 'https://img.daisyui.com/images/profile/demo/yellingcat@192.webp'"
-                [alt]="nombreCompleto" />
+                [src]="fotoPreview || usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'"
+                [alt]="nombreCompleto"
+              />
             </div>
           </div>
         </li>
       </ul>
       <ul>
         <li>
-          <p class="max-w-[500px] text-2xl truncate font-bold dark:text-gray-200" [title]="nombreCompleto">
-            Nombre:
-            {{ nombreCompleto }}
+          <p
+            class="max-w-[500px] truncate text-2xl font-bold dark:text-gray-200"
+            [title]="nombreCompleto"
+          >
+            Nombre: {{ nombreCompleto }}
           </p>
         </li>
         <li>
-          <p class="text-gray-700 font-medium dark:text-gray-300">Correo electrónico: {{ correo }}</p>
+          <p class="font-medium text-gray-700 dark:text-gray-300">
+            Correo electrónico: {{ correo }}
+          </p>
         </li>
         <li class="flex items-center gap-2">
           Rol:
@@ -56,83 +73,123 @@
             {{ rolBadge.text }}
           </span>
         </li>
-        <li class="flex gap-5 mt-5">
-          <input type="file" #fileInput accept="image/*" (change)="onFotoSeleccionada($event)" class="hidden" />
-          <button type="button" (click)="fileInput.click()"
-            class="bg-sky-600 text-white p-1.5 rounded flex items-center gap-1 cursor-pointer hover:bg-sky-700 transition-colors">
+        <li class="mt-5 flex gap-5">
+          <input
+            type="file"
+            #fileInput
+            accept="image/*"
+            (change)="onFotoSeleccionada($event)"
+            class="hidden"
+          />
+          <button
+            type="button"
+            (click)="fileInput.click()"
+            class="flex cursor-pointer items-center gap-1 rounded bg-sky-600 p-1.5 text-white transition-colors hover:bg-sky-700"
+          >
             <span class="icon-[material-symbols--image-outline] size-6"></span>
             Cargar nueva foto
           </button>
-          <button type="button" (click)="eliminarFoto()"
-            class="bg-red-500 text-white p-1.5 rounded flex items-center gap-1 cursor-pointer hover:bg-red-600 transition-colors">
+          <button
+            type="button"
+            (click)="eliminarFoto()"
+            class="flex cursor-pointer items-center gap-1 rounded bg-red-500 p-1.5 text-white transition-colors hover:bg-red-600"
+          >
             <span class="icon-[material-symbols--delete-outline] size-6"></span>
             Eliminar foto
           </button>
         </li>
         <li class="mt-1">
-          <p class="text-gray-600 dark:text-gray-300">Cargue el archivo en formato jpeg/png y asegúrese que el tamaño
-            sea inferior a 25MB
+          <p class="text-gray-600 dark:text-gray-300">
+            Cargue el archivo en formato jpeg/png y asegúrese que el tamaño sea inferior a 25MB
           </p>
         </li>
       </ul>
     </article>
-    <article class="border border-gray-300 rounded p-8 mt-10 dark:border-gray-700">
+    <article class="mt-10 rounded border border-gray-300 p-8 dark:border-gray-700">
       <form class="flex flex-col gap-6">
         <p class="font-medium">Selecciona tu nombre y apellido:</p>
         <div class="flex gap-6">
           <!-- Nombre -->
-          <div class="flex flex-col relative">
-            <label class="floating-label block relative">
+          <div class="relative flex flex-col">
+            <label class="floating-label relative block">
               <span class="text-base text-gray-600 dark:text-gray-300">Nombre</span>
               <div class="relative">
-                <input type="text" #nombreCtrl="ngModel" [(ngModel)]="nombre" name="nombre"
-                  placeholder="Ingresa tu nombre" required minlength="2" pattern="^[A-Za-zÀ-ÿ\\s]+$"
+                <input
+                  type="text"
+                  #nombreCtrl="ngModel"
+                  [(ngModel)]="nombre"
+                  name="nombre"
+                  placeholder="Ingresa tu nombre"
+                  required
+                  minlength="2"
+                  pattern="^[A-Za-zÀ-ÿ\\s]+$"
                   [class.border-red-500]="nombreCtrl.invalid && nombreCtrl.touched"
-                  class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 pr-10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 dark:bg-gray-700" />
+                  class="input input-lg w-full border-gray-300 pr-10 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
+                />
                 <span
-                  class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl pointer-events-none z-10"></span>
+                  class="pointer-events-none absolute top-1/2 right-3 z-10 icon-[material-symbols-light--id-card-rounded] -translate-y-1/2 text-xl text-gray-500"
+                ></span>
               </div>
             </label>
-            <small class="block text-sm transition-all duration-200"
+            <small
+              class="block text-sm transition-all duration-200"
               [class.text-red-600]="nombreCtrl.invalid && nombreCtrl.touched"
-              [style.visibility]="nombreCtrl.invalid && nombreCtrl.touched ? 'visible' : 'hidden'">
+              [style.visibility]="nombreCtrl.invalid && nombreCtrl.touched ? 'visible' : 'hidden'"
+            >
               <span *ngIf="nombreCtrl.errors?.['required']">El nombre es requerido.</span>
               <span *ngIf="nombreCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
               <span *ngIf="nombreCtrl.errors?.['pattern']">Solo se permiten letras.</span>
             </small>
-            <p *ngIf="nombreCtrl.valid && nombreCtrl.touched" class="text-sm text-green-600 mt-1">Nombre válido</p>
+            <p *ngIf="nombreCtrl.valid && nombreCtrl.touched" class="mt-1 text-sm text-green-600">
+              Nombre válido
+            </p>
           </div>
 
           <!-- Apellido -->
-          <div class="flex flex-col relative">
-            <label class="floating-label block relative">
+          <div class="relative flex flex-col">
+            <label class="floating-label relative block">
               <span class="text-base text-gray-600 dark:text-gray-300">Apellido</span>
               <div class="relative">
-                <input type="text" #apellidoCtrl="ngModel" [(ngModel)]="apellido" name="apellido"
-                  placeholder="Ingresa tu apellido" required minlength="2" pattern="^[A-Za-zÀ-ÿ\\s]+$"
+                <input
+                  type="text"
+                  #apellidoCtrl="ngModel"
+                  [(ngModel)]="apellido"
+                  name="apellido"
+                  placeholder="Ingresa tu apellido"
+                  required
+                  minlength="2"
+                  pattern="^[A-Za-zÀ-ÿ\\s]+$"
                   [class.border-red-500]="apellidoCtrl.invalid && apellidoCtrl.touched"
-                  class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 pr-10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 dark:bg-gray-700" />
+                  class="input input-lg w-full border-gray-300 pr-10 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
+                />
                 <span
-                  class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl pointer-events-none z-10"></span>
+                  class="pointer-events-none absolute top-1/2 right-3 z-10 icon-[material-symbols-light--id-card-rounded] -translate-y-1/2 text-xl text-gray-500"
+                ></span>
               </div>
             </label>
-            <small class="block text-sm transition-all duration-200"
+            <small
+              class="block text-sm transition-all duration-200"
               [class.text-red-600]="apellidoCtrl.invalid && apellidoCtrl.touched"
-              [style.visibility]="apellidoCtrl.invalid && apellidoCtrl.touched ? 'visible' : 'hidden'">
+              [style.visibility]="apellidoCtrl.invalid && apellidoCtrl.touched ? 'visible' : 'hidden'"
+            >
               <span *ngIf="apellidoCtrl.errors?.['required']">El apellido es requerido.</span>
               <span *ngIf="apellidoCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
               <span *ngIf="apellidoCtrl.errors?.['pattern']">Solo se permiten letras.</span>
             </small>
-            <p *ngIf="apellidoCtrl.valid && apellidoCtrl.touched" class="text-sm text-green-600 mt-1">Apellido válido
+            <p
+              *ngIf="apellidoCtrl.valid && apellidoCtrl.touched"
+              class="mt-1 text-sm text-green-600"
+            >
+              Apellido válido
             </p>
           </div>
         </div>
         <!-- Fecha de nacimiento -->
         <article>
           <p class="mb-2 font-medium dark:text-gray-200">Selecciona tu fecha de nacimiento:</p>
-          <div class="flex gap-5 mt-3">
+          <div class="mt-3 flex gap-5">
             <div class="flex flex-col">
-              <label for="dia" class="text-gray-600 mb-1">Día:</label>
+              <label for="dia" class="mb-1 text-gray-600">Día:</label>
               <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia" class="select w-24">
                 <option value="" disabled selected>--</option>
                 <option *ngFor="let dia of dias" [value]="dia">{{ dia }}</option>
@@ -140,7 +197,7 @@
             </div>
 
             <div class="flex flex-col">
-              <label for="mes" class="text-gray-600 mb-1">Mes:</label>
+              <label for="mes" class="mb-1 text-gray-600">Mes:</label>
               <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes" class="select w-36">
                 <option value="" disabled selected>--</option>
                 <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nombre }}</option>
@@ -148,7 +205,7 @@
             </div>
 
             <div class="flex flex-col">
-              <label for="anio" class="text-gray-600 mb-1">Año:</label>
+              <label for="anio" class="mb-1 text-gray-600">Año:</label>
               <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio" class="select w-28">
                 <option value="" disabled selected>--</option>
                 <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
@@ -159,29 +216,50 @@
 
         <!-- Género -->
         <article>
-          <p class="mb-2 font-medium dark:text-gray-200">Selecciona el género con el que te identificas:</p>
-          <div class="flex gap-6 mt-3">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="radio-genero" class="radio radio-neutral" [(ngModel)]="genero"
-                value="femenino" />
+          <p class="mb-2 font-medium dark:text-gray-200">
+            Selecciona el género con el que te identificas:
+          </p>
+          <div class="mt-3 flex gap-6">
+            <label class="flex cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name="radio-genero"
+                class="radio radio-neutral"
+                [(ngModel)]="genero"
+                value="femenino"
+              />
               <span>Femenino</span>
             </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="radio-genero" class="radio radio-neutral" [(ngModel)]="genero"
-                value="masculino" />
+            <label class="flex cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name="radio-genero"
+                class="radio radio-neutral"
+                [(ngModel)]="genero"
+                value="masculino"
+              />
               <span>Masculino</span>
             </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="radio-genero" class="radio radio-neutral" [(ngModel)]="genero" value="otro" />
+            <label class="flex cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name="radio-genero"
+                class="radio radio-neutral"
+                [(ngModel)]="genero"
+                value="otro"
+              />
               <span>Otro</span>
             </label>
           </div>
         </article>
 
-        <div class="flex justify-center mt-2">
-          <button type="button" (click)="actualizarDatos()"
-            class="cursor-pointer w-40 bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg flex items-center justify-center gap-1">
-            <span *ngIf="isLoading" class="loading loading-sm loading-spinner mr-2"></span>
+        <div class="mt-2 flex justify-center">
+          <button
+            type="button"
+            (click)="actualizarDatos()"
+            class="flex w-40 cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+          >
+            <span *ngIf="isLoading" class="loading mr-2 loading-sm loading-spinner"></span>
             <span class="icon-[lucide--save] size-6"></span>
             Actualizar
           </button>
@@ -191,39 +269,60 @@
   </div>
 
   <!-- TAB 2 -->
-  <div class="p-8 w-[70vw] min-h-[710px]" *ngIf="activeTab === 'tab2'">
-    <article class="border border-gray-300 rounded p-8">
+  <div class="min-h-[710px] w-[70vw] p-8" *ngIf="activeTab === 'tab2'">
+    <article class="rounded border border-gray-300 p-8">
       <form #passwordForm="ngForm" class="flex flex-col gap-6">
-        <div *ngIf="successMessage && activeTab === 'tab2'"
-          class="mb-4 p-3 rounded bg-green-50 border border-green-200 text-green-800 dark:bg-green-900 dark:border-green-800 dark:text-green-200">
+        <div
+          *ngIf="successMessage && activeTab === 'tab2'"
+          class="mb-4 rounded border border-green-200 bg-green-50 p-3 text-green-800 dark:border-green-800 dark:bg-green-900 dark:text-green-200"
+        >
           {{ successMessage }}
         </div>
-        <div *ngIf="errorMessage && activeTab === 'tab2'"
-          class="mb-4 p-3 rounded bg-red-50 border border-red-200 text-red-800 dark:bg-red-900 dark:border-red-800 dark:text-red-200">
+        <div
+          *ngIf="errorMessage && activeTab === 'tab2'"
+          class="mb-4 rounded border border-red-200 bg-red-50 p-3 text-red-800 dark:border-red-800 dark:bg-red-900 dark:text-red-200"
+        >
           {{ errorMessage }}
         </div>
 
         <article class="flex gap-50">
           <div class="flex flex-col gap-6">
-
             <div class="flex-1">
               <label class="block">
                 <span class="text-base text-gray-600 dark:text-gray-300">Contraseña actual</span>
                 <div class="flex items-center gap-3">
-                  <input [type]="mostrarContrasenaActual ? 'text' : 'password'" #conActual="ngModel"
-                    [(ngModel)]="contrasenaActual" name="contrasenaActual" required
-                    [class.border-red-500]="conActual.invalid && conActual.touched" placeholder="Contraseña actual"
-                    class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 dark:bg-gray-700" />
-                  <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleContrasenaActual()"
-                    class="cursor-pointer flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                    <span *ngIf="!mostrarContrasenaActual" class="icon-[fluent--eye-16-regular] text-xl"></span>
-                    <span *ngIf="mostrarContrasenaActual" class="icon-[fluent--eye-off-16-regular] text-xl"></span>
+                  <input
+                    [type]="mostrarContrasenaActual ? 'text' : 'password'"
+                    #conActual="ngModel"
+                    [(ngModel)]="contrasenaActual"
+                    name="contrasenaActual"
+                    required
+                    [class.border-red-500]="conActual.invalid && conActual.touched"
+                    placeholder="Contraseña actual"
+                    class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
+                  />
+                  <button
+                    type="button"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="toggleContrasenaActual()"
+                    class="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  >
+                    <span
+                      *ngIf="!mostrarContrasenaActual"
+                      class="icon-[fluent--eye-16-regular] text-xl"
+                    ></span>
+                    <span
+                      *ngIf="mostrarContrasenaActual"
+                      class="icon-[fluent--eye-off-16-regular] text-xl"
+                    ></span>
                   </button>
                 </div>
               </label>
-              <small class="block text-sm transition-all duration-200"
+              <small
+                class="block text-sm transition-all duration-200"
                 [class.text-red-600]="conActual.invalid && conActual.touched"
-                [style.visibility]="conActual.invalid && conActual.touched ? 'visible' : 'hidden'">
+                [style.visibility]="conActual.invalid && conActual.touched ? 'visible' : 'hidden'"
+              >
                 La contraseña actual es requerida.
               </small>
             </div>
@@ -232,21 +331,40 @@
               <label class="block">
                 <span class="text-base text-gray-600 dark:text-gray-300">Nueva contraseña</span>
                 <div class="flex items-center gap-3">
-                  <input [type]="mostrarContrasena ? 'text' : 'password'" #conNueva="ngModel"
-                    [(ngModel)]="contrasenaNueva" name="contrasenaNueva" required minlength="8"
-                    (input)="verificarIndicaciones()" [class.border-red-500]="conNueva.invalid && conNueva.touched"
+                  <input
+                    [type]="mostrarContrasena ? 'text' : 'password'"
+                    #conNueva="ngModel"
+                    [(ngModel)]="contrasenaNueva"
+                    name="contrasenaNueva"
+                    required
+                    minlength="8"
+                    (input)="verificarIndicaciones()"
+                    [class.border-red-500]="conNueva.invalid && conNueva.touched"
                     placeholder="Nueva contraseña"
-                    class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 dark:bg-gray-700" />
-                  <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleContrasena()"
-                    class="cursor-pointer flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                    <span *ngIf="!mostrarContrasena" class="icon-[fluent--eye-16-regular] text-xl"></span>
-                    <span *ngIf="mostrarContrasena" class="icon-[fluent--eye-off-16-regular] text-xl"></span>
+                    class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
+                  />
+                  <button
+                    type="button"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="toggleContrasena()"
+                    class="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  >
+                    <span
+                      *ngIf="!mostrarContrasena"
+                      class="icon-[fluent--eye-16-regular] text-xl"
+                    ></span>
+                    <span
+                      *ngIf="mostrarContrasena"
+                      class="icon-[fluent--eye-off-16-regular] text-xl"
+                    ></span>
                   </button>
                 </div>
               </label>
-              <small class="block text-sm transition-all duration-200"
+              <small
+                class="block text-sm transition-all duration-200"
                 [class.text-red-600]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
-                [style.visibility]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula)) ? 'visible' : 'hidden'">
+                [style.visibility]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula)) ? 'visible' : 'hidden'"
+              >
                 Faltan requerimientos para la contraseña.
               </small>
             </div>
@@ -255,60 +373,92 @@
               <label class="block">
                 <span class="text-base text-gray-600 dark:text-gray-300">Confirmar contraseña</span>
                 <div class="flex items-center gap-3">
-                  <input [type]="mostrarConfirmarContrasena ? 'text' : 'password'" #conConfirm="ngModel"
-                    [(ngModel)]="contrasenaConfirmar" name="contrasenaConfirmar" required
+                  <input
+                    [type]="mostrarConfirmarContrasena ? 'text' : 'password'"
+                    #conConfirm="ngModel"
+                    [(ngModel)]="contrasenaConfirmar"
+                    name="contrasenaConfirmar"
+                    required
                     [class.border-red-500]="(conConfirm.touched && (contrasenaConfirmar !== contrasenaNueva)) || (conConfirm.invalid && conConfirm.touched)"
                     placeholder="Confirmar contraseña"
-                    class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 dark:bg-gray-700" />
-                  <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleConfirmarContrasena()"
-                    class="cursor-pointer flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                    <span *ngIf="!mostrarConfirmarContrasena" class="icon-[fluent--eye-16-regular] text-xl"></span>
-                    <span *ngIf="mostrarConfirmarContrasena" class="icon-[fluent--eye-off-16-regular] text-xl"></span>
+                    class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
+                  />
+                  <button
+                    type="button"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="toggleConfirmarContrasena()"
+                    class="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  >
+                    <span
+                      *ngIf="!mostrarConfirmarContrasena"
+                      class="icon-[fluent--eye-16-regular] text-xl"
+                    ></span>
+                    <span
+                      *ngIf="mostrarConfirmarContrasena"
+                      class="icon-[fluent--eye-off-16-regular] text-xl"
+                    ></span>
                   </button>
                 </div>
               </label>
-              <small class="block text-sm transition-all duration-200"
+              <small
+                class="block text-sm transition-all duration-200"
                 [class.text-red-600]="(contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched"
-                [style.visibility]="(contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched ? 'visible' : 'hidden'">
+                [style.visibility]="(contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched ? 'visible' : 'hidden'"
+              >
                 Las contraseñas no coinciden.
               </small>
             </div>
             <div class="flex gap-12 text-sm">
               <ul class="space-y-2">
                 <li class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full"
-                    [ngClass]="indicaciones.longitud ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"></span>
+                  <span
+                    class="h-2 w-2 rounded-full"
+                    [ngClass]="indicaciones.longitud ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
+                  ></span>
                   Usa 8 o más caracteres
                 </li>
                 <li class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full"
-                    [ngClass]="indicaciones.numero ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"></span>
+                  <span
+                    class="h-2 w-2 rounded-full"
+                    [ngClass]="indicaciones.numero ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
+                  ></span>
                   Incluye al menos un número
                 </li>
               </ul>
 
               <ul class="space-y-2">
                 <li class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full"
-                    [ngClass]="indicaciones.mayuscula ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"></span>
+                  <span
+                    class="h-2 w-2 rounded-full"
+                    [ngClass]="indicaciones.mayuscula ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
+                  ></span>
                   Usa letras mayúsculas y minúsculas
                 </li>
                 <li class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full"
-                    [ngClass]="indicaciones.simbolo ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"></span>
+                  <span
+                    class="h-2 w-2 rounded-full"
+                    [ngClass]="indicaciones.simbolo ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
+                  ></span>
                   Incluye un símbolo (!@#$)
                 </li>
               </ul>
             </div>
           </div>
-          <div class="flex justify-center content-center">
-            <img class="w-100" src="/images/ilustraciones/password-image.png" alt="Password Strength">
+          <div class="flex content-center justify-center">
+            <img
+              class="w-100"
+              src="/images/ilustraciones/password-image.png"
+              alt="Password Strength"
+            />
           </div>
         </article>
 
         <div class="flex">
-          <button type="button" (click)="cambiarContrasena()"
-            class="cursor-pointer w-55 bg-[#01162E] hover:bg-[#012042] text-white p-2 rounded-lg flex items-center justify-center gap-1">
+          <button
+            type="button"
+            (click)="cambiarContrasena()"
+            class="flex w-55 cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+          >
             <span class="icon-[lucide--save] size-6"></span>
             Cambiar contraseña
           </button>
@@ -316,5 +466,4 @@
       </form>
     </article>
   </div>
-
 </div>
