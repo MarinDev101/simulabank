@@ -109,13 +109,12 @@ CREATE TABLE sesiones_usuarios (
 CREATE TABLE logros (
   id_logro INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
+  imagen TEXT NOT NULL,
   descripcion TEXT NOT NULL,
-  criterio_desbloqueo JSON NOT NULL,
+  criterios_desbloqueo JSON NOT NULL,
   condicion_tipo ENUM(
     'simulaciones_completadas',
-    'simulaciones_aprobadas',
     'simulaciones_evaluativas',
-    'simulaciones_aleatorias',
     'simulaciones_agrupadas'
   ) NOT NULL
 );

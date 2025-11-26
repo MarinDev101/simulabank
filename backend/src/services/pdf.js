@@ -2,23 +2,34 @@ const jsPdfConfig = require('../config/jspdf.config');
 const fs = require('fs');
 const path = require('path');
 
-// Paleta de colores profesional mejorada
+// Paleta de colores diversificada y más armónica
+// `primario` es una aproximación al OKLCH pedido; el resto busca contraste y variantes para secciones
 const COLORES = {
-  primario: [41, 98, 255],
-  primarioOscuro: [30, 70, 200],
-  primarioClaro: [219, 234, 254],
-  texto: [31, 41, 55],
-  textoSecundario: [75, 85, 99],
-  textoClaro: [107, 114, 128],
-  fondoGris: [249, 250, 251],
-  fondoGrisOscuro: [243, 244, 246],
+  primario: [28, 35, 70], // encabezado - azul profundo
+  primarioOscuro: [16, 20, 44],
+  primarioClaro: [236, 243, 255],
+  titulo: [12, 97, 177], // color para títulos y acentos
+  texto: [23, 33, 52],
+  textoSecundario: [94, 101, 115],
+  textoClaro: [120, 130, 140],
   blanco: [255, 255, 255],
-  linea: [229, 231, 235],
-  lineaOscura: [156, 163, 175],
-  azulClaro: [239, 246, 255],
-  verdeClaro: [240, 253, 244],
-  verde: [34, 197, 94],
-  naranja: [251, 146, 60],
+  fondoGris: [250, 251, 253],
+  fondoGrisOscuro: [245, 246, 248],
+  linea: [230, 232, 235],
+  lineaOscura: [150, 160, 170],
+  azulClaro: [235, 242, 255],
+  mensajeAsesorFondo: [232, 241, 254],
+  mensajeClienteFondo: [248, 249, 250],
+  verdeClaro: [237, 252, 242],
+  verde: [16, 185, 129],
+  naranja: [249, 115, 22],
+  amarillo: [249, 204, 36],
+  morado: [99, 102, 241],
+  recomendacionFondo: [237, 249, 237],
+  recomendacion: [34, 197, 94],
+  fortalezasTitulo: [6, 78, 59],
+  areasTitulo: [185, 65, 12],
+  tarjetaFondo: [245, 249, 255],
 };
 
 /**
@@ -122,14 +133,14 @@ function dibujarTituloSeccion(doc, titulo, y, pageWidth, compacto = false) {
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(compacto ? 11 : 12);
-  doc.setTextColor(...COLORES.primario);
+  doc.setTextColor(...COLORES.titulo);
   const lineasTitulo = dividirTexto(doc, titulo, anchoUtil);
   doc.text(lineasTitulo, margen, y);
 
   const alturaUsada = lineasTitulo.length * (compacto ? 3.8 : 4.2);
 
   // Línea decorativa
-  doc.setDrawColor(...COLORES.primario);
+  doc.setDrawColor(...COLORES.titulo);
   doc.setLineWidth(1.5);
   doc.line(margen, y + alturaUsada, margen + 40, y + alturaUsada);
 
@@ -217,6 +228,41 @@ function dibujarSeccionInfo(doc, x, y, ancho, items) {
 }
 
 /**
+ * Calcula la altura aproximada que ocuparán un conjunto de items en una columna
+ */
+function calcularAlturaItems(
+  doc,
+  items,
+  ancho,
+  labelFontSize = 7,
+  valueFontSize = 8.5,
+  spacing = 3
+) {
+  let altura = 0;
+  items.forEach((item, index) => {
+    if (index > 0) altura += spacing;
+
+    const medidaLabel = medirAlturaTexto(
+      doc,
+      String(item.label || '').toUpperCase(),
+      ancho,
+      labelFontSize,
+      1.1
+    );
+    const medidaValor = medirAlturaTexto(
+      doc,
+      String(item.value || 'N/A'),
+      ancho,
+      valueFontSize,
+      1.15
+    );
+
+    altura += medidaLabel.altura + medidaValor.altura + 2; // padding pequeño
+  });
+  return altura;
+}
+
+/**
  * Verifica si necesita nueva página y dibuja pie de página si es necesario
  */
 function verificarYAgregarPagina(doc, y, alturaRequerida, pageHeight, pageWidth, numeroPagina) {
@@ -273,12 +319,12 @@ function dibujarMensajeChat(doc, msg, y, pageWidth, margen, esAsesor) {
   }
 
   // Fondo del mensaje
-  const colorFondo = esAsesor ? COLORES.azulClaro : COLORES.fondoGris;
+  const colorFondo = esAsesor ? COLORES.mensajeAsesorFondo : COLORES.mensajeClienteFondo;
   doc.setFillColor(...colorFondo);
   doc.rect(xInicio, y, anchoMensaje, alturaMensaje, 'F');
 
   // Borde del mensaje
-  const colorBorde = esAsesor ? COLORES.primario : COLORES.linea;
+  const colorBorde = esAsesor ? COLORES.titulo : COLORES.linea;
   doc.setDrawColor(...colorBorde);
   doc.setLineWidth(0.5);
   doc.rect(xInicio, y, anchoMensaje, alturaMensaje, 'S');
@@ -286,7 +332,7 @@ function dibujarMensajeChat(doc, msg, y, pageWidth, margen, esAsesor) {
   // Etiqueta del emisor
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7);
-  doc.setTextColor(...(esAsesor ? COLORES.primario : COLORES.textoSecundario));
+  doc.setTextColor(...(esAsesor ? COLORES.morado : COLORES.textoSecundario));
   const xEmisor = esAsesor ? xInicio + anchoMensaje - padding : xTexto;
   const emisorTexto = String(msg.emisor || '').toUpperCase();
   doc.text(emisorTexto, xEmisor, y + 4.5, { align: alignEmisor });
@@ -317,182 +363,108 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
   // Título principal
   y = dibujarTituloSeccion(doc, 'Resumen de Simulación', y, pageWidth, true);
 
-  // Tarjeta principal con información del aprendiz (más compacta)
-  const paddingTarjeta = 4;
+  // Presentar Resumen de Simulación como una lista etiquetada (estilo Perfil del Cliente)
+  const itemsResumen = [
+    { label: 'Aprendiz', value: datos.aprendiz.nombreCompleto || 'N/A' },
+    { label: 'Correo', value: datos.aprendiz?.correo || 'N/A' },
+    { label: 'Modo', value: datos.simulacion.modo || 'N/A' },
+    { label: 'Duración', value: datos.simulacion.duracionFormato || 'N/A' },
+    {
+      label: 'Etapas',
+      value:
+        String(datos.simulacion.etapaActualIndex || '') +
+        '/' +
+        String(datos.simulacion.total_etapas || datos.simulacion.totalEtapas || ''),
+    },
+    { label: 'Producto', value: datos.producto?.nombre || 'N/A' },
+    { label: 'Categoría', value: datos.producto?.categoria || 'N/A' },
+  ];
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  const medidaNombreAprendiz = medirAlturaTexto(
+  // Dibujar en dos columnas para aprovechar mejor el espacio
+  const gapCols = 8;
+  const colWidth = Math.floor((anchoUtil - gapCols) / 2);
+
+  // Dividir items en dos columnas (mitad superior/mitad inferior) intentando balancear
+  const mitad = Math.ceil(itemsResumen.length / 2);
+  const leftItems = itemsResumen.slice(0, mitad);
+  const rightItems = itemsResumen.slice(mitad);
+
+  const alturaLeft = calcularAlturaItems(doc, leftItems, colWidth - 6);
+  const alturaRight = calcularAlturaItems(doc, rightItems, colWidth - 6);
+  const alturaNecesaria = Math.max(alturaLeft, alturaRight) + 6;
+
+  const verif = verificarYAgregarPagina(
     doc,
-    datos.aprendiz.nombreCompleto,
-    anchoUtil - paddingTarjeta * 2,
-    10,
-    1.1
+    y,
+    alturaNecesaria + 8,
+    pageHeight,
+    pageWidth,
+    numeroPagina
   );
+  y = verif.y;
+  numeroPagina = verif.numeroPagina;
 
-  const altoTarjetaPrincipal = 8 + medidaNombreAprendiz.altura + paddingTarjeta * 2;
+  // Dibujar columnas
+  const xLeft = margen + 2;
+  const xRight = margen + 2 + colWidth + gapCols;
 
-  dibujarTarjeta(doc, margen, y, anchoUtil, altoTarjetaPrincipal, COLORES.primarioClaro);
+  const yLeftFin = dibujarSeccionInfo(doc, xLeft, y, colWidth, leftItems);
+  const yRightFin = dibujarSeccionInfo(doc, xRight, y, colWidth, rightItems);
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(...COLORES.primario);
-  doc.text('APRENDIZ', margen + paddingTarjeta, y + paddingTarjeta + 2.5);
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.setTextColor(...COLORES.texto);
-  doc.text(medidaNombreAprendiz.lineas, margen + paddingTarjeta, y + paddingTarjeta + 7);
-
-  y += altoTarjetaPrincipal + 6;
-
-  // Estadísticas en dos filas (más compactas)
-  const espacioEntreStats = 3;
-  const anchoStat = (anchoUtil - espacioEntreStats * 2) / 3;
-
-  // Primera fila de estadísticas
-  let yStats = y;
-  const altoStat1 =
-    dibujarEstadistica(
-      doc,
-      margen,
-      yStats,
-      anchoStat,
-      'Modo',
-      datos.simulacion.modo || 'N/A',
-      true
-    ) - yStats;
-  const etapasTexto =
-    String(datos.simulacion.etapaActualIndex) + '/' + String(datos.simulacion.totalEtapas);
-  const altoStat2 =
-    dibujarEstadistica(
-      doc,
-      margen + anchoStat + espacioEntreStats,
-      yStats,
-      anchoStat,
-      'Duración',
-      datos.simulacion.duracionFormato,
-      true
-    ) - yStats;
-  const altoStat3 =
-    dibujarEstadistica(
-      doc,
-      margen + (anchoStat + espacioEntreStats) * 2,
-      yStats,
-      anchoStat,
-      'Etapas',
-      etapasTexto,
-      true
-    ) - yStats;
-
-  const altoMaxStats = Math.max(altoStat1, altoStat2, altoStat3);
-  y += altoMaxStats + 4;
-
-  // Segunda fila de estadísticas (Producto)
-  yStats = y;
-  const anchoStatProducto = (anchoUtil - espacioEntreStats) / 2;
-
-  const altoStat4 =
-    dibujarEstadistica(
-      doc,
-      margen,
-      yStats,
-      anchoStatProducto,
-      'Producto',
-      datos.producto.nombre,
-      true
-    ) - yStats;
-  const altoStat5 =
-    dibujarEstadistica(
-      doc,
-      margen + anchoStatProducto + espacioEntreStats,
-      yStats,
-      anchoStatProducto,
-      'Categoría',
-      datos.producto.categoria,
-      true
-    ) - yStats;
-
-  const altoMaxStats2 = Math.max(altoStat4, altoStat5);
-  y += altoMaxStats2 + 8;
+  y = Math.max(yLeftFin, yRightFin) + 8;
 
   // ==================== PERFIL DEL CLIENTE ====================
   y = dibujarTituloSeccion(doc, 'Perfil del Cliente Simulado', y, pageWidth, true);
 
   const cliente = datos.clienteSimulado;
-
-  // Calcular altura de la tarjeta del cliente (más compacta)
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  const medidaNombreCliente = medirAlturaTexto(
-    doc,
-    cliente.nombre,
-    anchoUtil - paddingTarjeta * 2,
-    10,
-    1.1
-  );
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
-  const medidaEdad = medirAlturaTexto(
-    doc,
-    String(cliente.edad) + ' años',
-    anchoUtil - paddingTarjeta * 2,
-    8.5,
-    1.1
-  );
-
-  const lineasprofesion = dividirTexto(
-    doc,
-    String(cliente.profesion),
-    anchoUtil - paddingTarjeta * 2
-  );
-  const alturaProfesion = lineasprofesion.length * 3;
-
-  const infoExtra = String(cliente.genero) + ' - ' + String(cliente.nivelConocimiento);
-  const lineasInfoExtra = dividirTexto(doc, infoExtra, anchoUtil - paddingTarjeta * 2);
-  const alturaInfoExtra = lineasInfoExtra.length * 3;
-
-  const altoTarjetaCliente =
-    paddingTarjeta * 2 +
-    medidaNombreCliente.altura +
-    medidaEdad.altura +
-    alturaProfesion +
-    alturaInfoExtra +
-    6;
-
-  dibujarTarjeta(doc, margen, y, anchoUtil, altoTarjetaCliente, COLORES.azulClaro);
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.setTextColor(...COLORES.texto);
-  doc.text(medidaNombreCliente.lineas, margen + paddingTarjeta, y + paddingTarjeta + 3.5);
-
-  let yCliente = y + paddingTarjeta + 3.5 + medidaNombreCliente.altura + 2;
-
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(...COLORES.textoSecundario);
-  doc.text(String(cliente.edad) + ' años', margen + paddingTarjeta, yCliente);
-  yCliente += 3;
-
-  doc.text(lineasprofesion, margen + paddingTarjeta, yCliente);
-  yCliente += alturaProfesion;
-
-  doc.text(lineasInfoExtra, margen + paddingTarjeta, yCliente);
-
-  y += altoTarjetaCliente + 6;
+  // (Se removió la tarjeta azul 'CLIENTE SIMULADO' para mostrar directamente los datos)
+  y += 2;
 
   // Información del cliente en UNA COLUMNA (sin concepto producto)
+  // Presentar todos los datos del cliente como items (igual que el resto de la sección)
   const itemsCliente = [
+    { label: 'Nombre', value: cliente.nombre },
+    { label: 'Edad', value: String(cliente.edad) ? String(cliente.edad) + ' años' : 'N/A' },
+    { label: 'Profesión', value: cliente.profesion },
+    { label: 'Género', value: cliente.genero },
     { label: 'Situación Actual', value: cliente.situacionActual },
     { label: 'Motivación', value: cliente.motivacion },
     { label: 'Perfil de Riesgo', value: cliente.perfilRiesgo },
     { label: 'Tipo de Cliente', value: datos.tipoCliente.tipo },
     { label: 'Perfil Asignado', value: datos.perfilCliente.nombre },
+    { label: 'Nivel de Conocimiento', value: cliente.nivelConocimiento },
+    { label: 'Objetivo', value: cliente.objetivo },
+    { label: 'Escenario Narrativo', value: cliente.escenarioNarrativo },
   ];
+  // Dibujar perfil del cliente en dos columnas
+  const gapColsC = 8;
+  const colWidthC = Math.floor((anchoUtil - gapColsC) / 2);
+  const mitadC = Math.ceil(itemsCliente.length / 2);
+  const leftCliente = itemsCliente.slice(0, mitadC);
+  const rightCliente = itemsCliente.slice(mitadC);
 
-  y = dibujarSeccionInfo(doc, margen + 2, y, anchoUtil - 4, itemsCliente);
+  const alturaLeftC = calcularAlturaItems(doc, leftCliente, colWidthC - 6);
+  const alturaRightC = calcularAlturaItems(doc, rightCliente, colWidthC - 6);
+  const alturaNecesariaC = Math.max(alturaLeftC, alturaRightC) + 6;
+
+  const verifC = verificarYAgregarPagina(
+    doc,
+    y,
+    alturaNecesariaC + 8,
+    pageHeight,
+    pageWidth,
+    numeroPagina
+  );
+  y = verifC.y;
+  numeroPagina = verifC.numeroPagina;
+
+  const xLeftC = margen + 2;
+  const xRightC = margen + 2 + colWidthC + gapColsC;
+
+  const yLeftFinC = dibujarSeccionInfo(doc, xLeftC, y, colWidthC, leftCliente);
+  const yRightFinC = dibujarSeccionInfo(doc, xRightC, y, colWidthC, rightCliente);
+
+  y = Math.max(yLeftFinC, yRightFinC) + 8;
 
   // Dibujar pie de página en la primera página
   dibujarPiePagina(doc, pageWidth, pageHeight, numeroPagina);
@@ -520,11 +492,25 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
     // Separador de etapa y recomendación
     if (msg.indiceEtapa && msg.indiceEtapa !== etapaAnterior) {
       // Calcular altura de la tarjeta de etapa
-      const etapaTexto = 'ETAPA ' + String(msg.indiceEtapa) + ': ' + String(msg.nombreEtapa || '');
+      // Construir título de etapa e incluir el objetivo de la etapa al lado del nombre
+      const etapasArray = datos.etapas || [];
+      const etapaObj = etapasArray.find(
+        (e) =>
+          e.numero_orden == msg.indiceEtapa ||
+          e.id_etapa_conversacion == msg.indiceEtapa ||
+          String(e.nombre).trim() === String(msg.nombreEtapa).trim()
+      );
+      const objetivoEtapa = etapaObj?.objetivo;
+      let etapaTexto = 'ETAPA ' + String(msg.indiceEtapa) + ': ' + String(msg.nombreEtapa || '');
+      if (objetivoEtapa) etapaTexto += ' — Objetivo: ' + String(objetivoEtapa);
+
+      // Usar mediciones para evitar desbordes: medir altura real del bloque
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
-      const lineasEtapa = dividirTexto(doc, etapaTexto, anchoUtil - 8);
-      const altoTarjetaEtapa = Math.max(14, lineasEtapa.length * 4 + 6);
+      const fontSizeEtapa = 9.5;
+      doc.setFontSize(fontSizeEtapa);
+      const medidaEtapa = medirAlturaTexto(doc, etapaTexto, anchoUtil - 12, fontSizeEtapa, 1.12);
+      const paddingEtapa = 8;
+      const altoTarjetaEtapa = Math.max(14, medidaEtapa.altura + paddingEtapa * 2);
 
       // Verificar espacio para tarjeta de etapa
       const verificacion = verificarYAgregarPagina(
@@ -541,12 +527,11 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
       // Tarjeta de etapa mejorada sin badge
       dibujarTarjeta(doc, margen, y, anchoUtil, altoTarjetaEtapa, COLORES.primarioClaro);
 
-      // Nombre de etapa centrado verticalmente en la tarjeta
+      // Nombre de etapa en la parte superior de la tarjeta con padding
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
-      doc.setTextColor(...COLORES.primario);
-      const yTextoEtapa = y + altoTarjetaEtapa / 2 + lineasEtapa.length * 2;
-      doc.text(lineasEtapa, margen + 6, yTextoEtapa);
+      doc.setFontSize(fontSizeEtapa);
+      doc.setTextColor(...COLORES.titulo);
+      doc.text(medidaEtapa.lineas, margen + 8, y + paddingEtapa + fontSizeEtapa * 0.352778);
 
       y += altoTarjetaEtapa + 6;
 
@@ -567,16 +552,16 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
         y = verificacionRec.y;
         numeroPagina = verificacionRec.numeroPagina;
 
-        // Tarjeta de recomendación
-        dibujarTarjeta(doc, margen, y, anchoUtil, alturaRec, COLORES.verdeClaro);
+        // Tarjeta de recomendación (fondo suave y color de acento)
+        dibujarTarjeta(doc, margen, y, anchoUtil, alturaRec, COLORES.recomendacionFondo);
 
         // Ícono o badge de recomendación
-        doc.setFillColor(...COLORES.verde);
+        doc.setFillColor(...COLORES.recomendacion);
         doc.circle(margen + 8, y + 7, 2.5, 'F');
 
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(7.5);
-        doc.setTextColor(...COLORES.verde);
+        doc.setTextColor(...COLORES.recomendacion);
         doc.text('RECOMENDACIÓN DE APRENDIZAJE', margen + 13, y + 8);
 
         doc.setFont('helvetica', 'normal');
@@ -626,14 +611,24 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
 
     const analisis = datos.analisisDesempeno;
 
-    // Puntuación destacada
+    // Puntuación destacada (mostrar como texto simple, sin tarjeta)
     if (analisis.puntuacion_cualitativa) {
-      const altoBadge = 20;
+      const fontSizeTituloPunt = 9;
+      const paddingPunt = 6;
+      const maxWidthPunt = anchoUtil - paddingPunt * 2;
+      const medidaPunt = medirAlturaTexto(
+        doc,
+        analisis.puntuacion_cualitativa,
+        maxWidthPunt,
+        12,
+        1.15
+      );
+      const alturaPunt = medidaPunt.altura + paddingPunt * 2;
 
       const verificacion = verificarYAgregarPagina(
         doc,
         y,
-        altoBadge + 5,
+        alturaPunt + 10,
         pageHeight,
         pageWidth,
         numeroPagina
@@ -641,24 +636,39 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
       y = verificacion.y;
       numeroPagina = verificacion.numeroPagina;
 
-      dibujarTarjeta(doc, margen, y, anchoUtil, altoBadge, COLORES.verde);
-
+      // Mostrar en una sola línea: 'CALIFICACIÓN OBTENIDA: <valor>'
+      const labelPunt = 'CALIFICACIÓN OBTENIDA: ';
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(...COLORES.blanco);
-      doc.text('CALIFICACIÓN OBTENIDA', margen + 6, y + 8);
+      doc.setFontSize(fontSizeTituloPunt);
+      doc.setTextColor(...COLORES.titulo);
+      // dibujar etiqueta
+      const yLinea = y + 7;
+      doc.text(labelPunt, margen, yLinea);
+      // ancho de la etiqueta para posicionar el valor a la derecha inmediato
+      const labelWidth = typeof doc.getTextWidth === 'function' ? doc.getTextWidth(labelPunt) : 0;
 
+      doc.setFont('helvetica', 'normal');
       doc.setFontSize(12);
-      const puntuacionLineas = dividirTexto(doc, analisis.puntuacion_cualitativa, anchoUtil - 12);
-      doc.text(puntuacionLineas, margen + 6, y + 15);
+      doc.setTextColor(...COLORES.morado);
+      // Escribir la puntuación justo después de la etiqueta
+      doc.text(String(analisis.puntuacion_cualitativa || ''), margen + labelWidth + 4, yLinea);
 
-      y += altoBadge + 12;
+      y += Math.max(alturaPunt, 12) + 6;
     }
 
-    // Resumen general
+    // Resumen general (usar todo el ancho disponible y calcular altura real)
     if (analisis.resumen_general) {
-      const resumenLineas = dividirTexto(doc, analisis.resumen_general, anchoUtil);
-      const alturaResumen = resumenLineas.length * 3.8 + 12;
+      const fontSizeResumen = 9;
+      const paddingResumen = 6;
+      const maxWidthResumen = anchoUtil - paddingResumen * 2;
+      const medidaResumen = medirAlturaTexto(
+        doc,
+        analisis.resumen_general,
+        maxWidthResumen,
+        fontSizeResumen,
+        1.15
+      );
+      const alturaResumen = medidaResumen.altura + paddingResumen * 2;
 
       const verificacion = verificarYAgregarPagina(
         doc,
@@ -673,16 +683,17 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(9);
-      doc.setTextColor(...COLORES.primario);
+      doc.setTextColor(...COLORES.titulo);
       doc.text('RESUMEN GENERAL', margen, y);
       y += 7;
 
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
+      doc.setFontSize(fontSizeResumen);
       doc.setTextColor(...COLORES.texto);
-      doc.text(resumenLineas, margen, y);
+      // Dibujar usando el ancho completo (con padding interno)
+      doc.text(medidaResumen.lineas, margen + paddingResumen, y + paddingResumen / 2);
 
-      y += resumenLineas.length * 3.8 + 12;
+      y += alturaResumen + 6;
     }
 
     // Fortalezas
@@ -693,7 +704,7 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(9);
-      doc.setTextColor(...COLORES.verde);
+      doc.setTextColor(...COLORES.fortalezasTitulo);
       doc.text('FORTALEZAS IDENTIFICADAS', margen, y);
       y += 7;
 
@@ -730,7 +741,7 @@ async function generarPdfEvidencia(datos, obtenerPeso = false) {
 
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(9);
-      doc.setTextColor(...COLORES.naranja);
+      doc.setTextColor(...COLORES.areasTitulo);
       doc.text('ÁREAS DE MEJORA', margen, y);
       y += 7;
 

@@ -1,6 +1,7 @@
 const { pool } = require('../config/database.config');
 const geminiService = require('../services/gemini');
 const pdfService = require('../services/pdf');
+const logrosService = require('../services/logros');
 const { default: fetch } = require('node-fetch');
 
 /**
@@ -1026,6 +1027,13 @@ exports.enviarMensaje = async (req, res) => {
         evidenciaCreada = await crearEvidenciaPersonal(simulacion.id_simulacion, userId);
       } catch (errEvid) {
         console.error('⚠️ Error creando evidencia en finalización automática:', errEvid);
+      }
+
+      // 👈 NUEVO: Evaluar y asignar logros SOLO cuando la finalización es automática
+      try {
+        await logrosService.evaluarYAsignarLogrosPorFinalizacion(userId);
+      } catch (errLogros) {
+        console.error('⚠️ Error evaluando/asignando logros (finalización automática):', errLogros);
       }
 
       simulacionFinalizada = true;

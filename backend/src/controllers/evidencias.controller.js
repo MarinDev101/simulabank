@@ -323,14 +323,46 @@ class EvidenciasController {
       const userId = req.user.id || req.user.userId;
       const { id_simulacion } = req.params;
 
-      await pool.query(
-        `DELETE ep FROM evidencias_personales ep
-         INNER JOIN simulaciones s ON s.id_simulacion = ep.id_simulacion
-         WHERE ep.id_simulacion = ? AND s.id_aprendiz = ?`,
-        [id_simulacion, userId]
-      );
+      // Usar una transacción para asegurar que ambas filas (evidencia y simulación)
+      // se eliminen de forma consistente y que la simulación pertenezca al usuario.
+      const connection = await pool.getConnection();
+      try {
+        await connection.beginTransaction();
 
-      return res.json({ ok: true, mensaje: 'Evidencia eliminada' });
+        // Verificar que la simulación exista y pertenezca al aprendiz
+        const [simRows] = await connection.query(
+          'SELECT id_simulacion FROM simulaciones WHERE id_simulacion = ? AND id_aprendiz = ?',
+          [id_simulacion, userId]
+        );
+
+        if (!simRows || simRows.length === 0) {
+          await connection.rollback();
+          connection.release();
+          return res
+            .status(404)
+            .json({ ok: false, error: 'Simulación no encontrada o no pertenece al usuario' });
+        }
+
+        // Eliminar la(s) evidencia(s) asociada(s)
+        await connection.query('DELETE FROM evidencias_personales WHERE id_simulacion = ?', [
+          id_simulacion,
+        ]);
+
+        // Eliminar la simulación
+        await connection.query(
+          'DELETE FROM simulaciones WHERE id_simulacion = ? AND id_aprendiz = ?',
+          [id_simulacion, userId]
+        );
+
+        await connection.commit();
+        connection.release();
+
+        return res.json({ ok: true, mensaje: 'Evidencia y simulación eliminadas' });
+      } catch (errTrans) {
+        await connection.rollback();
+        connection.release();
+        throw errTrans;
+      }
     } catch (err) {
       return res.status(500).json({ ok: false, error: err.message });
     }

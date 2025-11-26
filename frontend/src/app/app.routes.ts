@@ -96,6 +96,11 @@ export const routes: Routes = [
         title: 'Mi Personal',
       },
       {
+        path: 'logros',
+        loadComponent: () => import('./pages/aprendiz/logros/logros').then((m) => m.Logros),
+        title: 'Logros',
+      },
+      {
         path: 'informacion-plataforma',
         loadComponent: () =>
           import('./pages/aprendiz-instructor/informacion-plataforma/informacion-plataforma').then(

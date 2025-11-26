@@ -8,5 +8,6 @@ const router = express.Router();
 router.use('/auth', require('./auth.routes')());
 router.use('/simulacion', require('./simulacion.routes')());
 router.use('/evidencias', require('./evidencias.routes')());
+router.use('/estadisticas', require('./estadisticas.routes')());
 
 module.exports = router;

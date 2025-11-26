@@ -200,6 +200,33 @@
             </li>
             }
 
+            <!-- Mis Logros (solo para aprendices) -->
+            @if (shouldShowMenuItem(['aprendiz'])) {
+            <li role="none">
+              <button
+                routerLink="/aprendiz/logros"
+                class="group z-1000 flex h-12 items-center text-[#566577] transition-colors duration-200 hover:bg-[#EEF2FF] focus:ring-0 focus:outline-none active:bg-[#E5E9FF] dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+                [matTooltip]="'Mis Logros'"
+                [matTooltipDisabled]="!isDrawerClosed"
+                matTooltipPosition="right"
+                [matTooltipShowDelay]="500"
+                role="menuitem"
+                tabindex="0"
+                aria-label="Ir a Mis Logros"
+              >
+                <span
+                  class="icon-[hugeicons--award-01] text-2xl transition-colors duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300"
+                  aria-hidden="true"
+                ></span>
+                <span
+                  class="ml-2 w-max animate-fade-right transition-colors duration-200 animate-duration-200 group-hover:text-[#4F46E5] group-active:text-[#3730A3] dark:group-hover:text-indigo-400 dark:group-active:text-indigo-300 is-drawer-close:hidden"
+                >
+                  Mis Logros
+                </span>
+              </button>
+            </li>
+            }
+
             <!-- Políticas -->
             <li role="none">
               <button
