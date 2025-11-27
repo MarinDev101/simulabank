@@ -1,91 +1,92 @@
 <div class="flex min-h-screen flex-col">
   <app-header-basico></app-header-basico>
   <main
-    class="flex flex-1 flex-col items-center gap-35 bg-geometria bg-size-[275px_275px] bg-repeat pt-[150px] pb-20"
-  >
-    <section class="relative flex w-[65%] flex-row items-center justify-between overflow-visible">
-      <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
-        <div class="leading-10">
-          <p class="w-[576.203px]">
+    class="flex flex-1 flex-col items-center gap-16 md:gap-20 lg:gap-35 bg-geometria bg-size-[275px_275px] bg-repeat pt-20 md:pt-28 lg:pt-[150px] pb-12 md:pb-16 lg:pb-20 px-4 md:px-8">
+    <!-- Sección 1: Hero -->
+    <section
+      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
+      <div
+        class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] w-full lg:w-auto">
+        <div class="leading-8 md:leading-9 lg:leading-10">
+          <p class="w-full lg:w-[576.203px]">
             Una nueva forma de
-            <span class="text-[55px] text-[#00A448]">Aprender</span>
+            <span class="text-[35px] md:text-[45px] lg:text-[55px] text-[#00A448]">Aprender</span>
           </p>
-          <p class="w-[576.203px]">Simulando Asesorias Bancarias</p>
-          <p class="w-[576.203px]">
+          <p class="w-full lg:w-[576.203px]">Simulando Asesorias Bancarias</p>
+          <p class="w-full lg:w-[576.203px]">
             Impulsadas con
-            <span class="text-[35px] text-[#1788EF]">Inteligencia Artificial</span>
+            <span class="text-[25px] md:text-[30px] lg:text-[35px] text-[#1788EF]">Inteligencia Artificial</span>
           </p>
         </div>
-        <p class="nunito-sans-body my-[1lh] w-[450px] text-[18px] leading-7 text-balance">
+        <p
+          class="nunito-sans-body my-[1lh] w-full lg:w-[450px] text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
           Explora las posibilidades de Aprender Interactivamente con clientes virtuales impulsados
           con inteligencia artificial. Fortalece tus competencias técnicas, habilidades
           comunicativas y capacidad de tomar decisiones.
         </p>
         <app-go-to-register-button></app-go-to-register-button>
       </div>
-      <div class="relative">
-        <img
-          src="images/personas/asesora_inicio.png"
-          alt="asesora"
-          class="relative z-20 -ml-20 h-auto w-[700px] max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
-        />
+      <div class="relative w-full lg:w-auto flex justify-center lg:justify-end">
+        <img src="images/personas/asesora_inicio.png" alt="asesora"
+          class="relative z-20 lg:-ml-20 h-auto w-full max-w-[350px] md:max-w-[500px] lg:w-[700px] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
       </div>
     </section>
-    <section class="relative flex w-[65%] flex-row items-center justify-between overflow-visible">
-      <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
-        <div class="leading-10 text-[#034D82]">
-          <p class="w-[576.203px]">Todo lo que puedes aprender en</p>
-          <p class="w-[576.203px]">una asesoría bancaria real, puedes</p>
-          <p class="w-[576.203px]">practicarlo en SimulaBank</p>
+
+    <!-- Sección 2: Video -->
+    <section
+      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
+      <div
+        class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] w-full lg:w-auto order-2 lg:order-1">
+        <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
+          <p class="w-full lg:w-[576.203px]">Todo lo que puedes aprender en</p>
+          <p class="w-full lg:w-[576.203px]">una asesoría bancaria real, puedes</p>
+          <p class="w-full lg:w-[576.203px]">practicarlo en SimulaBank</p>
         </div>
-        <p class="nunito-sans-body my-[1lh] w-[450px] text-[18px] leading-7 text-balance">
+        <p
+          class="nunito-sans-body my-[1lh] w-full lg:w-[450px] text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
           Vive la experiencia completa de atender clientes, analizar perfiles, recomendar productos
           y resolver dudas, todo en un entorno virtual interactivo que simula situaciones reales del
           sector financiero.
         </p>
       </div>
-      <iframe
-        loading="lazy"
-        class="mx-auto aspect-video w-[600px] max-w-4xl rounded-xl border-2 border-[#01162E] bg-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
+      <iframe loading="lazy"
+        class="mx-auto aspect-video w-full md:w-[90%] lg:w-[600px] max-w-4xl rounded-xl border-2 border-[#01162E] bg-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)] order-1 lg:order-2"
         src="https://www.youtube-nocookie.com/embed/xWKedtup6AI?si=xktpcEWBOmODbtk0&rel=0&modestbranding=1&playsinline=1"
-        title="YouTube video player"
-        frameborder="0"
+        title="YouTube video player" frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
       </iframe>
     </section>
+
+    <!-- Sección 3: Dispositivos -->
     <section
-      class="relative flex w-[65%] flex-row items-center justify-between gap-10 overflow-visible"
-    >
-      <img
-        src="images/ilustraciones/celular_pagina.png"
-        alt=""
-        class="h-auto w-[150px] max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
-      />
-      <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
-        <div class="leading-10 text-[#034D82]">
-          <p class="w-[460px]">Entrena y Mejora tus Asesorías</p>
-          <p class="w-[460px]">desde Cualquier Dispositivo</p>
+      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col md:flex-row items-center justify-between gap-6 md:gap-8 lg:gap-10 overflow-visible">
+      <img src="images/ilustraciones/celular_pagina.png" alt=""
+        class="h-auto w-[100px] md:w-[120px] lg:w-[150px] max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
+      <div
+        class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] text-center md:text-left">
+        <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
+          <p class="w-full md:w-[400px] lg:w-[460px]">Entrena y Mejora tus Asesorías</p>
+          <p class="w-full md:w-[400px] lg:w-[460px]">desde Cualquier Dispositivo</p>
         </div>
-        <p class="nunito-sans-body my-[1lh] w-[450px] text-[18px] leading-7 text-balance">
+        <p
+          class="nunito-sans-body my-[1lh] w-full md:w-[400px] lg:w-[450px] text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
           Accede desde tu teléfono o computador para practicar con clientes virtuales, resolver
           casos bancarios y seguir tu progreso en tiempo real.
         </p>
       </div>
-      <img
-        src="images/ilustraciones/computador_pagina.png"
-        alt=""
-        class="h-auto w-[500px] max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
-      />
+      <img src="images/ilustraciones/computador_pagina.png" alt=""
+        class="h-auto w-full max-w-[300px] md:max-w-[350px] lg:w-[500px] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
     </section>
-    <section class="relative flex w-[65%] items-center justify-center overflow-visible">
-      <div class="nunito-sans-title text-center text-[30px] text-[#505050]">
-        <div class="leading-10 text-[#034D82]">
+
+    <!-- Sección 4: Descripción -->
+    <section class="relative flex w-full max-w-[90%] lg:w-[65%] items-center justify-center overflow-visible px-4">
+      <div class="nunito-sans-title text-center text-[20px] md:text-[25px] lg:text-[30px] text-[#505050]">
+        <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
           <p>Lo que Debes Saber de SimulaBank</p>
         </div>
-        <p class="nunito-sans-body mx-auto my-[1lh] w-[850px] text-[18px] leading-7 text-balance">
+        <p
+          class="nunito-sans-body mx-auto my-[1lh] w-full md:w-[90%] lg:w-[850px] text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
           SimulaBank una plataforma virtual interactiva que permite a los aprendices del sector
           financiero practicar asesorías con clientes simulados en tiempo real. Ofrece escenarios
           realistas, productos y servicios bancarios, retroalimentación personalizada y evaluación
@@ -94,80 +95,74 @@
         </p>
       </div>
     </section>
+
+    <!-- Sección 5: Tarjetas -->
     <section
-      class="relative mt-25 grid w-[65%] grid-cols-3 grid-rows-[repeat(1,150px_1fr)] items-center justify-center gap-8 overflow-visible [grid-template-areas:'tarjeta1_tarjeta2_tarjeta3''tarjeta1_tarjeta2_tarjeta3']"
-    >
+      class="relative mt-8 md:mt-16 lg:mt-25 grid w-full max-w-[90%] lg:w-[65%] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-auto items-start justify-center gap-6 md:gap-8 overflow-visible">
       <div
-        class="relative grid grid-rows-subgrid justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta1]"
-      >
-        <img
-          src="images/ilustraciones/robot_ia.png"
-          alt=""
-          class="relative bottom-[100px] mx-auto w-45 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
-        />
+        class="relative flex flex-col items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md pt-20 md:pt-24">
+        <img src="images/ilustraciones/robot_ia.png" alt=""
+          class="absolute -top-16 md:-top-20 mx-auto w-36 md:w-40 lg:w-45 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
 
         <div class="p-6">
-          <h5 class="nunito-sans-title mb-2 block text-center text-[1.6rem] text-[#1788EF]">
+          <h5
+            class="nunito-sans-title mb-2 block text-center text-[1.4rem] md:text-[1.5rem] lg:text-[1.6rem] text-[#1788EF]">
             Cliente Virtual con IA Interactivo
           </h5>
-          <p class="block pr-4 pb-3 pl-4 text-[18px] leading-7 text-balance">
+          <p class="block pr-4 pb-3 pl-4 text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
             Enfréntate a clientes simulados que presentan necesidades y problemas reales, para que
             practiques la resolución y asesoría efectiva.
           </p>
         </div>
       </div>
       <div
-        class="relative grid grid-rows-subgrid justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta2]"
-      >
-        <img
-          src="images/ilustraciones/asesor_bancario.png"
-          alt=""
-          class="relative bottom-[140px] mx-auto w-50 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
-        />
+        class="relative flex flex-col items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md pt-24 md:pt-28 lg:pt-32">
+        <img src="images/ilustraciones/asesor_bancario.png" alt=""
+          class="absolute -top-20 md:-top-24 lg:-top-28 mx-auto w-40 md:w-44 lg:w-50 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
 
         <div class="p-6">
-          <h5 class="nunito-sans-title mb-2 block text-center text-[1.6rem] text-[#1377d4]">
+          <h5
+            class="nunito-sans-title mb-2 block text-center text-[1.4rem] md:text-[1.5rem] lg:text-[1.6rem] text-[#1377d4]">
             Prácticas Guiadas de Asesoría
           </h5>
-          <p class="block pr-4 pb-3 pl-4 text-[18px] leading-7 text-balance">
+          <p class="block pr-4 pb-3 pl-4 text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
             Atiende casos bancarios paso a paso, mejorando tu comunicación, empatía y capacidad de
             ofrecer soluciones personalizadas.
           </p>
         </div>
       </div>
       <div
-        class="relative grid grid-rows-subgrid justify-items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md [grid-area:tarjeta3]"
-      >
-        <img
-          src="images/ilustraciones/alcancia_cerdito.png"
-          alt=""
-          class="relative bottom-[55px] mx-auto w-50 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
-        />
+        class="relative flex flex-col items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md pt-16 md:pt-20 md:col-span-2 lg:col-span-1">
+        <img src="images/ilustraciones/alcancia_cerdito.png" alt=""
+          class="absolute -top-10 md:-top-12 mx-auto w-40 md:w-44 lg:w-50 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
 
         <div class="p-6">
-          <h5 class="nunito-sans-title mb-2 block text-center text-[1.6rem] text-[#00a84c]">
+          <h5
+            class="nunito-sans-title mb-2 block text-center text-[1.4rem] md:text-[1.5rem] lg:text-[1.6rem] text-[#00a84c]">
             Gestión de Productos Financieros
           </h5>
-          <p class="block pr-4 pb-3 pl-4 text-[18px] leading-7 text-balance">
+          <p class="block pr-4 pb-3 pl-4 text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
             Aprende a recomendar cuentas, créditos e inversiones, asegurando la satisfacción y
             confianza del cliente simulado.
           </p>
         </div>
       </div>
     </section>
-    <section class="relative flex w-[65%] flex-row items-center justify-between overflow-visible">
-      <img
-        src="images/personas/estudiantes_banca_cut.png"
-        alt="Estudiantes banca"
-        class="h-auto w-[500px] max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
-      />
-      <div class="nunito-sans-title relative z-10 text-[30px] text-[#505050]">
-        <div class="leading-10 text-[#034D82]">
-          <p class="w-[576.203px]">Todo lo que puedes aprender en</p>
-          <p class="w-[576.203px]">una asesoría bancaria real, puedes</p>
-          <p class="w-[576.203px]">practicarlo en SimulaBank</p>
+
+    <!-- Sección 6: Estudiantes -->
+    <section
+      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
+      <img src="images/personas/estudiantes_banca_cut.png" alt="Estudiantes banca"
+        class="h-auto w-full max-w-[350px] md:max-w-[450px] lg:w-[500px] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)] order-2 lg:order-1" />
+      <div
+        class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] w-full lg:w-auto order-1 lg:order-2">
+        <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
+          <p class="w-full lg:w-[576.203px]">Todo lo que puedes aprender en</p>
+          <p class="w-full lg:w-[576.203px]">una asesoría bancaria real, puedes</p>
+          <p class="w-full lg:w-[576.203px]">practicarlo en SimulaBank</p>
         </div>
-        <p class="nunito-sans-body my-[1lh] w-[450px] text-[18px] leading-7 text-balance">
+        <p
+          class="nunito-sans-body my-[1lh] w-full lg:w-[450px] text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
           Vive la experiencia completa de atender clientes, analizar perfiles, recomendar productos
           y resolver dudas, todo en un entorno virtual interactivo que simula situaciones reales del
           sector financiero.
@@ -175,15 +170,17 @@
       </div>
     </section>
   </main>
+
+  <!-- Sección CTA Final -->
   <div
-    class="relative flex h-[500px] flex-col items-center justify-center bg-imagenes_ia bg-cover bg-center bg-no-repeat"
-  >
+    class="relative flex h-[350px] md:h-[400px] lg:h-[500px] flex-col items-center justify-center bg-imagenes_ia bg-cover bg-center bg-no-repeat px-4">
     <div
-      class="absolute inset-x-0 top-0 h-[150px] bg-linear-to-b from-white/95 to-transparent"
-    ></div>
-    <div class="nunito-sans-title leading-10">
-      <h1 class="my-[1lh] text-center text-[55px] text-[#034D82]">Aprender nunca fue tan fácil</h1>
-      <h1 class="my-[1lh] text-center text-[55px] text-[#00A448]">¡Empieza ahora!</h1>
+      class="absolute inset-x-0 top-0 h-[100px] md:h-[125px] lg:h-[150px] bg-linear-to-b from-white/95 to-transparent">
+    </div>
+    <div class="nunito-sans-title leading-8 md:leading-9 lg:leading-10">
+      <h1 class="my-[1lh] text-center text-[35px] md:text-[45px] lg:text-[55px] text-[#034D82]">Aprender nunca fue tan
+        fácil</h1>
+      <h1 class="my-[1lh] text-center text-[35px] md:text-[45px] lg:text-[55px] text-[#00A448]">¡Empieza ahora!</h1>
     </div>
     <app-go-to-register-button></app-go-to-register-button>
   </div>
