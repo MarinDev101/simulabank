@@ -1,58 +1,61 @@
-<header class="fixed top-0 left-0 z-9999 flex w-full justify-around bg-white p-8 shadow-md dark:bg-[#0b0b0b]">
-  <div class="drawer">
+<header class="fixed top-0 left-0 z-[9999] w-full bg-white dark:bg-[#0b0b0b] shadow-md">
+  <div class="drawer drawer-end">
     <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
-      <div class="navbar flex justify-around w-full bg-white">
-        <div class="mx-2 px-2">
-          <img src="images/imagotipo/imagotipo_simulabank.svg" class="h-auto w-90" alt="SimulaBank" />
+      <nav class="navbar w-full px-4 py-8 flex justify-around items-center bg-white dark:bg-[#0b0b0b]">
+        <!-- Logo -->
+        <div class="flex items-center gap-2">
+          <img src="images/imagotipo/imagotipo_simulabank.svg" class="h-auto w-80" alt="SimulaBank" />
         </div>
-        <div class="flex-none lg:hidden">
-          <label for="my-drawer-2" aria-label="open sidebar" class="btn btn-square btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              class="inline-block h-6 w-6 stroke-current">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
+        <!-- Hamburger Button (mobile only) -->
+        <div class="lg:hidden">
+          <label for="my-drawer-2" aria-label="Open sidebar" class="btn btn-square btn-ghost">
+<span class="icon-[quill--hamburger-sidebar] size-9"></span>
           </label>
         </div>
-        <div class="hidden flex-none lg:block">
-          <ul class="menu menu-horizontal flex items-center gap-10 font-nunito">
-            <!-- Navbar menu content here -->
-            <li><a class="btn rounded-[10px] border-black bg-[#003169] text-white transition-none!" routerLink="/"><span
-                  class="icon-[clarity--home-line] text-[25px]"></span></a></li>
-            <li><a routerLink="/iniciar-sesion"
-                class="btn rounded-[10px] px-4 btn-outline hover:border-[#016b31] hover:bg-[#009040] hover:text-white">Iniciar
-                Sesión</a></li>
-            <li> <a routerLink="/crear-cuenta"
-                class="btn rounded-[10px] border-black bg-[#01162E] px-6 text-white">Registrarse</a></li>
+        <!-- Desktop Menu -->
+        <div class="hidden lg:block">
+          <ul class="menu menu-horizontal flex items-center gap-6 font-nunito">
+            <li>
+              <a class="btn rounded-[10px] border-black bg-[#003169] text-white" routerLink="/">
+                <span class="icon-[clarity--home-line] text-[25px]"></span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/iniciar-sesion" class="btn rounded-[10px] px-4 btn-outline hover:border-[#016b31] hover:bg-[#009040] hover:text-white">
+                Iniciar Sesión
+              </a>
+            </li>
+            <li>
+              <a routerLink="/crear-cuenta" class="btn rounded-[10px] border-black bg-[#01162E] px-6 text-white">
+                Registrarse
+              </a>
+            </li>
           </ul>
         </div>
-      </div>
+      </nav>
     </div>
+    <!-- Sidebar (Drawer) -->
     <div class="drawer-side">
-      <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
-      <ul class="menu bg-base-200 min-h-full w-80 p-4 gap-5">
-        <!-- Sidebar content here -->
-        <li><a class="btn rounded-[10px] border-black bg-[#003169] text-white transition-none!" routerLink="/"><span
-              class="icon-[clarity--home-line] text-[25px]"></span></a></li>
-        <li><a routerLink="/iniciar-sesion"
-            class="btn rounded-[10px] px-4 btn-outline hover:border-[#016b31] hover:bg-[#009040] hover:text-white">Iniciar
-            Sesión</a></li>
-        <li> <a routerLink="/crear-cuenta"
-            class="btn rounded-[10px] border-black bg-[#01162E] px-6 text-white">Registrarse</a></li>
+      <label for="my-drawer-2" aria-label="Close sidebar" class="drawer-overlay"></label>
+      <ul class="menu bg-base-200 min-h-full w-72 p-4 gap-5 font-nunito">
+        <li>
+          <a class="btn rounded-[10px] border-black bg-[#003169] text-white" routerLink="/">
+            <span class="icon-[clarity--home-line] text-[25px]"></span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/iniciar-sesion" class="btn rounded-[10px] px-4 btn-outline hover:border-[#016b31] hover:bg-[#009040] hover:text-white">
+            Iniciar Sesión
+          </a>
+        </li>
+        <li>
+          <a routerLink="/crear-cuenta" class="btn rounded-[10px] border-black bg-[#01162E] px-6 text-white">
+            Registrarse
+          </a>
+        </li>
       </ul>
     </div>
   </div>
 </header>
-
-<!-- <header class="fixed top-0 left-0 z-9999 flex w-full justify-around bg-white p-8 shadow-md dark:bg-[#0b0b0b]">
-  <img src="images/imagotipo/imagotipo_simulabank.svg" class="h-auto w-90" alt="SimulaBank" />
-  <nav class="flex items-center gap-10 font-nunito">
-    <a class="btn rounded-[10px] border-black bg-[#003169] text-white transition-none!" routerLink="/"><span
-        class="icon-[clarity--home-line] text-[25px]"></span></a>
-    <a routerLink="/iniciar-sesion"
-      class="btn rounded-[10px] px-4 btn-outline hover:border-[#016b31] hover:bg-[#009040] hover:text-white">Iniciar
-      Sesión</a>
-    <a routerLink="/crear-cuenta" class="btn rounded-[10px] border-black bg-[#01162E] px-6 text-white">Registrarse</a>
-  </nav>
-</header> -->

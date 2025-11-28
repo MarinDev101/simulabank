@@ -1,10 +1,10 @@
 <div class="flex min-h-screen flex-col">
   <app-header-basico></app-header-basico>
   <main
-    class="flex flex-1 flex-col items-center gap-16 md:gap-20 lg:gap-35 bg-geometria bg-size-[275px_275px] bg-repeat pt-20 md:pt-28 lg:pt-[150px] pb-12 md:pb-16 lg:pb-20 px-4 md:px-8">
+    class="flex flex-1 flex-col items-center gap-16 md:gap-20 lg:gap-35 bg-geometria bg-size-[275px_275px] bg-repeat pt-[150px] pb-12 md:pb-16 lg:pb-20 px-4 md:px-8">
     <!-- Sección 1: Hero -->
     <section
-      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
+      class="relative flex w-full max-w-[70%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
       <div
         class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] w-full lg:w-auto">
         <div class="leading-8 md:leading-9 lg:leading-10">
@@ -28,15 +28,15 @@
       </div>
       <div class="relative w-full lg:w-auto flex justify-center lg:justify-end">
         <img src="images/personas/asesora_inicio.png" alt="asesora"
-          class="relative z-20 lg:-ml-20 h-auto w-full max-w-[350px] md:max-w-[500px] lg:w-[700px] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
+          class="relative z-20 lg:-ml-20 h-auto w-full  md:max-w-[650px] lg:w-[40VW] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
       </div>
     </section>
 
-    <!-- Sección 2: Video -->
+    <!-- Sección 2: Video - CORREGIDA -->
     <section
-      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
+      class="relative flex w-full max-w-[70%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
       <div
-        class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] w-full lg:w-auto order-2 lg:order-1">
+        class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] w-full lg:w-auto order-1 lg:order-1">
         <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
           <p class="w-full lg:w-[576.203px]">Todo lo que puedes aprender en</p>
           <p class="w-full lg:w-[576.203px]">una asesoría bancaria real, puedes</p>
@@ -50,7 +50,7 @@
         </p>
       </div>
       <iframe loading="lazy"
-        class="mx-auto aspect-video w-full md:w-[90%] lg:w-[600px] max-w-4xl rounded-xl border-2 border-[#01162E] bg-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)] order-1 lg:order-2"
+        class="aspect-video w-full max-w-[500px] md:max-w-[550px] lg:w-[600px] lg:max-w-none rounded-xl border-2 border-[#01162E] bg-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)] order-2 lg:order-2"
         src="https://www.youtube-nocookie.com/embed/xWKedtup6AI?si=xktpcEWBOmODbtk0&rel=0&modestbranding=1&playsinline=1"
         title="YouTube video player" frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -58,29 +58,39 @@
       </iframe>
     </section>
 
-    <!-- Sección 3: Dispositivos -->
-    <section
-      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col md:flex-row items-center justify-between gap-6 md:gap-8 lg:gap-10 overflow-visible">
-      <img src="images/ilustraciones/celular_pagina.png" alt=""
-        class="h-auto w-[100px] md:w-[120px] lg:w-[150px] max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
-      <div
-        class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] text-center md:text-left">
-        <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
-          <p class="w-full md:w-[400px] lg:w-[460px]">Entrena y Mejora tus Asesorías</p>
-          <p class="w-full md:w-[400px] lg:w-[460px]">desde Cualquier Dispositivo</p>
-        </div>
-        <p
-          class="nunito-sans-body my-[1lh] w-full md:w-[400px] lg:w-[450px] text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
-          Accede desde tu teléfono o computador para practicar con clientes virtuales, resolver
-          casos bancarios y seguir tu progreso en tiempo real.
-        </p>
+<!-- Sección 3: Dispositivos -->
+<section
+  class="relative flex w-full max-w-[70%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-6 md:gap-8 lg:gap-10 overflow-visible">
+  <!-- Imagen de celular - oculta en móviles y tablets -->
+  <img src="images/ilustraciones/celular_pagina.png" alt=""
+    class="hidden lg:block h-auto w-[100px] md:w-[120px] lg:w-[150px] max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
+
+  <div class="flex flex-col items-center lg:items-start">
+    <div
+      class="nunito-sans-title relative z-10 text-[20px] md:text-[25px] lg:text-[30px] text-[#505050] text-center lg:text-left">
+      <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
+        <p class="w-full md:w-[400px] lg:w-[460px]">Entrena y Mejora tus Asesorías</p>
+        <p class="w-full md:w-[400px] lg:w-[460px]">desde Cualquier Dispositivo</p>
       </div>
-      <img src="images/ilustraciones/computador_pagina.png" alt=""
-        class="h-auto w-full max-w-[300px] md:max-w-[350px] lg:w-[500px] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
-    </section>
+      <p
+        class="nunito-sans-body my-[1lh] w-full md:w-[400px] lg:w-[450px] text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
+        Accede desde tu teléfono o computador para practicar con clientes virtuales, resolver
+        casos bancarios y seguir tu progreso en tiempo real.
+      </p>
+    </div>
+
+    <!-- Nueva imagen para móviles y tablets - visible solo en móviles y tablets -->
+    <img src="images/ilustraciones/computador_celular.png" alt="Dispositivos móviles"
+      class="block lg:hidden h-auto w-full max-w-[600px] mt-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
+  </div>
+
+  <!-- Imagen de computador - oculta en móviles y tablets -->
+  <img src="images/ilustraciones/computador_pagina.png" alt=""
+    class="hidden lg:block h-auto w-full max-w-[300px] md:max-w-[350px] lg:w-[500px] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
+</section>
 
     <!-- Sección 4: Descripción -->
-    <section class="relative flex w-full max-w-[90%] lg:w-[65%] items-center justify-center overflow-visible px-4">
+    <section class="relative flex w-full max-w-[70%] lg:w-[65%] items-center justify-center overflow-visible px-4">
       <div class="nunito-sans-title text-center text-[20px] md:text-[25px] lg:text-[30px] text-[#505050]">
         <div class="leading-8 md:leading-9 lg:leading-10 text-[#034D82]">
           <p>Lo que Debes Saber de SimulaBank</p>
@@ -97,61 +107,89 @@
     </section>
 
     <!-- Sección 5: Tarjetas -->
-    <section
-      class="relative mt-8 md:mt-16 lg:mt-25 grid w-full max-w-[90%] lg:w-[65%] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-auto items-start justify-center gap-6 md:gap-8 overflow-visible">
-      <div
-        class="relative flex flex-col items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md pt-20 md:pt-24">
-        <img src="images/ilustraciones/robot_ia.png" alt=""
-          class="absolute -top-16 md:-top-20 mx-auto w-36 md:w-40 lg:w-45 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
-
-        <div class="p-6">
-          <h5
-            class="nunito-sans-title mb-2 block text-center text-[1.4rem] md:text-[1.5rem] lg:text-[1.6rem] text-[#1788EF]">
-            Cliente Virtual con IA Interactivo
-          </h5>
-          <p class="block pr-4 pb-3 pl-4 text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
-            Enfréntate a clientes simulados que presentan necesidades y problemas reales, para que
-            practiques la resolución y asesoría efectiva.
-          </p>
-        </div>
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<!-- Sección 5: Tarjetas -->
+<section class="relative mt-25 w-full max-w-[70%] mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-3  items-start lg:[grid-template-rows:70px_auto_1fr]">
+    <!-- Tarjeta 1 -->
+    <div class="relative grid grid-rows-subgrid rounded-xl bg-white shadow-md [grid-row:span_3]">
+      <div class="flex justify-center items-end">
+        <img
+          src="images/ilustraciones/robot_ia.png"
+          alt="Cliente Virtual IA"
+          class="w-40 lg:w-45 -mt-14 lg:-mt-16 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
+        />
       </div>
-      <div
-        class="relative flex flex-col items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md pt-24 md:pt-28 lg:pt-32">
-        <img src="images/ilustraciones/asesor_bancario.png" alt=""
-          class="absolute -top-20 md:-top-24 lg:-top-28 mx-auto w-40 md:w-44 lg:w-50 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
-
-        <div class="p-6">
-          <h5
-            class="nunito-sans-title mb-2 block text-center text-[1.4rem] md:text-[1.5rem] lg:text-[1.6rem] text-[#1377d4]">
-            Prácticas Guiadas de Asesoría
-          </h5>
-          <p class="block pr-4 pb-3 pl-4 text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
-            Atiende casos bancarios paso a paso, mejorando tu comunicación, empatía y capacidad de
-            ofrecer soluciones personalizadas.
-          </p>
-        </div>
+      <div class="px-4 text-center">
+        <h5 class="nunito-sans-title text-xl lg:text-2xl text-[#1788EF] font-bold">
+          Cliente Virtual con IA Interactivo
+        </h5>
       </div>
-      <div
-        class="relative flex flex-col items-center rounded-xl bg-white bg-clip-border text-gray-700 shadow-md pt-16 md:pt-20 md:col-span-2 lg:col-span-1">
-        <img src="images/ilustraciones/alcancia_cerdito.png" alt=""
-          class="absolute -top-10 md:-top-12 mx-auto w-40 md:w-44 lg:w-50 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]" />
-
-        <div class="p-6">
-          <h5
-            class="nunito-sans-title mb-2 block text-center text-[1.4rem] md:text-[1.5rem] lg:text-[1.6rem] text-[#00a84c]">
-            Gestión de Productos Financieros
-          </h5>
-          <p class="block pr-4 pb-3 pl-4 text-[16px] md:text-[17px] lg:text-[18px] leading-6 md:leading-7 text-balance">
-            Aprende a recomendar cuentas, créditos e inversiones, asegurando la satisfacción y
-            confianza del cliente simulado.
-          </p>
-        </div>
+      <div class="px-4 pb-4 text-center">
+        <p class="text-base lg:text-[18px] text-gray-600 leading-relaxed lg:leading-7">
+          Enfréntate a clientes simulados que presentan necesidades y problemas reales, para que
+          practiques la resolución y asesoría efectiva.
+        </p>
       </div>
-    </section>
+    </div>
+
+    <!-- Tarjeta 2 -->
+    <div class="relative grid grid-rows-subgrid rounded-xl bg-white shadow-md [grid-row:span_3]">
+      <div class="flex justify-center items-end">
+        <img
+          src="images/ilustraciones/asesor_bancario.png"
+          alt="Prácticas Guiadas"
+          class="w-44 lg:w-50 -mt-16 lg:-mt-20 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
+        />
+      </div>
+      <div class="px-4 text-center">
+        <h5 class="nunito-sans-title text-xl lg:text-2xl text-[#1377d4] font-bold">
+          Prácticas Guiadas de Asesoría
+        </h5>
+      </div>
+      <div class="px-4 pb-4 text-center">
+        <p class="text-base lg:text-[18px] text-gray-600 leading-relaxed lg:leading-7">
+          Atiende casos bancarios paso a paso, mejorando tu comunicación, empatía y capacidad de
+          ofrecer soluciones personalizadas.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 3 -->
+    <div class="relative grid grid-rows-subgrid rounded-xl bg-white shadow-md [grid-row:span_3]">
+      <div class="flex justify-center items-end">
+        <img
+          src="images/ilustraciones/alcancia_cerdito.png"
+          alt="Gestión Financiera"
+          class="w-44 lg:w-50 -mt-8 lg:-mt-10 drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)]"
+        />
+      </div>
+      <div class="px-4 text-center">
+        <h5 class="nunito-sans-title text-xl lg:text-2xl text-[#00a84c] font-bold">
+          Gestión de Productos Financieros
+        </h5>
+      </div>
+      <div class="px-4 pb-4 text-center">
+        <p class="text-base lg:text-[18px] text-gray-600 leading-relaxed lg:leading-7">
+          Aprende a recomendar cuentas, créditos e inversiones, asegurando la satisfacción y
+          confianza del cliente simulado.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- Sección 6: Estudiantes -->
     <section
-      class="relative flex w-full max-w-[90%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
+      class="relative flex w-full max-w-[70%] lg:w-[65%] flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 overflow-visible">
       <img src="images/personas/estudiantes_banca_cut.png" alt="Estudiantes banca"
         class="h-auto w-full max-w-[350px] md:max-w-[450px] lg:w-[500px] lg:max-w-none drop-shadow-[0_5px_5px_rgba(0,0,0,0.35)] order-2 lg:order-1" />
       <div
