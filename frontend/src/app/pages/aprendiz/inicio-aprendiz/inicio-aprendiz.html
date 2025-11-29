@@ -1,134 +1,143 @@
-<div class="flex h-full flex-col gap-8">
-  <div class="grid grid-cols-3 gap-8">
+<div class="flex h-full flex-col gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-0">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+    <!-- Card 1: Simulación -->
     <article
-      class="flex flex-col items-center gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-5 dark:border-gray-700 dark:bg-gray-800"
-    >
-      <p class="titulo-seccion text-[20px] font-medium text-elegant-700 dark:text-gray-200">
+      class="order-2 lg:order-1 flex flex-col items-center gap-6 sm:gap-8 lg:gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-gray-800">
+      <p
+        class="titulo-seccion text-center text-base sm:text-lg lg:text-[20px] font-medium text-elegant-700 dark:text-gray-200">
         Comienza simulando asesorias bancarias virtuales con clientes generados con IA
       </p>
-      <img src="/images/ilustraciones/simulacion-inicio.png" alt="" />
-      <button
-        routerLink="/aprendiz/simulador"
-        class="flex w-full max-w-55 cursor-pointer items-center justify-center gap-3 rounded-full bg-[#009040] p-2 transition-colors duration-200 hover:bg-[#007a33] focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:outline-none dark:bg-green-600 hover:dark:bg-green-700"
-      >
-        <p class="text-sm text-white md:text-base">Empezar simulación</p>
-        <div class="h-6 w-6 rounded-full bg-white p-1 md:h-7 md:w-7 dark:bg-gray-700">
+      <img src="/images/ilustraciones/simulacion-inicio.png" alt="" class="flex-grow" />
+      <button routerLink="/aprendiz/simulador" class="flex w-full max-w-[260px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-55
+         cursor-pointer items-center justify-center gap-2 sm:gap-3
+         rounded-full bg-[#009040] p-2 md:p-3
+         transition-colors duration-200 hover:bg-[#007a33]
+         focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:outline-none
+         dark:bg-green-600 hover:dark:bg-green-700">
+        <p class="text-sm md:text-base text-white">Empezar simulación</p>
+        <div class="h-6 w-6 md:h-7 md:w-7 rounded-full bg-white p-1 dark:bg-gray-700">
           <span class="icon-[solar--play-linear] dark:text-indigo-300"></span>
         </div>
       </button>
     </article>
+
+    <!-- Card 2: Políticas e Información -->
     <article
-      class="flex flex-col items-center gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-5 dark:border-gray-700 dark:bg-gray-800"
-    >
-      <p class="titulo-seccion text-[20px] font-medium text-elegant-700 dark:text-gray-200">
+      class="order-3 lg:order-2 flex flex-col items-center gap-6 sm:gap-8 lg:gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-gray-800">
+      <p
+        class="titulo-seccion text-center text-base sm:text-lg lg:text-[20px] font-medium text-elegant-700 dark:text-gray-200">
         SimulaBank es un banco simulado. Tiene sus politicas y sus clientes
       </p>
-      <img src="/images/ilustraciones/poliinfo-incio.png" alt="" />
-      <div class="flex w-full justify-center gap-5 dark:text-gray-300">
-        <button
-          [routerLink]="politicasRoute"
-          class="flex w-[40%] cursor-pointer items-center justify-center gap-3 rounded-full bg-[#0271b1] p-2 transition-colors duration-200 hover:bg-[#00537a] focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none dark:bg-blue-600 hover:dark:bg-blue-700"
-        >
-          <p class="text-sm text-white md:text-base">Ver Politicas</p>
-          <span class="icon-[mdi--eye-outline] size-7 text-white dark:text-indigo-300"></span>
+      <img src="/images/ilustraciones/poliinfo-incio.png" alt="" class="flex-grow" />
+      <div class="flex w-full justify-center items-center gap-3 sm:gap-4 lg:gap-5
+         flex-row
+         max-[1650px]:flex-col max-[1650px]:w-full max-[1650px]:items-center">
+
+        <button [routerLink]="politicasRoute" class="flex items-center justify-center gap-2 sm:gap-3
+         w-full sm:w-[70%] md:w-[60%] lg:w-[55%] xl:w-[45%] max-[1650px]:w-[80%]
+         h-[48px] md:h-[52px] lg:h-[55px]
+         rounded-full bg-[#0271b1] px-4
+         transition-colors duration-200 hover:bg-[#00537a]
+         focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none
+         dark:bg-blue-600 hover:dark:bg-blue-700">
+          <p class="text-sm md:text-base text-white leading-none">Ver Politicas</p>
+          <span class="icon-[mdi--eye-outline] size-5 md:size-6 text-white dark:text-indigo-300"></span>
         </button>
-        <button
-          [routerLink]="informacionRoute"
-          class="flex w-[40%] cursor-pointer items-center justify-center gap-3 rounded-full bg-[#0271b1] p-2 transition-colors duration-200 hover:bg-[#00537a] focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none dark:bg-blue-600 hover:dark:bg-blue-700"
-        >
-          <p class="text-sm text-white md:text-base">Ver Informacion</p>
-          <span class="icon-[mdi--eye-outline] size-7 text-white dark:text-indigo-300"></span>
+
+        <button [routerLink]="informacionRoute" class="flex items-center justify-center gap-2 sm:gap-3
+         w-full sm:w-[70%] md:w-[60%] lg:w-[55%] xl:w-[45%] max-[1650px]:w-[80%]
+         h-[48px] md:h-[52px] lg:h-[55px]
+         rounded-full bg-[#0271b1] px-4
+         transition-colors duration-200 hover:bg-[#00537a]
+         focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none
+         dark:bg-blue-600 hover:dark:bg-blue-700">
+          <p class="text-sm md:text-base text-white leading-none">Ver Informacion</p>
+          <span class="icon-[mdi--eye-outline] size-5 md:size-6 text-white dark:text-indigo-300"></span>
         </button>
+
       </div>
+
+
     </article>
+
+    <!-- Card 3: Perfil y Estadísticas -->
     <article
-      class="rounded-lg border-2 border-[#E7E9EB] bg-white p-10 dark:border-gray-700 dark:bg-gray-800"
-    >
+      class="order-1 lg:order-3 rounded-lg border-2 border-[#E7E9EB] bg-white p-6 sm:p-8 lg:p-10 dark:border-gray-700 dark:bg-gray-800">
       <ul class="flex flex-col items-center gap-1">
         <li>
           <div class="avatar ml-[5px]">
             <div
-              class="w-30 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
-            >
-              <img
-                [src]="usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'"
-                [alt]="nombreCompleto"
-              />
+              class="w-24 sm:w-28 lg:w-30 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
+              <img [src]="usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'" [alt]="nombreCompleto" />
             </div>
           </div>
         </li>
-        <li class="text-center">
-          <p
-            class="max-w-[200px] truncate text-2xl font-bold text-[#566577] dark:text-gray-200"
-            [title]="nombreCompleto"
-          >
+        <li class="text-center w-full px-2">
+          <p class="max-w-[200px] mx-auto truncate text-xl sm:text-2xl font-bold text-[#566577] dark:text-gray-200"
+            [title]="nombreCompleto">
             {{ nombreCompleto }}
           </p>
         </li>
         <li>
-          <span class="badge p-3.5 font-bold text-white" [ngClass]="rolBadge.color">
+          <span class="badge p-2.5 sm:p-3 lg:p-3.5 text-sm sm:text-base font-bold text-white"
+            [ngClass]="rolBadge.color">
             {{ rolBadge.text }}
           </span>
         </li>
       </ul>
-      <div class="mt-5">
-        <p>Estadisticas:</p>
-        <ul class="mt-2 grid grid-cols-2 gap-4">
+      <div class="mt-4 sm:mt-5">
+        <p class="text-sm sm:text-base dark:text-gray-200">Estadisticas:</p>
+        <ul class="mt-2 grid grid-cols-2 gap-3 sm:gap-4">
           <li
-            class="flex h-[185px] flex-col items-center justify-center gap-2 rounded-lg bg-[#ebebeb] p-3"
-          >
-            <p class="text-7xl font-medium">{{ totalSimulacionesCompletadas }}</p>
-            <p class="text-center text-elegant-500">
+            class="flex h-[140px] sm:h-[160px] lg:h-[185px] flex-col items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-[#ebebeb] p-2 sm:p-3 dark:bg-gray-700">
+            <p class="text-4xl sm:text-5xl lg:text-7xl font-medium dark:text-gray-200">{{ totalSimulacionesCompletadas
+              }}</p>
+            <p class="text-center text-xs sm:text-sm text-elegant-500 dark:text-gray-300 leading-tight">
               Simulaciones<br />completadas<br />exitosamente
             </p>
           </li>
+
           <li
-            class="flex h-[185px] flex-col items-center justify-center gap-2 rounded-lg bg-[#ebebeb] p-3"
-          >
-            <p class="text-7xl font-medium">{{ totalLogrosCompletados }}</p>
-            <p class="text-center text-elegant-500">Logros<br />completados<br />exitosamente</p>
+            class="flex h-[140px] sm:h-[160px] lg:h-[185px] flex-col items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-[#ebebeb] p-2 sm:p-3 dark:bg-gray-700">
+            <p class="text-4xl sm:text-5xl lg:text-7xl font-medium dark:text-gray-200">{{ totalLogrosCompletados }}</p>
+            <p class="text-center text-xs sm:text-sm text-elegant-500 dark:text-gray-300 leading-tight">
+              Logros<br />completados<br />exitosamente
+            </p>
           </li>
         </ul>
       </div>
     </article>
   </div>
+
+  <!-- Sección de Logros -->
   <div>
-    <article
-      class="rounded-lg border-2 border-[#E7E9EB] bg-white dark:border-gray-700 dark:bg-gray-800"
-    >
-      <div
-        class="flex items-center justify-center border-b-2 border-[#E7E9EB] p-2.5 dark:border-gray-700"
-      >
-        <p class="text-[20px] font-medium text-elegant-700 dark:text-gray-200">Logros exhibidos</p>
+    <article class="rounded-lg border-2 border-[#E7E9EB] bg-white dark:border-gray-700 dark:bg-gray-800">
+      <div class="flex items-center justify-center border-b-2 border-[#E7E9EB] p-2.5 dark:border-gray-700">
+        <p class="text-base sm:text-lg lg:text-[20px] font-medium text-elegant-700 dark:text-gray-200">Logros exhibidos
+        </p>
       </div>
-      <div class="flex-grow overflow-auto p-5 dark:text-gray-300">
-        <div class="mx-auto flex max-w-6xl flex-col items-center gap-4">
+      <div class="flex-grow overflow-auto p-4 sm:p-5 dark:text-gray-300">
+        <div class="mx-auto flex max-w-6xl flex-col items-center gap-4 min-h-[212px] lg:h-53">
           <ng-container *ngIf="logrosAprendiz?.length; else sinLogrosInicio">
-            <div class="flex w-full flex-wrap justify-center gap-4">
+            <div class="flex w-full flex-wrap justify-center gap-3 sm:gap-4">
               <ng-container *ngFor="let logro of logrosAprendiz">
                 <div
-                  class="flex w-52 flex-col overflow-hidden rounded-lg border-2 border-[#E7E9EB] dark:border-gray-700"
-                >
+                  class="flex w-40 sm:w-48 lg:w-52 flex-col overflow-hidden rounded-lg border-2 border-[#E7E9EB] dark:border-gray-700">
                   <div
-                    class="flex h-40 items-center justify-center overflow-hidden bg-gray-100 p-3 dark:bg-gray-900"
-                  >
-                    <img
-                      [src]="logro.imagen"
-                      class="max-h-full max-w-full object-contain drop-shadow-lg"
-                      [alt]="logro.nombre"
-                    />
+                    class="flex h-32 sm:h-36 lg:h-40 items-center justify-center overflow-hidden bg-gray-100 p-2 sm:p-3 dark:bg-gray-900">
+                    <img [src]="logro.imagen" class="max-h-full max-w-full object-contain drop-shadow-lg"
+                      [alt]="logro.nombre" />
                   </div>
                   <div
-                    class="flex h-20 items-center justify-center border-t-2 border-[#E7E9EB] bg-white p-2 text-center dark:border-gray-700 dark:bg-gray-800"
-                  >
-                    <p class="text-sm">{{ logro.nombre }}</p>
+                    class="flex h-16 sm:h-18 lg:h-20 items-center justify-center border-t-2 border-[#E7E9EB] bg-white p-2 text-center dark:border-gray-700 dark:bg-gray-800">
+                    <p class="text-xs sm:text-sm">{{ logro.nombre }}</p>
                   </div>
                 </div>
               </ng-container>
             </div>
           </ng-container>
           <ng-template #sinLogrosInicio>
-            <p class="max-w-xl text-center text-sm text-elegant-500 dark:text-gray-400">
+            <p class="max-w-xl text-center text-xs sm:text-sm text-elegant-500 dark:text-gray-400 px-4">
               No tienes logros. Ve a la sección de logros de la plataforma para enterarte qué debes
               hacer.
             </p>
