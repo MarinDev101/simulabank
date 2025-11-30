@@ -1,19 +1,89 @@
-<footer
-  class="nunito-sans-body flex flex-col items-center gap-4 bg-[#252641] pt-8 pb-8 text-white"
->
-  <div class="flex flex-col sm:flex-row items-center sm:gap-8 gap-2 pb-4 text-center sm:text-left">
-    <img src="images/imagotipo/imagotipo_simulabank_claro.svg" class="h-auto w-[180px] sm:w-[250px] mb-2 sm:mb-0" alt="" />
-    <div class="nunito-sans-title text-[18px] sm:text-[20px]">
-      <p>Simulador de</p>
-      <p>Asesoría Bancaria</p>
+<footer class="font-nunito bg-[#252641] text-white">
+  <div class="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-10 sm:py-12 lg:py-14">
+
+    <!-- Logo y descripción - siempre centrado -->
+    <div class="flex flex-col items-center gap-4 text-center">
+      <img
+        src="images/imagotipo/imagotipo_simulabank_claro.svg"
+        class="h-auto w-44 sm:w-48"
+        alt="SimulaBank"
+      />
+      <p class="text-[#9d9fb8] text-sm leading-relaxed max-w-sm">
+        Simulador de Asesoría Bancaria para el desarrollo de competencias financieras.
+      </p>
+    </div>
+
+    <!-- Separador -->
+    <hr class="my-8 border-white/10" />
+
+    <!-- Grid de enlaces -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6">
+
+      <!-- Enlaces legales -->
+      <div class="flex flex-col items-center gap-3 text-center">
+        <h4 class="font-semibold text-sm text-white/90 uppercase tracking-wide">Legal</h4>
+        <hr class="w-8 border-white/20 sm:hidden" />
+        <nav class="flex flex-col items-center gap-2">
+          <a
+            routerLink="/politicas-privacidad"
+            class="text-[#9d9fb8] hover:text-white text-sm transition-colors duration-300"
+          >
+            Política de privacidad
+          </a>
+          <a
+            routerLink="/terminos-condiciones"
+            class="text-[#9d9fb8] hover:text-white text-sm transition-colors duration-300"
+          >
+            Términos y condiciones
+          </a>
+        </nav>
+      </div>
+
+      <!-- Navegación -->
+      <div class="flex flex-col items-center gap-3 text-center">
+        <h4 class="font-semibold text-sm text-white/90 uppercase tracking-wide">Navegación</h4>
+        <hr class="w-8 border-white/20 sm:hidden" />
+        <nav class="flex flex-col items-center gap-2">
+          <a
+            routerLink="/"
+            class="text-[#9d9fb8] hover:text-white text-sm transition-colors duration-300"
+          >
+            Inicio
+          </a>
+          <a
+            routerLink="/iniciar-sesion"
+            class="text-[#9d9fb8] hover:text-white text-sm transition-colors duration-300"
+          >
+            Iniciar sesión
+          </a>
+          <a
+            routerLink="/crear-cuenta"
+            class="text-[#9d9fb8] hover:text-white text-sm transition-colors duration-300"
+          >
+            Crear cuenta
+          </a>
+        </nav>
+      </div>
+
+      <!-- Desarrolladores -->
+      <div class="flex flex-col items-center gap-3 text-center">
+        <h4 class="font-semibold text-sm text-white/90 uppercase tracking-wide">Desarrolladores</h4>
+        <hr class="w-8 border-white/20 sm:hidden" />
+        <div class="text-[#9d9fb8] text-sm space-y-1">
+          <p>Sebastian Marin Valencia</p>
+          <p>Juan David Avila Gutierrez</p>
+        </div>
+      </div>
+
     </div>
   </div>
-  <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-[#7b7c97] mb-2">
-    <a routerLink="/politicas-privacidad" class="link link-hover">Política de privacidad</a>
-    <hr class="hidden sm:inline-block h-5 border border-[#7b7c97]" />
-    <a routerLink="/terminos-condiciones" class="link link-hover">Términos y condiciones</a>
-  </div>
-  <div>
-    <p class="text-[#7b7c97] text-center text-xs sm:text-base">&copy; 2025 SimulaBank. Sebastian Marin - Juan David Avila</p>
+
+  <!-- Barra inferior con copyright -->
+  <div class="border-t border-white/10">
+    <div class="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-4 sm:py-5">
+      <p class="text-[#7d7f99] text-center text-xs sm:text-sm">
+        © 2025 SimulaBank. Todos los derechos reservados.
+      </p>
+    </div>
   </div>
 </footer>

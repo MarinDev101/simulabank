@@ -1,34 +1,36 @@
 <header class="fixed top-0 left-0 z-[9999] w-full bg-white dark:bg-[#0b0b0b] shadow-md">
   <div class="drawer drawer-end">
-    <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle" [checked]="isDrawerOpen" />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
-      <nav class="navbar w-full px-4 py-8 flex justify-around items-center bg-white dark:bg-[#0b0b0b]">
+      <nav class="navbar w-full lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 lg:py-8 flex justify-around lg:justify-between items-center bg-white dark:bg-[#0b0b0b]">
         <!-- Logo -->
         <div class="flex items-center gap-2">
-          <img src="images/imagotipo/imagotipo_simulabank.svg" class="h-auto w-80" alt="SimulaBank" />
+          <img src="images/imagotipo/imagotipo_simulabank.svg" class="h-auto w-60 md:w-80" alt="SimulaBank" />
         </div>
         <!-- Hamburger Button (mobile only) -->
-        <div class="lg:hidden">
-          <label for="my-drawer-2" aria-label="Open sidebar" class="btn btn-square btn-ghost">
-<span class="icon-[quill--hamburger-sidebar] size-9"></span>
-          </label>
+        <div class="lg:hidden ml-4">
+          <button (click)="toggleDrawer()" aria-label="Open sidebar" class="btn btn-square btn-ghost hover:bg-[#1788EF]/10 transition-all duration-300">
+            <span class="icon-[quill--hamburger-sidebar] size-8 sm:size-9 text-[#034D82]"></span>
+          </button>
         </div>
         <!-- Desktop Menu -->
         <div class="hidden lg:block">
-          <ul class="menu menu-horizontal flex items-center gap-6 font-nunito">
+          <ul class="menu menu-horizontal flex items-center gap-4 font-nunito">
             <li>
-              <a class="btn rounded-[10px] border-black bg-[#003169] text-white" routerLink="/">
-                <span class="icon-[clarity--home-line] text-[25px]"></span>
+              <a class="btn rounded-xl border-none bg-linear-to-br from-[#00A448] via-[#00913e] to-[#007a34] text-white shadow-md shadow-[#00A448]/20 hover:shadow-lg hover:shadow-[#00A448]/30 hover:brightness-110 transition-shadow duration-500 ease-out" routerLink="/">
+                <span class="icon-[clarity--home-line] text-[22px]"></span>
               </a>
             </li>
             <li>
-              <a routerLink="/iniciar-sesion" class="btn rounded-[10px] px-4 btn-outline hover:border-[#016b31] hover:bg-[#009040] hover:text-white">
+              <a routerLink="/iniciar-sesion" class="btn rounded-xl px-6 border-2 border-[#1788EF]/80 bg-transparent text-[#1788EF] font-semibold hover:bg-[#1788EF]/10 hover:border-[#1788EF] hover:shadow-md hover:shadow-[#1788EF]/15 transition-[shadow,background-color,border-color] duration-500 ease-out">
+                <span class="icon-[heroicons-outline--login] text-[18px]"></span>
                 Iniciar Sesión
               </a>
             </li>
             <li>
-              <a routerLink="/crear-cuenta" class="btn rounded-[10px] border-black bg-[#01162E] px-6 text-white">
+              <a routerLink="/crear-cuenta" class="btn rounded-xl px-6 border-none bg-linear-to-br from-[#034D82] via-[#0a5a9c] to-[#01162E] text-white font-semibold shadow-md shadow-[#034D82]/20 hover:shadow-lg hover:shadow-[#034D82]/30 hover:brightness-110 transition-shadow duration-500 ease-out">
+                <span class="icon-[heroicons-outline--user-plus] text-[18px]"></span>
                 Registrarse
               </a>
             </li>
@@ -38,24 +40,42 @@
     </div>
     <!-- Sidebar (Drawer) -->
     <div class="drawer-side">
-      <label for="my-drawer-2" aria-label="Close sidebar" class="drawer-overlay"></label>
-      <ul class="menu bg-base-200 min-h-full w-72 p-4 gap-5 font-nunito">
-        <li>
-          <a class="btn rounded-[10px] border-black bg-[#003169] text-white" routerLink="/">
-            <span class="icon-[clarity--home-line] text-[25px]"></span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/iniciar-sesion" class="btn rounded-[10px] px-4 btn-outline hover:border-[#016b31] hover:bg-[#009040] hover:text-white">
-            Iniciar Sesión
-          </a>
-        </li>
-        <li>
-          <a routerLink="/crear-cuenta" class="btn rounded-[10px] border-black bg-[#01162E] px-6 text-white">
-            Registrarse
-          </a>
-        </li>
-      </ul>
+      <div (click)="closeDrawer()" aria-label="Close sidebar" class="drawer-overlay backdrop-blur-sm"></div>
+      <aside class="min-h-full w-72 bg-white dark:bg-[#0b0b0b] shadow-xl">
+        <!-- Header del Sidebar con botón X -->
+        <div class="flex justify-end p-4">
+          <button (click)="closeDrawer()" aria-label="Close sidebar" class="btn btn-ghost btn-sm hover:bg-[#034D82]/10 border-none text-[#034D82] dark:text-white transition-[background-color] duration-300 ease-out cursor-pointer">
+            <span class="icon-[heroicons-outline--x-mark] text-2xl"></span>
+          </button>
+        </div>
+
+        <!-- Menu Items -->
+        <ul class="menu w-full px-6 pb-6 gap-4 font-nunito">
+          <li>
+            <a (click)="closeDrawer()" class="btn h-12 justify-start gap-3 rounded-xl border-none bg-linear-to-br from-[#00A448] via-[#00913e] to-[#007a34] text-white shadow-md shadow-[#00A448]/20 hover:shadow-lg hover:shadow-[#00A448]/25 hover:brightness-110 transition-shadow duration-500 ease-out" routerLink="/">
+              <span class="icon-[clarity--home-line] text-[20px]"></span>
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a (click)="closeDrawer()" routerLink="/iniciar-sesion" class="btn h-12 justify-start gap-3 rounded-xl px-5 border-2 border-[#1788EF]/80 bg-transparent text-[#1788EF] font-semibold hover:bg-[#1788EF]/10 hover:border-[#1788EF] hover:shadow-md hover:shadow-[#1788EF]/10 transition-[shadow,background-color,border-color] duration-500 ease-out">
+              <span class="icon-[heroicons-outline--login] text-[18px]"></span>
+              Iniciar Sesión
+            </a>
+          </li>
+          <li>
+            <a (click)="closeDrawer()" routerLink="/crear-cuenta" class="btn h-12 justify-start gap-3 rounded-xl px-5 border-none bg-linear-to-br from-[#034D82] via-[#0a5a9c] to-[#01162E] text-white font-semibold shadow-md shadow-[#034D82]/20 hover:shadow-lg hover:shadow-[#034D82]/25 hover:brightness-110 transition-shadow duration-500 ease-out">
+              <span class="icon-[heroicons-outline--user-plus] text-[18px]"></span>
+              Registrarse
+            </a>
+          </li>
+        </ul>
+
+        <!-- Footer del Sidebar -->
+        <div class="absolute bottom-0 left-0 right-0 p-4">
+          <p class="text-xs text-center text-[#9ca3af]">© 2025 SimulaBank</p>
+        </div>
+      </aside>
     </div>
   </div>
 </header>

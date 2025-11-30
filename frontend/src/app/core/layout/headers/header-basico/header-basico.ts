@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,4 +7,22 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   templateUrl: './header-basico.html',
 })
-export class HeaderBasico {}
+export class HeaderBasico {
+  isDrawerOpen = false;
+
+  @HostListener('window:resize')
+  onResize(): void {
+    // Breakpoint lg de Tailwind = 1024px
+    if (window.innerWidth >= 1024 && this.isDrawerOpen) {
+      this.closeDrawer();
+    }
+  }
+
+  toggleDrawer(): void {
+    this.isDrawerOpen = !this.isDrawerOpen;
+  }
+
+  closeDrawer(): void {
+    this.isDrawerOpen = false;
+  }
+}

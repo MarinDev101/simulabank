@@ -29,7 +29,8 @@
                 "glob": "**/*",
                 "input": "node_modules/ng2-pdfjs-viewer/pdfjs",
                 "output": "assets/pdfjs"
-              }
+              },
+              "src/_redirects"
             ],
             "styles": ["src/custom-theme.scss", "src/styles.css"]
           },
