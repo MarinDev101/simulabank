@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   ElementRef,
   ViewChild,
   Output,
@@ -13,13 +14,16 @@ import { Router } from '@angular/router';
 import { RegistroService } from '@app/core/auth/service/registro';
 import { AuthService } from '@app/core/auth/service/auth';
 
+const CODE_COOLDOWN_KEY = 'codigo_cooldown_registro'; // Mismo cooldown global que datos-basicos.ts
+const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
+
 @Component({
   selector: 'app-validar-cuenta',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './validar-cuenta.html',
 })
-export class ValidarCuenta implements OnInit {
+export class ValidarCuenta implements OnInit, OnDestroy {
   @Input() correoUsuario: string = '';
   @Input() datosRegistro: any = null; // Recibir datos completos del registro
   @Output() volver = new EventEmitter<void>();
@@ -31,6 +35,10 @@ export class ValidarCuenta implements OnInit {
   errorMessage = '';
   isResending = false;
   resendMessage = '';
+
+  // Rate limiting para reenvío de códigos
+  cooldownSeconds = 0;
+  cooldownInterval: any = null;
 
   @ViewChild('inputsContainer') inputsContainer!: ElementRef<HTMLDivElement>;
 
@@ -47,6 +55,29 @@ export class ValidarCuenta implements OnInit {
       group[`digit${i}`] = ['', [Validators.pattern('[0-9]')]];
     }
     this.pinForm = this.fb.group(group);
+
+    // Verificar cooldown global existente
+    this.verificarCooldownExistente();
+  }
+
+  private verificarCooldownExistente(): void {
+    const lastSent = localStorage.getItem(CODE_COOLDOWN_KEY);
+
+    if (lastSent) {
+      const elapsed = Date.now() - parseInt(lastSent, 10);
+      const remaining = COOLDOWN_TIME_MS - elapsed;
+
+      if (remaining > 0) {
+        this.cooldownSeconds = Math.ceil(remaining / 1000);
+        this.iniciarCooldown();
+      } else {
+        localStorage.removeItem(CODE_COOLDOWN_KEY);
+      }
+    }
+  }
+
+  private guardarCooldown(): void {
+    localStorage.setItem(CODE_COOLDOWN_KEY, Date.now().toString());
   }
 
   onInput(event: any, index: number) {
@@ -155,10 +186,15 @@ export class ValidarCuenta implements OnInit {
     });
   }
 
-  // MÉTODO ACTUALIZADO: Reenviar código con datos reales
+  // MÉTODO ACTUALIZADO: Reenviar código con datos reales y rate limiting
   reenviarCodigo() {
     if (!this.datosRegistro) {
       this.errorMessage = 'No se encontraron los datos del registro';
+      return;
+    }
+
+    // Verificar si está en cooldown
+    if (this.cooldownSeconds > 0) {
       return;
     }
 
@@ -171,6 +207,11 @@ export class ValidarCuenta implements OnInit {
       next: (response) => {
         this.isResending = false;
         this.resendMessage = 'Código reenviado exitosamente. Revisa tu correo.';
+
+        // Iniciar cooldown y guardar en localStorage
+        this.guardarCooldown();
+        this.cooldownSeconds = 300;
+        this.iniciarCooldown();
 
         // Limpiar campos y enfocar el primero
         this.limpiarCodigo();
@@ -186,11 +227,37 @@ export class ValidarCuenta implements OnInit {
 
         if (error.status === 400) {
           this.errorMessage = error.error?.error || 'Error al reenviar el código';
+        } else if (error.status === 429) {
+          this.errorMessage = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
+          this.guardarCooldown();
+          this.cooldownSeconds = 300;
+          this.iniciarCooldown();
         } else {
           this.errorMessage = 'No se pudo reenviar el código. Intenta nuevamente.';
         }
       },
     });
+  }
+
+  iniciarCooldown() {
+    // Limpiar intervalo anterior si existe
+    if (this.cooldownInterval) {
+      clearInterval(this.cooldownInterval);
+    }
+
+    this.cooldownInterval = setInterval(() => {
+      this.cooldownSeconds--;
+      if (this.cooldownSeconds <= 0) {
+        clearInterval(this.cooldownInterval);
+        this.cooldownInterval = null;
+      }
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.cooldownInterval) {
+      clearInterval(this.cooldownInterval);
+    }
   }
 
   limpiarCodigo() {

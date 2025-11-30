@@ -16,12 +16,14 @@ export class CrearCuenta {
   pasoActual = 1;
   correoUsuario = '';
   datosRegistro: any = null; // Almacenar datos completos del registro
+  datosFormularioGuardados: any = null; // Datos del formulario para restaurar al volver
 
   siguientePaso(datos?: any) {
     // Guardar datos del registro si vienen del paso 1
     if (datos?.correo) {
       this.correoUsuario = datos.correo;
       this.datosRegistro = datos; // Guardar datos completos
+      this.datosFormularioGuardados = datos; // Guardar para restaurar si vuelve
     }
 
     if (this.pasoActual < 3) {

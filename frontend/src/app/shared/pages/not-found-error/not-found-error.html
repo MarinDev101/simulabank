@@ -1,1 +1,54 @@
-<p>not-found-error works!</p>
+<div class="flex min-h-screen flex-col bg-geometria bg-repeat bg-size-[275px_275px]">
+  <!-- Contenedor principal centrado -->
+  <main class="flex flex-1 flex-col items-center justify-center px-4 py-8 sm:px-8">
+    <!-- Card principal -->
+    <div class="relative w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] rounded-3xl border border-[#e8f4fc] bg-white/95 backdrop-blur-sm p-6 sm:p-10 md:p-12 shadow-xl overflow-hidden text-center">
+
+      <!-- Decoraciones de fondo -->
+      <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
+      <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
+
+      <!-- Logo SimulaBank -->
+      <div class="relative z-10 mb-6 sm:mb-8">
+        <img
+          src="images/imagotipo/imagotipo_simulabank.svg"
+          alt="SimulaBank Logo"
+          class="h-10 sm:h-12 md:h-14 mx-auto"
+        />
+      </div>
+
+      <!-- Ilustración del robot -->
+      <div class="relative z-10 mb-6 sm:mb-8">
+        <img
+          src="images/ilustraciones/robot_error.svg"
+          alt="Robot de error"
+          class="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 mx-auto drop-shadow-lg"
+        />
+      </div>
+
+      <!-- Texto del error -->
+      <div class="relative z-10 space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+        <h1 class="nunito-sans-title text-6xl sm:text-7xl md:text-8xl font-bold bg-linear-to-r from-[#034D82] to-[#1788EF] bg-clip-text text-transparent">
+          404
+        </h1>
+        <h2 class="nunito-sans-title text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
+          ¡Página no encontrada!
+        </h2>
+        <p class="text-sm sm:text-base md:text-lg text-gray-500 leading-relaxed max-w-md mx-auto">
+          Lo sentimos, la página que buscas no existe o ha sido movida. Nuestro robot no pudo encontrarla.
+        </p>
+      </div>
+
+      <!-- Botón de volver al inicio -->
+      <div class="relative z-10">
+        <a
+          routerLink="/inicio"
+          class="btn rounded-xl px-6 sm:px-8 py-3 border-none bg-linear-to-br from-[#034D82] via-[#0a5a9c] to-[#01162E] text-white font-semibold shadow-md shadow-[#034D82]/20 hover:shadow-lg hover:shadow-[#034D82]/30 hover:brightness-110 transition-all duration-500 ease-out text-sm sm:text-base"
+        >
+          <span class="icon-[uil--home] text-lg sm:text-xl"></span>
+          Volver al inicio
+        </a>
+      </div>
+    </div>
+  </main>
+</div>

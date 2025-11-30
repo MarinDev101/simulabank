@@ -1,27 +1,44 @@
-<app-header-basico></app-header-basico>
+<div class="flex min-h-screen flex-col">
+  <app-header-basico></app-header-basico>
 
-<div class="flex flex-col items-center justify-center gap-10 bg-geometria bg-size-[275px_275px] bg-repeat min-h-200 mt-15">
-  <h2 class="nunito-sans-title text-center text-[40px] font-semibold">
-    Recuperar Cuenta
-  </h2>
+  <main class="flex flex-1 flex-col items-center bg-geometria bg-size-[275px_275px] bg-repeat pt-[120px] sm:pt-[140px] md:pt-[160px] pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 md:px-8">
+    <!-- Encabezado -->
+    <div class="text-center mb-6 sm:mb-8 md:mb-10">
+      <h2 class="nunito-sans-title text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] font-bold text-gray-800">
+        Recuperar Cuenta
+      </h2>
+      <p class="mt-2 sm:mt-3 text-sm sm:text-base text-gray-500 max-w-md mx-auto">
+        Sigue los pasos para restablecer tu contraseña
+      </p>
+    </div>
 
-  <!-- Steps -->
-  <ul class="steps w-[60%] max-w-4xl">
-    <li class="step" [class.step-neutral]="pasoActual >= 1">Solicita Recuperación</li>
-    <li class="step" [class.step-neutral]="pasoActual >= 2">Validar Cuenta</li>
-    <li class="step" [class.step-neutral]="pasoActual >= 3">Establecer Nueva Contraseña</li>
-  </ul>
+    <!-- Steps -->
+    <ul class="steps steps-horizontal w-full max-w-[95%] sm:max-w-[85%] md:max-w-2xl lg:max-w-3xl mb-6 sm:mb-8 md:mb-10">
+      <li class="step text-xs sm:text-sm" [class.step-primary]="pasoActual >= 1">
+        <span class="hidden sm:inline">Solicita Recuperación</span>
+        <span class="sm:hidden">Solicitar</span>
+      </li>
+      <li class="step text-xs sm:text-sm" [class.step-primary]="pasoActual >= 2">
+        <span class="hidden sm:inline">Validar Cuenta</span>
+        <span class="sm:hidden">Validar</span>
+      </li>
+      <li class="step text-xs sm:text-sm" [class.step-primary]="pasoActual >= 3">
+        <span class="hidden sm:inline">Nueva Contraseña</span>
+        <span class="sm:hidden">Contraseña</span>
+      </li>
+    </ul>
 
-  <!-- Contenedor dinámico -->
-  <div class="w-full max-w-3xl bg-white rounded-xl shadow-md">
-    <ng-container [ngSwitch]="pasoActual">
-      <app-solicitud *ngSwitchCase="1" (continuar)="siguientePaso($event)"></app-solicitud>
-      <app-validacion *ngSwitchCase="2" [correoUsuario]="correoUsuario" (continuar)="siguientePaso()"
-        (volver)="anteriorPaso()">
-      </app-validacion>
-      <app-nueva-contrasena *ngSwitchCase="3" (volver)="anteriorPaso()"></app-nueva-contrasena>
-    </ng-container>
-  </div>
+    <!-- Contenedor dinámico -->
+    <div class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-2xl lg:max-w-3xl">
+      <ng-container [ngSwitch]="pasoActual">
+        <app-solicitud *ngSwitchCase="1" [datosGuardados]="datosFormularioGuardados" (continuar)="siguientePaso($event)"></app-solicitud>
+        <app-validacion *ngSwitchCase="2" [correoUsuario]="correoUsuario" (continuar)="siguientePaso()"
+          (volver)="anteriorPaso()">
+        </app-validacion>
+        <app-nueva-contrasena *ngSwitchCase="3" (volver)="anteriorPaso()"></app-nueva-contrasena>
+      </ng-container>
+    </div>
+  </main>
+
+  <app-footer></app-footer>
 </div>
-
-<app-footer></app-footer>

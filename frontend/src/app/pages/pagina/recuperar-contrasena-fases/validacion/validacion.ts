@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   ElementRef,
   ViewChild,
   Output,
@@ -11,13 +12,16 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
 
+const CODE_COOLDOWN_KEY = 'codigo_cooldown_recuperacion'; // Mismo cooldown global que solicitud.ts
+const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
+
 @Component({
   selector: 'app-validacion',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './validacion.html',
 })
-export class Validacion implements OnInit {
+export class Validacion implements OnInit, OnDestroy {
   @Input() correoUsuario: string = '';
   @Output() volver = new EventEmitter<void>();
   @Output() continuar = new EventEmitter<string>(); // Emitimos el token temporal
@@ -29,6 +33,10 @@ export class Validacion implements OnInit {
   isResending = false;
   resendMessage = '';
   tokenTemporal = '';
+
+  // Rate limiting para reenvío de códigos
+  cooldownSeconds = 0;
+  cooldownInterval: any = null;
 
   @ViewChild('inputsContainer') inputsContainer!: ElementRef<HTMLDivElement>;
 
@@ -43,6 +51,29 @@ export class Validacion implements OnInit {
       group[`digit${i}`] = ['', [Validators.pattern('[0-9]')]];
     }
     this.pinForm = this.fb.group(group);
+
+    // Verificar cooldown global existente
+    this.verificarCooldownExistente();
+  }
+
+  private verificarCooldownExistente(): void {
+    const lastSent = localStorage.getItem(CODE_COOLDOWN_KEY);
+
+    if (lastSent) {
+      const elapsed = Date.now() - parseInt(lastSent, 10);
+      const remaining = COOLDOWN_TIME_MS - elapsed;
+
+      if (remaining > 0) {
+        this.cooldownSeconds = Math.ceil(remaining / 1000);
+        this.iniciarCooldown();
+      } else {
+        localStorage.removeItem(CODE_COOLDOWN_KEY);
+      }
+    }
+  }
+
+  private guardarCooldown(): void {
+    localStorage.setItem(CODE_COOLDOWN_KEY, Date.now().toString());
   }
 
   onInput(event: any, index: number) {
@@ -164,6 +195,11 @@ export class Validacion implements OnInit {
   }
 
   reenviarCodigo() {
+    // Verificar si está en cooldown
+    if (this.cooldownSeconds > 0) {
+      return;
+    }
+
     this.isResending = true;
     this.resendMessage = '';
     this.errorMessage = '';
@@ -172,6 +208,12 @@ export class Validacion implements OnInit {
       next: (response) => {
         this.isResending = false;
         this.resendMessage = 'Código reenviado exitosamente. Revisa tu correo.';
+
+        // Iniciar cooldown y guardar en localStorage
+        this.guardarCooldown();
+        this.cooldownSeconds = 300;
+        this.iniciarCooldown();
+
         this.limpiarCodigo();
 
         setTimeout(() => {
@@ -184,11 +226,37 @@ export class Validacion implements OnInit {
 
         if (error.status === 400) {
           this.errorMessage = error.error?.error || 'Error al reenviar el código';
+        } else if (error.status === 429) {
+          this.errorMessage = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
+          this.guardarCooldown();
+          this.cooldownSeconds = 300;
+          this.iniciarCooldown();
         } else {
           this.errorMessage = 'No se pudo reenviar el código. Intenta nuevamente.';
         }
       },
     });
+  }
+
+  iniciarCooldown() {
+    // Limpiar intervalo anterior si existe
+    if (this.cooldownInterval) {
+      clearInterval(this.cooldownInterval);
+    }
+
+    this.cooldownInterval = setInterval(() => {
+      this.cooldownSeconds--;
+      if (this.cooldownSeconds <= 0) {
+        clearInterval(this.cooldownInterval);
+        this.cooldownInterval = null;
+      }
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.cooldownInterval) {
+      clearInterval(this.cooldownInterval);
+    }
   }
 
   limpiarCodigo() {

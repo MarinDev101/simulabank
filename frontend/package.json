@@ -41,7 +41,6 @@
     "@angular/router": "^20.0.0",
     "@sweetalert2/ngx-sweetalert2": "^14.0.0",
     "@tailwindcss/postcss": "^4.1.12",
-    "jspdf": "^3.0.1",
     "ng-recaptcha-2": "^16.0.1",
     "ng2-pdfjs-viewer": "^25.0.18",
     "postcss": "^8.5.6",

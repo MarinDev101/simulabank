@@ -17,12 +17,14 @@ export class RecuperarContrasena {
   pasoActual = 1;
   correoUsuario = '';
   datosRegistro: any = null; // Almacenar datos completos del registro
+  datosFormularioGuardados: { correo: string } | null = null; // Para restaurar el formulario
 
   siguientePaso(datos?: any) {
-
     if (datos?.correo) {
       this.correoUsuario = datos.correo;
       this.datosRegistro = datos;
+      // Guardar datos para restaurar si el usuario vuelve
+      this.datosFormularioGuardados = { correo: datos.correo };
     }
 
     if (this.pasoActual < 3) {

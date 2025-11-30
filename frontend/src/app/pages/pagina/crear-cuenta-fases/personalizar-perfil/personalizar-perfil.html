@@ -1,86 +1,101 @@
-<div class="flex h-full w-full flex-col gap-3 rounded-xl bg-white p-15 shadow-md">
-  <div class="flex items-center gap-2">
-    <span
-      class="flex h-6 w-6 items-center justify-center rounded-full bg-[#333333] text-sm font-bold text-white"
-      >3</span
-    >
-    <p class="text-base md:text-inherit dark:text-gray-200">Personalizar Perfil</p>
+<div class="relative flex flex-col gap-4 sm:gap-5 w-full h-full bg-white rounded-2xl p-5 sm:p-8 md:p-10 lg:p-12 shadow-xl border border-[#e8f4fc] overflow-hidden">
+  <!-- Decoraciones de fondo -->
+  <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
+  <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
+
+  <!-- Header del paso -->
+  <div class="relative z-10 flex items-center gap-3">
+    <span class="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-linear-to-br from-[#00A448] to-[#007a34] text-sm sm:text-base font-bold text-white shadow-md">3</span>
+    <div>
+      <p class="text-base sm:text-lg font-semibold text-gray-800">Personalizar Perfil</p>
+    </div>
   </div>
 
-  <p>
-    ¡Ya casi terminamos! Completa tu perfil para mejorar tu experiencia. Este paso es opcional y
-    podrás hacerlo más adelante.
-  </p>
+  <!-- Descripción -->
+  <div class="relative z-10 text-center sm:text-left">
+    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+      ¡Ya casi terminamos! Completa tu perfil para mejorar tu experiencia.
+      <span class="text-xs sm:text-sm text-gray-500 block sm:inline mt-1 sm:mt-0">Este paso es opcional y podrás hacerlo más adelante.</span>
+    </p>
+  </div>
 
   <!-- Mensaje de error -->
   @if (errorMessage) {
-  <div class="rounded-lg border border-red-200 bg-red-50 p-4">
-    <div class="flex items-start">
-      <span class="mt-0.5 mr-3 icon-[hugeicons--alert-circle] text-xl text-red-600"></span>
-      <p class="text-sm text-red-800">{{ errorMessage }}</p>
+  <div class="relative z-10 rounded-xl border border-red-200 bg-red-50 p-3 sm:p-4">
+    <div class="flex items-center gap-3">
+      <span class="icon-[hugeicons--alert-circle] text-lg sm:text-xl text-red-500 shrink-0"></span>
+      <p class="text-xs sm:text-sm text-red-700 font-medium">{{ errorMessage }}</p>
     </div>
   </div>
   }
 
-  <form class="flex flex-col gap-4">
-    <article>
-      <p class="mb-2 font-medium">Personaliza tu foto de perfil:</p>
-      <ul class="mt-5 flex flex-col items-center gap-2">
-        <li>
-          <div class="avatar ml-[5px]">
-            <div
-              class="w-22 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
-            >
-              <img [src]="fotoPerfil || '/images/ilustraciones/perfil_default.png'" />
-            </div>
+  <form class="relative z-10 flex flex-col gap-6 sm:gap-8">
+    <!-- Foto de perfil -->
+    <article class="bg-gray-50 rounded-xl p-4 sm:p-6">
+      <p class="text-sm sm:text-base font-medium text-gray-700 mb-4 flex items-center gap-2">
+        <span class="icon-[heroicons-outline--camera] text-lg sm:text-xl text-[#034D82]"></span>
+        Personaliza tu foto de perfil
+      </p>
+      <div class="flex flex-col items-center gap-4">
+        <div class="avatar">
+          <div class="w-20 sm:w-24 md:w-28 rounded-full ring-2 ring-[#034D82]/30 ring-offset-2 ring-offset-white shadow-lg">
+            <img [src]="fotoPerfil || '/images/ilustraciones/perfil_default.png'" alt="Foto de perfil" />
           </div>
-        </li>
-        <li>
-          <input
-            type="file"
-            #fileInput
-            accept="image/*"
-            (change)="onFotoSeleccionada($event)"
-            class="hidden"
-          />
-          <button
-            type="button"
-            (click)="fileInput.click()"
-            class="flex w-[150px] items-center justify-center gap-2 rounded-lg bg-[#01162E] p-1 text-white hover:bg-[#012042]"
-          >
-            <p>Añadir Foto</p>
-            <span class="icon-[subway--brush]"></span>
-          </button>
-        </li>
-      </ul>
+        </div>
+        <input
+          type="file"
+          #fileInput
+          accept="image/*"
+          (change)="onFotoSeleccionada($event)"
+          class="hidden"
+        />
+        <button
+          type="button"
+          (click)="fileInput.click()"
+          class="btn btn-sm sm:btn-md border-2 border-[#034D82]/60 bg-transparent text-[#034D82] font-medium rounded-xl
+          hover:bg-[#034D82]/10 hover:border-[#034D82] transition-all duration-200"
+        >
+          <span class="icon-[subway--brush] text-base sm:text-lg"></span>
+          <span class="text-xs sm:text-sm">Añadir Foto</span>
+        </button>
+      </div>
     </article>
 
     <!-- Fecha de nacimiento -->
-    <article class="mt-6">
-      <p class="mb-2 font-medium">Selecciona tu fecha de nacimiento:</p>
-      <div class="mt-5 flex justify-center gap-5">
+    <article class="bg-gray-50 rounded-xl p-4 sm:p-6">
+      <p class="text-sm sm:text-base font-medium text-gray-700 mb-4 flex items-center gap-2">
+        <span class="icon-[heroicons-outline--calendar] text-lg sm:text-xl text-[#034D82]"></span>
+        Fecha de nacimiento
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 md:gap-5">
         <!-- Día -->
-        <div class="flex flex-col">
-          <label for="dia" class="mb-1 text-gray-600">Día:</label>
-          <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia" class="select w-24">
+        <div class="flex flex-col flex-1 sm:flex-initial">
+          <label for="dia" class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-1.5">Día</label>
+          <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia"
+            class="select select-sm sm:select-md w-full sm:w-20 md:w-24 border-gray-200 bg-white rounded-xl
+            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
             <option value="" disabled selected>--</option>
             <option *ngFor="let dia of dias" [value]="dia">{{ dia }}</option>
           </select>
         </div>
 
         <!-- Mes -->
-        <div class="flex flex-col">
-          <label for="mes" class="mb-1 text-gray-600">Mes:</label>
-          <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes" class="select w-36">
+        <div class="flex flex-col flex-1 sm:flex-initial">
+          <label for="mes" class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-1.5">Mes</label>
+          <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes"
+            class="select select-sm sm:select-md w-full sm:w-32 md:w-36 border-gray-200 bg-white rounded-xl
+            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
             <option value="" disabled selected>--</option>
             <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nombre }}</option>
           </select>
         </div>
 
         <!-- Año -->
-        <div class="flex flex-col">
-          <label for="anio" class="mb-1 text-gray-600">Año:</label>
-          <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio" class="select w-28">
+        <div class="flex flex-col flex-1 sm:flex-initial">
+          <label for="anio" class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-1.5">Año</label>
+          <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio"
+            class="select select-sm sm:select-md w-full sm:w-24 md:w-28 border-gray-200 bg-white rounded-xl
+            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
             <option value="" disabled selected>--</option>
             <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
           </select>
@@ -89,61 +104,75 @@
     </article>
 
     <!-- Género -->
-    <article class="mt-6">
-      <p class="mb-2 font-medium">Selecciona el género con el que te identificas:</p>
-      <div class="mt-5 flex justify-center gap-8">
-        <label class="flex cursor-pointer items-center gap-2">
+    <article class="bg-gray-50 rounded-xl p-4 sm:p-6">
+      <p class="text-sm sm:text-base font-medium text-gray-700 mb-4 flex items-center gap-2">
+        <span class="icon-[heroicons-outline--user] text-lg sm:text-xl text-[#034D82]"></span>
+        Género con el que te identificas
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 md:gap-8">
+        <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
           <input
             type="radio"
             name="radio-3"
-            class="radio radio-neutral"
+            class="radio radio-sm sm:radio-md radio-primary"
             [(ngModel)]="genero"
             value="femenino"
           />
-          <span>Femenino</span>
+          <span class="text-sm sm:text-base text-gray-700 group-hover:text-gray-900 transition-colors">Femenino</span>
         </label>
-        <label class="flex cursor-pointer items-center gap-2">
+        <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
           <input
             type="radio"
             name="radio-3"
-            class="radio radio-neutral"
+            class="radio radio-sm sm:radio-md radio-primary"
             [(ngModel)]="genero"
             value="masculino"
           />
-          <span>Masculino</span>
+          <span class="text-sm sm:text-base text-gray-700 group-hover:text-gray-900 transition-colors">Masculino</span>
         </label>
-        <label class="flex cursor-pointer items-center gap-2">
+        <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
           <input
             type="radio"
             name="radio-3"
-            class="radio radio-neutral"
+            class="radio radio-sm sm:radio-md radio-primary"
             [(ngModel)]="genero"
             value="otro"
           />
-          <span>Otro</span>
+          <span class="text-sm sm:text-base text-gray-700 group-hover:text-gray-900 transition-colors">Otro</span>
         </label>
       </div>
     </article>
   </form>
 
-  <div class="mt-15 flex justify-around">
+  <!-- Botones de acción -->
+  <div class="relative z-10 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
     <button
       type="button"
       (click)="guardarPerfil()"
-      class="w-[200px] cursor-pointer rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+      class="btn btn-sm sm:btn-md bg-blue-600 border-blue-600 text-white font-semibold rounded-xl
+      shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:border-blue-700 hover:shadow-blue-700/30
+      transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed
+      w-full sm:w-auto sm:min-w-[180px] md:min-w-[200px] order-1 sm:order-2"
       [disabled]="isLoading"
     >
       @if (isLoading) {
-      <span class="loading loading-sm loading-spinner"></span>
-      Guardando... } @else { Guardar y Finalizar }
+      <span class="loading loading-spinner loading-xs sm:loading-sm"></span>
+      <span class="text-xs sm:text-sm">Guardando...</span>
+      } @else {
+      <span class="icon-[heroicons-outline--check] text-base sm:text-lg"></span>
+      <span class="text-xs sm:text-sm">Guardar y Finalizar</span>
+      }
     </button>
     <button
       type="button"
       (click)="omitirPaso()"
-      class="w-[200px] cursor-pointer rounded-lg border border-black p-2 hover:bg-gray-100"
+      class="btn btn-sm sm:btn-md border-2 border-gray-300 bg-transparent text-gray-700 font-medium rounded-xl
+      hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 disabled:opacity-70
+      w-full sm:w-auto sm:min-w-[160px] md:min-w-[180px] order-2 sm:order-1"
       [disabled]="isLoading"
     >
-      Omitir por ahora
+      <span class="text-xs sm:text-sm">Omitir por ahora</span>
+      <span class="icon-[heroicons-outline--arrow-right] text-base sm:text-lg"></span>
     </button>
   </div>
 </div>

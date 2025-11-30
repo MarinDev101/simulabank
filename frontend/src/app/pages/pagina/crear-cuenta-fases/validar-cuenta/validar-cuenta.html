@@ -1,79 +1,113 @@
-<div class="flex h-full w-full flex-col gap-3 rounded-xl bg-white p-15 shadow-md">
-  <div class="flex items-center gap-2">
-    <span
-      class="flex h-6 w-6 items-center justify-center rounded-full bg-[#333333] text-sm font-bold text-white"
-    >
-      2
-    </span>
-    <p class="text-base md:text-inherit dark:text-gray-200">Validar Cuenta</p>
+<div class="relative flex flex-col gap-4 sm:gap-5 w-full h-full bg-white rounded-2xl p-5 sm:p-8 md:p-10 lg:p-12 shadow-xl border border-[#e8f4fc] overflow-hidden">
+  <!-- Decoraciones de fondo -->
+  <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
+  <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
+
+  <!-- Header del paso -->
+  <div class="relative z-10 flex items-center gap-3">
+    <span class="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-linear-to-br from-[#034D82] to-[#01162E] text-sm sm:text-base font-bold text-white shadow-md">2</span>
+    <div>
+      <p class="text-base sm:text-lg font-semibold text-gray-800">Validar Cuenta</p>
+    </div>
   </div>
 
-  <p>
-    ¡Hemos enviado un correo electrónico con un código de verificación de 6 dígitos a tu dirección
-    <strong>{{ correoUsuario }}</strong>!
-  </p>
-  <p class="text-sm text-gray-600">*El código caduca en 5 minutos*</p>
+  <!-- Información del correo -->
+  <div class="relative z-10 text-center sm:text-left">
+    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+      ¡Hemos enviado un correo electrónico con un código de verificación de 6 dígitos a tu dirección
+      <strong class="text-gray-800 font-semibold">{{ correoUsuario }}</strong>!
+    </p>
+    <p class="mt-2 text-xs sm:text-sm text-gray-500 flex items-center justify-center sm:justify-start gap-1">
+      <span class="icon-[heroicons-outline--clock] text-base"></span>
+      El código caduca en 5 minutos
+    </p>
+  </div>
 
   <!-- Mensaje de error -->
   @if (errorMessage) {
-  <div class="rounded-lg border border-red-200 bg-red-50 p-4">
-    <div class="flex items-start">
-      <span class="mt-0.5 mr-3 icon-[hugeicons--alert-circle] text-xl text-red-600"></span>
-      <p class="text-sm text-red-800">{{ errorMessage }}</p>
+  <div class="relative z-10 rounded-xl border border-red-200 bg-red-50 p-3 sm:p-4">
+    <div class="flex items-center gap-3">
+      <span class="icon-[hugeicons--alert-circle] text-lg sm:text-xl text-red-500 shrink-0"></span>
+      <p class="text-xs sm:text-sm text-red-700 font-medium">{{ errorMessage }}</p>
     </div>
   </div>
   }
 
   <!-- Mensaje de éxito al reenviar -->
   @if (resendMessage) {
-  <div class="rounded-lg border border-green-200 bg-green-50 p-4">
-    <div class="flex items-start">
-      <span class="mt-0.5 mr-3 icon-[hugeicons--checkmark-circle-02] text-xl text-green-600"></span>
-      <p class="text-sm text-green-800">{{ resendMessage }}</p>
+  <div class="relative z-10 rounded-xl border border-green-200 bg-green-50 p-3 sm:p-4">
+    <div class="flex items-center gap-3">
+      <span class="icon-[hugeicons--checkmark-circle-02] text-lg sm:text-xl text-green-500 shrink-0"></span>
+      <p class="text-xs sm:text-sm text-green-700 font-medium">{{ resendMessage }}</p>
     </div>
   </div>
   }
 
-  <form [formGroup]="pinForm" class="flex justify-center">
-    <div #inputsContainer class="mt-3 flex justify-center gap-3" (paste)="onPaste($event)">
+  <!-- Formulario de código -->
+  <form [formGroup]="pinForm" class="relative z-10 flex flex-col items-center w-full">
+    <p class="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">Ingresa el código de 6 dígitos</p>
+    <div #inputsContainer class="grid grid-cols-6 gap-1 min-[360px]:gap-1.5 min-[400px]:gap-2 sm:gap-3 w-full max-w-[280px] min-[360px]:max-w-[300px] min-[400px]:max-w-[340px] sm:max-w-sm mx-auto" (paste)="onPaste($event)">
       <input
         *ngFor="let ctrl of pinControls; let i = index"
         maxlength="1"
         type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
         formControlName="{{ 'digit' + i }}"
         (input)="onInput($event, i)"
         (keydown)="onKeyDown($event, i)"
-        class="h-12 w-12 rounded-md border border-gray-400 text-center text-xl outline-none focus:border-[#01162E] focus:ring-2 focus:ring-[#01162E]"
+        class="aspect-square w-full max-w-10 min-[360px]:max-w-11 min-[400px]:max-w-12 sm:max-w-14 rounded-lg sm:rounded-xl border-2 border-gray-200 bg-gray-50/50 text-center text-sm min-[360px]:text-base min-[400px]:text-lg sm:text-xl md:text-2xl font-semibold text-gray-800
+        transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
       />
     </div>
   </form>
 
+  <!-- Botón Verificar -->
   <button
     (click)="verificarCodigo()"
-    class="mt-5 cursor-pointer rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+    class="relative z-10 btn btn-block btn-sm sm:btn-md bg-blue-600 border-blue-600 text-white font-semibold rounded-xl
+    shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:border-blue-700 hover:shadow-blue-700/30
+    transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
     [disabled]="isLoading"
   >
     @if (isLoading) {
-    <span class="loading loading-sm loading-spinner"></span>
-    Verificando... } @else { Verificar }
+    <span class="loading loading-spinner loading-xs sm:loading-sm"></span>
+    <span class="text-xs sm:text-sm">Verificando...</span>
+    } @else {
+    <span class="text-xs sm:text-sm">Verificar código</span>
+    <span class="icon-[heroicons-outline--check-circle] text-base sm:text-lg"></span>
+    }
   </button>
 
-  <div class="flex justify-around">
+  <!-- Botones secundarios -->
+  <div class="relative z-10 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-2">
     <button
-      class="mt-5 w-[150px] cursor-pointer rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+      class="btn btn-sm sm:btn-md border-2 border-gray-300 bg-transparent text-gray-700 font-medium rounded-xl
+      hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 disabled:opacity-70
+      w-full sm:w-auto sm:min-w-[140px]"
       (click)="emitirVolver()"
       [disabled]="isLoading"
     >
-      Volver
+      <span class="icon-[heroicons-outline--arrow-left] text-base sm:text-lg"></span>
+      <span class="text-xs sm:text-sm">Volver</span>
     </button>
     <button
-      class="mt-5 w-[150px] cursor-pointer rounded-lg border border-black p-2 hover:bg-gray-100"
+      class="btn btn-sm sm:btn-md border-2 border-[#034D82]/60 bg-transparent text-[#034D82] font-medium rounded-xl
+      hover:bg-[#034D82]/10 hover:border-[#034D82] transition-all duration-200 disabled:opacity-70
+      w-full sm:w-auto sm:min-w-[160px]"
       (click)="reenviarCodigo()"
-      [disabled]="isResending || isLoading"
+      [disabled]="isResending || isLoading || cooldownSeconds > 0"
     >
       @if (isResending) {
-      <span class="loading loading-sm loading-spinner"></span>
-      Reenviando... } @else { Reenviar código }
+      <span class="loading loading-spinner loading-xs sm:loading-sm"></span>
+      <span class="text-xs sm:text-sm">Reenviando...</span>
+      } @else if (cooldownSeconds > 0) {
+      <span class="icon-[heroicons-outline--clock] text-base sm:text-lg"></span>
+      <span class="text-xs sm:text-sm">Espera {{ cooldownSeconds }}s</span>
+      } @else {
+      <span class="icon-[heroicons-outline--arrow-path] text-base sm:text-lg"></span>
+      <span class="text-xs sm:text-sm">Reenviar código</span>
+      }
     </button>
   </div>
 </div>

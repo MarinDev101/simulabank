@@ -1,166 +1,256 @@
-<app-header-basico></app-header-basico>
-<div class="bg-geometria bg-size-[275px_275px] bg-repeat flex flex-col items-center p-15 px-4 mt-20">
+<div class="flex min-h-screen flex-col overflow-x-hidden">
+  <app-header-basico></app-header-basico>
+  <main class="flex flex-1 flex-col items-center bg-geometria bg-size-[275px_275px] bg-repeat pt-[120px] md:pt-[140px] lg:pt-[160px] pb-12 md:pb-16 lg:pb-20 px-4 sm:px-6 md:px-8 overflow-x-hidden">
 
-  <div class="flex flex-col gap-10 w-full max-w-5xl">
+    <!-- Hero Section -->
+    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto mb-8 md:mb-12">
+      <div class="relative bg-white rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-xl border border-[#e8f4fc] overflow-hidden">
+        <!-- Decoraciones de fondo -->
+        <div class="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 md:w-40 md:h-40 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
+        <div class="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 md:w-36 md:h-36 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
 
-    <p class="text-4xl"><strong>Términos y condiciones de uso</strong></p>
-    <p>A través de www.simulabank.com, ofrecemos a aprendices, instructores y público académico en general, una
-      herramienta digital interactiva que simula procesos de asesoría financiera con clientes virtuales para apoyar la
-      formación en gestión bancaria mediante escenarios prácticos, simulaciones guiadas y retroalimentación del
-      desempeño.</p>
+        <div class="relative z-10">
+          <!-- Encabezado con icono -->
+          <div class="flex flex-col items-center mb-6 md:mb-8">
+            <div class="mb-4 flex items-center justify-center">
+              <div class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-[#1788EF]/10 rounded-2xl flex items-center justify-center">
+                <span class="icon-[heroicons-outline--document-text] w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#1788EF]"></span>
+              </div>
+            </div>
+            <h1 class="nunito-sans-title text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#034D82] leading-tight text-center">
+              Términos y Condiciones
+            </h1>
+          </div>
 
-
-    <!-- 1 -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-300 w-full max-w-5xl">
-      <input class="h-full" type="radio" name="my-accordion-2" />
-      <div class="collapse-title font-semibold">¿Qué encontrarás en este sitio web?</div>
-      <div class="collapse-content text-sm bg-[#e2e2e2] pb-0">
-        <div class="p-3">
-          <ul class="flex flex-col gap-4 text-[16px]">
-            <li class="before:content-['-'] before:mr-2">Información académica que incluye escenarios de atención,
-              simulación de productos financieros y
-              retroalimentación de desempeño. Así mismo, encontrarás reportes de avance y herramientas de práctica que
-              permiten mejorar las habilidades de los usuarios.</li>
-            <li class="before:content-['-'] before:mr-2"><strong>A</strong> Los aprendices podrán acceder a información
-              que les permitirá desarrollar
-              competencias, como el historial de sus prácticas, los casos simulados y los resultados de sus
-              evaluaciones.</li>
-            <li class="before:content-['-'] before:mr-2"><strong>B</strong> La información que encontrarás en el Sitio
-              Web es educativa, realizamos nuestro mejor
-              esfuerzo para que el contenido sea útil principalmente como insumo para el proceso formativo de los
-              aprendices, además de ofrecer material de interés para instructores y público académico en general.</li>
-          </ul>
+          <!-- Descripción principal -->
+          <div class="max-w-[800px] mx-auto text-center">
+            <p class="nunito-sans-body text-sm sm:text-base md:text-lg text-[#4a5d6f] leading-relaxed md:leading-[1.8]">
+              A través de <span class="font-bold text-[#034D82]">www.simulabank.com</span>, ofrecemos a aprendices, instructores y público académico en general, una
+              herramienta digital interactiva que simula procesos de asesoría financiera con clientes virtuales para apoyar la
+              formación en gestión bancaria mediante <span class="text-[#00A448] font-medium">escenarios prácticos</span>, <span class="text-[#1788EF] font-medium">simulaciones guiadas</span> y retroalimentación del desempeño.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- 2 -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-300 w-full max-w-5xl">
-      <input class="h-full" type="radio" name="my-accordion-2" />
-      <div class="collapse-title font-semibold">Información de terceros en nuestro sitio web</div>
-      <div class="collapse-content text-sm bg-[#e2e2e2] pb-0">
-        <div class="p-3">
-          <ul class="flex flex-col gap-4 text-[16px]">
-            <li class="before:content-['-'] before:mr-2">Alguna información presentada en el Sitio Web es obtenida de
-              entidades financieras y aliados académicos
-              con los que no tenemos relación directa. Esta información es de propiedad de ellos, pero nos dieron
-              autorización para incluirla en nuestro Sitio con fines educativos.</li>
-            <li class="before:content-['-'] before:mr-2">También encontrarás accesos a sitios de estos terceros a través
-              de vínculos. El tener estos vínculos no
-              implica que SimulaBank esté aprobando los sitios de terceros ni su contenido, tampoco garantizamos los
-              productos, servicios o información ofrecida en dichos sitios.</li>
-            <li class="before:content-['-'] before:mr-2">Cualquier transacción que realices con terceros en estos sitios
-              vinculados será de tu responsabilidad y
-              del tercero.</li>
-          </ul>
+    <!-- Contenido Principal -->
+    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto space-y-4 md:space-y-6">
+
+      <!-- 1. Qué encontrarás -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" checked="checked" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--magnifying-glass] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0"></span>
+          ¿Qué encontrarás en este sitio web?
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <div class="space-y-4">
+            <div class="flex gap-3 items-start">
+              <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0 mt-1">Info</span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Información académica que incluye escenarios de atención, simulación de productos financieros y
+                retroalimentación de desempeño. También encontrarás reportes de avance y herramientas de práctica.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-4">
+              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+                <span class="badge badge-sm sm:badge-md bg-[#00A448] text-white border-none shrink-0">A</span>
+                <p class="text-sm sm:text-base text-[#4a5d6f]">
+                  Los aprendices podrán acceder al historial de prácticas, casos simulados y resultados de evaluaciones.
+                </p>
+              </div>
+              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+                <span class="badge badge-sm sm:badge-md bg-[#034D82] text-white border-none shrink-0">B</span>
+                <p class="text-sm sm:text-base text-[#4a5d6f]">
+                  La información es educativa y está diseñada para el proceso formativo de los aprendices.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 3 -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-300 w-full max-w-5xl">
-      <input class="h-full" type="radio" name="my-accordion-2" />
-      <div class="collapse-title font-semibold">Propiedad de la información</div>
-      <div class="collapse-content text-sm bg-[#e2e2e2] pb-0">
-        <div class="flex flex-col gap-5 p-3">
-          <ul class="flex flex-col gap-4 text-[16px]">
-            <li class="before:content-['-'] before:mr-2">La información contenida en el Sitio Web, sea de SimulaBank o
-              de un tercero que nos autorizó, está
-              protegida por derechos de autor, marcas, patentes o formas similares de propiedad. Esto aplica para
-              textos, software, audios, fotografías, videos, gráficos y demás contenidos.</li>
-            <li class="before:content-['-'] before:mr-2">Debes abstenerte de publicar, retransmitir o comercializar,
-              total o parcialmente, la información
-              contenida en el Sitio Web y en los sitios vinculados. Si lo haces, podrás incurrir en responsabilidades
-              por violación de derechos de autor conforme a las normas vigentes.</li>
-          </ul>
-          <ul class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 justify-center text-[16px]">
-            <li class="flex gap-2.5 bg-white p-4 rounded-md h-[170px]">
-              <span class="icon-[mi--circle-check] size-10 text-[#4FB700] w-40"></span>
-              <p>
-                Podrás hacer copia del contenido para uso personal y no comercial, siempre que se mantengan intactos los
-                avisos de derechos de autor y se cite la fuente.
+      <!-- 2. Información de terceros -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--link] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0"></span>
+          Información de terceros en nuestro sitio web
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <ul class="space-y-3 sm:space-y-4">
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--building-office] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Alguna información presentada en el Sitio Web es obtenida de entidades financieras y aliados académicos
+                con los que no tenemos relación directa, pero nos autorizaron a incluirla con fines educativos.
               </p>
             </li>
-            <li class="flex gap-2.5 bg-white p-4 rounded-md h-[170px]">
-              <span class="icon-[mi--circle-error] size-10 text-[#FFA1A1] w-40"></span>
-              <p>
-                No podrás transmitir, transferir, reformar, publicar, reproducir, distribuir, vender, arrendar o
-                comercializar la información sin autorización.
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--arrow-top-right-on-square] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Encontrarás accesos a sitios de terceros a través de vínculos. Esto no implica que SimulaBank esté aprobando esos sitios ni su contenido.
               </p>
             </li>
-            <li class="flex gap-2.5 bg-white p-4 rounded-md h-[170px]">
-              <span class="icon-[mi--circle-information] size-10 w-40"></span>
-              <p>
-                Eres responsable de la interpretación y uso de los datos e información suministrada en este Sitio Web.
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--exclamation] w-5 h-5 sm:w-6 sm:h-6 text-[#f59e0b] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Cualquier transacción que realices con terceros en estos sitios vinculados será de tu responsabilidad.
               </p>
             </li>
           </ul>
         </div>
       </div>
-    </div>
 
-    <!-- 4 -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-300 w-full max-w-5xl">
-      <input class="h-full" type="radio" name="my-accordion-2" />
-      <div class="collapse-title font-semibold">Protección de datos</div>
-      <div class="collapse-content text-sm bg-[#e2e2e2] pb-0">
-        <div class="p-3">
-          <ul class="flex flex-col gap-4 text-[16px]">
-            <li class="before:content-['-'] before:mr-2">Para nosotros es muy importante el derecho a la privacidad de
-              todos los que visitan nuestro Sitio Web. Puedes estar tranquilo, contamos con lineamientos para la
-              administración y tratamiento de datos personales.</li>
-            <li class="before:content-['-'] before:mr-2">Debes tener en cuenta que, a través del Sitio Web, podremos
-              acceder a algunas funcionalidades del dispositivo desde el que ingresas, como conexión a internet,
-              almacenamiento o identificación del equipo. También podremos compartir información con aliados académicos
-              y tecnológicos, con la finalidad de llevar a cabo actividades relacionadas con la operatividad y uso de la
-              plataforma.</li>
-            <li class="before:content-['-'] before:mr-2">Al entregar información en el Sitio Web autorizas a SimulaBank
-              para que la utilice con el fin de comunicarse contigo, responder inquietudes académicas y dar soporte a tu
-              proceso de aprendizaje.</li>
+      <!-- 3. Propiedad de la información -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--document-check] w-5 h-5 sm:w-6 sm:h-6 text-[#034D82] shrink-0"></span>
+          Propiedad de la información
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <div class="space-y-4 sm:space-y-5">
+            <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+              La información contenida en el Sitio Web está protegida por derechos de autor, marcas, patentes o formas similares de propiedad.
+              Esto aplica para textos, software, audios, fotografías, videos, gráficos y demás contenidos.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              <div class="flex flex-col gap-3 bg-white p-4 sm:p-5 rounded-xl border border-[#e8f4fc]">
+                <div class="flex items-center gap-2">
+                  <span class="icon-[mi--circle-check] w-6 h-6 sm:w-8 sm:h-8 text-[#00A448]"></span>
+                  <span class="text-xs sm:text-sm font-semibold text-[#00A448]">Permitido</span>
+                </div>
+                <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                  Podrás hacer copia del contenido para uso personal y no comercial, manteniendo los avisos de derechos de autor.
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 bg-white p-4 sm:p-5 rounded-xl border border-[#e8f4fc]">
+                <div class="flex items-center gap-2">
+                  <span class="icon-[mi--circle-error] w-6 h-6 sm:w-8 sm:h-8 text-[#e74c3c]"></span>
+                  <span class="text-xs sm:text-sm font-semibold text-[#e74c3c]">Prohibido</span>
+                </div>
+                <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                  No podrás transmitir, publicar, reproducir, distribuir, vender o comercializar la información sin autorización.
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 bg-white p-4 sm:p-5 rounded-xl border border-[#e8f4fc] sm:col-span-2 lg:col-span-1">
+                <div class="flex items-center gap-2">
+                  <span class="icon-[mi--circle-information] w-6 h-6 sm:w-8 sm:h-8 text-[#1788EF]"></span>
+                  <span class="text-xs sm:text-sm font-semibold text-[#1788EF]">Importante</span>
+                </div>
+                <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                  Eres responsable de la interpretación y uso de los datos e información suministrada en este Sitio Web.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Protección de datos -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--lock-closed] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0"></span>
+          Protección de datos
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <ul class="space-y-3 sm:space-y-4">
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--shield-check] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Para nosotros es muy importante el derecho a la privacidad. Contamos con lineamientos para la administración y tratamiento de datos personales.
+              </p>
+            </li>
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--device-phone-mobile] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                A través del Sitio Web podremos acceder a funcionalidades del dispositivo como conexión a internet, almacenamiento o identificación del equipo.
+              </p>
+            </li>
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--chat-bubble-left-right] w-5 h-5 sm:w-6 sm:h-6 text-[#034D82] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Al entregar información, autorizas a SimulaBank a utilizarla para comunicarse contigo y dar soporte a tu proceso de aprendizaje.
+              </p>
+            </li>
           </ul>
         </div>
       </div>
-    </div>
 
-    <!-- 5 -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-300 w-full max-w-5xl">
-      <input class="h-full" type="radio" name="my-accordion-2" />
-      <div class="collapse-title font-semibold">Seguridad</div>
-      <div class="collapse-content text-sm bg-[#e2e2e2] pb-0">
-        <div class="p-3">
-          <ul class="flex flex-col gap-4 text-[16px]">
-            <li class="before:content-['-'] before:mr-2"><strong>A</strong> Hemos implementado procedimientos
-              electrónicos y administrativos para proteger la información, prevenir accesos no autorizados y evitar
-              pérdida o mal uso de datos.</li>
-            <li class="before:content-['-'] before:mr-2"><strong>B</strong> Podrás ser responsable de los daños o
-              perjuicios que puedas causar a SimulaBank o a terceros por los usos indebidos del Sitio Web, de acuerdo
-              con lo establecido en estas condiciones de uso.</li>
-            <li class="before:content-['-'] before:mr-2"><strong>C</strong> Recuerda que debes contar con los medios
-              físicos y tecnológicos que te permitan acceder a la información prevista en el sitio. También debes asumir
-              los costos del equipo, internet y demás recursos necesarios para usar la plataforma.</li>
+      <!-- 5. Seguridad -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--shield-exclamation] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0"></span>
+          Seguridad
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <div class="space-y-3 sm:space-y-4">
+            <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+              <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0">A</span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Hemos implementado procedimientos electrónicos y administrativos para proteger la información, prevenir accesos no autorizados y evitar pérdida o mal uso de datos.
+              </p>
+            </div>
+            <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+              <span class="badge badge-sm sm:badge-md bg-[#f59e0b] text-white border-none shrink-0">B</span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Podrás ser responsable de los daños o perjuicios que puedas causar a SimulaBank o a terceros por los usos indebidos del Sitio Web.
+              </p>
+            </div>
+            <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+              <span class="badge badge-sm sm:badge-md bg-[#034D82] text-white border-none shrink-0">C</span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Debes contar con los medios físicos y tecnológicos para acceder a la información y asumir los costos del equipo, internet y demás recursos necesarios.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Legales -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--scale] w-5 h-5 sm:w-6 sm:h-6 text-[#034D82] shrink-0"></span>
+          Legales
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <ul class="space-y-3 sm:space-y-4">
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--arrow-path] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Podremos incluir funcionalidades, modificar o suprimir contenidos del Sitio Web y actualizar estos términos y condiciones. Procuraremos informarlo previamente.
+              </p>
+            </li>
+            <li class="flex gap-3 items-start">
+              <span class="icon-[heroicons-outline--flag] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                A estos términos y condiciones, la información contenida en el Sitio Web y cualquier conflicto le aplica la <strong class="text-[#034D82]">ley colombiana</strong> y se somete a los jueces y tribunales colombianos.
+              </p>
+            </li>
           </ul>
         </div>
       </div>
-    </div>
 
-    <!-- 6 -->
-    <div class="collapse collapse-arrow bg-base-100 border border-base-300 w-full max-w-5xl">
-      <input class="h-full" type="radio" name="my-accordion-2" />
-      <div class="collapse-title font-semibold">Legales</div>
-      <div class="collapse-content text-sm bg-[#e2e2e2] pb-0">
-        <div class="p-3">
-          <ul class="flex flex-col gap-4 text-[16px]">
-            <li class="before:content-['-'] before:mr-2">Podremos incluir funcionalidades, modificar o suprimir
-              contenidos del Sitio Web y actualizar estos términos y condiciones. Procuraremos informarlo previamente en
-              el mismo sitio para que conozcas oportunamente los cambios.</li>
-            <li class="before:content-['-'] before:mr-2">A estos términos y condiciones, la información contenida en el
-              Sitio Web y cualquier conflicto que pueda surgir le aplica la ley colombiana y se somete a los jueces y
-              tribunales colombianos.</li>
-          </ul>
-        </div>
+    </section>
+
+    <!-- Footer info -->
+    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto mt-8 md:mt-12">
+      <div class="text-center p-4 sm:p-6 bg-white/60 rounded-xl border border-[#e8f4fc]">
+        <p class="text-xs sm:text-sm text-[#6b7c8a]">
+          Estos términos y condiciones fueron actualizados por última vez en 2025.
+          <br class="hidden sm:block"/>
+          Al usar este sitio, aceptas cumplir con estos términos.
+        </p>
       </div>
-    </div>
+    </section>
 
-  </div>
+  </main>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>

@@ -3,6 +3,10 @@ import { authGuard } from './core/auth/guard/auth-guard';
 import { roleGuard } from './guards/role/role-guard';
 import { adminGuard } from './guards/admin/admin-guard';
 import { publicGuard } from './guards/public/public-guard';
+import {
+  maintenanceGuard,
+  maintenancePageGuard,
+} from './guards/maintenance/maintenance-guard';
 
 export const routes: Routes = [
   // ============================================
@@ -17,21 +21,21 @@ export const routes: Routes = [
     path: 'inicio',
     loadComponent: () => import('./pages/pagina/inicio/inicio').then((m) => m.Inicio),
     title: 'Inicio',
-    canActivate: [publicGuard],
+    canActivate: [maintenanceGuard, publicGuard],
   },
   {
     path: 'iniciar-sesion',
     loadComponent: () =>
       import('./pages/pagina/iniciar-sesion/iniciar-sesion').then((m) => m.IniciarSesion),
     title: 'Iniciar sesión',
-    canActivate: [publicGuard],
+    canActivate: [maintenanceGuard, publicGuard],
   },
   {
     path: 'crear-cuenta',
     loadComponent: () =>
       import('./pages/pagina/crear-cuenta/crear-cuenta').then((m) => m.CrearCuenta),
     title: 'Crear cuenta',
-    canActivate: [publicGuard],
+    canActivate: [maintenanceGuard, publicGuard],
   },
   {
     path: 'recuperar-contrasena',
@@ -40,7 +44,7 @@ export const routes: Routes = [
         (m) => m.RecuperarContrasena
       ),
     title: 'Recuperar contraseña',
-    canActivate: [publicGuard],
+    canActivate: [maintenanceGuard, publicGuard],
   },
   {
     path: 'politicas-privacidad',
@@ -49,7 +53,7 @@ export const routes: Routes = [
         (m) => m.PoliticasPrivacidadPagina
       ),
     title: 'Políticas de privacidad',
-    canActivate: [publicGuard],
+    canActivate: [maintenanceGuard, publicGuard],
   },
   {
     path: 'terminos-condiciones',
@@ -58,7 +62,7 @@ export const routes: Routes = [
         (m) => m.TerminosCondicionesPagina
       ),
     title: 'Términos y condiciones',
-    canActivate: [publicGuard],
+    canActivate: [maintenanceGuard, publicGuard],
   },
 
   // ============================================
@@ -68,7 +72,7 @@ export const routes: Routes = [
     path: 'aprendiz',
     loadComponent: () =>
       import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
-    canActivate: [authGuard, roleGuard],
+    canActivate: [maintenanceGuard, authGuard, roleGuard],
     data: { role: 'aprendiz' },
     children: [
       {
@@ -132,7 +136,7 @@ export const routes: Routes = [
     path: 'instructor',
     loadComponent: () =>
       import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
-    canActivate: [authGuard, roleGuard],
+    canActivate: [maintenanceGuard, authGuard, roleGuard],
     data: { role: 'instructor' },
     children: [
       {
@@ -180,7 +184,7 @@ export const routes: Routes = [
     path: 'administrador',
     loadComponent: () =>
       import('./core/layout/plataforma-layout/plataforma-layout').then((m) => m.PlataformaLayout),
-    canActivate: [authGuard, adminGuard],
+    canActivate: [maintenanceGuard, authGuard, adminGuard],
     data: { role: 'administrador' },
     children: [
       {
@@ -213,11 +217,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./shared/pages/maintenance/maintenance').then((m) => m.Maintenance),
     title: 'En mantenimiento',
+    canActivate: [maintenancePageGuard],
   },
   {
     path: '**',
     loadComponent: () =>
       import('./shared/pages/not-found-error/not-found-error').then((m) => m.NotFoundError),
     title: 'Página no encontrada',
+    canActivate: [maintenanceGuard],
   },
 ];

@@ -1,105 +1,149 @@
 <div class="flex min-h-screen flex-col">
-  <main class="bg-length:275px_275px flex flex-1 flex-row justify-between bg-geometria bg-repeat">
-    <!-- Mitad izquierda -->
-    <div class="bg-length:275px_275px relative flex w-1/2 flex-col bg-white bg-geometria bg-repeat">
+  <main class="flex flex-1 flex-col lg:flex-row">
+    <!-- Mitad izquierda (formulario) -->
+    <div class="relative flex w-full lg:w-1/2 min-h-screen lg:min-h-0 flex-col bg-white bg-geometria bg-repeat bg-size-[275px_275px]">
       <!-- Botón arriba a la izquierda -->
-      <div class="absolute top-8 left-8">
+      <div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
         <app-return-button></app-return-button>
       </div>
 
       <!-- Contenedor centrado del formulario -->
-      <div class="flex flex-1 items-center justify-center p-10">
-        <form class="w-full max-w-md space-y-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg"
+      <div class="flex flex-1 items-center justify-center px-4 py-8 pt-16 sm:px-8 sm:py-12 md:px-16 lg:px-16">
+        <form class="relative w-full max-w-[360px] sm:max-w-[420px] md:max-w-[480px] rounded-3xl border border-[#e8f4fc] bg-white/95 backdrop-blur-sm p-5 sm:p-8 md:p-10 shadow-xl overflow-hidden"
           (ngSubmit)="onSubmit()" [formGroup]="loginForm">
-          <h2 class="nunito-sans-title text-center text-[40px] font-semibold text-[#595959]">
-            Iniciar sesión
-          </h2>
-          <p class="text-center text-base text-gray-600">
-            ¡Bienvenido de nuevo! Ingresa tus credenciales para acceder a tu cuenta
-          </p>
+
+          <!-- Decoraciones de fondo -->
+          <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
+          <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
+
+          <!-- Encabezado del formulario -->
+          <div class="relative z-10 text-center space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+            <h2 class="nunito-sans-title text-[22px] sm:text-3xl md:text-[36px] lg:text-[40px] font-bold text-gray-800">
+              Iniciar sesión
+            </h2>
+            <p class="text-xs sm:text-sm md:text-base text-gray-500 leading-relaxed">
+              ¡Bienvenido de nuevo! Ingresa tus credenciales para acceder a tu cuenta
+            </p>
+          </div>
 
           <!-- Mensaje de error -->
           @if (errorMessage) {
-          <div class="rounded-lg border border-red-200 bg-red-50 p-4">
-            <div class="flex items-start">
-              <span class="mt-0.5 mr-3 icon-[hugeicons--alert-circle] text-xl text-red-600"></span>
-              <p class="text-sm text-red-800">{{ errorMessage }}</p>
+          <div class="relative z-10 rounded-xl border border-red-200 bg-red-50 p-3 sm:p-4 mb-5 sm:mb-6">
+            <div class="flex items-center gap-3">
+              <span class="icon-[hugeicons--alert-circle] text-lg sm:text-xl text-red-500 shrink-0"></span>
+              <p class="text-xs sm:text-sm text-red-700 font-medium">{{ errorMessage }}</p>
             </div>
           </div>
           }
 
-          <!-- Campo de correo -->
-          <div class="relative mb-5">
-            <label class="floating-label block relative">
-              <span class="text-base text-gray-600">Correo electrónico</span>
-              <div class="relative">
-                <input type="email" formControlName="email" placeholder="mail@site.com" autocomplete="username"
-                  [class.border-red-500]="emailInvalid && loginForm.get('email')?.touched" class="input input-lg mt-2 w-full border-gray-300 text-gray-800 placeholder-gray-400
-                focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+          <!-- Campos del formulario -->
+          <div class="relative z-10 space-y-4 sm:space-y-5">
+            <!-- Campo de correo -->
+            <div class="space-y-1 sm:space-y-1.5">
+              <label class="floating-label block">
+                <span class="text-xs sm:text-sm font-medium text-gray-700">Correo electrónico</span>
+                <div class="mt-1 sm:mt-1.5">
+                  <input type="email" formControlName="email" placeholder="mail@site.com" autocomplete="username"
+                    [class.border-red-500]="emailInvalid && loginForm.get('email')?.touched"
+                    [class.focus:border-red-500]="emailInvalid && loginForm.get('email')?.touched"
+                    class="input input-sm sm:input-md md:input-lg w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
+                    transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
+                </div>
+              </label>
+              <div class="min-h-4 sm:min-h-[18px]">
+                <small *ngIf="formInitialized && emailInvalid && loginForm.get('email')?.touched"
+                  class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium animate-in fade-in duration-200">
+                  <span *ngIf="loginForm.get('email')?.hasError('required')">El correo es requerido.</span>
+                  <span *ngIf="loginForm.get('email')?.hasError('email')">Ingresa un correo válido.</span>
+                </small>
               </div>
-            </label>
+            </div>
 
-            <small *ngIf="formInitialized" class="h-min-2 block text-sm transition-all duration-200"
-              [class.text-red-600]="emailInvalid && loginForm.get('email')?.touched"
-              [style.opacity]="emailInvalid && loginForm.get('email')?.touched ? '1' : '0'">
-              <span *ngIf="loginForm.get('email')?.hasError('required')">El correo es requerido.</span>
-              <span *ngIf="loginForm.get('email')?.hasError('email')">Ingresa un correo válido.</span>
-            </small>
-          </div>
-
-          <!-- Campo de contraseña -->
-          <div class="relative">
-            <label class="floating-label block relative mb-1">
-              <span class="text-base text-gray-600">Contraseña</span>
-              <div class="mt-1 flex items-center gap-3">
-                <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••"
-                  id="passwordInput" autocomplete="current-password"
-                  [class.border-red-500]="passwordInvalid && loginForm.get('password')?.touched" class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400
-                focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-                <button type="button" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility()" class="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300
-                bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600
-                  focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                  [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
-                  <span *ngIf="!showPassword" class="icon-[fluent--eye-16-regular] text-xl"></span>
-                  <span *ngIf="showPassword" class="icon-[fluent--eye-off-16-regular] text-xl"></span>
-                </button>
+            <!-- Campo de contraseña -->
+            <div class="space-y-1 sm:space-y-1.5">
+              <label class="floating-label block">
+                <span class="text-xs sm:text-sm font-medium text-gray-700">Contraseña</span>
+                <div class="mt-1 sm:mt-1.5 flex items-center gap-2">
+                  <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••"
+                    id="passwordInput" autocomplete="current-password"
+                    [class.border-red-500]="passwordInvalid && loginForm.get('password')?.touched"
+                    [class.focus:border-red-500]="passwordInvalid && loginForm.get('password')?.touched"
+                    class="input input-sm sm:input-md md:input-lg flex-1 border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
+                    transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
+                  <button type="button" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility()"
+                    class="btn btn-square btn-sm sm:btn-md md:btn-lg border-gray-200 bg-gray-50/50 text-gray-500 rounded-xl
+                    transition-all duration-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600"
+                    [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                    <span *ngIf="!showPassword" class="icon-[fluent--eye-16-regular] text-base sm:text-lg md:text-xl"></span>
+                    <span *ngIf="showPassword" class="icon-[fluent--eye-off-16-regular] text-base sm:text-lg md:text-xl"></span>
+                  </button>
+                </div>
+              </label>
+              <div class="min-h-4 sm:min-h-[18px]">
+                <small *ngIf="formInitialized && passwordInvalid && loginForm.get('password')?.touched"
+                  class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium animate-in fade-in duration-200">
+                  <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es requerida.</span>
+                  <span *ngIf="loginForm.get('password')?.hasError('minlength')">Mínimo 8 caracteres.</span>
+                </small>
               </div>
-            </label>
-
-            <small *ngIf="formInitialized" class="block text-sm min-h-5 transition-all duration-200"
-              [class.text-red-600]="passwordInvalid && loginForm.get('password')?.touched"
-              [style.opacity]="passwordInvalid && loginForm.get('password')?.touched ? '1' : '0'">
-              <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es requerida.</span>
-              <span *ngIf="loginForm.get('password')?.hasError('minlength')">Mínimo 8 caracteres.</span>
-            </small>
+            </div>
           </div>
 
-
-          <div class="flex items-center justify-between text-base text-gray-600">
-            <label class="flex cursor-pointer items-center gap-2">
-              <input type="checkbox" formControlName="remember" class="checkbox checkbox-md" />
-              <span>Recordarme</span>
+          <!-- Recordarme y Olvidé contraseña -->
+          <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mt-4 sm:mt-5 mb-5 sm:mb-7">
+            <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group select-none">
+              <input type="checkbox" formControlName="remember" class="checkbox checkbox-xs sm:checkbox-sm checkbox-primary rounded-md" />
+              <span class="text-xs sm:text-sm text-gray-600 group-hover:text-gray-800 transition-colors">Recordarme</span>
             </label>
-            <a href="/recuperar-contrasena" class="text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
+            <a href="/recuperar-contrasena"
+              class="text-xs sm:text-sm text-blue-600 font-medium hover:text-blue-700 hover:underline underline-offset-2 transition-colors self-end sm:self-auto">
+              ¿Olvidaste tu contraseña?
+            </a>
           </div>
 
-          <button type="submit" class="btn btn-block bg-blue-600 text-white hover:bg-blue-700" [disabled]="isLoading">
+          <!-- Botón de submit -->
+          <button type="submit"
+            class="relative z-10 btn btn-block btn-sm sm:btn-md md:btn-lg bg-blue-600 border-blue-600 text-white font-semibold rounded-xl
+            shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:border-blue-700 hover:shadow-blue-700/30
+            transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+            [disabled]="isLoading">
             @if (isLoading) {
-            <span class="loading loading-sm loading-spinner"></span>
-            Ingresando... } @else { Ingresar }
+            <span class="loading loading-spinner loading-xs sm:loading-sm"></span>
+            <span class="text-xs sm:text-sm md:text-base">Ingresando...</span>
+            } @else {
+            <span class="text-xs sm:text-sm md:text-base">Ingresar</span>
+            }
           </button>
 
-          <p class="text-center text-base text-gray-600">
+          <!-- Separador -->
+          <div class="relative z-10 divider text-gray-400 text-[10px] sm:text-xs my-4 sm:my-6">o</div>
+
+          <!-- Link de registro -->
+          <p class="relative z-10 text-center text-xs sm:text-sm text-gray-500">
             ¿No tienes una cuenta?
-            <a href="/crear-cuenta" class="text-blue-600 hover:underline">Regístrate</a>
+            <a href="/crear-cuenta" class="text-blue-600 font-semibold hover:text-blue-700 hover:underline transition-colors ml-1">
+              Regístrate aquí
+            </a>
           </p>
         </form>
       </div>
     </div>
 
-    <!-- Mitad derecha -->
-    <div class="flex w-1/2 items-start justify-end bg-green-200 bg-olas_azules p-10">
-      <img src="images/imagotipo/imagotipo_simulabank_claro.svg" class="h-auto w-[450px]" alt="SimulaBank" />
+    <!-- Mitad derecha (solo visible en lg y superiores) -->
+    <div class="hidden lg:flex w-1/2 h-screen flex-col bg-olas_azules bg-cover bg-center overflow-hidden">
+      <!-- Contenido superior con logo -->
+      <div class="shrink-0 p-6 xl:p-8 flex justify-end">
+        <img src="images/imagotipo/imagotipo_simulabank_claro.svg"
+          class="h-auto w-[400px] drop-shadow-lg"
+          alt="SimulaBank" />
+      </div>
+
+      <!-- Imagen del chat cliente tocando el fondo -->
+      <div class="flex-1 flex items-end justify-end overflow-hidden min-h-0">
+        <img src="images/ilustraciones/chat_cliente.png"
+          class="w-[95%] xl:w-[90%] 2xl:w-[85%] max-w-[750px] max-h-full h-auto object-contain object-bottom drop-shadow-2xl"
+          alt="Chat con cliente" />
+      </div>
     </div>
   </main>
 </div>

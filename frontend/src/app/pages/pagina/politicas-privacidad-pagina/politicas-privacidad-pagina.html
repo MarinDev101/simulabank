@@ -1,76 +1,161 @@
-<app-header-basico></app-header-basico>
-<div class="bg-geometria bg-size-[275px_275px] bg-repeat flex flex-col items-center px-4 py-10 md:px-10 lg:px-20 mt-20">
+<div class="flex min-h-screen flex-col overflow-x-hidden">
+  <app-header-basico></app-header-basico>
+  <main class="flex flex-1 flex-col items-center bg-geometria bg-size-[275px_275px] bg-repeat pt-[120px] md:pt-[140px] lg:pt-[160px] pb-12 md:pb-16 lg:pb-20 px-4 sm:px-6 md:px-8 overflow-x-hidden">
 
-  <div class="flex flex-col gap-6 w-full max-w-5xl md:p-5 text-gray-800 leading-relaxed">
+    <!-- Hero Section -->
+    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto mb-8 md:mb-12">
+      <div class="relative bg-white rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-xl border border-[#e8f4fc] overflow-hidden">
+        <!-- Decoraciones de fondo -->
+        <div class="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 md:w-40 md:h-40 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
+        <div class="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 md:w-36 md:h-36 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
 
-    <!-- Título -->
-    <h1 class="text-3xl md:text-4xl font-bold">
-      Política de privacidad - SimulaBank
-    </h1>
+        <div class="relative z-10">
+          <!-- Encabezado con icono -->
+          <div class="flex flex-col items-center mb-6 md:mb-8">
+            <div class="mb-4 flex items-center justify-center">
+              <div class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-[#034D82]/10 rounded-2xl flex items-center justify-center">
+                <span class="icon-[heroicons-outline--shield-check] w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#034D82]"></span>
+              </div>
+            </div>
+            <h1 class="nunito-sans-title text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#034D82] leading-tight text-center">
+              Políticas de Privacidad
+            </h1>
+          </div>
 
-    <!-- Introducción -->
-    <p>
-      Internet es una herramienta extraordinaria. En <strong>SimulaBank</strong> creemos que puede transformar la manera
-      en que los aprendices se forman y desarrollan sus habilidades financieras y comunicacionales. Nuestra plataforma
-      permite simular procesos de asesoría bancaria y acceder a información educativa de valor, siempre bajo un marco de
-      seguridad y protección de datos.
-    </p>
-    <p>
-      La privacidad de nuestros usuarios es fundamental. Por eso, protegemos la información que compartes con nosotros y
-      garantizamos que será usada únicamente con fines educativos y académicos. Para proteger tu privacidad, SimulaBank
-      respeta los principios internacionales de protección de datos y buenas prácticas en el manejo responsable de
-      información personal.
-    </p>
+          <!-- Descripción principal -->
+          <div class="max-w-[800px] mx-auto text-center space-y-4 md:space-y-5">
+            <p class="nunito-sans-body text-sm sm:text-base md:text-lg text-[#4a5d6f] leading-relaxed md:leading-[1.8]">
+              Internet es una herramienta extraordinaria. En <span class="font-bold text-[#034D82]">SimulaBank</span> creemos que puede transformar la manera
+              en que los aprendices se forman y desarrollan sus habilidades financieras y comunicacionales.
+            </p>
+            <p class="nunito-sans-body text-sm sm:text-base md:text-lg text-[#4a5d6f] leading-relaxed md:leading-[1.8]">
+              La privacidad de nuestros usuarios es fundamental. Por eso, protegemos la información que compartes con nosotros y
+              garantizamos que será usada únicamente con <span class="text-[#00A448] font-medium">fines educativos y académicos</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- Subtítulo -->
-    <h2 class="text-2xl font-semibold mt-6">Principios básicos</h2>
-    <ul class="list-disc pl-6 space-y-2">
-      <li>No venderemos ni revelaremos a nadie tu nombre, dirección de correo, número de teléfono, ni otra información
-        personal sin tu autorización.</li>
-      <li>Utilizaremos medidas de seguridad de última generación para proteger tu información frente a accesos no
-        autorizados.</li>
-    </ul>
+    <!-- Contenido Principal -->
+    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto space-y-4 md:space-y-6">
 
-    <!-- Notificación -->
-    <h2 class="text-2xl font-semibold mt-6">Notificación</h2>
-    <p>
-      Nos comunicaremos contigo únicamente cuando necesitemos información que te identifique personalmente (información
-      personal) o que permita mejorar tu experiencia en la plataforma. En general, esta información se solicita al crear
-      un perfil en el sitio, ingresar a un módulo de práctica, participar en simulaciones o recibir reportes de progreso
-      académico.
-    </p>
-    <p class="font-medium">Usamos tu información personal para cuatro fines principales:</p>
-    <ul class="list-decimal pl-6 space-y-2">
-      <li>Hacer más sencillo tu acceso al sitio, evitando repetir registros innecesarios.</li>
-      <li>Facilitar tu interacción con escenarios, simulaciones y recursos educativos.</li>
-      <li>Ayudarnos a generar contenido académico cada vez más relevante para ti.</li>
-      <li>Notificarte sobre nuevas actividades, actualizaciones de módulos o mejoras en el sistema.</li>
-    </ul>
+      <!-- Principios básicos -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="privacy-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" checked="checked" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--check-badge] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0"></span>
+          Principios básicos
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <ul class="space-y-3 sm:space-y-4">
+            <li class="flex gap-3 items-start">
+              <span class="icon-[mi--circle-check] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">No venderemos ni revelaremos a nadie tu nombre, dirección de correo, número de teléfono, ni otra información personal sin tu autorización.</p>
+            </li>
+            <li class="flex gap-3 items-start">
+              <span class="icon-[mi--circle-check] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">Utilizaremos medidas de seguridad de última generación para proteger tu información frente a accesos no autorizados.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-    <!-- Consentimiento -->
-    <h2 class="text-2xl font-semibold mt-6">Consentimiento</h2>
-    <p>
-      Si decides no registrarte ni proporcionar información personal, podrás utilizar libremente la mayoría de los
-      contenidos informativos del sitio. Sin embargo, no tendrás acceso a las áreas que requieren autenticación, como
-      simulaciones prácticas, historial de progreso o evaluaciones personalizadas.
-    </p>
-    <p>
-      En caso de registrarte, podrás elegir qué tipo de notificaciones deseas recibir (recordatorios académicos,
-      boletines de novedades, invitaciones a talleres, etc.). Si no deseas recibir comunicaciones adicionales, podrás
-      modificar tus preferencias en cualquier momento desde tu perfil o desactivar la opción correspondiente.
-    </p>
+      <!-- Notificación -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="privacy-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--bell] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0"></span>
+          Notificación
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <div class="space-y-4">
+            <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+              Nos comunicaremos contigo únicamente cuando necesitemos información que te identifique personalmente o que permita mejorar tu experiencia en la plataforma.
+            </p>
+            <p class="text-sm sm:text-base font-medium text-[#034D82]">Usamos tu información personal para cuatro fines principales:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+                <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0">1</span>
+                <p class="text-sm sm:text-base text-[#4a5d6f]">Hacer más sencillo tu acceso al sitio</p>
+              </div>
+              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+                <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0">2</span>
+                <p class="text-sm sm:text-base text-[#4a5d6f]">Facilitar tu interacción con simulaciones</p>
+              </div>
+              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+                <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0">3</span>
+                <p class="text-sm sm:text-base text-[#4a5d6f]">Generar contenido académico relevante</p>
+              </div>
+              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
+                <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0">4</span>
+                <p class="text-sm sm:text-base text-[#4a5d6f]">Notificarte sobre actualizaciones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- Compartición -->
-    <h2 class="text-2xl font-semibold mt-6">Compartición de información</h2>
-    <p>
-      SimulaBank no comercializa la información de sus usuarios. Solo podrá compartir datos con aliados académicos o
-      proveedores tecnológicos que sean estrictamente necesarios para garantizar la operatividad de la plataforma y la
-      experiencia educativa.
-    </p>
-    <p>
-      En ningún caso se transferirá información personal con fines comerciales o ajenos al proceso formativo.
-    </p>
+      <!-- Consentimiento -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="privacy-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--hand-raised] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0"></span>
+          Consentimiento
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <div class="space-y-4">
+            <div class="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg border border-[#e8f4fc]">
+              <span class="icon-[heroicons-outline--information-circle] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                Si decides no registrarte ni proporcionar información personal, podrás utilizar libremente la mayoría de los contenidos informativos del sitio. Sin embargo, no tendrás acceso a las áreas que requieren autenticación.
+              </p>
+            </div>
+            <div class="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg border border-[#e8f4fc]">
+              <span class="icon-[heroicons-outline--cog] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
+              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+                En caso de registrarte, podrás elegir qué tipo de notificaciones deseas recibir y modificar tus preferencias en cualquier momento desde tu perfil.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  </div>
+      <!-- Compartición de información -->
+      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+        <input type="radio" name="privacy-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
+          <span class="icon-[heroicons-outline--share] w-5 h-5 sm:w-6 sm:h-6 text-[#034D82] shrink-0"></span>
+          Compartición de información
+        </div>
+        <div class="collapse-content bg-[#f8fbff] pt-4">
+          <div class="space-y-4">
+            <div class="alert bg-[#00A448]/10 border border-[#00A448]/20">
+              <span class="icon-[heroicons-outline--shield-check] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448]"></span>
+              <span class="text-sm sm:text-base text-[#4a5d6f]"><strong class="text-[#034D82]">SimulaBank no comercializa</strong> la información de sus usuarios.</span>
+            </div>
+            <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
+              Solo podrá compartir datos con aliados académicos o proveedores tecnológicos que sean estrictamente necesarios para garantizar la operatividad de la plataforma y la experiencia educativa.
+            </p>
+            <div class="alert bg-[#FFA1A1]/10 border border-[#FFA1A1]/30">
+              <span class="icon-[heroicons-outline--x-circle] w-5 h-5 sm:w-6 sm:h-6 text-[#e74c3c]"></span>
+              <span class="text-sm sm:text-base text-[#4a5d6f]">En ningún caso se transferirá información personal con fines comerciales.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Footer info -->
+    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto mt-8 md:mt-12">
+      <div class="text-center p-4 sm:p-6 bg-white/60 rounded-xl border border-[#e8f4fc]">
+        <p class="text-xs sm:text-sm text-[#6b7c8a]">
+          Estas políticas de privacidad fue actualizada por última vez en 2025.
+        </p>
+      </div>
+    </section>
+
+  </main>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>

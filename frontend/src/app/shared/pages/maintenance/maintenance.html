@@ -1,1 +1,51 @@
-<p>maintenance works!</p>
+<div class="flex min-h-screen flex-col bg-geometria bg-repeat bg-size-[275px_275px]">
+  <!-- Contenedor principal centrado -->
+  <main class="flex flex-1 flex-col items-center justify-center px-4 py-8 sm:px-8">
+    <!-- Card principal -->
+    <div class="relative w-full max-w-[500px] sm:max-w-[550px] md:max-w-[600px] rounded-3xl border border-[#e8f4fc] bg-white/95 backdrop-blur-sm p-6 sm:p-10 md:p-12 shadow-xl overflow-hidden text-center">
+
+      <!-- Decoraciones de fondo -->
+      <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-bl from-[#FFA500]/10 to-transparent rounded-bl-full"></div>
+      <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-tr from-[#034D82]/10 to-transparent rounded-tr-full"></div>
+
+      <!-- Logo SimulaBank -->
+      <div class="relative z-10 mb-6 sm:mb-8">
+        <img
+          src="images/imagotipo/imagotipo_simulabank.svg"
+          alt="SimulaBank Logo"
+          class="h-10 sm:h-12 md:h-14 mx-auto"
+        />
+      </div>
+
+      <!-- Ilustración de mantenimiento -->
+      <div class="relative z-10 mb-6 sm:mb-8">
+        <img
+          src="images/ilustraciones/mantenimiento.svg"
+          alt="En mantenimiento"
+          class="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 mx-auto drop-shadow-lg"
+        />
+      </div>
+
+      <!-- Texto del mantenimiento -->
+      <div class="relative z-10 space-y-3 sm:space-y-4">
+        <div class="flex items-center justify-center gap-2 sm:gap-3">
+          <h1 class="nunito-sans-title text-3xl sm:text-4xl md:text-5xl font-bold bg-linear-to-r from-[#034D82] to-[#1788EF] bg-clip-text text-transparent">
+            En Mantenimiento
+          </h1>
+        </div>
+        <h2 class="nunito-sans-title text-lg sm:text-xl md:text-2xl font-bold text-gray-800">
+          ¡Estamos mejorando para ti!
+        </h2>
+        <p class="text-sm sm:text-base md:text-lg text-gray-500 leading-relaxed max-w-md mx-auto">
+          Nuestro equipo está trabajando para brindarte una mejor experiencia. Por favor, vuelve más tarde.
+        </p>
+        <div class="pt-4 sm:pt-6">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFA500]/10 text-[#B37400] text-xs sm:text-sm font-medium">
+            <span class="icon-[mdi--clock-outline] text-base sm:text-lg"></span>
+            Volveremos pronto
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
