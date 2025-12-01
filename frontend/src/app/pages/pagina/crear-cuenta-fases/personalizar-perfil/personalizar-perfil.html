@@ -19,16 +19,6 @@
     </p>
   </div>
 
-  <!-- Mensaje de error -->
-  @if (errorMessage) {
-  <div class="relative z-10 rounded-xl border border-red-200 bg-red-50 p-3 sm:p-4">
-    <div class="flex items-center gap-3">
-      <span class="icon-[hugeicons--alert-circle] text-lg sm:text-xl text-red-500 shrink-0"></span>
-      <p class="text-xs sm:text-sm text-red-700 font-medium">{{ errorMessage }}</p>
-    </div>
-  </div>
-  }
-
   <form class="relative z-10 flex flex-col gap-6 sm:gap-8">
     <!-- Foto de perfil -->
     <article class="bg-gray-50 rounded-xl p-4 sm:p-6">
@@ -45,7 +35,7 @@
         <input
           type="file"
           #fileInput
-          accept="image/*"
+          accept="image/jpeg,image/png"
           (change)="onFotoSeleccionada($event)"
           class="hidden"
         />
@@ -58,6 +48,7 @@
           <span class="icon-[subway--brush] text-base sm:text-lg"></span>
           <span class="text-xs sm:text-sm">Añadir Foto</span>
         </button>
+        <p class="text-xs text-gray-500 mt-2">Solo JPEG/PNG — máx. 2 MB</p>
       </div>
     </article>
 

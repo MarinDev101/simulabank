@@ -125,3 +125,67 @@ Grupo de iconos de un paquete
     }
   }
 }
+
+/* SweetAlert2 - Z-index alto para que nada oculte las alertas */
+.swal2-container {
+  z-index: 99999 !important;
+}
+
+/* Estilos para toasts coloreados de SweetAlert2 - Modo Claro */
+.colored-toast.swal2-icon-success {
+  background-color: #22c55e !important; /* Verde vibrante */
+}
+
+.colored-toast.swal2-icon-error {
+  background-color: #ef4444 !important; /* Rojo vibrante */
+}
+
+.colored-toast.swal2-icon-warning {
+  background-color: #f59e0b !important; /* Amarillo/Naranja vibrante */
+}
+
+.colored-toast.swal2-icon-info {
+  background-color: #3b82f6 !important; /* Azul vibrante */
+}
+
+.colored-toast.swal2-icon-question {
+  background-color: #6366f1 !important; /* Índigo vibrante */
+}
+
+.colored-toast .swal2-title {
+  color: white !important;
+}
+
+.colored-toast .swal2-close {
+  color: white !important;
+}
+
+.colored-toast .swal2-html-container {
+  color: white !important;
+}
+
+/* Estilos para toasts coloreados de SweetAlert2 - Modo Oscuro */
+.dark .colored-toast.swal2-icon-success,
+[data-theme='dark'] .colored-toast.swal2-icon-success {
+  background-color: #16a34a !important; /* Verde más oscuro */
+}
+
+.dark .colored-toast.swal2-icon-error,
+[data-theme='dark'] .colored-toast.swal2-icon-error {
+  background-color: #dc2626 !important; /* Rojo más oscuro */
+}
+
+.dark .colored-toast.swal2-icon-warning,
+[data-theme='dark'] .colored-toast.swal2-icon-warning {
+  background-color: #d97706 !important; /* Naranja más oscuro */
+}
+
+.dark .colored-toast.swal2-icon-info,
+[data-theme='dark'] .colored-toast.swal2-icon-info {
+  background-color: #2563eb !important; /* Azul más oscuro */
+}
+
+.dark .colored-toast.swal2-icon-question,
+[data-theme='dark'] .colored-toast.swal2-icon-question {
+  background-color: #4f46e5 !important; /* Índigo más oscuro */
+}

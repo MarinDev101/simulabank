@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RegistroService } from '@app/core/auth/service/registro';
+import { AlertService } from '@app/services/alert/alert.service';
+import { ImageCropperService } from '@app/services/image-cropper/image-cropper.service';
 
 @Component({
   selector: 'app-personalizar-perfil',
@@ -39,11 +41,12 @@ export class PersonalizarPerfil implements OnInit {
   genero: string = '';
   fotoPerfil: string = '';
   isLoading = false;
-  errorMessage = '';
 
   constructor(
     private registroService: RegistroService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService,
+    private imageCropperService: ImageCropperService
   ) {}
 
   ngOnInit(): void {
@@ -55,18 +58,52 @@ export class PersonalizarPerfil implements OnInit {
     this.anios = Array.from({ length: anioActual - 1899 }, (_, i) => anioActual - i);
   }
 
-  // Método para manejar la subida de foto (pendiente implementación completa)
-  onFotoSeleccionada(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      // Aquí deberías implementar la lógica para subir la imagen
-      // Por ahora, simulamos con una URL
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.fotoPerfil = e.target.result;
-      };
-      reader.readAsDataURL(file);
+  // Método para manejar la subida de foto con recorte
+  async onFotoSeleccionada(event: any) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    // Validar que sea jpeg o png
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      this.alertService.error('Formato no válido', 'Solo se permiten imágenes en formato JPEG o PNG.');
+      return;
     }
+
+    // Validar tamaño máximo de 2MB
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSize) {
+      this.alertService.error('Archivo muy grande', 'El tamaño máximo permitido es de 2MB.');
+      return;
+    }
+
+    // Abrir el modal de recorte
+    try {
+      const result = await this.imageCropperService.openCropper(file, {
+        aspectRatio: 1,
+        resizeToWidth: 400,
+        resizeToHeight: 400,
+        roundCropper: true,
+        format: 'png',
+        quality: 92,
+        title: 'Recortar Foto',
+        confirmButtonText: 'Aplicar recorte',
+        cancelButtonText: 'Cancelar',
+      });
+
+      if (result) {
+        // Se aplicó el recorte - guardar la imagen como base64
+        this.fotoPerfil = result.base64;
+        this.alertService.toastSuccess('Foto recortada correctamente');
+      }
+      // Si result es null, el usuario canceló
+    } catch (err) {
+      console.error('Error al abrir el cropper', err);
+      this.alertService.error('Error', 'No se pudo procesar la imagen. Intenta de nuevo.');
+    }
+
+    // Limpiar el input para permitir seleccionar el mismo archivo de nuevo
+    event.target.value = '';
   }
 
   // Guardar perfil y redirigir al login
@@ -74,13 +111,12 @@ export class PersonalizarPerfil implements OnInit {
     // Obtener usuario del localStorage
     const userData = localStorage.getItem('user_data');
     if (!userData) {
-      this.errorMessage = 'No se encontró información del usuario';
+      this.alertService.error('Error', 'No se encontró información del usuario');
       return;
     }
 
     const user = JSON.parse(userData);
     this.isLoading = true;
-    this.errorMessage = '';
 
     // Construir fecha de nacimiento si está completa
     let fechaNacimientoCompleta = null;
@@ -100,13 +136,14 @@ export class PersonalizarPerfil implements OnInit {
     this.registroService.actualizarPerfilInicial(datosActualizar).subscribe({
       next: (response) => {
         console.log('Perfil actualizado:', response);
+        this.alertService.toastSuccess('¡Perfil guardado correctamente!');
         // Limpiar localStorage y redirigir al login
         this.limpiarYRedirigir();
       },
       error: (error) => {
         this.isLoading = false;
         console.error('Error al actualizar perfil:', error);
-        this.errorMessage = 'Error al guardar el perfil. Intenta nuevamente.';
+        this.alertService.error('Error', 'Error al guardar el perfil. Intenta nuevamente.');
       },
     });
   }
@@ -123,11 +160,12 @@ export class PersonalizarPerfil implements OnInit {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_data');
 
+    // Mostrar mensaje de redirección
+    this.alertService.toastInfo('Redirigiendo al inicio de sesión...');
+
     // Redirigir al login con un pequeño delay
     setTimeout(() => {
-      this.router.navigate(['/iniciar-sesion'], {
-        queryParams: { mensaje: 'Cuenta creada exitosamente. Por favor, inicia sesión.' },
-      });
-    }, 500);
+      this.router.navigate(['/iniciar-sesion']);
+    }, 1000);
   }
 }

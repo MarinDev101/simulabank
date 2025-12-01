@@ -23,26 +23,6 @@
     </p>
   </div>
 
-  <!-- Mensaje de error -->
-  @if (errorMessage) {
-  <div class="relative z-10 rounded-xl border border-red-200 bg-red-50 p-3 sm:p-4">
-    <div class="flex items-center gap-3">
-      <span class="icon-[hugeicons--alert-circle] text-lg sm:text-xl text-red-500 shrink-0"></span>
-      <p class="text-xs sm:text-sm text-red-700 font-medium">{{ errorMessage }}</p>
-    </div>
-  </div>
-  }
-
-  <!-- Mensaje de éxito al reenviar -->
-  @if (resendMessage) {
-  <div class="relative z-10 rounded-xl border border-green-200 bg-green-50 p-3 sm:p-4">
-    <div class="flex items-center gap-3">
-      <span class="icon-[hugeicons--checkmark-circle-02] text-lg sm:text-xl text-green-500 shrink-0"></span>
-      <p class="text-xs sm:text-sm text-green-700 font-medium">{{ resendMessage }}</p>
-    </div>
-  </div>
-  }
-
   <!-- Formulario de código -->
   <form [formGroup]="pinForm" class="relative z-10 flex flex-col items-center w-full">
     <p class="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">Ingresa el código de 6 dígitos</p>

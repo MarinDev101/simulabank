@@ -8,6 +8,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
+import { AlertService } from '@app/services/alert/alert.service';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_recuperacion'; // Cooldown global para recuperación
 const COOLDOWN_TIME = 300000; // 5 minutos en milisegundos
@@ -24,7 +25,6 @@ export class Solicitud implements OnInit, OnDestroy {
 
   form!: FormGroup;
   isLoading = false;
-  errorMessage = '';
 
   // Rate limiting
   cooldownSeconds = 0;
@@ -32,7 +32,8 @@ export class Solicitud implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private recuperacionService: RecuperacionService
+    private recuperacionService: RecuperacionService,
+    private alertService: AlertService
   ) {
     this.form = this.fb.group({
       correo: ['', [Validators.required, Validators.email]],
@@ -111,19 +112,18 @@ export class Solicitud implements OnInit, OnDestroy {
       if (remaining > 0) {
         this.cooldownSeconds = Math.ceil(remaining / 1000);
         this.iniciarContadorCooldown();
-        this.errorMessage = `Debes esperar ${this.cooldownSeconds} segundos antes de solicitar otro código.`;
+        this.alertService.warning('Espera un momento', `Debes esperar ${this.cooldownSeconds} segundos antes de solicitar otro código.`);
         return;
       }
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
 
     const correo = this.form.value.correo;
 
     this.recuperacionService.solicitarRecuperacion({ correo }).subscribe({
-      next: (response) => {
-        console.log('Código de recuperación enviado:', response);
+      next: () => {
+        this.alertService.toastSuccess('Código de recuperación enviado a tu correo');
         // Guardar cooldown global
         this.guardarCooldown();
         this.cooldownSeconds = 300;
@@ -134,20 +134,22 @@ export class Solicitud implements OnInit, OnDestroy {
         this.isLoading = false;
         console.error('Error al solicitar recuperación:', error);
 
+        let mensaje = 'Ocurrió un error inesperado. Intenta nuevamente.';
+
         if (error.status === 404) {
-          this.errorMessage = 'No existe una cuenta con este correo electrónico';
+          mensaje = 'No existe una cuenta con este correo electrónico';
         } else if (error.status === 400 && error.error?.error) {
-          this.errorMessage = error.error.error;
+          mensaje = error.error.error;
         } else if (error.status === 429) {
-          this.errorMessage = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
+          mensaje = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
           this.guardarCooldown();
           this.cooldownSeconds = 300;
           this.iniciarContadorCooldown();
         } else if (error.status === 0) {
-          this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
-        } else {
-          this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
+          mensaje = 'No se pudo conectar con el servidor. Verifica tu conexión.';
         }
+
+        this.alertService.error('Error', mensaje);
       },
       complete: () => {
         this.isLoading = false;

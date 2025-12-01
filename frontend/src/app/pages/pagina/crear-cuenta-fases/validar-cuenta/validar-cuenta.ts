@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RegistroService } from '@app/core/auth/service/registro';
 import { AuthService } from '@app/core/auth/service/auth';
+import { AlertService } from '@app/services/alert/alert.service';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_registro'; // Mismo cooldown global que datos-basicos.ts
 const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
@@ -32,9 +33,7 @@ export class ValidarCuenta implements OnInit, OnDestroy {
   pinForm!: FormGroup;
   pinControls = Array(6);
   isLoading = false;
-  errorMessage = '';
   isResending = false;
-  resendMessage = '';
 
   // Rate limiting para reenvío de códigos
   cooldownSeconds = 0;
@@ -46,7 +45,8 @@ export class ValidarCuenta implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private registroService: RegistroService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {}
 
   ngOnInit() {
@@ -147,12 +147,11 @@ export class ValidarCuenta implements OnInit, OnDestroy {
     const codigo = Object.values(this.pinForm.value).join('');
 
     if (codigo.length !== 6) {
-      this.errorMessage = 'Por favor, ingresa el código completo de 6 dígitos';
+      this.alertService.warning('Código incompleto', 'Por favor, ingresa el código completo de 6 dígitos');
       return;
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
 
     this.registroService.verificarCodigo({ correo: this.correoUsuario, codigo }).subscribe({
       next: (response: any) => {
@@ -163,22 +162,25 @@ export class ValidarCuenta implements OnInit, OnDestroy {
         localStorage.setItem('refresh_token', response.refreshToken);
         localStorage.setItem('user_data', JSON.stringify(response.user));
 
+        // Mostrar alerta de cuenta creada exitosamente
+        this.alertService.success('¡Cuenta creada!', 'Tu cuenta ha sido creada exitosamente. Ahora puedes personalizar tu perfil.');
+
         // Continuar al siguiente paso (personalizar perfil)
         setTimeout(() => {
           this.isLoading = false;
           this.continuar.emit();
-        }, 1000);
+        }, 1500);
       },
       error: (error: any) => {
         this.isLoading = false;
         console.error('Error al verificar código:', error);
 
         if (error.status === 400) {
-          this.errorMessage = error.error?.error || 'Código inválido o expirado';
+          this.alertService.error('Código inválido', error.error?.error || 'Código inválido o expirado');
         } else if (error.status === 0) {
-          this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+          this.alertService.error('Error de conexión', 'No se pudo conectar con el servidor. Verifica tu conexión.');
         } else {
-          this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
+          this.alertService.error('Error', 'Ocurrió un error inesperado. Intenta nuevamente.');
         }
 
         this.limpiarCodigo();
@@ -189,7 +191,7 @@ export class ValidarCuenta implements OnInit, OnDestroy {
   // MÉTODO ACTUALIZADO: Reenviar código con datos reales y rate limiting
   reenviarCodigo() {
     if (!this.datosRegistro) {
-      this.errorMessage = 'No se encontraron los datos del registro';
+      this.alertService.error('Error', 'No se encontraron los datos del registro');
       return;
     }
 
@@ -199,14 +201,14 @@ export class ValidarCuenta implements OnInit, OnDestroy {
     }
 
     this.isResending = true;
-    this.resendMessage = '';
-    this.errorMessage = '';
 
     // Llamar al servicio para reenviar el código
     this.registroService.reenviarCodigo(this.datosRegistro).subscribe({
       next: (response) => {
         this.isResending = false;
-        this.resendMessage = 'Código reenviado exitosamente. Revisa tu correo.';
+
+        // Mostrar toast de éxito
+        this.alertService.toastSuccess('Código reenviado. Revisa tu correo.');
 
         // Iniciar cooldown y guardar en localStorage
         this.guardarCooldown();
@@ -215,25 +217,20 @@ export class ValidarCuenta implements OnInit, OnDestroy {
 
         // Limpiar campos y enfocar el primero
         this.limpiarCodigo();
-
-        // Ocultar mensaje después de 5 segundos
-        setTimeout(() => {
-          this.resendMessage = '';
-        }, 5000);
       },
       error: (error) => {
         this.isResending = false;
         console.error('Error al reenviar código:', error);
 
         if (error.status === 400) {
-          this.errorMessage = error.error?.error || 'Error al reenviar el código';
+          this.alertService.error('Error', error.error?.error || 'Error al reenviar el código');
         } else if (error.status === 429) {
-          this.errorMessage = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
+          this.alertService.warning('Demasiadas solicitudes', 'Espera un momento antes de intentar de nuevo.');
           this.guardarCooldown();
           this.cooldownSeconds = 300;
           this.iniciarCooldown();
         } else {
-          this.errorMessage = 'No se pudo reenviar el código. Intenta nuevamente.';
+          this.alertService.error('Error', 'No se pudo reenviar el código. Intenta nuevamente.');
         }
       },
     });

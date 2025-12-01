@@ -12,16 +12,6 @@
     </div>
   </div>
 
-  <!-- Mensaje de error -->
-  @if (errorMessage) {
-  <div class="relative z-10 rounded-xl border border-red-200 bg-red-50 p-3 sm:p-4">
-    <div class="flex items-center gap-3">
-      <span class="icon-[hugeicons--alert-circle] text-lg sm:text-xl text-red-500 shrink-0"></span>
-      <p class="text-xs sm:text-sm text-red-700 font-medium">{{ errorMessage }}</p>
-    </div>
-  </div>
-  }
-
   <form [formGroup]="formCrearCuenta" (ngSubmit)="validarCuenta()" class="relative z-10 flex flex-col gap-4 sm:gap-5">
     <!-- Nombre y Apellido -->
     <div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
@@ -183,13 +173,13 @@
 
     <!-- Términos -->
     <div class="space-y-1">
-      <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group select-none">
-        <input type="checkbox" formControlName="terminos" class="checkbox checkbox-xs sm:checkbox-sm checkbox-primary rounded-md" />
-        <span class="text-xs sm:text-sm text-gray-600 group-hover:text-gray-800 transition-colors leading-tight">
-          Acepto los <a (click)="navegarATerminos()" class="text-blue-600 font-medium hover:underline cursor-pointer">términos y condiciones</a> y
+      <div class="flex items-center gap-2 sm:gap-3 select-none">
+        <input type="checkbox" formControlName="terminos" id="terminos-checkbox" class="checkbox checkbox-xs sm:checkbox-sm checkbox-primary rounded-md cursor-pointer" />
+        <span class="text-xs sm:text-sm text-gray-600 leading-tight">
+          <label for="terminos-checkbox" class="cursor-pointer hover:text-gray-800 transition-colors">Acepto los </label><a (click)="navegarATerminos()" class="text-blue-600 font-medium hover:underline cursor-pointer">términos y condiciones</a> y
           <a (click)="navegarAPoliticas()" class="text-blue-600 font-medium hover:underline cursor-pointer">políticas de privacidad</a>
         </span>
-      </label>
+      </div>
       <div class="min-h-4 pl-5 sm:pl-7">
         <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
           *ngIf="f['terminos'].invalid && f['terminos'].touched">

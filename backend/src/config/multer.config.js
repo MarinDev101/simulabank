@@ -7,21 +7,22 @@ const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB por archivo por defecto
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB por archivo
   fileFilter: (req, file, cb) => {
-    // Aceptar por tipo MIME cuando sea una imagen (más fiable si el cliente no envía extensión)
-    if (file && file.mimetype && file.mimetype.startsWith('image/')) {
+    // Solo aceptar jpeg y png
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (file && file.mimetype && allowedTypes.includes(file.mimetype)) {
       return cb(null, true);
     }
 
-    // Backup: aceptar algunas extensiones comunes si por alguna razón no hay mimetype
-    const allowedExt = ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.heic', '.jfif'];
+    // Backup: aceptar extensiones .jpg, .jpeg, .png
+    const allowedExt = ['.png', '.jpg', '.jpeg'];
     const ext = path.extname(file.originalname || '').toLowerCase();
     if (ext && allowedExt.includes(ext)) {
       return cb(null, true);
     }
 
-    return cb(new Error('Tipo de archivo no permitido'));
+    return cb(new Error('Solo se permiten archivos JPEG o PNG'));
   },
 });
 

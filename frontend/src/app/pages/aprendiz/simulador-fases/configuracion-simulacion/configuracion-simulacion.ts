@@ -3,6 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { SimulacionService, ConfiguracionSimulacion } from '@app/services/simulacion/simulacion';
+import { AlertService } from '@app/services/alert/alert.service';
 
 @Component({
   selector: 'app-configuracion-simulacion',
@@ -23,7 +24,6 @@ export class ConfiguracionSimulacionComponent implements OnInit, OnDestroy {
 
   cargando = false;
   verificandoSimulacion = true;
-  error: string | null = null;
 
   private subscriptions = new Subscription();
   private productosCaptacion = ['cuenta_ahorros', 'cuenta_corriente', 'cdt_digital'];
@@ -33,7 +33,10 @@ export class ConfiguracionSimulacionComponent implements OnInit, OnDestroy {
     'credito_rotativo_empresarial',
   ];
 
-  constructor(private simulacionService: SimulacionService) {}
+  constructor(
+    private simulacionService: SimulacionService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     // Verificar si hay simulación activa al cargar el componente
@@ -127,7 +130,6 @@ export class ConfiguracionSimulacionComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.error = null;
     this.cargando = true;
 
     try {
@@ -156,10 +158,15 @@ export class ConfiguracionSimulacionComponent implements OnInit, OnDestroy {
 
           // Manejar específicamente el error 429
           if (error.status === 429) {
-            this.error =
-              'Demasiadas solicitudes. Por favor, espera un momento e intenta nuevamente.';
+            this.alertService.warning(
+              'Demasiadas solicitudes',
+              'Por favor, espera un momento e intenta nuevamente.'
+            );
           } else {
-            this.error = error.error?.mensaje || 'Error al iniciar la simulación';
+            this.alertService.error(
+              'Error',
+              error.error?.mensaje || 'Error al iniciar la simulación'
+            );
           }
         },
       });
@@ -168,7 +175,7 @@ export class ConfiguracionSimulacionComponent implements OnInit, OnDestroy {
     } catch (error: any) {
       console.error('❌ Error al iniciar simulación:', error);
       this.cargando = false;
-      this.error = 'Error inesperado al iniciar la simulación';
+      this.alertService.error('Error', 'Error inesperado al iniciar la simulación');
     }
   }
 }

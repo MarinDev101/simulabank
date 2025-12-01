@@ -26,18 +26,6 @@
 
   <!-- TAB 1 -->
   <div class="min-h-[640px] w-[70vw] p-8" *ngIf="activeTab === 'tab1'">
-    <div
-      *ngIf="successMessage && activeTab === 'tab1'"
-      class="mb-4 rounded border border-green-200 bg-green-50 p-3 text-green-800 dark:border-green-800 dark:bg-green-900 dark:text-green-200"
-    >
-      {{ successMessage }}
-    </div>
-    <div
-      *ngIf="errorMessage && activeTab === 'tab1'"
-      class="mb-4 rounded border border-red-200 bg-red-50 p-3 text-red-800 dark:border-red-800 dark:bg-red-900 dark:text-red-200"
-    >
-      {{ errorMessage }}
-    </div>
     <article class="flex gap-8">
       <ul>
         <li>
@@ -77,7 +65,7 @@
           <input
             type="file"
             #fileInput
-            accept="image/*"
+            accept="image/jpeg,image/png"
             (change)="onFotoSeleccionada($event)"
             class="hidden"
           />
@@ -99,9 +87,7 @@
           </button>
         </li>
         <li class="mt-1">
-          <p class="text-gray-600 dark:text-gray-300">
-            Cargue el archivo en formato jpeg/png y asegúrese que el tamaño sea inferior a 25MB
-          </p>
+          <p class="text-gray-600 dark:text-gray-300">Solo JPEG/PNG — máx. 2 MB</p>
         </li>
       </ul>
     </article>
@@ -272,19 +258,6 @@
   <div class="min-h-[710px] w-[70vw] p-8" *ngIf="activeTab === 'tab2'">
     <article class="rounded border border-gray-300 p-8">
       <form #passwordForm="ngForm" class="flex flex-col gap-6">
-        <div
-          *ngIf="successMessage && activeTab === 'tab2'"
-          class="mb-4 rounded border border-green-200 bg-green-50 p-3 text-green-800 dark:border-green-800 dark:bg-green-900 dark:text-green-200"
-        >
-          {{ successMessage }}
-        </div>
-        <div
-          *ngIf="errorMessage && activeTab === 'tab2'"
-          class="mb-4 rounded border border-red-200 bg-red-50 p-3 text-red-800 dark:border-red-800 dark:bg-red-900 dark:text-red-200"
-        >
-          {{ errorMessage }}
-        </div>
-
         <article class="flex gap-50">
           <div class="flex flex-col gap-6">
             <div class="flex-1">

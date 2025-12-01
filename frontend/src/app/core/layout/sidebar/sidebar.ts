@@ -4,6 +4,7 @@ import { HeaderPlataforma } from '../headers/header-plataforma/header-plataforma
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
+import { AlertService } from '@app/services/alert/alert.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -20,7 +21,8 @@ export class Sidebar implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {
     // Inicializar usuario inmediatamente desde localStorage
     this.usuario = this.authService.obtenerUsuario();
@@ -84,10 +86,19 @@ export class Sidebar implements OnInit, OnDestroy {
     return this.isDrawerClosed;
   }
 
-  cerrarSesion(): void {
-    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+  async cerrarSesion(): Promise<void> {
+    const confirmado = await this.alertService.confirm(
+      '¿Cerrar sesión?',
+      '¿Estás seguro de que deseas cerrar sesión?',
+      'Sí, cerrar sesión',
+      'Cancelar',
+      'question'
+    );
+
+    if (confirmado) {
       this.authService.logout().subscribe({
         next: () => {
+          this.alertService.toastSuccess('Sesión cerrada correctamente');
           this.router.navigate(['/iniciar-sesion']);
         },
         error: (error) => {

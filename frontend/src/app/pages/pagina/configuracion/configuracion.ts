@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
 import { RegistroService } from '@app/core/auth/service/registro';
+import { AlertService } from '@app/services/alert/alert.service';
+import { ImageCropperService } from '@app/services/image-cropper/image-cropper.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -52,8 +54,6 @@ export class Configuracion implements OnInit {
   fotoChanged: boolean = false; // mark new photo selected
 
   isLoading = false;
-  errorMessage = '';
-  successMessage = '';
 
   // Contraseña
   contrasenaActual = '';
@@ -67,7 +67,9 @@ export class Configuracion implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private alertService: AlertService,
+    private imageCropperService: ImageCropperService
   ) {
     this.usuario = this.authService.obtenerUsuario();
     if (this.usuario) {
@@ -133,32 +135,78 @@ export class Configuracion implements OnInit {
   }
 
   // Foto
-  onFotoSeleccionada(event: any) {
+  async onFotoSeleccionada(event: any) {
     const file = event.target.files && event.target.files[0];
     if (!file) return;
-    this.fotoFile = file;
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.fotoPreview = e.target.result;
-      this.fotoChanged = true;
-      this.eliminarPending = false; // if new photo selected, cancel delete
-      // Subir la foto inmediatamente al seleccionarla
-      try {
-        this.subirFotoInmediata();
-      } catch (err) {
-        console.error('Error al iniciar subida inmediata', err);
+
+    // Validar que sea jpeg o png
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      this.alertService.error('Formato no válido', 'Solo se permiten imágenes en formato JPEG o PNG.');
+      return;
+    }
+
+    // Validar tamaño máximo de 2MB
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSize) {
+      this.alertService.error('Archivo muy grande', 'El tamaño máximo permitido es de 2MB.');
+      return;
+    }
+
+    // Abrir el modal de recorte
+    try {
+      const result = await this.imageCropperService.openCropper(file, {
+        aspectRatio: 1,
+        resizeToWidth: 400,
+        resizeToHeight: 400,
+        roundCropper: true,
+        format: 'png',
+        quality: 92,
+        title: 'Recortar Foto',
+        confirmButtonText: 'Aplicar recorte',
+        cancelButtonText: 'Cancelar',
+      });
+
+      if (result) {
+        // Se aplicó el recorte
+        this.fotoFile = result.file;
+        this.fotoPreview = result.base64;
+        this.fotoChanged = true;
+        this.eliminarPending = false;
+
+        // Subir la foto inmediatamente
+        try {
+          this.subirFotoInmediata();
+        } catch (err) {
+          console.error('Error al iniciar subida inmediata', err);
+        }
       }
-    };
-    reader.readAsDataURL(file);
+      // Si result es null, el usuario canceló
+    } catch (err) {
+      console.error('Error al abrir el cropper', err);
+      this.alertService.error('Error', 'No se pudo procesar la imagen. Intenta de nuevo.');
+    }
+
+    // Limpiar el input para permitir seleccionar el mismo archivo de nuevo
+    event.target.value = '';
   }
-  eliminarFoto() {
+
+  async eliminarFoto() {
     if (!this.usuario) return;
-    if (!confirm('¿Deseas eliminar la foto? Se eliminará inmediatamente.')) return;
+
+    const confirmado = await this.alertService.confirm(
+      '¿Eliminar foto?',
+      '¿Deseas eliminar la foto? Se eliminará inmediatamente.',
+      'Sí, eliminar',
+      'Cancelar',
+      'warning'
+    );
+
+    if (!confirmado) return;
+
     // Llamada inmediata para eliminar la foto
     if (!this.usuario) return;
     this.isLoading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
     const form = new FormData();
     form.append('userId', String(this.usuario.id));
     form.append('eliminar_foto', 'true');
@@ -187,7 +235,7 @@ export class Configuracion implements OnInit {
           console.warn('No se pudo guardar user_data en localStorage', e);
         }
         this.usuario = nuevo;
-        this.successMessage = 'Foto eliminada correctamente.';
+        this.alertService.toastSuccess('Foto eliminada correctamente');
         setTimeout(() => {
           try {
             window.location.reload();
@@ -199,7 +247,7 @@ export class Configuracion implements OnInit {
       error: (err) => {
         console.error('Error eliminando foto', err);
         this.isLoading = false;
-        this.errorMessage = 'No se pudo eliminar la foto. Intenta de nuevo.';
+        this.alertService.error('Error', 'No se pudo eliminar la foto. Intenta de nuevo.');
       },
     });
   }
@@ -207,8 +255,6 @@ export class Configuracion implements OnInit {
   subirFotoInmediata() {
     if (!this.usuario || !this.fotoFile) return;
     this.isLoading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
 
     const form = new FormData();
     form.append('userId', String(this.usuario.id));
@@ -238,7 +284,7 @@ export class Configuracion implements OnInit {
           console.warn('No se pudo guardar user_data en localStorage', e);
         }
         this.usuario = nuevo;
-        this.successMessage = 'Foto actualizada correctamente.';
+        this.alertService.toastSuccess('Foto actualizada correctamente');
         setTimeout(() => {
           try {
             window.location.reload();
@@ -250,7 +296,7 @@ export class Configuracion implements OnInit {
       error: (err) => {
         console.error('Error subiendo foto', err);
         this.isLoading = false;
-        this.errorMessage = 'No se pudo subir la foto. Intenta de nuevo.';
+        this.alertService.error('Error', 'No se pudo subir la foto. Intenta de nuevo.');
       },
     });
   }
@@ -284,17 +330,24 @@ export class Configuracion implements OnInit {
     return this.nombreValidoLocal() && this.apellidoValidoLocal();
   }
 
-  actualizarDatos() {
+  async actualizarDatos() {
     if (!this.usuario) return;
     if (!this.validarNombreApellido()) {
-      this.errorMessage = 'Por favor corrige los campos requeridos.';
+      this.alertService.warning('Campos inválidos', 'Por favor corrige los campos requeridos.');
       return;
     }
-    if (!confirm('¿Confirmas que deseas actualizar tus datos?')) return;
+
+    const confirmado = await this.alertService.confirm(
+      '¿Actualizar datos?',
+      '¿Confirmas que deseas actualizar tus datos?',
+      'Sí, actualizar',
+      'Cancelar',
+      'question'
+    );
+
+    if (!confirmado) return;
 
     this.isLoading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
 
     setTimeout(() => {
       const form = new FormData();
@@ -334,7 +387,7 @@ export class Configuracion implements OnInit {
           this.usuario = nuevo;
           this.fotoChanged = false;
           this.eliminarPending = false;
-          this.successMessage = 'Configuración exitosa.';
+          this.alertService.toastSuccess('Configuración actualizada exitosamente');
           // Persisted — reload page so sidebar and other components read updated localStorage
           setTimeout(() => {
             try {
@@ -348,7 +401,7 @@ export class Configuracion implements OnInit {
         error: (err) => {
           console.error('Error actualizando perfil', err);
           this.isLoading = false;
-          this.errorMessage = 'Error al actualizar datos. Intenta de nuevo.';
+          this.alertService.error('Error', 'Error al actualizar datos. Intenta de nuevo.');
         },
       });
     }, 3000);
@@ -375,24 +428,32 @@ export class Configuracion implements OnInit {
     this.indicaciones.simbolo = /[@$!%*?&]/.test(val);
   }
 
-  cambiarContrasena() {
+  async cambiarContrasena() {
     if (!this.contrasenaActual || !this.contrasenaNueva || !this.contrasenaConfirmar) {
-      this.errorMessage = 'Completa las tres casillas de contraseña.';
+      this.alertService.warning('Campos incompletos', 'Completa las tres casillas de contraseña.');
       return;
     }
     if (this.contrasenaNueva !== this.contrasenaConfirmar) {
-      this.errorMessage = 'Las nuevas contraseñas no coinciden.';
+      this.alertService.warning('Contraseñas no coinciden', 'Las nuevas contraseñas no coinciden.');
       return;
     }
     this.verificarIndicaciones();
     if (!this.indicaciones.longitud || !this.indicaciones.numero || !this.indicaciones.mayuscula) {
-      this.errorMessage = 'La nueva contraseña no cumple los requisitos.';
+      this.alertService.warning('Contraseña débil', 'La nueva contraseña no cumple los requisitos.');
       return;
     }
-    if (!confirm('¿Confirmas que deseas cambiar tu contraseña?')) return;
+
+    const confirmado = await this.alertService.confirm(
+      '¿Cambiar contraseña?',
+      '¿Confirmas que deseas cambiar tu contraseña?',
+      'Sí, cambiar',
+      'Cancelar',
+      'question'
+    );
+
+    if (!confirmado) return;
 
     this.isLoading = true;
-    this.errorMessage = '';
 
     setTimeout(() => {
       const token = localStorage.getItem('access_token');
@@ -411,10 +472,10 @@ export class Configuracion implements OnInit {
           this.isLoading = false;
           const json = await r.json();
           if (!r.ok) {
-            this.errorMessage = json.error || 'Error al cambiar la contraseña.';
+            this.alertService.error('Error', json.error || 'Error al cambiar la contraseña.');
             return;
           }
-          this.successMessage = 'Contraseña actualizada exitosamente.';
+          this.alertService.toastSuccess('Contraseña actualizada exitosamente');
           this.contrasenaActual = this.contrasenaNueva = this.contrasenaConfirmar = '';
           // Reset form state so inputs stop showing touched/invalid styles
           try {
@@ -424,12 +485,11 @@ export class Configuracion implements OnInit {
           }
           // Reset indicators
           this.indicaciones = { longitud: false, numero: false, mayuscula: false, simbolo: false };
-          setTimeout(() => (this.successMessage = ''), 4000);
         })
         .catch((err) => {
           console.error('Error cambiar contraseña', err);
           this.isLoading = false;
-          this.errorMessage = 'Error al cambiar la contraseña.';
+          this.alertService.error('Error', 'Error al cambiar la contraseña.');
         });
     }, 3000);
   }

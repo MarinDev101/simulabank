@@ -11,6 +11,7 @@ import {
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
+import { AlertService } from '@app/services/alert/alert.service';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_recuperacion'; // Mismo cooldown global que solicitud.ts
 const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
@@ -29,9 +30,7 @@ export class Validacion implements OnInit, OnDestroy {
   pinForm!: FormGroup;
   pinControls = Array(6);
   isLoading = false;
-  errorMessage = '';
   isResending = false;
-  resendMessage = '';
   tokenTemporal = '';
 
   // Rate limiting para reenvío de códigos
@@ -42,7 +41,8 @@ export class Validacion implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private recuperacionService: RecuperacionService
+    private recuperacionService: RecuperacionService,
+    private alertService: AlertService
   ) {}
 
   ngOnInit() {
@@ -147,17 +147,16 @@ export class Validacion implements OnInit, OnDestroy {
     console.log('Código construido:', codigo, 'Largo:', codigo.length);
 
     if (codigo.length !== 6) {
-      this.errorMessage = 'Por favor, ingresa el código completo de 6 dígitos';
+      this.alertService.warning('Código incompleto', 'Por favor, ingresa el código completo de 6 dígitos');
       return;
     }
 
     if (!/^\d+$/.test(codigo)) {
-      this.errorMessage = 'El código solo debe contener dígitos';
+      this.alertService.warning('Código inválido', 'El código solo debe contener dígitos');
       return;
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
 
     console.log('Enviando solicitud:', { correo: this.correoUsuario, codigo });
 
@@ -171,6 +170,8 @@ export class Validacion implements OnInit, OnDestroy {
           // Guardar token temporal en localStorage para usarlo en el siguiente paso
           localStorage.setItem('token_recuperacion', this.tokenTemporal);
 
+          this.alertService.toastSuccess('Código verificado correctamente');
+
           setTimeout(() => {
             this.isLoading = false;
             this.continuar.emit(this.tokenTemporal);
@@ -181,14 +182,15 @@ export class Validacion implements OnInit, OnDestroy {
           console.error('Error al verificar código:', error);
           console.error('Respuesta de error:', error.error);
 
+          let mensaje = 'Ocurrió un error inesperado. Intenta nuevamente.';
+
           if (error.status === 400) {
-            this.errorMessage = error.error?.error || 'Código inválido o expirado';
+            mensaje = error.error?.error || 'Código inválido o expirado';
           } else if (error.status === 0) {
-            this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
-          } else {
-            this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
+            mensaje = 'No se pudo conectar con el servidor. Verifica tu conexión.';
           }
 
+          this.alertService.error('Error de verificación', mensaje);
           this.limpiarCodigo();
         },
       });
@@ -201,13 +203,11 @@ export class Validacion implements OnInit, OnDestroy {
     }
 
     this.isResending = true;
-    this.resendMessage = '';
-    this.errorMessage = '';
 
     this.recuperacionService.reenviarCodigoRecuperacion(this.correoUsuario).subscribe({
-      next: (response) => {
+      next: () => {
         this.isResending = false;
-        this.resendMessage = 'Código reenviado exitosamente. Revisa tu correo.';
+        this.alertService.toastSuccess('Código reenviado exitosamente. Revisa tu correo.');
 
         // Iniciar cooldown y guardar en localStorage
         this.guardarCooldown();
@@ -215,25 +215,23 @@ export class Validacion implements OnInit, OnDestroy {
         this.iniciarCooldown();
 
         this.limpiarCodigo();
-
-        setTimeout(() => {
-          this.resendMessage = '';
-        }, 5000);
       },
       error: (error) => {
         this.isResending = false;
         console.error('Error al reenviar código:', error);
 
+        let mensaje = 'No se pudo reenviar el código. Intenta nuevamente.';
+
         if (error.status === 400) {
-          this.errorMessage = error.error?.error || 'Error al reenviar el código';
+          mensaje = error.error?.error || 'Error al reenviar el código';
         } else if (error.status === 429) {
-          this.errorMessage = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
+          mensaje = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
           this.guardarCooldown();
           this.cooldownSeconds = 300;
           this.iniciarCooldown();
-        } else {
-          this.errorMessage = 'No se pudo reenviar el código. Intenta nuevamente.';
         }
+
+        this.alertService.error('Error', mensaje);
       },
     });
   }

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@app/core/auth/service/auth';
 import { ReturnButton } from '@app/components/return-button/return-button';
+import { AlertService } from '@app/services/alert/alert.service';
 
 @Component({
   selector: 'app-iniciar-sesion',
@@ -15,7 +16,6 @@ export class IniciarSesion implements OnInit {
   loginForm!: FormGroup;
   showPassword = false;
   isLoading = false;
-  errorMessage = '';
   returnUrl = '';
   formInitialized = false; // nuevo flag
 
@@ -24,7 +24,8 @@ export class IniciarSesion implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +63,6 @@ export class IniciarSesion implements OnInit {
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
 
     const { email, password, remember } = this.loginForm.value;
 
@@ -71,6 +71,10 @@ export class IniciarSesion implements OnInit {
         this.isLoading = false;
 
         if (remember) localStorage.setItem('remember_user', 'true');
+
+        // Mostrar toast de bienvenida
+        const nombreUsuario = response.user?.nombres || 'Usuario';
+        this.alertService.toastSuccess(`¡Bienvenido/a, ${nombreUsuario}!`);
 
         if (this.returnUrl) {
           this.router.navigateByUrl(this.returnUrl);
@@ -83,13 +87,13 @@ export class IniciarSesion implements OnInit {
         console.error('Error en login:', error);
 
         if (error.status === 401) {
-          this.errorMessage = 'Credenciales incorrectas. Por favor, verifica tu correo y contraseña.';
+          this.alertService.error('Credenciales incorrectas', 'Por favor, verifica tu correo y contraseña.');
         } else if (error.status === 0) {
-          this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+          this.alertService.error('Error de conexión', 'No se pudo conectar con el servidor. Verifica tu conexión.');
         } else if (error.error?.error) {
-          this.errorMessage = error.error.error;
+          this.alertService.error('Error', error.error.error);
         } else {
-          this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
+          this.alertService.error('Error', 'Ocurrió un error inesperado. Intenta nuevamente.');
         }
 
         this.cd.detectChanges();

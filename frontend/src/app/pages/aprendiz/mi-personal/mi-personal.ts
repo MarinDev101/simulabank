@@ -3,6 +3,7 @@ import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EvidenciasService, Evidencia } from '@app/services/evidencias/evidencias';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { AlertService } from '@app/services/alert/alert.service';
 
 @Component({
   selector: 'app-mi-personal',
@@ -12,6 +13,7 @@ import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 })
 export class MiPersonal implements OnInit {
   private evidenciasService = inject(EvidenciasService);
+  private alertService = inject(AlertService);
 
   // Datos
   evidencias: Evidencia[] = [];
@@ -63,6 +65,7 @@ export class MiPersonal implements OnInit {
         this.error = 'Error al cargar las evidencias. Por favor, intenta de nuevo.';
         this.cargando = false;
         console.error(err);
+        this.alertService.error('Error', 'No se pudieron cargar las evidencias. Por favor, intenta de nuevo.');
       },
     });
   }
@@ -207,7 +210,7 @@ export class MiPersonal implements OnInit {
       },
       error: (err) => {
         console.error('Error al visualizar PDF:', err);
-        alert('Error al cargar el PDF. Por favor, intenta de nuevo.');
+        this.alertService.error('Error', 'Error al cargar el PDF. Por favor, intenta de nuevo.');
         this.cerrarModalPdf();
       },
     });
@@ -249,7 +252,7 @@ export class MiPersonal implements OnInit {
             },
             error: (err) => {
               console.error('Error al descargar (servicio):', err);
-              alert('Error al descargar el archivo. Por favor, intenta de nuevo.');
+              this.alertService.error('Error', 'Error al descargar el archivo. Por favor, intenta de nuevo.');
             },
           });
       }
@@ -285,13 +288,13 @@ export class MiPersonal implements OnInit {
           })
           .catch((err) => {
             console.error('Error descargando desde URL:', err);
-            alert('No se pudo iniciar la descarga. Intenta descargar desde la lista.');
+            this.alertService.error('Error', 'No se pudo iniciar la descarga. Intenta descargar desde la lista.');
           });
         return;
       }
     } catch (err) {
       console.error('Error al iniciar descarga del PDF:', err);
-      alert('Error al descargar el archivo. Por favor, intenta de nuevo.');
+      this.alertService.error('Error', 'Error al descargar el archivo. Por favor, intenta de nuevo.');
     }
   }
 
@@ -307,7 +310,7 @@ export class MiPersonal implements OnInit {
         },
         error: (err) => {
           console.error('Error al descargar:', err);
-          alert('Error al descargar el archivo. Por favor, intenta de nuevo.');
+          this.alertService.error('Error', 'Error al descargar el archivo. Por favor, intenta de nuevo.');
         },
       });
   }
@@ -315,14 +318,23 @@ export class MiPersonal implements OnInit {
   /**
    * Archiva o desarchiva una evidencia
    */
-  toggleArchivar(evidencia: Evidencia): void {
+  async toggleArchivar(evidencia: Evidencia): Promise<void> {
     const accion = evidencia.estado === 'visible' ? 'archivar' : 'desarchivar';
+    const titulo = accion === 'archivar' ? '¿Archivar evidencia?' : '¿Desarchivar evidencia?';
     const mensaje =
       accion === 'archivar'
         ? '¿Estás seguro de archivar esta evidencia?'
         : '¿Estás seguro de desarchivar esta evidencia?';
 
-    if (!confirm(mensaje)) return;
+    const confirmado = await this.alertService.confirm(
+      titulo,
+      mensaje,
+      `Sí, ${accion}`,
+      'Cancelar',
+      'question'
+    );
+
+    if (!confirmado) return;
 
     const observable =
       accion === 'archivar'
@@ -333,10 +345,11 @@ export class MiPersonal implements OnInit {
       next: () => {
         evidencia.estado = accion === 'archivar' ? 'archivada' : 'visible';
         this.aplicarFiltros();
+        this.alertService.toastSuccess(`Evidencia ${accion === 'archivar' ? 'archivada' : 'desarchivada'} correctamente`);
       },
       error: (err) => {
         console.error(`Error al ${accion}:`, err);
-        alert(`Error al ${accion} la evidencia. Por favor, intenta de nuevo.`);
+        this.alertService.error('Error', `Error al ${accion} la evidencia. Por favor, intenta de nuevo.`);
       },
     });
   }
@@ -344,10 +357,13 @@ export class MiPersonal implements OnInit {
   /**
    * Elimina una evidencia
    */
-  eliminarEvidencia(evidencia: Evidencia): void {
-    if (!confirm('¿Estás seguro de eliminar esta evidencia? Esta acción no se puede deshacer.')) {
-      return;
-    }
+  async eliminarEvidencia(evidencia: Evidencia): Promise<void> {
+    const confirmado = await this.alertService.confirmDelete(
+      'esta evidencia',
+      '¿Estás seguro de eliminar esta evidencia? Esta acción no se puede deshacer.'
+    );
+
+    if (!confirmado) return;
 
     this.evidenciasService.eliminarEvidencia(evidencia.id_simulacion).subscribe({
       next: () => {
@@ -355,10 +371,11 @@ export class MiPersonal implements OnInit {
           (e) => e.id_simulacion !== evidencia.id_simulacion
         );
         this.aplicarFiltros();
+        this.alertService.toastSuccess('Evidencia eliminada correctamente');
       },
       error: (err) => {
         console.error('Error al eliminar:', err);
-        alert('Error al eliminar la evidencia. Por favor, intenta de nuevo.');
+        this.alertService.error('Error', 'Error al eliminar la evidencia. Por favor, intenta de nuevo.');
       },
     });
   }

@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
+import { AlertService } from '@app/services/alert/alert.service';
 
 @Component({
   selector: 'app-nueva-contrasena',
@@ -23,7 +24,6 @@ export class NuevaContrasena {
   mostrarContrasena = false;
   mostrarConfirmarContrasena = false;
   isLoading = false;
-  errorMessage = '';
 
   indicaciones = {
     longitud: false,
@@ -35,7 +35,8 @@ export class NuevaContrasena {
   constructor(
     private fb: FormBuilder,
     private recuperacionService: RecuperacionService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {
     this.formNuevaContrasena = this.fb.group(
       {
@@ -90,12 +91,11 @@ export class NuevaContrasena {
     // Obtener token temporal del localStorage
     const tokenTemporal = localStorage.getItem('token_recuperacion');
     if (!tokenTemporal) {
-      this.errorMessage = 'Sesión expirada. Por favor, inicia el proceso nuevamente.';
+      this.alertService.error('Sesión expirada', 'Por favor, inicia el proceso nuevamente.');
       return;
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
 
     const datos = {
       token_temporal: tokenTemporal,
@@ -109,25 +109,26 @@ export class NuevaContrasena {
         // Limpiar token temporal
         localStorage.removeItem('token_recuperacion');
 
-        // Redirigir al login con mensaje de éxito
+        // Mostrar éxito
+        this.alertService.success('¡Contraseña restablecida!', 'Tu contraseña ha sido cambiada exitosamente. Por favor, inicia sesión.');
+
+        // Redirigir al login
         setTimeout(() => {
-          this.router.navigate(['/iniciar-sesion'], {
-            queryParams: { mensaje: 'Contraseña restablecida exitosamente. Por favor, inicia sesión.' },
-          });
-        }, 1000);
+          this.router.navigate(['/iniciar-sesion']);
+        }, 1500);
       },
       error: (error) => {
         this.isLoading = false;
         console.error('Error al restablecer contraseña:', error);
 
         if (error.status === 400 && error.error?.error) {
-          this.errorMessage = error.error.error;
+          this.alertService.error('Error', error.error.error);
         } else if (error.status === 401) {
-          this.errorMessage = 'Token inválido o expirado. Inicia el proceso nuevamente.';
+          this.alertService.error('Sesión expirada', 'Token inválido o expirado. Inicia el proceso nuevamente.');
         } else if (error.status === 0) {
-          this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+          this.alertService.error('Error de conexión', 'No se pudo conectar con el servidor. Verifica tu conexión.');
         } else {
-          this.errorMessage = 'Ocurrió un error inesperado. Intenta nuevamente.';
+          this.alertService.error('Error', 'Ocurrió un error inesperado. Intenta nuevamente.');
         }
       },
       complete: () => {

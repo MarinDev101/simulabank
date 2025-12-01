@@ -3,6 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
 import { AdminService } from '@app/core/auth/service/admin';
+import { AlertService } from '@app/services/alert/alert.service';
 
 @Component({
   selector: 'app-gestion-aprendices',
@@ -13,6 +14,7 @@ import { AdminService } from '@app/core/auth/service/admin';
 export class GestionAprendices implements OnInit {
   private authService = inject(AuthService);
   private adminService = inject(AdminService);
+  private alertService = inject(AlertService);
 
   // Datos
   aprendices: Usuario[] = [];
@@ -60,6 +62,7 @@ export class GestionAprendices implements OnInit {
         this.error = 'Error al cargar los aprendices. Por favor, intenta de nuevo.';
         this.cargando = false;
         console.error('Error detallado:', err);
+        this.alertService.error('Error', 'No se pudieron cargar los aprendices. Por favor, intenta de nuevo.');
       },
     });
   }
@@ -228,14 +231,14 @@ export class GestionAprendices implements OnInit {
         // Recargar la lista completa de aprendices
         this.cargarAprendices();
 
-        alert('Aprendiz actualizado correctamente');
+        this.alertService.toastSuccess('Aprendiz actualizado correctamente');
       },
       error: (err) => {
         console.error('Error al actualizar aprendiz:', err);
         console.error('Detalles del error:', err.error);
 
         if (err.status === 403) {
-          this.error = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+          this.alertService.error('Sesión expirada', 'Por favor, inicia sesión nuevamente.');
           setTimeout(() => {
             this.authService.logout().subscribe(() => {
               window.location.href = '/iniciar-sesion';
@@ -243,7 +246,7 @@ export class GestionAprendices implements OnInit {
           }, 2000);
         } else {
           const mensajeError = err.error?.error || 'Error al actualizar el aprendiz. Por favor, intenta de nuevo.';
-          alert(mensajeError);
+          this.alertService.error('Error', mensajeError);
         }
       },
     });
@@ -259,20 +262,26 @@ export class GestionAprendices implements OnInit {
   /**
    * Inhabilita un aprendiz
    */
-  inhabilitarAprendiz(aprendiz: Usuario): void {
-    if (!confirm(`¿Estás seguro de inhabilitar a ${aprendiz.nombres} ${aprendiz.apellidos}?`)) {
-      return;
-    }
+  async inhabilitarAprendiz(aprendiz: Usuario): Promise<void> {
+    const confirmado = await this.alertService.confirm(
+      '¿Inhabilitar aprendiz?',
+      `¿Estás seguro de inhabilitar a ${aprendiz.nombres} ${aprendiz.apellidos}?`,
+      'Sí, inhabilitar',
+      'Cancelar',
+      'warning'
+    );
+
+    if (!confirmado) return;
 
     this.adminService.inhabilitarAprendiz(aprendiz.id).subscribe({
       next: () => {
         aprendiz.estado = 'inactivo';
         this.aplicarFiltros();
-        alert('Aprendiz inhabilitado correctamente');
+        this.alertService.toastSuccess('Aprendiz inhabilitado correctamente');
       },
       error: (err) => {
         console.error('Error al inhabilitar aprendiz:', err);
-        alert('Error al inhabilitar el aprendiz. Por favor, intenta de nuevo.');
+        this.alertService.error('Error', 'Error al inhabilitar el aprendiz. Por favor, intenta de nuevo.');
       },
     });
   }
@@ -280,20 +289,26 @@ export class GestionAprendices implements OnInit {
   /**
    * Habilita un aprendiz
    */
-  habilitarAprendiz(aprendiz: Usuario): void {
-    if (!confirm(`¿Estás seguro de habilitar a ${aprendiz.nombres} ${aprendiz.apellidos}?`)) {
-      return;
-    }
+  async habilitarAprendiz(aprendiz: Usuario): Promise<void> {
+    const confirmado = await this.alertService.confirm(
+      '¿Habilitar aprendiz?',
+      `¿Estás seguro de habilitar a ${aprendiz.nombres} ${aprendiz.apellidos}?`,
+      'Sí, habilitar',
+      'Cancelar',
+      'question'
+    );
+
+    if (!confirmado) return;
 
     this.adminService.habilitarAprendiz(aprendiz.id).subscribe({
       next: () => {
         aprendiz.estado = 'activo';
         this.aplicarFiltros();
-        alert('Aprendiz habilitado correctamente');
+        this.alertService.toastSuccess('Aprendiz habilitado correctamente');
       },
       error: (err) => {
         console.error('Error al habilitar aprendiz:', err);
-        alert('Error al habilitar el aprendiz. Por favor, intenta de nuevo.');
+        this.alertService.error('Error', 'Error al habilitar el aprendiz. Por favor, intenta de nuevo.');
       },
     });
   }
