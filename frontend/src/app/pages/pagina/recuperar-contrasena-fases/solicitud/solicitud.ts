@@ -9,6 +9,8 @@ import {
 } from '@angular/forms';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
 import { AlertService } from '@app/services/alert/alert.service';
+import { EmailFormatDirective } from '@app/shared/directives';
+import { VALIDATION_CONFIG, emailRobustoValidator } from '@app/shared/validators';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_recuperacion'; // Cooldown global para recuperación
 const COOLDOWN_TIME = 300000; // 5 minutos en milisegundos
@@ -16,7 +18,7 @@ const COOLDOWN_TIME = 300000; // 5 minutos en milisegundos
 @Component({
   selector: 'app-solicitud',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, EmailFormatDirective],
   templateUrl: './solicitud.html',
 })
 export class Solicitud implements OnInit, OnDestroy {
@@ -36,7 +38,14 @@ export class Solicitud implements OnInit, OnDestroy {
     private alertService: AlertService
   ) {
     this.form = this.fb.group({
-      correo: ['', [Validators.required, Validators.email]],
+      correo: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(VALIDATION_CONFIG.email.maxLength),
+          emailRobustoValidator(),
+        ],
+      ],
     });
   }
 

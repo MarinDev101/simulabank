@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { RegistroService } from '@app/core/auth/service/registro';
 import { AuthService } from '@app/core/auth/service/auth';
 import { AlertService } from '@app/services/alert/alert.service';
+import { SoloNumerosDirective } from '@app/shared/directives';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_registro'; // Mismo cooldown global que datos-basicos.ts
 const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
@@ -21,7 +22,7 @@ const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
 @Component({
   selector: 'app-validar-cuenta',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SoloNumerosDirective],
   templateUrl: './validar-cuenta.html',
 })
 export class ValidarCuenta implements OnInit, OnDestroy {

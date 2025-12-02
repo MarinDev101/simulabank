@@ -39,15 +39,28 @@
           (change)="onFotoSeleccionada($event)"
           class="hidden"
         />
-        <button
-          type="button"
-          (click)="fileInput.click()"
-          class="btn btn-sm sm:btn-md border-2 border-[#034D82]/60 bg-transparent text-[#034D82] font-medium rounded-xl
-          hover:bg-[#034D82]/10 hover:border-[#034D82] transition-all duration-200"
-        >
-          <span class="icon-[subway--brush] text-base sm:text-lg"></span>
-          <span class="text-xs sm:text-sm">Añadir Foto</span>
-        </button>
+        <div class="flex gap-2">
+          <button
+            type="button"
+            (click)="fileInput.click()"
+            class="btn btn-sm sm:btn-md border-2 border-[#034D82]/60 bg-transparent text-[#034D82] font-medium rounded-xl
+            hover:bg-[#034D82]/10 hover:border-[#034D82] transition-all duration-200"
+          >
+            <span class="icon-[subway--brush] text-base sm:text-lg"></span>
+            <span class="text-xs sm:text-sm">{{ fotoPerfil ? 'Cambiar Foto' : 'Añadir Foto' }}</span>
+          </button>
+          @if (fotoPerfil) {
+            <button
+              type="button"
+              (click)="limpiarFoto()"
+              class="btn btn-sm sm:btn-md border-2 border-red-400 bg-transparent text-red-500 font-medium rounded-xl
+              hover:bg-red-50 hover:border-red-500 transition-all duration-200"
+            >
+              <span class="icon-[heroicons-outline--trash] text-base sm:text-lg"></span>
+              <span class="text-xs sm:text-sm">Quitar</span>
+            </button>
+          }
+        </div>
         <p class="text-xs text-gray-500 mt-2">Solo JPEG/PNG — máx. 2 MB</p>
       </div>
     </article>
@@ -63,10 +76,16 @@
         <div class="flex flex-col flex-1 sm:flex-initial">
           <label for="dia" class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-1.5">Día</label>
           <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia"
+            (change)="marcarFechaTocada()"
+            (blur)="marcarFechaTocada()"
             class="select select-sm sm:select-md w-full sm:w-20 md:w-24 border-gray-200 bg-white rounded-xl
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
-            <option value="" disabled selected>--</option>
-            <option *ngFor="let dia of dias" [value]="dia">{{ dia }}</option>
+            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+            [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
+            [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.dia">
+            <option value="">--</option>
+            @for (dia of dias; track dia) {
+              <option [value]="dia">{{ dia }}</option>
+            }
           </select>
         </div>
 
@@ -74,10 +93,16 @@
         <div class="flex flex-col flex-1 sm:flex-initial">
           <label for="mes" class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-1.5">Mes</label>
           <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes"
+            (change)="actualizarDias(); marcarFechaTocada()"
+            (blur)="marcarFechaTocada()"
             class="select select-sm sm:select-md w-full sm:w-32 md:w-36 border-gray-200 bg-white rounded-xl
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
-            <option value="" disabled selected>--</option>
-            <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nombre }}</option>
+            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+            [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
+            [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.mes">
+            <option value="">--</option>
+            @for (mes of meses; track mes.valor) {
+              <option [value]="mes.valor">{{ mes.nombre }}</option>
+            }
           </select>
         </div>
 
@@ -85,13 +110,53 @@
         <div class="flex flex-col flex-1 sm:flex-initial">
           <label for="anio" class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-1.5">Año</label>
           <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio"
+            (change)="actualizarDias(); marcarFechaTocada()"
+            (blur)="marcarFechaTocada()"
             class="select select-sm sm:select-md w-full sm:w-24 md:w-28 border-gray-200 bg-white rounded-xl
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
-            <option value="" disabled selected>--</option>
-            <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
+            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+            [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
+            [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.anio">
+            <option value="">--</option>
+            @for (anio of anios; track anio) {
+              <option [value]="anio">{{ anio }}</option>
+            }
           </select>
         </div>
       </div>
+      <!-- Mensajes de información/error -->
+      <div class="min-h-5 mt-2 text-center">
+        @if (fechaCompleta && fechaValida && edadCalculada !== null) {
+          <p class="text-xs sm:text-sm text-green-600">
+            <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
+            Tendrás {{ edadCalculada }} años
+          </p>
+        }
+        @if (fechaTocada && fechaIncompleta) {
+          <p class="text-xs sm:text-sm text-amber-600">
+            <span class="icon-[heroicons-outline--exclamation-triangle] inline-block align-middle mr-1"></span>
+            Debes completar todos los campos de fecha
+          </p>
+        }
+        @if (fechaTocada && fechaCompleta && !fechaValida) {
+          <p class="text-xs sm:text-sm text-red-500">
+            <span class="icon-[heroicons-outline--exclamation-circle] inline-block align-middle mr-1"></span>
+            Debes tener al menos {{ EDAD_MINIMA }} años
+          </p>
+        }
+      </div>
+      <!-- Botón para limpiar fecha -->
+      @if (fechaIniciada) {
+        <div class="mt-3 text-center">
+          <button
+            type="button"
+            (click)="limpiarFecha()"
+            class="text-xs sm:text-sm text-gray-500 hover:text-red-500 transition-colors underline"
+          >
+            <span class="icon-[heroicons-outline--x-mark] inline-block align-middle mr-1"></span>
+            Limpiar fecha
+          </button>
+        </div>
+      }
     </article>
 
     <!-- Género -->
@@ -104,34 +169,59 @@
         <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
           <input
             type="radio"
-            name="radio-3"
+            name="genero"
             class="radio radio-sm sm:radio-md radio-primary"
             [(ngModel)]="genero"
             value="femenino"
+            (change)="marcarGeneroTocado()"
           />
           <span class="text-sm sm:text-base text-gray-700 group-hover:text-gray-900 transition-colors">Femenino</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
           <input
             type="radio"
-            name="radio-3"
+            name="genero"
             class="radio radio-sm sm:radio-md radio-primary"
             [(ngModel)]="genero"
             value="masculino"
+            (change)="marcarGeneroTocado()"
           />
           <span class="text-sm sm:text-base text-gray-700 group-hover:text-gray-900 transition-colors">Masculino</span>
         </label>
         <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
           <input
             type="radio"
-            name="radio-3"
+            name="genero"
             class="radio radio-sm sm:radio-md radio-primary"
             [(ngModel)]="genero"
             value="otro"
+            (change)="marcarGeneroTocado()"
           />
           <span class="text-sm sm:text-base text-gray-700 group-hover:text-gray-900 transition-colors">Otro</span>
         </label>
       </div>
+      <!-- Mensaje de confirmación -->
+      <div class="min-h-5 mt-2 text-center">
+        @if (genero) {
+          <p class="text-xs sm:text-sm text-green-600">
+            <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
+            Género seleccionado
+          </p>
+        }
+      </div>
+      <!-- Botón para limpiar género -->
+      @if (genero) {
+        <div class="mt-3 text-center">
+          <button
+            type="button"
+            (click)="limpiarGenero()"
+            class="text-xs sm:text-sm text-gray-500 hover:text-red-500 transition-colors underline"
+          >
+            <span class="icon-[heroicons-outline--x-mark] inline-block align-middle mr-1"></span>
+            Limpiar género
+          </button>
+        </div>
+      }
     </article>
   </form>
 
@@ -144,7 +234,7 @@
       shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:border-blue-700 hover:shadow-blue-700/30
       transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed
       w-full sm:w-auto sm:min-w-[180px] md:min-w-[200px] order-1 sm:order-2"
-      [disabled]="isLoading"
+      [disabled]="isLoading || fechaIncompleta || (fechaCompleta && !fechaValida)"
     >
       @if (isLoading) {
       <span class="loading loading-spinner loading-xs sm:loading-sm"></span>

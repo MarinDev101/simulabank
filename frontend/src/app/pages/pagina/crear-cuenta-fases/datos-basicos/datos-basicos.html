@@ -21,18 +21,23 @@
           <span class="text-xs sm:text-sm font-medium text-gray-700">Nombre</span>
           <div class="mt-1 relative">
             <input type="text" formControlName="nombre" placeholder="Ingresa tu nombre"
+              appSoloLetras
               [class.border-red-500]="f['nombre'].invalid && f['nombre'].touched"
+              [class.border-green-500]="f['nombre'].valid && f['nombre'].touched"
               class="input input-sm sm:input-md w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 pr-10 rounded-xl
               transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
             <span class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none"></span>
           </div>
         </label>
-        <div class="min-h-4">
-          <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-            *ngIf="f['nombre'].invalid && f['nombre'].touched">
-            <span *ngIf="f['nombre'].hasError('required')">El nombre es requerido.</span>
+        <div class="min-h-5">
+          <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+            [class.opacity-100]="f['nombre'].invalid && f['nombre'].touched"
+            [class.opacity-0]="!(f['nombre'].invalid && f['nombre'].touched)">
+            <span *ngIf="f['nombre'].hasError('required')">El nombre es obligatorio.</span>
             <span *ngIf="f['nombre'].hasError('minlength')">Mínimo 2 caracteres.</span>
+            <span *ngIf="f['nombre'].hasError('maxlength')">Máximo 50 caracteres.</span>
             <span *ngIf="f['nombre'].hasError('pattern')">Solo se permiten letras.</span>
+            <span *ngIf="f['nombre'].hasError('palabrasMinimas')">Cada palabra debe tener al menos 2 letras.</span>
           </small>
         </div>
       </div>
@@ -43,18 +48,23 @@
           <span class="text-xs sm:text-sm font-medium text-gray-700">Apellido</span>
           <div class="mt-1 relative">
             <input type="text" formControlName="apellido" placeholder="Ingresa tu apellido"
+              appSoloLetras
               [class.border-red-500]="f['apellido'].invalid && f['apellido'].touched"
+              [class.border-green-500]="f['apellido'].valid && f['apellido'].touched"
               class="input input-sm sm:input-md w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 pr-10 rounded-xl
               transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
             <span class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none"></span>
           </div>
         </label>
-        <div class="min-h-4">
-          <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-            *ngIf="f['apellido'].invalid && f['apellido'].touched">
-            <span *ngIf="f['apellido'].hasError('required')">El apellido es requerido.</span>
+        <div class="min-h-5">
+          <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+            [class.opacity-100]="f['apellido'].invalid && f['apellido'].touched"
+            [class.opacity-0]="!(f['apellido'].invalid && f['apellido'].touched)">
+            <span *ngIf="f['apellido'].hasError('required')">El apellido es obligatorio.</span>
             <span *ngIf="f['apellido'].hasError('minlength')">Mínimo 2 caracteres.</span>
+            <span *ngIf="f['apellido'].hasError('maxlength')">Máximo 50 caracteres.</span>
             <span *ngIf="f['apellido'].hasError('pattern')">Solo se permiten letras.</span>
+            <span *ngIf="f['apellido'].hasError('palabrasMinimas')">Cada palabra debe tener al menos 2 letras.</span>
           </small>
         </div>
       </div>
@@ -65,18 +75,22 @@
       <label class="floating-label block">
         <span class="text-xs sm:text-sm font-medium text-gray-700">Correo electrónico</span>
         <div class="mt-1 relative">
-          <input type="email" formControlName="correo" placeholder="mail@site.com"
+          <input type="text" formControlName="correo" placeholder="mail@site.com"
+            appEmailFormat
             [class.border-red-500]="f['correo'].invalid && f['correo'].touched"
+            [class.border-green-500]="f['correo'].valid && f['correo'].touched"
             class="input input-sm sm:input-md w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 pr-10 rounded-xl
             transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
           <span class="icon-[material-symbols-light--mail-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none"></span>
         </div>
       </label>
-      <div class="min-h-4">
-        <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-          *ngIf="f['correo'].invalid && f['correo'].touched">
-          <span *ngIf="f['correo'].hasError('required')">El correo es requerido.</span>
-          <span *ngIf="f['correo'].hasError('email')">Ingresa un correo válido.</span>
+      <div class="min-h-5">
+        <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+          [class.opacity-100]="f['correo'].invalid && f['correo'].touched"
+          [class.opacity-0]="!(f['correo'].invalid && f['correo'].touched)">
+          <span *ngIf="f['correo'].hasError('required')">El correo electrónico es obligatorio.</span>
+          <span *ngIf="f['correo'].hasError('email')">Ingresa un correo electrónico válido.</span>
+          <span *ngIf="f['correo'].hasError('maxlength')">El correo es demasiado largo.</span>
         </small>
       </div>
     </div>
@@ -92,8 +106,10 @@
           <span class="text-xs sm:text-sm font-medium text-gray-700">Contraseña</span>
           <div class="mt-1 flex items-center gap-2">
             <input [type]="mostrarContrasena ? 'text' : 'password'" formControlName="contrasena"
+              appPasswordFormat
               (input)="verificarIndicaciones()" placeholder="••••••••"
               [class.border-red-500]="f['contrasena'].invalid && f['contrasena'].touched"
+              [class.border-green-500]="f['contrasena'].valid && f['contrasena'].touched"
               class="input input-sm sm:input-md flex-1 border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
               transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
             <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleContrasena()"
@@ -104,10 +120,12 @@
             </button>
           </div>
         </label>
-        <div class="min-h-4">
-          <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-            *ngIf="f['contrasena'].invalid && f['contrasena'].touched">
-            Faltan requerimientos para la contraseña.
+        <div class="min-h-5">
+          <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+            [class.opacity-100]="f['contrasena'].invalid && f['contrasena'].touched"
+            [class.opacity-0]="!(f['contrasena'].invalid && f['contrasena'].touched)">
+            <span *ngIf="f['contrasena'].hasError('required')">La contraseña es obligatoria.</span>
+            <span *ngIf="!f['contrasena'].hasError('required')">Faltan requerimientos para la contraseña.</span>
           </small>
         </div>
       </div>
@@ -118,8 +136,10 @@
           <span class="text-xs sm:text-sm font-medium text-gray-700">Confirmar contraseña</span>
           <div class="mt-1 flex items-center gap-2">
             <input [type]="mostrarConfirmarContrasena ? 'text' : 'password'" formControlName="confirmarContrasena"
+              appPasswordFormat
               placeholder="••••••••"
-              [class.border-red-500]="(f['confirmarContrasena'].touched && formCrearCuenta.errors?.['noCoinciden'])"
+              [class.border-red-500]="(f['confirmarContrasena'].touched && formCrearCuenta.errors?.['noCoinciden']) || (f['confirmarContrasena'].invalid && f['confirmarContrasena'].touched)"
+              [class.border-green-500]="f['confirmarContrasena'].valid && f['confirmarContrasena'].touched && !formCrearCuenta.errors?.['noCoinciden']"
               class="input input-sm sm:input-md flex-1 border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
               transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
             <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleConfirmarContrasena()"
@@ -130,10 +150,12 @@
             </button>
           </div>
         </label>
-        <div class="min-h-4">
-          <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-            *ngIf="formCrearCuenta.errors?.['noCoinciden'] && f['confirmarContrasena'].touched">
-            Las contraseñas no coinciden.
+        <div class="min-h-5">
+          <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+            [class.opacity-100]="(formCrearCuenta.errors?.['noCoinciden'] && f['confirmarContrasena'].touched) || (f['confirmarContrasena'].invalid && f['confirmarContrasena'].touched)"
+            [class.opacity-0]="!((formCrearCuenta.errors?.['noCoinciden'] && f['confirmarContrasena'].touched) || (f['confirmarContrasena'].invalid && f['confirmarContrasena'].touched))">
+            <span *ngIf="f['confirmarContrasena'].hasError('required')">Debes confirmar la contraseña.</span>
+            <span *ngIf="formCrearCuenta.errors?.['noCoinciden'] && !f['confirmarContrasena'].hasError('required')">Las contraseñas no coinciden.</span>
           </small>
         </div>
       </div>
@@ -180,10 +202,11 @@
           <a (click)="navegarAPoliticas()" class="text-blue-600 font-medium hover:underline cursor-pointer">políticas de privacidad</a>
         </span>
       </div>
-      <div class="min-h-4 pl-5 sm:pl-7">
-        <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-          *ngIf="f['terminos'].invalid && f['terminos'].touched">
-          Debe aceptar los términos y condiciones.
+      <div class="min-h-5 pl-5 sm:pl-7">
+        <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+          [class.opacity-100]="f['terminos'].invalid && f['terminos'].touched"
+          [class.opacity-0]="!(f['terminos'].invalid && f['terminos'].touched)">
+          Debes aceptar los términos y condiciones.
         </small>
       </div>
     </div>
@@ -193,9 +216,10 @@
       <div class="transform scale-[0.65] xs:scale-[0.75] sm:scale-[0.85] md:scale-100 origin-center transition-transform duration-200">
         <re-captcha [siteKey]="siteKey" formControlName="recaptcha" (resolved)="onRecaptchaResolved($event)"></re-captcha>
       </div>
-      <div class="min-h-4 mt-1">
-        <small class="block text-[10px] sm:text-xs text-red-500 font-medium text-center"
-          *ngIf="f['recaptcha']?.invalid && f['recaptcha']?.touched">
+      <div class="min-h-5 mt-1">
+        <small class="block text-[10px] sm:text-xs text-red-500 font-medium text-center transition-opacity duration-200"
+          [class.opacity-100]="f['recaptcha']?.invalid && f['recaptcha']?.touched"
+          [class.opacity-0]="!(f['recaptcha']?.invalid && f['recaptcha']?.touched)">
           Por favor, complete el captcha.
         </small>
       </div>

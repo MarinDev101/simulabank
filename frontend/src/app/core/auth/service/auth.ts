@@ -41,9 +41,10 @@ export class AuthService {
   // Los services se encargan de la lógica de negocio y comunicación con el backend
 
   private apiUrl = `${environment.apiBaseUrl}/auth`; // Endpoint del backend. URL base de la API
-  private tokenKey = 'access_token'; // clave para almacenar el token en localStorage
-  private refreshTokenKey = 'refresh_token'; // clave para almacenar el refresh token en localStorage
-  private userKey = 'user_data'; // clave para almacenar los datos del usuario en localStorage
+  private tokenKey = 'access_token'; // clave para almacenar el token
+  private refreshTokenKey = 'refresh_token'; // clave para almacenar el refresh token
+  private userKey = 'user_data'; // clave para almacenar los datos del usuario
+  private rememberKey = 'remember_user'; // clave para saber si se marcó "Recuérdame"
 
   // Observable para el estado de autenticación
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
@@ -62,10 +63,56 @@ export class AuthService {
   }
 
   // ============================================
+  // MÉTODOS DE STORAGE (localStorage vs sessionStorage)
+  // ============================================
+
+  /**
+   * Determina qué storage usar basándose en si el usuario marcó "Recuérdame"
+   * - localStorage: persiste después de cerrar el navegador
+   * - sessionStorage: se borra al cerrar el navegador/pestaña
+   */
+  private getStorage(): Storage {
+    // Si hay datos en localStorage con remember_user, usar localStorage
+    if (localStorage.getItem(this.rememberKey) === 'true') {
+      return localStorage;
+    }
+    // Si hay datos en sessionStorage, usar sessionStorage
+    if (sessionStorage.getItem(this.tokenKey)) {
+      return sessionStorage;
+    }
+    // Por defecto, verificar si hay datos en localStorage (para migración)
+    if (localStorage.getItem(this.tokenKey)) {
+      return localStorage;
+    }
+    return sessionStorage;
+  }
+
+  /**
+   * Establece si se debe recordar la sesión
+   */
+  setRememberMe(remember: boolean): void {
+    if (remember) {
+      localStorage.setItem(this.rememberKey, 'true');
+    } else {
+      localStorage.removeItem(this.rememberKey);
+    }
+  }
+
+  /**
+   * Verifica si el usuario marcó "Recuérdame"
+   */
+  isRememberMe(): boolean {
+    return localStorage.getItem(this.rememberKey) === 'true';
+  }
+
+  // ============================================
   // MÉTODOS DE AUTENTICACIÓN
   // ============================================
 
-  login(correo: string, contrasena: string): Observable<LoginResponse> {
+  login(correo: string, contrasena: string, remember: boolean = false): Observable<LoginResponse> {
+    // Establecer preferencia de "Recuérdame" ANTES de guardar la sesión
+    this.setRememberMe(remember);
+
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { correo, contrasena }).pipe(
       tap((response) => {
         if (response.success && response.token) {
@@ -106,8 +153,9 @@ export class AuthService {
     return this.http.post<RefreshResponse>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
       tap((response) => {
         if (response.success) {
-          localStorage.setItem(this.tokenKey, response.token);
-          localStorage.setItem(this.refreshTokenKey, response.refreshToken);
+          const storage = this.getStorage();
+          storage.setItem(this.tokenKey, response.token);
+          storage.setItem(this.refreshTokenKey, response.refreshToken);
         }
       }),
       catchError((error) => {
@@ -122,15 +170,23 @@ export class AuthService {
   // ============================================
 
   private setSession(authResult: LoginResponse): void {
-    localStorage.setItem(this.tokenKey, authResult.token);
-    localStorage.setItem(this.refreshTokenKey, authResult.refreshToken);
-    localStorage.setItem(this.userKey, JSON.stringify(authResult.user));
+    const storage = this.getStorage();
+    storage.setItem(this.tokenKey, authResult.token);
+    storage.setItem(this.refreshTokenKey, authResult.refreshToken);
+    storage.setItem(this.userKey, JSON.stringify(authResult.user));
   }
 
   private clearSession(): void {
+    // Limpiar ambos storages para asegurar limpieza completa
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.refreshTokenKey);
     localStorage.removeItem(this.userKey);
+    localStorage.removeItem(this.rememberKey);
+
+    sessionStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.refreshTokenKey);
+    sessionStorage.removeItem(this.userKey);
+
     this.isAuthenticatedSubject.next(false);
     this.currentUserSubject.next(null);
   }
@@ -144,7 +200,8 @@ export class AuthService {
   }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    // Verificar en ambos storages
+    return !!(localStorage.getItem(this.tokenKey) || sessionStorage.getItem(this.tokenKey));
   }
 
   private checkAuthStatus(): void {
@@ -160,15 +217,19 @@ export class AuthService {
   // ============================================
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    const storage = this.getStorage();
+    return storage.getItem(this.tokenKey);
   }
 
   getRefreshToken(): string | null {
-    return localStorage.getItem(this.refreshTokenKey);
+    const storage = this.getStorage();
+    return storage.getItem(this.refreshTokenKey);
   }
 
   obtenerUsuario(): Usuario | null {
-    const userData = localStorage.getItem(this.userKey);
+    // Buscar en el storage activo
+    const storage = this.getStorage();
+    const userData = storage.getItem(this.userKey);
     if (userData) {
       try {
         return JSON.parse(userData);

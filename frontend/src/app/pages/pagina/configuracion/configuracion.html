@@ -108,8 +108,11 @@
                   placeholder="Ingresa tu nombre"
                   required
                   minlength="2"
-                  pattern="^[A-Za-zÀ-ÿ\\s]+$"
+                  maxlength="50"
+                  pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]+$"
+                  appSoloLetras
                   [class.border-red-500]="nombreCtrl.invalid && nombreCtrl.touched"
+                  [class.border-green-500]="nombreCtrl.valid && nombreCtrl.touched"
                   class="input input-lg w-full border-gray-300 pr-10 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
                 />
                 <span
@@ -117,18 +120,22 @@
                 ></span>
               </div>
             </label>
-            <small
-              class="block text-sm transition-all duration-200"
-              [class.text-red-600]="nombreCtrl.invalid && nombreCtrl.touched"
-              [style.visibility]="nombreCtrl.invalid && nombreCtrl.touched ? 'visible' : 'hidden'"
-            >
-              <span *ngIf="nombreCtrl.errors?.['required']">El nombre es requerido.</span>
-              <span *ngIf="nombreCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
-              <span *ngIf="nombreCtrl.errors?.['pattern']">Solo se permiten letras.</span>
-            </small>
-            <p *ngIf="nombreCtrl.valid && nombreCtrl.touched" class="mt-1 text-sm text-green-600">
-              Nombre válido
-            </p>
+            <div class="min-h-6">
+              <small
+                class="block text-sm transition-opacity duration-200"
+                [class.text-red-600]="nombreCtrl.invalid && nombreCtrl.touched"
+                [class.opacity-100]="nombreCtrl.invalid && nombreCtrl.touched"
+                [class.opacity-0]="!(nombreCtrl.invalid && nombreCtrl.touched)"
+              >
+                <span *ngIf="nombreCtrl.errors?.['required']">El nombre es obligatorio.</span>
+                <span *ngIf="nombreCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
+                <span *ngIf="nombreCtrl.errors?.['maxlength']">Máximo 50 caracteres.</span>
+                <span *ngIf="nombreCtrl.errors?.['pattern']">Solo se permiten letras.</span>
+              </small>
+              <p *ngIf="nombreCtrl.valid && nombreCtrl.touched" class="text-sm text-green-600">
+                Nombre válido
+              </p>
+            </div>
           </div>
 
           <!-- Apellido -->
@@ -144,8 +151,11 @@
                   placeholder="Ingresa tu apellido"
                   required
                   minlength="2"
-                  pattern="^[A-Za-zÀ-ÿ\\s]+$"
+                  maxlength="50"
+                  pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]+$"
+                  appSoloLetras
                   [class.border-red-500]="apellidoCtrl.invalid && apellidoCtrl.touched"
+                  [class.border-green-500]="apellidoCtrl.valid && apellidoCtrl.touched"
                   class="input input-lg w-full border-gray-300 pr-10 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
                 />
                 <span
@@ -153,21 +163,25 @@
                 ></span>
               </div>
             </label>
-            <small
-              class="block text-sm transition-all duration-200"
-              [class.text-red-600]="apellidoCtrl.invalid && apellidoCtrl.touched"
-              [style.visibility]="apellidoCtrl.invalid && apellidoCtrl.touched ? 'visible' : 'hidden'"
-            >
-              <span *ngIf="apellidoCtrl.errors?.['required']">El apellido es requerido.</span>
-              <span *ngIf="apellidoCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
-              <span *ngIf="apellidoCtrl.errors?.['pattern']">Solo se permiten letras.</span>
-            </small>
-            <p
-              *ngIf="apellidoCtrl.valid && apellidoCtrl.touched"
-              class="mt-1 text-sm text-green-600"
-            >
-              Apellido válido
-            </p>
+            <div class="min-h-6">
+              <small
+                class="block text-sm transition-opacity duration-200"
+                [class.text-red-600]="apellidoCtrl.invalid && apellidoCtrl.touched"
+                [class.opacity-100]="apellidoCtrl.invalid && apellidoCtrl.touched"
+                [class.opacity-0]="!(apellidoCtrl.invalid && apellidoCtrl.touched)"
+              >
+                <span *ngIf="apellidoCtrl.errors?.['required']">El apellido es obligatorio.</span>
+                <span *ngIf="apellidoCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
+                <span *ngIf="apellidoCtrl.errors?.['maxlength']">Máximo 50 caracteres.</span>
+                <span *ngIf="apellidoCtrl.errors?.['pattern']">Solo se permiten letras.</span>
+              </small>
+              <p
+                *ngIf="apellidoCtrl.valid && apellidoCtrl.touched"
+                class="text-sm text-green-600"
+              >
+                Apellido válido
+              </p>
+            </div>
           </div>
         </div>
         <!-- Fecha de nacimiento -->
@@ -175,29 +189,84 @@
           <p class="mb-2 font-medium dark:text-gray-200">Selecciona tu fecha de nacimiento:</p>
           <div class="mt-3 flex gap-5">
             <div class="flex flex-col">
-              <label for="dia" class="mb-1 text-gray-600">Día:</label>
-              <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia" class="select w-24">
-                <option value="" disabled selected>--</option>
-                <option *ngFor="let dia of dias" [value]="dia">{{ dia }}</option>
+              <label for="dia" class="mb-1 text-gray-600 dark:text-gray-400">Día:</label>
+              <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia"
+                (change)="marcarFechaTocada()"
+                (blur)="marcarFechaTocada()"
+                class="select w-24"
+                [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
+                [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.dia">
+                <option value="">--</option>
+                @for (dia of dias; track dia) {
+                  <option [value]="dia">{{ dia }}</option>
+                }
               </select>
             </div>
 
             <div class="flex flex-col">
-              <label for="mes" class="mb-1 text-gray-600">Mes:</label>
-              <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes" class="select w-36">
-                <option value="" disabled selected>--</option>
-                <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nombre }}</option>
+              <label for="mes" class="mb-1 text-gray-600 dark:text-gray-400">Mes:</label>
+              <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes"
+                (change)="actualizarDias(); marcarFechaTocada()"
+                (blur)="marcarFechaTocada()"
+                class="select w-36"
+                [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
+                [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.mes">
+                <option value="">--</option>
+                @for (mes of meses; track mes.valor) {
+                  <option [value]="mes.valor">{{ mes.nombre }}</option>
+                }
               </select>
             </div>
 
             <div class="flex flex-col">
-              <label for="anio" class="mb-1 text-gray-600">Año:</label>
-              <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio" class="select w-28">
-                <option value="" disabled selected>--</option>
-                <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
+              <label for="anio" class="mb-1 text-gray-600 dark:text-gray-400">Año:</label>
+              <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio"
+                (change)="actualizarDias(); marcarFechaTocada()"
+                (blur)="marcarFechaTocada()"
+                class="select w-28"
+                [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
+                [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.anio">
+                <option value="">--</option>
+                @for (anio of anios; track anio) {
+                  <option [value]="anio">{{ anio }}</option>
+                }
               </select>
             </div>
           </div>
+          <!-- Mensajes de información/error -->
+          <div class="min-h-5 mt-2">
+            @if (fechaCompleta && fechaValida && edadCalculada !== null) {
+              <p class="text-sm text-green-600">
+                <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
+                Tendrás {{ edadCalculada }} años
+              </p>
+            }
+            @if (fechaTocada && fechaIncompleta) {
+              <p class="text-sm text-amber-600">
+                <span class="icon-[heroicons-outline--exclamation-triangle] inline-block align-middle mr-1"></span>
+                Debes completar todos los campos de fecha
+              </p>
+            }
+            @if (fechaTocada && fechaCompleta && !fechaValida) {
+              <p class="text-sm text-red-500">
+                <span class="icon-[heroicons-outline--exclamation-circle] inline-block align-middle mr-1"></span>
+                Debes tener al menos {{ EDAD_MINIMA }} años
+              </p>
+            }
+          </div>
+          <!-- Botón para limpiar fecha -->
+          @if (fechaIniciada) {
+            <div class="mt-2">
+              <button
+                type="button"
+                (click)="limpiarFecha()"
+                class="text-sm text-gray-500 hover:text-red-500 transition-colors underline"
+              >
+                <span class="icon-[heroicons-outline--x-mark] inline-block align-middle mr-1"></span>
+                Limpiar fecha
+              </button>
+            </div>
+          }
         </article>
 
         <!-- Género -->
@@ -214,7 +283,7 @@
                 [(ngModel)]="genero"
                 value="femenino"
               />
-              <span>Femenino</span>
+              <span class="dark:text-gray-300">Femenino</span>
             </label>
             <label class="flex cursor-pointer items-center gap-2">
               <input
@@ -224,7 +293,7 @@
                 [(ngModel)]="genero"
                 value="masculino"
               />
-              <span>Masculino</span>
+              <span class="dark:text-gray-300">Masculino</span>
             </label>
             <label class="flex cursor-pointer items-center gap-2">
               <input
@@ -234,18 +303,43 @@
                 [(ngModel)]="genero"
                 value="otro"
               />
-              <span>Otro</span>
+              <span class="dark:text-gray-300">Otro</span>
             </label>
           </div>
+          <!-- Mensaje de confirmación -->
+          <div class="min-h-5 mt-2">
+            @if (genero) {
+              <p class="text-sm text-green-600">
+                <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
+                Género seleccionado
+              </p>
+            }
+          </div>
+          <!-- Botón para limpiar género -->
+          @if (genero) {
+            <div class="mt-2">
+              <button
+                type="button"
+                (click)="limpiarGenero()"
+                class="text-sm text-gray-500 hover:text-red-500 transition-colors underline"
+              >
+                <span class="icon-[heroicons-outline--x-mark] inline-block align-middle mr-1"></span>
+                Limpiar género
+              </button>
+            </div>
+          }
         </article>
 
         <div class="mt-2 flex justify-center">
           <button
             type="button"
             (click)="actualizarDatos()"
-            class="flex w-40 cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
+            [disabled]="isLoading || fechaIncompleta || (fechaCompleta && !fechaValida)"
+            class="flex w-40 cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span *ngIf="isLoading" class="loading mr-2 loading-sm loading-spinner"></span>
+            @if (isLoading) {
+              <span class="loading mr-2 loading-sm loading-spinner"></span>
+            }
             <span class="icon-[lucide--save] size-6"></span>
             Actualizar
           </button>
@@ -270,7 +364,9 @@
                     [(ngModel)]="contrasenaActual"
                     name="contrasenaActual"
                     required
+                    appPasswordFormat
                     [class.border-red-500]="conActual.invalid && conActual.touched"
+                    [class.border-green-500]="conActual.valid && conActual.touched && contrasenaActual"
                     placeholder="Contraseña actual"
                     class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
                   />
@@ -291,13 +387,16 @@
                   </button>
                 </div>
               </label>
-              <small
-                class="block text-sm transition-all duration-200"
-                [class.text-red-600]="conActual.invalid && conActual.touched"
-                [style.visibility]="conActual.invalid && conActual.touched ? 'visible' : 'hidden'"
-              >
-                La contraseña actual es requerida.
-              </small>
+              <div class="min-h-6">
+                <small
+                  class="block text-sm transition-opacity duration-200"
+                  [class.text-red-600]="conActual.invalid && conActual.touched"
+                  [class.opacity-100]="conActual.invalid && conActual.touched"
+                  [class.opacity-0]="!(conActual.invalid && conActual.touched)"
+                >
+                  La contraseña actual es obligatoria.
+                </small>
+              </div>
             </div>
 
             <div class="flex-1">
@@ -311,8 +410,10 @@
                     name="contrasenaNueva"
                     required
                     minlength="8"
+                    appPasswordFormat
                     (input)="verificarIndicaciones()"
                     [class.border-red-500]="conNueva.invalid && conNueva.touched"
+                    [class.border-green-500]="conNueva.valid && conNueva.touched && indicaciones.longitud && indicaciones.numero && indicaciones.mayuscula"
                     placeholder="Nueva contraseña"
                     class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
                   />
@@ -333,13 +434,16 @@
                   </button>
                 </div>
               </label>
-              <small
-                class="block text-sm transition-all duration-200"
-                [class.text-red-600]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
-                [style.visibility]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula)) ? 'visible' : 'hidden'"
-              >
-                Faltan requerimientos para la contraseña.
-              </small>
+              <div class="min-h-6">
+                <small
+                  class="block text-sm transition-opacity duration-200"
+                  [class.text-red-600]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
+                  [class.opacity-100]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
+                  [class.opacity-0]="!(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
+                >
+                  Faltan requerimientos para la contraseña.
+                </small>
+              </div>
             </div>
 
             <div class="flex-1">
@@ -352,7 +456,9 @@
                     [(ngModel)]="contrasenaConfirmar"
                     name="contrasenaConfirmar"
                     required
+                    appPasswordFormat
                     [class.border-red-500]="(conConfirm.touched && (contrasenaConfirmar !== contrasenaNueva)) || (conConfirm.invalid && conConfirm.touched)"
+                    [class.border-green-500]="conConfirm.valid && conConfirm.touched && contrasenaConfirmar === contrasenaNueva && contrasenaConfirmar"
                     placeholder="Confirmar contraseña"
                     class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
                   />
@@ -373,13 +479,17 @@
                   </button>
                 </div>
               </label>
-              <small
-                class="block text-sm transition-all duration-200"
-                [class.text-red-600]="(contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched"
-                [style.visibility]="(contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched ? 'visible' : 'hidden'"
-              >
-                Las contraseñas no coinciden.
-              </small>
+              <div class="min-h-6">
+                <small
+                  class="block text-sm transition-opacity duration-200"
+                  [class.text-red-600]="((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched)"
+                  [class.opacity-100]="((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched)"
+                  [class.opacity-0]="!(((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched))"
+                >
+                  <span *ngIf="conConfirm.invalid && conConfirm.touched">Debes confirmar la contraseña.</span>
+                  <span *ngIf="(contrasenaConfirmar !== contrasenaNueva) && !conConfirm.invalid && conConfirm.touched">Las contraseñas no coinciden.</span>
+                </small>
+              </div>
             </div>
             <div class="flex gap-12 text-sm">
               <ul class="space-y-2">

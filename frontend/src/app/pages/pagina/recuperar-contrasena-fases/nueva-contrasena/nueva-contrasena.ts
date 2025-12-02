@@ -10,11 +10,18 @@ import {
 import { Router } from '@angular/router';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
 import { AlertService } from '@app/services/alert/alert.service';
+import { PasswordFormatDirective } from '@app/shared/directives';
+import {
+  VALIDATION_CONFIG,
+  passwordFuerteValidator,
+  confirmarContrasenaValidator,
+  verificarIndicadoresPassword,
+} from '@app/shared/validators';
 
 @Component({
   selector: 'app-nueva-contrasena',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PasswordFormatDirective],
   templateUrl: './nueva-contrasena.html',
 })
 export class NuevaContrasena {
@@ -44,24 +51,19 @@ export class NuevaContrasena {
           '',
           [
             Validators.required,
-            Validators.minLength(8),
-            Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/),
+            Validators.minLength(VALIDATION_CONFIG.password.minLength),
+            Validators.maxLength(VALIDATION_CONFIG.password.maxLength),
+            passwordFuerteValidator(),
           ],
         ],
         confirmarContrasena: ['', Validators.required],
       },
-      { validators: this.validarContrasenas }
+      { validators: confirmarContrasenaValidator('contrasena', 'confirmarContrasena') }
     );
   }
 
   get f(): { [key: string]: AbstractControl } {
     return this.formNuevaContrasena.controls;
-  }
-
-  validarContrasenas(form: FormGroup) {
-    const pass = form.get('contrasena')?.value;
-    const confirmPass = form.get('confirmarContrasena')?.value;
-    return pass === confirmPass ? null : { noCoinciden: true };
   }
 
   toggleContrasena() {
@@ -74,11 +76,12 @@ export class NuevaContrasena {
 
   verificarIndicaciones() {
     const valor = this.f['contrasena'].value || '';
+    const indicadores = verificarIndicadoresPassword(valor);
     this.indicaciones = {
-      longitud: valor.length >= 8,
-      numero: /\d/.test(valor),
-      mayuscula: /[A-Z]/.test(valor),
-      simbolo: /[@$!%*?&]/.test(valor),
+      longitud: indicadores.longitud,
+      numero: indicadores.numero,
+      mayuscula: indicadores.mayuscula && indicadores.minuscula,
+      simbolo: indicadores.simbolo,
     };
   }
 

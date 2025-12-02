@@ -27,8 +27,10 @@
           <span class="text-xs sm:text-sm font-medium text-gray-700">Nueva Contraseña</span>
           <div class="mt-1 flex items-center gap-2">
             <input [type]="mostrarContrasena ? 'text' : 'password'" formControlName="contrasena"
+              appPasswordFormat
               (input)="verificarIndicaciones()" placeholder="••••••••"
               [class.border-red-500]="f['contrasena'].invalid && f['contrasena'].touched"
+              [class.border-green-500]="f['contrasena'].valid && f['contrasena'].touched"
               class="input input-sm sm:input-md flex-1 border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
               transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
             <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleContrasena()"
@@ -39,10 +41,12 @@
             </button>
           </div>
         </label>
-        <div class="min-h-4">
-          <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-            *ngIf="f['contrasena'].invalid && f['contrasena'].touched">
-            Faltan requerimientos para la contraseña.
+        <div class="min-h-5">
+          <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+            [class.opacity-100]="f['contrasena'].invalid && f['contrasena'].touched"
+            [class.opacity-0]="!(f['contrasena'].invalid && f['contrasena'].touched)">
+            <span *ngIf="f['contrasena'].hasError('required')">La contraseña es obligatoria.</span>
+            <span *ngIf="!f['contrasena'].hasError('required')">Faltan requerimientos para la contraseña.</span>
           </small>
         </div>
       </div>
@@ -53,8 +57,10 @@
           <span class="text-xs sm:text-sm font-medium text-gray-700">Confirmar contraseña</span>
           <div class="mt-1 flex items-center gap-2">
             <input [type]="mostrarConfirmarContrasena ? 'text' : 'password'" formControlName="confirmarContrasena"
+              appPasswordFormat
               placeholder="••••••••"
-              [class.border-red-500]="(f['confirmarContrasena'].touched && formNuevaContrasena.errors?.['noCoinciden'])"
+              [class.border-red-500]="(f['confirmarContrasena'].touched && formNuevaContrasena.errors?.['noCoinciden']) || (f['confirmarContrasena'].invalid && f['confirmarContrasena'].touched)"
+              [class.border-green-500]="f['confirmarContrasena'].valid && f['confirmarContrasena'].touched && !formNuevaContrasena.errors?.['noCoinciden']"
               class="input input-sm sm:input-md flex-1 border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
               transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
             <button type="button" (mousedown)="$event.preventDefault()" (click)="toggleConfirmarContrasena()"
@@ -65,10 +71,12 @@
             </button>
           </div>
         </label>
-        <div class="min-h-4">
-          <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-            *ngIf="formNuevaContrasena.errors?.['noCoinciden'] && f['confirmarContrasena'].touched">
-            Las contraseñas no coinciden.
+        <div class="min-h-5">
+          <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+            [class.opacity-100]="(formNuevaContrasena.errors?.['noCoinciden'] && f['confirmarContrasena'].touched) || (f['confirmarContrasena'].invalid && f['confirmarContrasena'].touched)"
+            [class.opacity-0]="!((formNuevaContrasena.errors?.['noCoinciden'] && f['confirmarContrasena'].touched) || (f['confirmarContrasena'].invalid && f['confirmarContrasena'].touched))">
+            <span *ngIf="f['confirmarContrasena'].hasError('required')">Debes confirmar la contraseña.</span>
+            <span *ngIf="formNuevaContrasena.errors?.['noCoinciden'] && !f['confirmarContrasena'].hasError('required')">Las contraseñas no coinciden.</span>
           </small>
         </div>
       </div>

@@ -25,18 +25,22 @@
       <label class="floating-label block">
         <span class="text-xs sm:text-sm font-medium text-gray-700">Correo electrónico</span>
         <div class="mt-1 relative">
-          <input type="email" formControlName="correo" placeholder="mail@site.com"
+          <input type="text" formControlName="correo" placeholder="mail@site.com"
+            appEmailFormat
             [class.border-red-500]="f['correo'].invalid && f['correo'].touched"
+            [class.border-green-500]="f['correo'].valid && f['correo'].touched"
             class="input input-sm sm:input-md w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 pr-10 rounded-xl
             transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
           <span class="icon-[material-symbols-light--mail-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none"></span>
         </div>
       </label>
-      <div class="min-h-4">
-        <small class="block text-[10px] sm:text-xs text-red-500 font-medium"
-          *ngIf="f['correo'].invalid && f['correo'].touched">
-          <span *ngIf="f['correo'].hasError('required')">El correo es requerido.</span>
-          <span *ngIf="f['correo'].hasError('email')">Ingresa un correo válido.</span>
+      <div class="min-h-5">
+        <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+          [class.opacity-100]="f['correo'].invalid && f['correo'].touched"
+          [class.opacity-0]="!(f['correo'].invalid && f['correo'].touched)">
+          <span *ngIf="f['correo'].hasError('required')">El correo electrónico es obligatorio.</span>
+          <span *ngIf="f['correo'].hasError('email')">Ingresa un correo electrónico válido.</span>
+          <span *ngIf="f['correo'].hasError('maxlength')">El correo es demasiado largo.</span>
         </small>
       </div>
     </div>

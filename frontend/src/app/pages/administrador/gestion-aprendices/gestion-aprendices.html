@@ -332,7 +332,7 @@
     <div class="p-6">
       <form class="space-y-4">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Nombres</label
             >
@@ -340,10 +340,23 @@
               type="text"
               [(ngModel)]="aprendizEditando.nombres"
               name="nombres"
+              appSoloLetras
+              minlength="2"
+              maxlength="50"
+              #nombresCtrl="ngModel"
               class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              [class.border-red-500]="nombresCtrl.invalid && nombresCtrl.touched"
+              [class.border-green-500]="nombresCtrl.valid && nombresCtrl.touched"
             />
+            <div class="min-h-4">
+              <small class="block text-xs text-red-500 font-medium transition-opacity duration-200"
+                [class.opacity-100]="nombresCtrl.invalid && nombresCtrl.touched"
+                [class.opacity-0]="!(nombresCtrl.invalid && nombresCtrl.touched)">
+                El nombre debe tener entre 2 y 50 caracteres.
+              </small>
+            </div>
           </div>
-          <div>
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Apellidos</label
             >
@@ -351,18 +364,43 @@
               type="text"
               [(ngModel)]="aprendizEditando.apellidos"
               name="apellidos"
+              appSoloLetras
+              minlength="2"
+              maxlength="50"
+              #apellidosCtrl="ngModel"
               class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              [class.border-red-500]="apellidosCtrl.invalid && apellidosCtrl.touched"
+              [class.border-green-500]="apellidosCtrl.valid && apellidosCtrl.touched"
             />
+            <div class="min-h-4">
+              <small class="block text-xs text-red-500 font-medium transition-opacity duration-200"
+                [class.opacity-100]="apellidosCtrl.invalid && apellidosCtrl.touched"
+                [class.opacity-0]="!(apellidosCtrl.invalid && apellidosCtrl.touched)">
+                El apellido debe tener entre 2 y 50 caracteres.
+              </small>
+            </div>
           </div>
         </div>
-        <div>
+        <div class="space-y-1">
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo</label>
           <input
-            type="email"
+            type="text"
             [(ngModel)]="aprendizEditando.correo"
             name="correo"
+            appEmailFormat
+            email
+            #correoCtrl="ngModel"
             class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            [class.border-red-500]="correoCtrl.invalid && correoCtrl.touched"
+            [class.border-green-500]="correoCtrl.valid && correoCtrl.touched"
           />
+          <div class="min-h-4">
+            <small class="block text-xs text-red-500 font-medium transition-opacity duration-200"
+              [class.opacity-100]="correoCtrl.invalid && correoCtrl.touched"
+              [class.opacity-0]="!(correoCtrl.invalid && correoCtrl.touched)">
+              Ingresa un correo electrónico válido.
+            </small>
+          </div>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estado</label>

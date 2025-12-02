@@ -33,18 +33,20 @@
               <label class="floating-label block">
                 <span class="text-xs sm:text-sm font-medium text-gray-700">Correo electrónico</span>
                 <div class="mt-1 sm:mt-1.5">
-                  <input type="email" formControlName="email" placeholder="mail@site.com" autocomplete="username"
+                  <input type="text" formControlName="email" placeholder="mail@site.com" autocomplete="username"
+                    appEmailFormat
                     [class.border-red-500]="emailInvalid && loginForm.get('email')?.touched"
-                    [class.focus:border-red-500]="emailInvalid && loginForm.get('email')?.touched"
+                    [class.border-green-500]="!emailInvalid && loginForm.get('email')?.touched && loginForm.get('email')?.value"
                     class="input input-sm sm:input-md md:input-lg w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
                     transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
                 </div>
               </label>
-              <div class="min-h-4 sm:min-h-[18px]">
-                <small *ngIf="formInitialized && emailInvalid && loginForm.get('email')?.touched"
-                  class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium animate-in fade-in duration-200">
-                  <span *ngIf="loginForm.get('email')?.hasError('required')">El correo es requerido.</span>
-                  <span *ngIf="loginForm.get('email')?.hasError('email')">Ingresa un correo válido.</span>
+              <div class="min-h-5 sm:min-h-[20px]">
+                <small class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium transition-opacity duration-200 opacity-0"
+                  [class.opacity-100]="formInitialized && emailInvalid && loginForm.get('email')?.touched">
+                  <span *ngIf="loginForm.get('email')?.hasError('required')">El correo electrónico es obligatorio.</span>
+                  <span *ngIf="loginForm.get('email')?.hasError('email')">Ingresa un correo electrónico válido.</span>
+                  <span *ngIf="loginForm.get('email')?.hasError('maxlength')">El correo es demasiado largo.</span>
                 </small>
               </div>
             </div>
@@ -56,8 +58,9 @@
                 <div class="mt-1 sm:mt-1.5 flex items-center gap-2">
                   <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••"
                     id="passwordInput" autocomplete="current-password"
+                    appPasswordFormat
                     [class.border-red-500]="passwordInvalid && loginForm.get('password')?.touched"
-                    [class.focus:border-red-500]="passwordInvalid && loginForm.get('password')?.touched"
+                    [class.border-green-500]="!passwordInvalid && loginForm.get('password')?.touched && loginForm.get('password')?.value"
                     class="input input-sm sm:input-md md:input-lg flex-1 border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
                     transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
                   <button type="button" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility()"
@@ -69,10 +72,10 @@
                   </button>
                 </div>
               </label>
-              <div class="min-h-4 sm:min-h-[18px]">
-                <small *ngIf="formInitialized && passwordInvalid && loginForm.get('password')?.touched"
-                  class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium animate-in fade-in duration-200">
-                  <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es requerida.</span>
+              <div class="min-h-5 sm:min-h-[20px]">
+                <small class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium transition-opacity duration-200 opacity-0"
+                  [class.opacity-100]="formInitialized && passwordInvalid && loginForm.get('password')?.touched">
+                  <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es obligatoria.</span>
                   <span *ngIf="loginForm.get('password')?.hasError('minlength')">Mínimo 8 caracteres.</span>
                 </small>
               </div>

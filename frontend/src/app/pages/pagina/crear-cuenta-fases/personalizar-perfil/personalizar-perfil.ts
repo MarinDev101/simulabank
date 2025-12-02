@@ -15,6 +15,10 @@ import { ImageCropperService } from '@app/services/image-cropper/image-cropper.s
 export class PersonalizarPerfil implements OnInit {
   @Output() volver = new EventEmitter<void>();
 
+  // Configuración de edad
+  readonly EDAD_MINIMA = 13;
+  readonly EDAD_MAXIMA = 100;
+
   dias: number[] = [];
   meses = [
     { valor: 1, nombre: 'Enero' },
@@ -42,6 +46,10 @@ export class PersonalizarPerfil implements OnInit {
   fotoPerfil: string = '';
   isLoading = false;
 
+  // Estado de validación
+  fechaTocada = false;
+  generoTocado = false;
+
   constructor(
     private registroService: RegistroService,
     private router: Router,
@@ -50,12 +58,169 @@ export class PersonalizarPerfil implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Días del 1 al 31
+    // Días del 1 al 31 (se ajustará dinámicamente)
     this.dias = Array.from({ length: 31 }, (_, i) => i + 1);
 
-    // Años desde el actual hasta 1900
+    // Años: desde hace EDAD_MAXIMA años hasta hace EDAD_MINIMA años
     const anioActual = new Date().getFullYear();
-    this.anios = Array.from({ length: anioActual - 1899 }, (_, i) => anioActual - i);
+    const anioMinimo = anioActual - this.EDAD_MAXIMA; // Edad máxima (ej: 1925)
+    const anioMaximo = anioActual - this.EDAD_MINIMA; // Edad mínima (ej: 2007)
+
+    // Crear array de años desde el más reciente al más antiguo
+    this.anios = Array.from(
+      { length: anioMaximo - anioMinimo + 1 },
+      (_, i) => anioMaximo - i
+    );
+  }
+
+  /**
+   * Actualiza los días disponibles según el mes y año seleccionados
+   */
+  actualizarDias(): void {
+    const mes = parseInt(this.fechaNacimiento.mes);
+    const anio = parseInt(this.fechaNacimiento.anio);
+
+    if (!mes) {
+      this.dias = Array.from({ length: 31 }, (_, i) => i + 1);
+      return;
+    }
+
+    let diasEnMes = 31;
+
+    // Meses con 30 días
+    if ([4, 6, 9, 11].includes(mes)) {
+      diasEnMes = 30;
+    }
+    // Febrero
+    else if (mes === 2) {
+      // Verificar si es año bisiesto
+      if (anio && this.esAnioBisiesto(anio)) {
+        diasEnMes = 29;
+      } else {
+        diasEnMes = 28;
+      }
+    }
+
+    this.dias = Array.from({ length: diasEnMes }, (_, i) => i + 1);
+
+    // Si el día seleccionado es mayor al máximo del mes, ajustarlo
+    if (parseInt(this.fechaNacimiento.dia) > diasEnMes) {
+      this.fechaNacimiento.dia = '';
+    }
+  }
+
+  /**
+   * Verifica si un año es bisiesto
+   */
+  private esAnioBisiesto(anio: number): boolean {
+    return (anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0);
+  }
+
+  /**
+   * Verifica si el usuario ha empezado a llenar la fecha (al menos un campo)
+   */
+  get fechaIniciada(): boolean {
+    return !!(this.fechaNacimiento.dia || this.fechaNacimiento.mes || this.fechaNacimiento.anio);
+  }
+
+  /**
+   * Verifica si la fecha de nacimiento está completa
+   */
+  get fechaCompleta(): boolean {
+    return !!(this.fechaNacimiento.dia && this.fechaNacimiento.mes && this.fechaNacimiento.anio);
+  }
+
+  /**
+   * Verifica si la fecha está incompleta (empezó pero no terminó)
+   */
+  get fechaIncompleta(): boolean {
+    return this.fechaIniciada && !this.fechaCompleta;
+  }
+
+  /**
+   * Verifica si la fecha es válida (mayor de edad)
+   */
+  get fechaValida(): boolean {
+    if (!this.fechaCompleta) return true; // Si no está completa, no mostrar error de edad
+
+    const fechaNac = new Date(
+      parseInt(this.fechaNacimiento.anio),
+      parseInt(this.fechaNacimiento.mes) - 1,
+      parseInt(this.fechaNacimiento.dia)
+    );
+
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mesActual = hoy.getMonth();
+    const mesNac = fechaNac.getMonth();
+
+    if (mesActual < mesNac || (mesActual === mesNac && hoy.getDate() < fechaNac.getDate())) {
+      edad--;
+    }
+
+    return edad >= this.EDAD_MINIMA;
+  }
+
+  /**
+   * Calcula la edad a partir de la fecha de nacimiento
+   */
+  get edadCalculada(): number | null {
+    if (!this.fechaCompleta) return null;
+
+    const fechaNac = new Date(
+      parseInt(this.fechaNacimiento.anio),
+      parseInt(this.fechaNacimiento.mes) - 1,
+      parseInt(this.fechaNacimiento.dia)
+    );
+
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mesActual = hoy.getMonth();
+    const mesNac = fechaNac.getMonth();
+
+    if (mesActual < mesNac || (mesActual === mesNac && hoy.getDate() < fechaNac.getDate())) {
+      edad--;
+    }
+
+    return edad;
+  }
+
+  /**
+   * Marca la fecha como tocada para mostrar validaciones
+   */
+  marcarFechaTocada(): void {
+    this.fechaTocada = true;
+  }
+
+  /**
+   * Marca el género como tocado para mostrar validaciones
+   */
+  marcarGeneroTocado(): void {
+    this.generoTocado = true;
+  }
+
+  /**
+   * Limpia la selección de fecha de nacimiento
+   */
+  limpiarFecha(): void {
+    this.fechaNacimiento = { dia: '', mes: '', anio: '' };
+    this.fechaTocada = false;
+    this.actualizarDias();
+  }
+
+  /**
+   * Limpia la selección de género
+   */
+  limpiarGenero(): void {
+    this.genero = '';
+    this.generoTocado = false;
+  }
+
+  /**
+   * Limpia la foto de perfil seleccionada
+   */
+  limpiarFoto(): void {
+    this.fotoPerfil = '';
   }
 
   // Método para manejar la subida de foto con recorte

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
 import { AdminService } from '@app/core/auth/service/admin';
 import { AlertService } from '@app/services/alert/alert.service';
+import { SoloLetrasDirective, EmailFormatDirective } from '@app/shared/directives';
 
 @Component({
   selector: 'app-gestion-aprendices',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SoloLetrasDirective, EmailFormatDirective],
   templateUrl: './gestion-aprendices.html',
 })
 export class GestionAprendices implements OnInit {

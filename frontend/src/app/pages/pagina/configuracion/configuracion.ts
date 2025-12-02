@@ -5,16 +5,22 @@ import { AuthService, Usuario } from '@app/core/auth/service/auth';
 import { RegistroService } from '@app/core/auth/service/registro';
 import { AlertService } from '@app/services/alert/alert.service';
 import { ImageCropperService } from '@app/services/image-cropper/image-cropper.service';
+import { SoloLetrasDirective, PasswordFormatDirective } from '@app/shared/directives';
+import { verificarIndicadoresPassword } from '@app/shared/validators';
 
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SoloLetrasDirective, PasswordFormatDirective],
   templateUrl: './configuracion.html',
 })
 export class Configuracion implements OnInit {
   // Tab activo
   activeTab: string = 'tab1';
+
+  // Configuración de edad
+  readonly EDAD_MINIMA = 13;
+  readonly EDAD_MAXIMA = 100;
 
   changeTab(tab: string) {
     this.activeTab = tab;
@@ -42,6 +48,7 @@ export class Configuracion implements OnInit {
 
   fechaNacimiento = { dia: '', mes: '', anio: '' };
   genero: string = '';
+  fechaTocada = false;
 
   // Nombre / apellido (editable)
   nombre: string = '';
@@ -87,13 +94,160 @@ export class Configuracion implements OnInit {
       }
     }
 
-    // Rellenar días y años
+    // Rellenar días (se ajusta dinámicamente)
     this.dias = Array.from({ length: 31 }, (_, i) => i + 1);
+
+    // Años: desde hace EDAD_MAXIMA años hasta hace EDAD_MINIMA años
     const anioActual = new Date().getFullYear();
-    this.anios = Array.from({ length: anioActual - 1899 }, (_, i) => anioActual - i);
+    const anioMinimo = anioActual - this.EDAD_MAXIMA; // Edad máxima (ej: 1925)
+    const anioMaximo = anioActual - this.EDAD_MINIMA; // Edad mínima (ej: 2012)
+    this.anios = Array.from(
+      { length: anioMaximo - anioMinimo + 1 },
+      (_, i) => anioMaximo - i
+    );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Ajustar días si ya hay fecha seleccionada
+    if (this.fechaNacimiento.mes) {
+      this.actualizarDias();
+    }
+  }
+
+  /**
+   * Actualiza los días disponibles según el mes y año seleccionados
+   */
+  actualizarDias(): void {
+    const mes = parseInt(this.fechaNacimiento.mes);
+    const anio = parseInt(this.fechaNacimiento.anio);
+
+    if (!mes) {
+      this.dias = Array.from({ length: 31 }, (_, i) => i + 1);
+      return;
+    }
+
+    let diasEnMes = 31;
+
+    // Meses con 30 días
+    if ([4, 6, 9, 11].includes(mes)) {
+      diasEnMes = 30;
+    }
+    // Febrero
+    else if (mes === 2) {
+      // Verificar si es año bisiesto
+      if (anio && this.esAnioBisiesto(anio)) {
+        diasEnMes = 29;
+      } else {
+        diasEnMes = 28;
+      }
+    }
+
+    this.dias = Array.from({ length: diasEnMes }, (_, i) => i + 1);
+
+    // Si el día seleccionado es mayor al máximo del mes, ajustarlo
+    if (parseInt(this.fechaNacimiento.dia) > diasEnMes) {
+      this.fechaNacimiento.dia = '';
+    }
+  }
+
+  /**
+   * Verifica si un año es bisiesto
+   */
+  private esAnioBisiesto(anio: number): boolean {
+    return (anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0);
+  }
+
+  /**
+   * Verifica si el usuario ha empezado a llenar la fecha (al menos un campo)
+   */
+  get fechaIniciada(): boolean {
+    return !!(this.fechaNacimiento.dia || this.fechaNacimiento.mes || this.fechaNacimiento.anio);
+  }
+
+  /**
+   * Verifica si la fecha de nacimiento está completa
+   */
+  get fechaCompleta(): boolean {
+    return !!(this.fechaNacimiento.dia && this.fechaNacimiento.mes && this.fechaNacimiento.anio);
+  }
+
+  /**
+   * Verifica si la fecha está incompleta (empezó pero no terminó)
+   */
+  get fechaIncompleta(): boolean {
+    return this.fechaIniciada && !this.fechaCompleta;
+  }
+
+  /**
+   * Verifica si la fecha es válida (mayor de edad mínima)
+   */
+  get fechaValida(): boolean {
+    if (!this.fechaCompleta) return true; // Si no está completa, no mostrar error
+
+    const fechaNac = new Date(
+      parseInt(this.fechaNacimiento.anio),
+      parseInt(this.fechaNacimiento.mes) - 1,
+      parseInt(this.fechaNacimiento.dia)
+    );
+
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mesActual = hoy.getMonth();
+    const mesNac = fechaNac.getMonth();
+
+    if (mesActual < mesNac || (mesActual === mesNac && hoy.getDate() < fechaNac.getDate())) {
+      edad--;
+    }
+
+    return edad >= this.EDAD_MINIMA;
+  }
+
+  /**
+   * Calcula la edad a partir de la fecha de nacimiento
+   */
+  get edadCalculada(): number | null {
+    if (!this.fechaCompleta) return null;
+
+    const fechaNac = new Date(
+      parseInt(this.fechaNacimiento.anio),
+      parseInt(this.fechaNacimiento.mes) - 1,
+      parseInt(this.fechaNacimiento.dia)
+    );
+
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mesActual = hoy.getMonth();
+    const mesNac = fechaNac.getMonth();
+
+    if (mesActual < mesNac || (mesActual === mesNac && hoy.getDate() < fechaNac.getDate())) {
+      edad--;
+    }
+
+    return edad;
+  }
+
+  /**
+   * Marca la fecha como tocada para mostrar validaciones
+   */
+  marcarFechaTocada(): void {
+    this.fechaTocada = true;
+  }
+
+  /**
+   * Limpia la selección de fecha de nacimiento
+   */
+  limpiarFecha(): void {
+    this.fechaNacimiento = { dia: '', mes: '', anio: '' };
+    this.fechaTocada = false;
+    this.actualizarDias();
+  }
+
+  /**
+   * Limpia la selección de género
+   */
+  limpiarGenero(): void {
+    this.genero = '';
+  }
 
   // Getters
   get correo(): string {
@@ -422,10 +576,11 @@ export class Configuracion implements OnInit {
 
   verificarIndicaciones() {
     const val = this.contrasenaNueva || '';
-    this.indicaciones.longitud = val.length >= 8;
-    this.indicaciones.numero = /\d/.test(val);
-    this.indicaciones.mayuscula = /[A-Z]/.test(val) && /[a-z]/.test(val);
-    this.indicaciones.simbolo = /[@$!%*?&]/.test(val);
+    const indicadores = verificarIndicadoresPassword(val);
+    this.indicaciones.longitud = indicadores.longitud;
+    this.indicaciones.numero = indicadores.numero;
+    this.indicaciones.mayuscula = indicadores.mayuscula && indicadores.minuscula;
+    this.indicaciones.simbolo = indicadores.simbolo;
   }
 
   async cambiarContrasena() {

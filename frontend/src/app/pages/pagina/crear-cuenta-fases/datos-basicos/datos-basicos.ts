@@ -12,6 +12,21 @@ import { RouterModule, Router } from '@angular/router';
 import { RegistroService } from '@app/core/auth/service/registro';
 import { AlertService } from '@app/services/alert/alert.service';
 import { environment } from '../../../../../environments/environment';
+import {
+  SoloLetrasDirective,
+  EmailFormatDirective,
+  PasswordFormatDirective,
+} from '@app/shared/directives';
+import {
+  VALIDATION_CONFIG,
+  VALIDATION_MESSAGES,
+  nombreValidator,
+  palabrasMinimasValidator,
+  emailRobustoValidator,
+  passwordFuerteValidator,
+  confirmarContrasenaValidator,
+  verificarIndicadoresPassword,
+} from '@app/shared/validators';
 
 const FORM_STORAGE_KEY = 'registro_datos_temporales';
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_registro'; // Cooldown global para registro
@@ -20,7 +35,16 @@ const COOLDOWN_TIME = 300000; // 5 minutos en milisegundos
 @Component({
   selector: 'app-datos-basicos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RecaptchaModule, RecaptchaFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+    RouterModule,
+    SoloLetrasDirective,
+    EmailFormatDirective,
+    PasswordFormatDirective,
+  ],
   templateUrl: './datos-basicos.html',
 })
 export class DatosBasicos implements OnInit, OnDestroy {
@@ -55,26 +79,46 @@ export class DatosBasicos implements OnInit, OnDestroy {
       {
         nombre: [
           '',
-          [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/)],
+          [
+            Validators.required,
+            Validators.minLength(VALIDATION_CONFIG.nombre.minLength),
+            Validators.maxLength(VALIDATION_CONFIG.nombre.maxLength),
+            nombreValidator(),
+            palabrasMinimasValidator(VALIDATION_CONFIG.nombre.minPalabraLength),
+          ],
         ],
         apellido: [
           '',
-          [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/)],
+          [
+            Validators.required,
+            Validators.minLength(VALIDATION_CONFIG.apellido.minLength),
+            Validators.maxLength(VALIDATION_CONFIG.apellido.maxLength),
+            nombreValidator(),
+            palabrasMinimasValidator(VALIDATION_CONFIG.apellido.minPalabraLength),
+          ],
         ],
-        correo: ['', [Validators.required, Validators.email]],
+        correo: [
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(VALIDATION_CONFIG.email.maxLength),
+            emailRobustoValidator(),
+          ],
+        ],
         contrasena: [
           '',
           [
             Validators.required,
-            Validators.minLength(8),
-            Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/),
+            Validators.minLength(VALIDATION_CONFIG.password.minLength),
+            Validators.maxLength(VALIDATION_CONFIG.password.maxLength),
+            passwordFuerteValidator(),
           ],
         ],
         confirmarContrasena: ['', Validators.required],
         terminos: [false, Validators.requiredTrue],
         recaptcha: [null, Validators.required],
       },
-      { validators: this.validarContrasenas }
+      { validators: confirmarContrasenaValidator('contrasena', 'confirmarContrasena') }
     );
   }
 
@@ -220,11 +264,12 @@ export class DatosBasicos implements OnInit, OnDestroy {
 
   verificarIndicaciones() {
     const valor = this.f['contrasena'].value || '';
+    const indicadores = verificarIndicadoresPassword(valor);
     this.indicaciones = {
-      longitud: valor.length >= 8,
-      numero: /\d/.test(valor),
-      mayuscula: /[A-Z]/.test(valor),
-      simbolo: /[@$!%*?&]/.test(valor),
+      longitud: indicadores.longitud,
+      numero: indicadores.numero,
+      mayuscula: indicadores.mayuscula && indicadores.minuscula,
+      simbolo: indicadores.simbolo,
     };
   }
 

@@ -5,11 +5,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@app/core/auth/service/auth';
 import { ReturnButton } from '@app/components/return-button/return-button';
 import { AlertService } from '@app/services/alert/alert.service';
+import { EmailFormatDirective, PasswordFormatDirective } from '@app/shared/directives';
+import { VALIDATION_CONFIG, emailRobustoValidator } from '@app/shared/validators';
 
 @Component({
   selector: 'app-iniciar-sesion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ReturnButton],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ReturnButton,
+    EmailFormatDirective,
+    PasswordFormatDirective,
+  ],
   templateUrl: './iniciar-sesion.html',
 })
 export class IniciarSesion implements OnInit {
@@ -40,8 +48,22 @@ export class IniciarSesion implements OnInit {
 
     // Inicializar formulario
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(VALIDATION_CONFIG.email.maxLength),
+          emailRobustoValidator(),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(VALIDATION_CONFIG.password.minLength),
+          Validators.maxLength(VALIDATION_CONFIG.password.maxLength),
+        ],
+      ],
       remember: [false],
     });
 
@@ -66,11 +88,9 @@ export class IniciarSesion implements OnInit {
 
     const { email, password, remember } = this.loginForm.value;
 
-    this.authService.login(email, password).subscribe({
+    this.authService.login(email, password, remember).subscribe({
       next: (response) => {
         this.isLoading = false;
-
-        if (remember) localStorage.setItem('remember_user', 'true');
 
         // Mostrar toast de bienvenida
         const nombreUsuario = response.user?.nombres || 'Usuario';

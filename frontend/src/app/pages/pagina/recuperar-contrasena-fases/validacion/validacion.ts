@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
 import { AlertService } from '@app/services/alert/alert.service';
+import { SoloNumerosDirective } from '@app/shared/directives';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_recuperacion'; // Mismo cooldown global que solicitud.ts
 const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
@@ -19,7 +20,7 @@ const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
 @Component({
   selector: 'app-validacion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SoloNumerosDirective],
   templateUrl: './validacion.html',
 })
 export class Validacion implements OnInit, OnDestroy {

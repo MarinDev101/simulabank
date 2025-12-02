@@ -34,6 +34,8 @@
         inputmode="numeric"
         pattern="[0-9]*"
         formControlName="{{ 'digit' + i }}"
+        appSoloNumeros
+        [maxDigitos]="1"
         (input)="onInput($event, i)"
         (keydown)="onKeyDown($event, i)"
         class="aspect-square w-full max-w-10 min-[360px]:max-w-11 min-[400px]:max-w-12 sm:max-w-14 rounded-lg sm:rounded-xl border-2 border-gray-200 bg-gray-50/50 text-center text-sm min-[360px]:text-base min-[400px]:text-lg sm:text-xl md:text-2xl font-semibold text-gray-800
