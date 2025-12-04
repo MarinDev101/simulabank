@@ -182,6 +182,7 @@ export class SimulacionService {
   private estadoSimulacionKey = 'estado_simulacion';
   private ultimaSincronizacionKey = 'ultima_sincronizacion';
   private versionEstadoKey = 'version_estado'; // Nuevo: para detectar cambios
+  private usuarioSimulacionKey = 'simulacion_usuario_id'; // Para vincular simulación al usuario
 
   // Observable para el estado de la simulación activa
   private simulacionActivaSubject = new BehaviorSubject<boolean>(false);
@@ -200,6 +201,9 @@ export class SimulacionService {
     private http: HttpClient,
     private authService: AuthService
   ) {
+    // 0. Verificar que la simulación pertenezca al usuario actual
+    this.verificarPropietarioSimulacion();
+
     // 1. Verificar estado inicial al cargar
     this.verificarEstadoInicial();
 
@@ -211,6 +215,57 @@ export class SimulacionService {
 
     // 4. Escuchar eventos de foco (cuando vuelve a la ventana)
     this.escucharCambiosFoco();
+
+    // 5. Escuchar cambios de usuario (logout/login)
+    this.escucharCambiosUsuario();
+  }
+
+  // ============================================
+  // VERIFICACIÓN DE PROPIETARIO
+  // ============================================
+
+  /**
+   * Verifica que la simulación guardada pertenezca al usuario actual
+   * Si no coincide, limpia el estado para evitar mostrar datos de otro usuario
+   */
+  private verificarPropietarioSimulacion(): void {
+    const usuarioActual = this.authService.obtenerUsuario();
+    const usuarioSimulacionGuardado = localStorage.getItem(this.usuarioSimulacionKey);
+    const haySimulacionGuardada = localStorage.getItem(this.estadoSimulacionKey);
+
+    if (haySimulacionGuardada) {
+      if (!usuarioActual) {
+        // No hay usuario logueado pero hay simulación guardada - limpiar
+        console.log('🧹 Limpiando simulación: no hay usuario autenticado');
+        this.limpiarSimulacionLocal();
+      } else if (usuarioSimulacionGuardado && usuarioSimulacionGuardado !== usuarioActual.id.toString()) {
+        // El usuario actual es diferente al que guardó la simulación - limpiar
+        console.log('🧹 Limpiando simulación: pertenece a otro usuario');
+        this.limpiarSimulacionLocal();
+      }
+    }
+  }
+
+  /**
+   * Escucha cambios en el usuario autenticado
+   * Limpia la simulación cuando el usuario cambia o cierra sesión
+   */
+  private escucharCambiosUsuario(): void {
+    this.authService.currentUser$.subscribe((usuario) => {
+      const usuarioSimulacionGuardado = localStorage.getItem(this.usuarioSimulacionKey);
+
+      if (!usuario) {
+        // Usuario cerró sesión - limpiar simulación
+        if (this.simulacionActivaSubject.value) {
+          console.log('🧹 Usuario cerró sesión - limpiando simulación');
+          this.limpiarSimulacionLocal();
+        }
+      } else if (usuarioSimulacionGuardado && usuarioSimulacionGuardado !== usuario.id.toString()) {
+        // Cambió a un usuario diferente - limpiar simulación del usuario anterior
+        console.log('🧹 Cambio de usuario detectado - limpiando simulación anterior');
+        this.limpiarSimulacionLocal();
+      }
+    });
   }
 
   // ============================================
@@ -503,11 +558,17 @@ export class SimulacionService {
 
   private guardarEstadoSimulacion(estado: EstadoSimulacion): void {
     const version = Date.now();
+    const usuarioActual = this.authService.obtenerUsuario();
 
     localStorage.setItem(this.estadoSimulacionKey, JSON.stringify(estado));
     localStorage.setItem(this.simulacionActivaKey, 'true');
     localStorage.setItem(this.versionEstadoKey, version.toString());
     localStorage.setItem(this.ultimaSincronizacionKey, version.toString());
+
+    // Guardar el ID del usuario propietario de la simulación
+    if (usuarioActual) {
+      localStorage.setItem(this.usuarioSimulacionKey, usuarioActual.id.toString());
+    }
 
     this.estadoSimulacionSubject.next(estado);
   }
@@ -539,6 +600,7 @@ export class SimulacionService {
     localStorage.removeItem(this.simulacionActivaKey);
     localStorage.removeItem(this.versionEstadoKey);
     localStorage.removeItem(this.ultimaSincronizacionKey);
+    localStorage.removeItem(this.usuarioSimulacionKey);
     this.simulacionActivaSubject.next(false);
     this.estadoSimulacionSubject.next(null);
   }

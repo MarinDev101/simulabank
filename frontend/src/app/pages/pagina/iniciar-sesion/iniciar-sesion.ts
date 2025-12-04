@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '@app/core/auth/service/auth';
 import { ReturnButton } from '@app/components/return-button/return-button';
 import { AlertService } from '@app/services/alert/alert.service';
@@ -24,14 +24,12 @@ export class IniciarSesion implements OnInit {
   loginForm!: FormGroup;
   showPassword = false;
   isLoading = false;
-  returnUrl = '';
   formInitialized = false; // nuevo flag
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
     private alertService: AlertService
   ) {}
@@ -42,9 +40,6 @@ export class IniciarSesion implements OnInit {
       this.authService.navegarSegunRol();
       return;
     }
-
-    // Obtener URL de retorno
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
 
     // Inicializar formulario
     this.loginForm = this.fb.group({
@@ -96,11 +91,8 @@ export class IniciarSesion implements OnInit {
         const nombreUsuario = response.user?.nombres || 'Usuario';
         this.alertService.toastSuccess(`¡Bienvenido/a, ${nombreUsuario}!`);
 
-        if (this.returnUrl) {
-          this.router.navigateByUrl(this.returnUrl);
-        } else {
-          this.authService.navegarSegunRol(response.user);
-        }
+        // Siempre redirigir según el rol del usuario (ignorar returnUrl para evitar volver a páginas públicas)
+        this.authService.navegarSegunRol(response.user);
       },
       error: (error) => {
         this.isLoading = false;

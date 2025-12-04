@@ -81,6 +81,17 @@ Grupo de iconos de un paquete
   }
 }
 
+/*
+  Deshabilitar transiciones de color al cambiar de tema para que el cambio sea instantáneo.
+  La clase 'theme-transitioning' se agrega temporalmente durante el cambio de tema.
+*/
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: none !important;
+}
+
 /* Utilidades personalizadas */
 @layer utilities {
   .social-button {

@@ -4,6 +4,9 @@ import { AuthService } from '../auth/service/auth';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
+// Flag para evitar múltiples redirecciones durante refresh fallido
+let isRedirecting = false;
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -14,6 +17,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (skipAuth) {
     return next(req);
   }
+
+  // URLs donde un error 401 NO debe causar logout (operaciones en background)
+  const skipLogoutOnError = ['/perfil'].some((url) => req.url.includes(url));
 
   // Agregar token si existe
   const token = authService.getToken();
@@ -42,9 +48,33 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return next(newReq);
           }),
           catchError((refreshError) => {
-            // Si falla el refresh, cerrar sesión
-            authService.logout().subscribe();
-            router.navigate(['/iniciar-sesion']);
+            // Si es una petición de background (como /perfil), no hacer logout
+            // Solo propagar el error silenciosamente
+            if (skipLogoutOnError) {
+              return throwError(() => refreshError);
+            }
+
+            // Si falla el refresh y no estamos ya redirigiendo, cerrar sesión
+            // Solo redirigir si el usuario no está en una ruta pública
+            if (!isRedirecting) {
+              isRedirecting = true;
+              const rutasPublicas = ['/inicio', '/iniciar-sesion', '/crear-cuenta', '/recuperar-contrasena'];
+              const rutaActual = router.url;
+              const esRutaPublica = rutasPublicas.some(ruta => rutaActual.startsWith(ruta));
+
+              if (!esRutaPublica) {
+                authService.logout().subscribe({
+                  complete: () => {
+                    isRedirecting = false;
+                  },
+                  error: () => {
+                    isRedirecting = false;
+                  }
+                });
+              } else {
+                isRedirecting = false;
+              }
+            }
             return throwError(() => refreshError);
           })
         );

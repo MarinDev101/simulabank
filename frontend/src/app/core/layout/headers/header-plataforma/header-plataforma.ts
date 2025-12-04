@@ -59,6 +59,27 @@ export class HeaderPlataforma implements OnInit, OnDestroy {
   }
 
   private humanizePathSegment(seg: string): string {
+    // Mapeo de rutas a nombres legibles
+    const routeNames: Record<string, string> = {
+      'inicio': 'Inicio',
+      'simulador': 'Simulación',
+      'mi-personal': 'Mi Personal',
+      'politicas': 'Políticas del Banco',
+      'informacion': 'Información',
+      'logros': 'Logros',
+      'configuracion': 'Configuración',
+      'aprendices': 'Aprendices',
+      'administrador': 'Panel de Administrador',
+      'instructor': 'Panel de Instructor',
+      'aprendiz': 'Panel de Aprendiz'
+    };
+
+    // Buscar en el mapeo primero
+    const lowerSeg = seg.toLowerCase();
+    if (routeNames[lowerSeg]) {
+      return routeNames[lowerSeg];
+    }
+
     // Reemplaza guiones y camelCase simple por espacios y capitaliza
     const s = seg.replace(/[-_]/g, ' ');
     return s.charAt(0).toUpperCase() + s.slice(1);

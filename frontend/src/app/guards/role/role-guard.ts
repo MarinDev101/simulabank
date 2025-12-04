@@ -8,7 +8,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
 
   // Verificar si está autenticado primero
   if (!authService.estaAutenticado()) {
-    router.navigate(['/iniciar-sesion']);
+    router.navigate(['/inicio']);
     return false;
   }
 

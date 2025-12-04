@@ -1,4 +1,4 @@
-<div class="h-full w-full rounded-xl bg-white p-8 dark:bg-gray-800">
+<div class="h-full w-full rounded-xl bg-white p-8 dark:bg-gray-800 dark:border-gray-700 border-2 border-[#E7E9EB]">
   <section class="container mx-auto">
     <!-- Encabezado -->
     <div class="sm:flex sm:items-center sm:justify-between">
@@ -6,7 +6,7 @@
         <div class="flex items-center gap-x-3">
           <h2 class="text-lg font-medium text-gray-800 dark:text-white">Gestión de Aprendices</h2>
           <span
-            class="rounded-full bg-blue-100 px-3 py-1 text-xs text-blue-600 dark:bg-gray-800 dark:text-blue-400"
+            class="rounded-full bg-blue-100 px-3 py-1 text-xs text-blue-600 dark:bg-gray-900 dark:text-blue-400"
           >
             {{ aprendicesFiltrados.length }} Aprendices
           </span>
@@ -18,17 +18,17 @@
     </div>
 
     <!-- Filtros -->
-    <div class="mt-6 md:flex md:items-center md:justify-between">
+    <div class="mt-6 lg:flex lg:items-center lg:justify-between">
       <!-- Filtros de estado -->
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
         <!-- Búsqueda -->
-        <div class="relative">
+        <div class="relative w-full sm:w-auto">
           <input
             type="text"
             [value]="filtroBusqueda"
             (input)="onBuscarChange($event)"
             placeholder="Buscar por nombre o correo..."
-            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 pl-10 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none sm:w-64 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
+            class="w-full rounded-lg border-2 border-[#E7E9EB] bg-white px-4 py-2 pl-10 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none sm:w-64 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
           />
           <span
             class="absolute top-1/2 left-3 icon-[heroicons-outline--magnifying-glass] h-4 w-4 -translate-y-1/2 text-gray-400"
@@ -37,29 +37,37 @@
 
         <!-- Filtros de estado -->
         <div
-          class="inline-flex divide-x overflow-hidden rounded-lg border bg-white rtl:flex-row-reverse dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900"
+          class="inline-flex overflow-hidden rounded-lg border-2 border-[#E7E9EB] bg-white divide-x-2 divide-[#E7E9EB]
+           rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700
+           max-[350px]:flex-col max-[350px]:divide-x-0 max-[350px]:divide-y-2 max-[350px]:w-full"
         >
           <button
             (click)="cambiarFiltroEstado('activos')"
-            [class.bg-gray-100]="filtroEstado === 'activos'"
-            [class.dark:bg-gray-800]="filtroEstado === 'activos'"
-            class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-100 sm:text-sm dark:text-gray-300 dark:hover:bg-gray-800"
+            [class.bg-blue-100]="filtroEstado === 'activos'"
+            [class.dark:bg-gray-700]="filtroEstado === 'activos'"
+            class="px-5 py-2 text-xs font-medium text-blue-600 transition-colors duration-200
+             hover:bg-blue-50 sm:text-sm dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer
+             max-[350px]:w-full max-[350px]:text-center"
           >
             Activos
           </button>
           <button
             (click)="cambiarFiltroEstado('inactivos')"
-            [class.bg-gray-100]="filtroEstado === 'inactivos'"
-            [class.dark:bg-gray-800]="filtroEstado === 'inactivos'"
-            class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-100 sm:text-sm dark:text-gray-300 dark:hover:bg-gray-800"
+            [class.bg-blue-100]="filtroEstado === 'inactivos'"
+            [class.dark:bg-gray-700]="filtroEstado === 'inactivos'"
+            class="px-5 py-2 text-xs font-medium text-blue-600 transition-colors duration-200
+             hover:bg-blue-50 sm:text-sm dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer
+             max-[350px]:w-full max-[350px]:text-center"
           >
             Inactivos
           </button>
           <button
             (click)="cambiarFiltroEstado('todos')"
-            [class.bg-gray-100]="filtroEstado === 'todos'"
-            [class.dark:bg-gray-800]="filtroEstado === 'todos'"
-            class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 hover:bg-gray-100 sm:text-sm dark:text-gray-300 dark:hover:bg-gray-800"
+            [class.bg-blue-100]="filtroEstado === 'todos'"
+            [class.dark:bg-gray-700]="filtroEstado === 'todos'"
+            class="px-5 py-2 text-xs font-medium text-blue-600 transition-colors duration-200
+             hover:bg-blue-50 sm:text-sm dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer
+             max-[350px]:w-full max-[350px]:text-center"
           >
             Ver todos
           </button>
@@ -67,23 +75,27 @@
       </div>
 
       <!-- Filtros de fecha -->
-      <div class="relative mt-4 flex items-center gap-3 md:mt-0">
-        <label class="flex flex-col">
+      <div class="relative mt-4 flex items-center gap-3 lg:mt-0 max-[600px]:flex-col">
+        <label class="flex flex-col w-full">
           <span class="text-sm text-gray-700 dark:text-gray-200">Desde</span>
           <input
             type="date"
             [value]="filtroFechaDesde"
             (change)="onFechaDesdeChange($event)"
-            class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
+            class="rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 placeholder-gray-400
+             focus:border-blue-500 focus:ring-0 focus:outline-none
+             dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
           />
         </label>
-        <label class="flex flex-col">
+        <label class="flex flex-col w-full">
           <span class="text-sm text-gray-700 dark:text-gray-200">Hasta</span>
           <input
             type="date"
             [value]="filtroFechaHasta"
             (change)="onFechaHastaChange($event)"
-            class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-0 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
+            class="rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 placeholder-gray-400
+             focus:border-blue-500 focus:ring-0 focus:outline-none
+             dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
           />
         </label>
       </div>
@@ -102,10 +114,10 @@
     <div *ngIf="!cargando && !error" class="mt-6 flex flex-col">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-          <div class="overflow-hidden border border-gray-200 md:rounded-lg dark:border-gray-700">
+          <div class="overflow-hidden border-2 border-gray-200 md:rounded-lg dark:border-gray-700">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead class="bg-gray-50 dark:bg-gray-800">
-                <tr>
+                <tr class="border-b-2 border-b-gray-200 dark:border-b-gray-700">
                   <th
                     scope="col"
                     class="px-4 py-3.5 text-left text-sm font-normal text-gray-500 rtl:text-right dark:text-gray-400"
@@ -208,7 +220,7 @@
                       <!-- Editar -->
                       <button
                         (click)="editarAprendiz(aprendiz)"
-                        class="flex items-center rounded-full bg-blue-100/60 px-3 py-1 text-xs text-blue-500 transition-colors hover:bg-blue-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        class="flex items-center rounded-full bg-blue-100/60 px-3 py-1 text-xs text-blue-500 transition-colors hover:bg-blue-200 dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer"
                         title="Editar"
                       >
                         <span class="icon-[heroicons-outline--pencil] h-5 w-5"></span>
@@ -218,7 +230,7 @@
                       <button
                         *ngIf="aprendiz.estado === 'activo'"
                         (click)="inhabilitarAprendiz(aprendiz)"
-                        class="flex items-center rounded-full bg-red-100/60 px-3 py-1 text-xs text-red-500 transition-colors hover:bg-red-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        class="flex items-center rounded-full bg-red-100/60 px-3 py-1 text-xs text-red-500 transition-colors hover:bg-red-200 dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer"
                         title="Inhabilitar"
                       >
                         <span class="icon-[heroicons-outline--user-remove] h-5 w-5"></span>
@@ -227,7 +239,7 @@
                       <button
                         *ngIf="aprendiz.estado === 'inactivo'"
                         (click)="habilitarAprendiz(aprendiz)"
-                        class="flex items-center rounded-full bg-green-100/60 px-3 py-1 text-xs text-green-500 transition-colors hover:bg-green-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        class="flex items-center rounded-full bg-green-100/60 px-3 py-1 text-xs text-green-500 transition-colors hover:bg-green-200 dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer"
                         title="Habilitar"
                       >
                         <span class="icon-[heroicons-outline--user-add] h-5 w-5"></span>
@@ -264,12 +276,12 @@
 
           <ul
             tabindex="0"
-            class="dropdown-content menu z-1 w-32 rounded-lg bg-base-100 p-2 shadow dark:bg-gray-800"
+            class="dropdown-content menu z-[1] w-32 rounded-lg bg-base-100 p-2 shadow dark:bg-gray-800 cursor-pointer"
           >
-            <li><a (click)="selectValue(5, $event)">5</a></li>
-            <li><a (click)="selectValue(10, $event)">10</a></li>
-            <li><a (click)="selectValue(15, $event)">15</a></li>
-            <li><a (click)="selectValue(20, $event)">20</a></li>
+            <li><a (click)="selectValue(5, $event)" class="cursor-pointer">5</a></li>
+            <li><a (click)="selectValue(10, $event)" class="cursor-pointer">10</a></li>
+            <li><a (click)="selectValue(15, $event)" class="cursor-pointer">15</a></li>
+            <li><a (click)="selectValue(20, $event)" class="cursor-pointer">20</a></li>
           </ul>
         </div>
       </div>
@@ -286,7 +298,7 @@
           [disabled]="paginaActual === 1"
           [class.opacity-50]="paginaActual === 1"
           [class.cursor-not-allowed]="paginaActual === 1"
-          class="flex w-1/2 items-center justify-center gap-x-2 rounded-md border bg-white px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 hover:bg-gray-100 disabled:hover:bg-white sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:disabled:hover:bg-gray-900"
+          class="flex w-1/2 items-center justify-center gap-x-2 rounded-md border bg-white px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 hover:bg-gray-100 disabled:hover:bg-white sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:disabled:hover:bg-gray-900 cursor-pointer"
         >
           <span class="icon-[heroicons--chevron-left] h-5 w-5 rtl:-scale-x-100"></span>
           <span>Anterior</span>
@@ -297,7 +309,7 @@
           [disabled]="paginaActual === totalPaginas"
           [class.opacity-50]="paginaActual === totalPaginas"
           [class.cursor-not-allowed]="paginaActual === totalPaginas"
-          class="flex w-1/2 items-center justify-center gap-x-2 rounded-md border bg-white px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 hover:bg-gray-100 disabled:hover:bg-white sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:disabled:hover:bg-gray-900"
+          class="flex w-1/2 items-center justify-center gap-x-2 rounded-md border bg-white px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 hover:bg-gray-100 disabled:hover:bg-white sm:w-auto dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:disabled:hover:bg-gray-900 cursor-pointer"
         >
           <span>Siguiente</span>
           <span class="icon-[heroicons--chevron-right] h-5 w-5 rtl:-scale-x-100"></span>

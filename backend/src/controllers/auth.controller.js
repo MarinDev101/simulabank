@@ -725,7 +725,25 @@ class AuthController {
     const usuario = mapDbToUsuario(rows[0]);
     const rol = await this._determinarRol(usuario.id);
 
-    return res.json({ success: true, user: { ...usuario, rol } });
+    // Devolver datos del usuario sin información sensible
+    return res.json({
+      success: true,
+      user: {
+        id: usuario.id,
+        correo: usuario.correo,
+        nombres: usuario.nombres,
+        apellidos: usuario.apellidos,
+        rol,
+        foto_perfil: usuario.foto_perfil || null,
+        fecha_nacimiento: usuario.fecha_nacimiento || null,
+        genero: usuario.genero || null,
+        preferencia_tema: usuario.preferencia_tema || null,
+        estado: usuario.estado,
+        fecha_creacion: usuario.fecha_creacion,
+        ultimo_acceso: usuario.ultimo_acceso || null,
+        fecha_actualizacion: usuario.fecha_actualizacion || null,
+      },
+    });
   }
 
   async refresh(req, res) {
@@ -790,6 +808,52 @@ class AuthController {
       message: 'Acceso de administrador verificado',
       user: req.user,
     });
+  }
+
+  /**
+   * Actualiza la preferencia de tema del usuario
+   * POST /auth/actualizar-tema
+   * Body: { tema: 'claro' | 'oscuro' | 'auto' }
+   */
+  async actualizarTema(req, res) {
+    const userId = req.user && req.user.id;
+    const { tema } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'No autenticado' });
+    }
+
+    // Validar valor del tema
+    const temasValidos = ['claro', 'oscuro', 'auto'];
+    if (!tema || !temasValidos.includes(tema)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Tema inválido. Valores permitidos: claro, oscuro, auto',
+      });
+    }
+
+    try {
+      const [result] = await pool.query(
+        'UPDATE ?? SET preferencia_tema = ?, fecha_actualizacion = NOW() WHERE ?? = ?',
+        [TABLAS.USUARIOS, tema, CAMPOS_ID.USUARIO, userId]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
+      }
+
+      return res.json({
+        success: true,
+        message: 'Preferencia de tema actualizada',
+        preferencia_tema: tema,
+      });
+    } catch (error) {
+      console.error('Error en actualizarTema:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al actualizar la preferencia de tema',
+      });
+    }
   }
 
   // =========================================================

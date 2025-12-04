@@ -30,14 +30,24 @@ function createExpressApp() {
   // Compresión de respuestas
   app.use(compression());
 
-  // Límite de peticiones global (protección DDoS)
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100, // máx. 100 peticiones por IP
-    standardHeaders: true,
+  // ============================================
+  // RATE LIMITING - Estándar de la industria
+  // ============================================
+
+  // Rate limiter global (API general)
+  // Estándar: 100-500 req/min para APIs públicas
+  const globalLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minuto (ventana corta para mejor control)
+    max: 100, // 100 peticiones por minuto por IP
+    standardHeaders: true, // Incluye `RateLimit-*` headers
     legacyHeaders: false,
+    message: {
+      success: false,
+      message: 'Demasiadas peticiones, por favor intenta de nuevo en un momento.',
+    },
+    skip: () => isDevelopment, // Desactivar en desarrollo
   });
-  app.use(limiter);
+  app.use(globalLimiter);
 
   // Sanitización de datos (XSS / inyección)
   app.use(securityMiddleware);
@@ -51,4 +61,51 @@ function createExpressApp() {
   return app;
 }
 
+// ============================================
+// RATE LIMITERS ESPECÍFICOS (para exportar)
+// ============================================
+
+// Rate limiter para login/registro (más estricto para prevenir fuerza bruta)
+// Estándar: 5-10 intentos por 15 minutos
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 10, // 10 intentos de login/registro
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Demasiados intentos de autenticación, intenta de nuevo en 15 minutos.',
+  },
+  skipFailedRequests: false, // Contar también peticiones fallidas
+});
+
+// Rate limiter para endpoints de creación (POST)
+// Estándar: 30-50 creaciones por minuto
+const createLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minuto
+  max: 30, // 30 creaciones por minuto
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Has creado demasiados recursos, espera un momento.',
+  },
+});
+
+// Rate limiter para operaciones sensibles (cambio de contraseña, etc.)
+// Estándar: 5 intentos por hora
+const sensitiveLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hora
+  max: 5, // 5 intentos por hora
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Demasiados intentos, por favor espera una hora.',
+  },
+});
+
 module.exports = createExpressApp;
+module.exports.authLimiter = authLimiter;
+module.exports.createLimiter = createLimiter;
+module.exports.sensitiveLimiter = sensitiveLimiter;

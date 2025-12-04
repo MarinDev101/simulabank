@@ -6,6 +6,7 @@ const { upload } = require('../config/multer.config');
 // Middlewares
 const { authenticateJWT } = require('../middlewares/jwt.middleware');
 const { requireAdmin } = require('../middlewares/admin.middleware');
+const { authLimiter, sensitiveLimiter } = require('../config/express.config');
 
 // Validadores
 const {
@@ -28,12 +29,14 @@ function crearAuthRouter() {
   // exportado y no falle al acceder a métodos auxiliares como _normalizarRol
   router.post(
     '/register',
+    authLimiter, // Rate limit para registro
     registerRules(),
     runValidation,
     asyncHandler(authController.registrar.bind(authController))
   );
   router.post(
     '/login',
+    authLimiter, // Rate limit para login
     loginRules(),
     runValidation,
     asyncHandler(authController.login.bind(authController))
@@ -71,6 +74,7 @@ function crearAuthRouter() {
   // Rutas de recuperación de contraseña
   router.post(
     '/solicitar-recuperacion',
+    sensitiveLimiter, // Rate limit estricto para recuperación
     recuperacionRules(),
     runValidation,
     asyncHandler(authController.solicitarRecuperacion.bind(authController))
@@ -78,6 +82,7 @@ function crearAuthRouter() {
 
   router.post(
     '/verificar-codigo-recuperacion',
+    sensitiveLimiter, // Rate limit estricto
     verificarCodigoRecuperacionRules(),
     runValidation,
     asyncHandler(authController.verificarCodigoRecuperacion.bind(authController))
@@ -85,6 +90,7 @@ function crearAuthRouter() {
 
   router.post(
     '/restablecer-contrasena',
+    sensitiveLimiter, // Rate limit estricto
     restablecerContrasenaRules(),
     runValidation,
     asyncHandler(authController.restablecerContrasena.bind(authController))
@@ -96,6 +102,10 @@ function crearAuthRouter() {
     authenticateJWT,
     asyncHandler(authController.listSessions.bind(authController))
   );
+
+  // Obtener perfil del usuario autenticado
+  router.get('/perfil', authenticateJWT, asyncHandler(authController.perfil.bind(authController)));
+
   // Acepta multipart/form-data con campo 'foto' (opcional). Si no envías archivo,
   // sigue aceptando los campos por JSON en el cuerpo (p. ej. foto_perfil como cadena).
   router.put(
@@ -109,6 +119,14 @@ function crearAuthRouter() {
     authenticateJWT,
     asyncHandler(authController.changePassword.bind(authController))
   );
+
+  // Actualizar preferencia de tema
+  router.put(
+    '/actualizar-tema',
+    authenticateJWT,
+    asyncHandler(authController.actualizarTema.bind(authController))
+  );
+
   router.post(
     '/logoutAll',
     authenticateJWT,

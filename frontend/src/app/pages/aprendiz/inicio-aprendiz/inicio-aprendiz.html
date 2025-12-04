@@ -1,149 +1,209 @@
-<div class="flex h-full flex-col gap-4 sm:gap-6 lg:gap-8 p-4 sm:p-6 lg:p-0">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-    <!-- Card 1: Simulación -->
-    <article
-      class="order-2 lg:order-1 flex flex-col items-center gap-6 sm:gap-8 lg:gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-gray-800">
-      <p
-        class="titulo-seccion text-center text-base sm:text-lg lg:text-[20px] font-medium text-elegant-700 dark:text-gray-200">
-        Comienza simulando asesorias bancarias virtuales con clientes generados con IA
-      </p>
-      <img src="/images/ilustraciones/simulacion-inicio.png" alt="" class="flex-grow" />
-      <button routerLink="/aprendiz/simulador" class="flex w-full max-w-[260px] sm:max-w-[280px] md:max-w-[300px] lg:max-w-55
-         cursor-pointer items-center justify-center gap-2 sm:gap-3
-         rounded-full bg-[#009040] p-2 md:p-3
-         transition-colors duration-200 hover:bg-[#007a33]
-         focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:outline-none
-         dark:bg-green-600 hover:dark:bg-green-700">
-        <p class="text-sm md:text-base text-white">Empezar simulación</p>
-        <div class="h-6 w-6 md:h-7 md:w-7 rounded-full bg-white p-1 dark:bg-gray-700">
-          <span class="icon-[solar--play-linear] dark:text-indigo-300"></span>
-        </div>
-      </button>
-    </article>
+<div class="flex min-h-full w-full flex-col items-center gap-6 sm:gap-8">
+  <!-- Hero Section - Bienvenida y Perfil -->
+  <section class="w-full max-w-5xl">
+    <div class="relative overflow-hidden rounded-2xl border border-[#e8f4fc] bg-white p-6 shadow-lg shadow-gray-200/60 sm:p-8 md:p-10 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/30">
+      <!-- Decoraciones de fondo -->
+      <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#00A448]/10 to-transparent sm:h-28 sm:w-28 md:h-40 md:w-40 dark:from-[#00A448]/20"></div>
+      <div class="absolute bottom-0 left-0 h-16 w-16 rounded-tr-full bg-linear-to-tr from-[#1788EF]/10 to-transparent sm:h-24 sm:w-24 md:h-36 md:w-36 dark:from-[#1788EF]/20"></div>
 
-    <!-- Card 2: Políticas e Información -->
-    <article
-      class="order-3 lg:order-2 flex flex-col items-center gap-6 sm:gap-8 lg:gap-10 rounded-lg border-2 border-[#E7E9EB] bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-gray-800">
-      <p
-        class="titulo-seccion text-center text-base sm:text-lg lg:text-[20px] font-medium text-elegant-700 dark:text-gray-200">
-        SimulaBank es un banco simulado. Tiene sus politicas y sus clientes
-      </p>
-      <img src="/images/ilustraciones/poliinfo-incio.png" alt="" class="flex-grow" />
-      <div class="flex w-full justify-center items-center gap-3 sm:gap-4 lg:gap-5
-         flex-row
-         max-[1650px]:flex-col max-[1650px]:w-full max-[1650px]:items-center">
-
-        <button [routerLink]="politicasRoute" class="flex items-center justify-center gap-2 sm:gap-3
-         w-full sm:w-[70%] md:w-[60%] lg:w-[55%] xl:w-[45%] max-[1650px]:w-[80%]
-         h-[48px] md:h-[52px] lg:h-[55px]
-         rounded-full bg-[#0271b1] px-4
-         transition-colors duration-200 hover:bg-[#00537a]
-         focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none
-         dark:bg-blue-600 hover:dark:bg-blue-700">
-          <p class="text-sm md:text-base text-white leading-none">Ver Politicas</p>
-          <span class="icon-[mdi--eye-outline] size-5 md:size-6 text-white dark:text-indigo-300"></span>
-        </button>
-
-        <button [routerLink]="informacionRoute" class="flex items-center justify-center gap-2 sm:gap-3
-         w-full sm:w-[70%] md:w-[60%] lg:w-[55%] xl:w-[45%] max-[1650px]:w-[80%]
-         h-[48px] md:h-[52px] lg:h-[55px]
-         rounded-full bg-[#0271b1] px-4
-         transition-colors duration-200 hover:bg-[#00537a]
-         focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none
-         dark:bg-blue-600 hover:dark:bg-blue-700">
-          <p class="text-sm md:text-base text-white leading-none">Ver Informacion</p>
-          <span class="icon-[mdi--eye-outline] size-5 md:size-6 text-white dark:text-indigo-300"></span>
-        </button>
-
-      </div>
-
-
-    </article>
-
-    <!-- Card 3: Perfil y Estadísticas -->
-    <article
-      class="order-1 lg:order-3 rounded-lg border-2 border-[#E7E9EB] bg-white p-6 sm:p-8 lg:p-10 dark:border-gray-700 dark:bg-gray-800">
-      <ul class="flex flex-col items-center gap-1">
-        <li>
-          <div class="avatar ml-[5px]">
-            <div
-              class="w-24 sm:w-28 lg:w-30 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900">
-              <img [src]="usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'" [alt]="nombreCompleto" />
+      <div class="relative z-10">
+        <div class="flex flex-col items-center gap-4 md:flex-row md:gap-8">
+          <!-- Avatar -->
+          <div class="shrink-0">
+            <div class="h-24 w-24 overflow-hidden rounded-full ring-4 ring-[#00A448]/20 ring-offset-2 sm:h-28 sm:w-28 md:h-32 md:w-32 dark:ring-[#00A448]/30 dark:ring-offset-gray-800">
+              <img [src]="usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'" [alt]="nombreCompleto" class="h-full w-full object-cover" />
             </div>
           </div>
-        </li>
-        <li class="text-center w-full px-2">
-          <p class="max-w-[200px] mx-auto truncate text-xl sm:text-2xl font-bold text-[#566577] dark:text-gray-200"
-            [title]="nombreCompleto">
-            {{ nombreCompleto }}
-          </p>
-        </li>
-        <li>
-          <span class="badge p-2.5 sm:p-3 lg:p-3.5 text-sm sm:text-base font-bold text-white"
-            [ngClass]="rolBadge.color">
-            {{ rolBadge.text }}
-          </span>
-        </li>
-      </ul>
-      <div class="mt-4 sm:mt-5">
-        <p class="text-sm sm:text-base dark:text-gray-200">Estadisticas:</p>
-        <ul class="mt-2 grid grid-cols-2 gap-3 sm:gap-4">
-          <li
-            class="flex h-[140px] sm:h-[160px] lg:h-[185px] flex-col items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-[#ebebeb] p-2 sm:p-3 dark:bg-gray-700">
-            <p class="text-4xl sm:text-5xl lg:text-7xl font-medium dark:text-gray-200">{{ totalSimulacionesCompletadas
-              }}</p>
-            <p class="text-center text-xs sm:text-sm text-elegant-500 dark:text-gray-300 leading-tight">
-              Simulaciones<br />completadas<br />exitosamente
-            </p>
-          </li>
 
-          <li
-            class="flex h-[140px] sm:h-[160px] lg:h-[185px] flex-col items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-[#ebebeb] p-2 sm:p-3 dark:bg-gray-700">
-            <p class="text-4xl sm:text-5xl lg:text-7xl font-medium dark:text-gray-200">{{ totalLogrosCompletados }}</p>
-            <p class="text-center text-xs sm:text-sm text-elegant-500 dark:text-gray-300 leading-tight">
-              Logros<br />completados<br />exitosamente
-            </p>
-          </li>
-        </ul>
-      </div>
-    </article>
-  </div>
+          <!-- Info del usuario -->
+          <div class="flex min-w-0 flex-1 flex-col items-center text-center md:items-start md:text-left">
+            <p class="mb-1 text-sm text-[#4a5d6f] dark:text-gray-400">¡Bienvenido de nuevo!</p>
+            <h1 class="mb-2 w-full break-words text-xl font-bold text-[#034D82] sm:text-2xl md:text-3xl lg:text-4xl dark:text-white" style="hyphens: auto; hyphenate-limit-chars: 10;">
+              {{ nombreCompleto }}
+            </h1>
+            <span class="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold text-white sm:text-base"
+              [ngClass]="rolBadge.color">
+              <span class="icon-[hugeicons--user-03] h-4 w-4"></span>
+              {{ rolBadge.text }}
+            </span>
+          </div>
 
-  <!-- Sección de Logros -->
-  <div>
-    <article class="rounded-lg border-2 border-[#E7E9EB] bg-white dark:border-gray-700 dark:bg-gray-800">
-      <div class="flex items-center justify-center border-b-2 border-[#E7E9EB] p-2.5 dark:border-gray-700">
-        <p class="text-base sm:text-lg lg:text-[20px] font-medium text-elegant-700 dark:text-gray-200">Logros exhibidos
-        </p>
-      </div>
-      <div class="flex-grow overflow-auto p-4 sm:p-5 dark:text-gray-300">
-        <div class="mx-auto flex max-w-6xl flex-col items-center gap-4 min-h-[212px] lg:h-53">
-          <ng-container *ngIf="logrosAprendiz?.length; else sinLogrosInicio">
-            <div class="flex w-full flex-wrap justify-center gap-3 sm:gap-4">
-              <ng-container *ngFor="let logro of logrosAprendiz">
-                <div
-                  class="flex w-40 sm:w-48 lg:w-52 flex-col overflow-hidden rounded-lg border-2 border-[#E7E9EB] dark:border-gray-700">
-                  <div
-                    class="flex h-32 sm:h-36 lg:h-40 items-center justify-center overflow-hidden bg-gray-100 p-2 sm:p-3 dark:bg-gray-900">
-                    <img [src]="logro.imagen" class="max-h-full max-w-full object-contain drop-shadow-lg"
-                      [alt]="logro.nombre" />
-                  </div>
-                  <div
-                    class="flex h-16 sm:h-18 lg:h-20 items-center justify-center border-t-2 border-[#E7E9EB] bg-white p-2 text-center dark:border-gray-700 dark:bg-gray-800">
-                    <p class="text-xs sm:text-sm">{{ logro.nombre }}</p>
-                  </div>
-                </div>
-              </ng-container>
+          <!-- Estadísticas -->
+          <div class="mt-4 flex gap-3 sm:gap-4 md:ml-auto md:mt-0">
+            <div class="flex min-w-20 flex-col items-center rounded-xl bg-[#00A448]/10 px-3 py-2 sm:min-w-24 sm:px-4 sm:py-3 md:min-w-28 md:px-5 dark:bg-[#00A448]/20">
+              <p class="text-3xl font-bold text-[#00A448] sm:text-4xl md:text-5xl">{{ totalSimulacionesCompletadas }}</p>
+              <p class="text-center text-[10px] text-[#4a5d6f] sm:text-xs dark:text-gray-400">Simulaciones<br>exitosas</p>
             </div>
-          </ng-container>
-          <ng-template #sinLogrosInicio>
-            <p class="max-w-xl text-center text-xs sm:text-sm text-elegant-500 dark:text-gray-400 px-4">
-              No tienes logros. Ve a la sección de logros de la plataforma para enterarte qué debes
-              hacer.
-            </p>
-          </ng-template>
+            <div class="flex min-w-20 flex-col items-center rounded-xl bg-[#f59e0b]/10 px-3 py-2 sm:min-w-24 sm:px-4 sm:py-3 md:min-w-28 md:px-5 dark:bg-[#f59e0b]/20">
+              <p class="text-3xl font-bold text-[#f59e0b] sm:text-4xl md:text-5xl">{{ totalLogrosCompletados }}</p>
+              <p class="text-center text-[10px] text-[#4a5d6f] sm:text-xs dark:text-gray-400">Logros<br>conseguidos</p>
+            </div>
+          </div>
         </div>
       </div>
-    </article>
-  </div>
+    </div>
+  </section>
+
+  <!-- Sección de Acciones Rápidas -->
+  <section class="w-full max-w-5xl">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6 xl:grid-cols-4">
+      <!-- Card 1: Simulación -->
+      <div class="group relative flex flex-col overflow-hidden rounded-xl border border-[#e8f4fc] bg-white p-4 shadow-sm shadow-gray-200/60 sm:p-5 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+        <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#00A448]/5 to-transparent dark:from-[#00A448]/10"></div>
+        <div class="relative z-10 flex h-full flex-col items-center text-center">
+          <!-- Icono -->
+          <div class="mb-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#00A448]/10 dark:bg-[#00A448]/20">
+            <span class="icon-[hugeicons--vr-glasses] h-7 w-7 text-[#00A448]"></span>
+          </div>
+          <!-- Título -->
+          <h3 class="mb-1.5 text-base font-semibold text-[#034D82] lg:text-lg dark:text-white">Simulación</h3>
+          <!-- Descripción con altura fija -->
+          <p class="mb-3 h-8 text-xs text-[#4a5d6f] lg:h-10 lg:text-sm dark:text-gray-400">
+            Practica asesorías bancarias con clientes de IA
+          </p>
+          <!-- Imagen con altura fija -->
+          <div class="mb-3 flex h-32 w-full shrink-0 items-center justify-center sm:h-32 lg:h-36">
+            <img src="/images/ilustraciones/simulacion-inicio.png" alt="Simulación" class="h-full w-auto object-contain" />
+          </div>
+          <!-- Botón siempre al final -->
+          <button routerLink="/aprendiz/simulador" class="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#00A448] px-4 py-2 text-xs font-medium text-white transition-colors duration-200 hover:bg-[#008a3a] focus:outline-none focus:ring-2 focus:ring-[#00A448]/50 focus:ring-offset-2 sm:text-sm dark:focus:ring-offset-gray-800">
+            <span>Ver simulación</span>
+            <span class="icon-[hugeicons--arrow-right-01] h-3.5 w-3.5 sm:h-4 sm:w-4"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 2: Mis Evidencias -->
+      <div class="group relative flex flex-col overflow-hidden rounded-xl border border-[#e8f4fc] bg-white p-4 shadow-sm shadow-gray-200/60 sm:p-5 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+        <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#8b5cf6]/5 to-transparent dark:from-[#8b5cf6]/10"></div>
+        <div class="relative z-10 flex h-full flex-col items-center text-center">
+          <!-- Icono -->
+          <div class="mb-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#8b5cf6]/10 dark:bg-[#8b5cf6]/20">
+            <span class="icon-[hugeicons--folder-02] h-7 w-7 text-[#8b5cf6]"></span>
+          </div>
+          <!-- Título -->
+          <h3 class="mb-1.5 text-base font-semibold text-[#034D82] lg:text-lg dark:text-white">Mi Personal</h3>
+          <!-- Descripción con altura fija -->
+          <p class="mb-3 h-8 text-xs text-[#4a5d6f] lg:h-10 lg:text-sm dark:text-gray-400">
+            Revisa tus simulaciones registradas
+          </p>
+          <!-- Imagen con altura fija -->
+          <div class="mb-3 flex h-32 w-full shrink-0 items-center justify-center sm:h-32 lg:h-36">
+            <img src="/images/ilustraciones/folder-inicio.png" alt="Mis Evidencias" class="h-full w-auto object-contain" />
+          </div>
+          <!-- Botón siempre al final -->
+          <button routerLink="/aprendiz/mi-personal" class="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#8b5cf6] px-4 py-2 text-xs font-medium text-white transition-colors duration-200 hover:bg-[#7c3aed] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]/50 focus:ring-offset-2 sm:text-sm dark:focus:ring-offset-gray-800">
+            <span>Ver evidencias</span>
+            <span class="icon-[hugeicons--arrow-right-01] h-3.5 w-3.5 sm:h-4 sm:w-4"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 3: Políticas -->
+      <div class="group relative flex flex-col overflow-hidden rounded-xl border border-[#e8f4fc] bg-white p-4 shadow-sm shadow-gray-200/60 sm:p-5 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+        <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#034D82]/5 to-transparent dark:from-[#034D82]/10"></div>
+        <div class="relative z-10 flex h-full flex-col items-center text-center">
+          <!-- Icono -->
+          <div class="mb-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#034D82]/10 dark:bg-[#034D82]/20">
+            <span class="icon-[hugeicons--bank] h-7 w-7 text-[#034D82] dark:text-blue-400"></span>
+          </div>
+          <!-- Título -->
+          <h3 class="mb-1.5 text-base font-semibold text-[#034D82] lg:text-lg dark:text-white">Políticas</h3>
+          <!-- Descripción con altura fija -->
+          <p class="mb-3 h-8 text-xs text-[#4a5d6f] lg:h-10 lg:text-sm dark:text-gray-400">
+            Conoce las políticas del banco simulado
+          </p>
+          <!-- Imagen con altura fija -->
+          <div class="mb-3 flex h-32 w-full shrink-0 items-center justify-center sm:h-32 lg:h-36">
+            <img src="/images/ilustraciones/bank-inicio.png" alt="Políticas" class="h-full w-auto object-contain" />
+          </div>
+          <!-- Botón siempre al final -->
+          <button [routerLink]="politicasRoute" class="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#034D82] px-4 py-2 text-xs font-medium text-white transition-colors duration-200 hover:bg-[#023a5e] focus:outline-none focus:ring-2 focus:ring-[#034D82]/50 focus:ring-offset-2 sm:text-sm dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-offset-gray-800">
+            <span>Ver políticas</span>
+            <span class="icon-[hugeicons--arrow-right-01] h-3.5 w-3.5 sm:h-4 sm:w-4"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 4: Información -->
+      <div class="group relative flex flex-col overflow-hidden rounded-xl border border-[#e8f4fc] bg-white p-4 shadow-sm shadow-gray-200/60 sm:p-5 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+        <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#1788EF]/5 to-transparent dark:from-[#1788EF]/10"></div>
+        <div class="relative z-10 flex h-full flex-col items-center text-center">
+          <!-- Icono -->
+          <div class="mb-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#1788EF]/10 dark:bg-[#1788EF]/20">
+            <span class="icon-[hugeicons--document-validation] h-7 w-7 text-[#1788EF]"></span>
+          </div>
+          <!-- Título -->
+          <h3 class="mb-1.5 text-base font-semibold text-[#034D82] lg:text-lg dark:text-white">Información</h3>
+          <!-- Descripción con altura fija -->
+          <p class="mb-3 h-8 text-xs text-[#4a5d6f] lg:h-10 lg:text-sm dark:text-gray-400">
+            Aprende sobre clientes y productos
+          </p>
+          <!-- Imagen con altura fija -->
+          <div class="mb-3 flex h-32 w-full shrink-0 items-center justify-center sm:h-32 lg:h-36">
+            <img src="/images/ilustraciones/personas-inicio.png" alt="Información" class="h-full w-auto object-contain" />
+          </div>
+          <!-- Botón siempre al final -->
+          <button [routerLink]="informacionRoute" class="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#1788EF] px-4 py-2 text-xs font-medium text-white transition-colors duration-200 hover:bg-[#1270c7] focus:outline-none focus:ring-2 focus:ring-[#1788EF]/50 focus:ring-offset-2 sm:text-sm dark:focus:ring-offset-gray-800">
+            <span>Ver información</span>
+            <span class="icon-[hugeicons--arrow-right-01] h-3.5 w-3.5 sm:h-4 sm:w-4"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Mis Logros Conseguidos -->
+  <section class="w-full max-w-5xl">
+    <div class="overflow-hidden rounded-xl border border-[#e8f4fc] bg-white shadow-sm shadow-gray-200/60 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+      <!-- Header -->
+      <div class="flex flex-col gap-3 border-b border-[#e8f4fc] bg-linear-to-r from-[#f59e0b]/5 via-transparent to-[#00A448]/5 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 dark:border-gray-700 dark:from-[#f59e0b]/10 dark:to-[#00A448]/10">
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f59e0b]/10 dark:bg-[#f59e0b]/20">
+            <span class="icon-[hugeicons--award-01] h-5 w-5 text-[#f59e0b]"></span>
+          </div>
+          <div>
+            <h2 class="text-lg font-semibold text-[#034D82] dark:text-white">Mis logros conseguidos</h2>
+            <p class="text-xs text-[#4a5d6f] dark:text-gray-400">Logros que has desbloqueado</p>
+          </div>
+        </div>
+        <a routerLink="/aprendiz/logros" class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#f59e0b] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[#d97706] sm:w-auto">
+          <span>Ver logros disponibles</span>
+          <span class="icon-[hugeicons--arrow-right-01] h-4 w-4"></span>
+        </a>
+      </div>
+
+      <!-- Content -->
+      <div class="p-5 sm:p-6">
+        <ng-container *ngIf="logrosAprendiz?.length; else sinLogrosInicio">
+          <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <ng-container *ngFor="let logro of logrosAprendiz">
+              <div class="overflow-hidden rounded-xl border border-[#e8f4fc] bg-white shadow-sm transition-all duration-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+                <!-- Imagen del logro -->
+                <div class="relative flex h-32 items-center justify-center overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 p-4 sm:h-36 dark:from-gray-900 dark:to-gray-800">
+                  <img [src]="logro.imagen" class="relative z-10 max-h-full max-w-full object-contain drop-shadow-lg" [alt]="logro.nombre" />
+                </div>
+                <!-- Info del logro -->
+                <div class="flex items-center justify-center border-t border-[#e8f4fc] bg-white p-3 text-center dark:border-gray-700 dark:bg-gray-800">
+                  <p class="text-sm font-medium text-[#034D82] dark:text-white">{{ logro.nombre }}</p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-template #sinLogrosInicio>
+          <div class="flex flex-col items-center justify-center py-10">
+            <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+              <span class="icon-[fluent-emoji--sad-but-relieved-face] h-10 w-10 text-gray-400 dark:text-gray-500"></span>
+            </div>
+            <h3 class="mb-2 text-lg font-semibold text-[#034D82] dark:text-white">Aún no tienes logros</h3>
+            <p class="mb-4 max-w-md text-center text-sm text-[#4a5d6f] dark:text-gray-400">
+              Completa simulaciones para desbloquear logros especiales y demostrar tus habilidades.
+            </p>
+
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </section>
 </div>

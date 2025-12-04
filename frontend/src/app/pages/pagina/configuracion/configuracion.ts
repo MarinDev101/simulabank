@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
@@ -6,7 +6,9 @@ import { RegistroService } from '@app/core/auth/service/registro';
 import { AlertService } from '@app/services/alert/alert.service';
 import { ImageCropperService } from '@app/services/image-cropper/image-cropper.service';
 import { SoloLetrasDirective, PasswordFormatDirective } from '@app/shared/directives';
-import { verificarIndicadoresPassword } from '@app/shared/validators';
+import { verificarIndicadoresPassword, VALIDATION_CONFIG } from '@app/shared/validators';
+import { environment } from '../../../../environments/environment';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-configuracion',
@@ -14,9 +16,12 @@ import { verificarIndicadoresPassword } from '@app/shared/validators';
   imports: [CommonModule, FormsModule, SoloLetrasDirective, PasswordFormatDirective],
   templateUrl: './configuracion.html',
 })
-export class Configuracion implements OnInit {
+export class Configuracion implements OnInit, OnDestroy {
   // Tab activo
   activeTab: string = 'tab1';
+
+  // Para limpiar suscripciones
+  private destroy$ = new Subject<void>();
 
   // Configuración de edad
   readonly EDAD_MINIMA = 13;
@@ -49,6 +54,7 @@ export class Configuracion implements OnInit {
   fechaNacimiento = { dia: '', mes: '', anio: '' };
   genero: string = '';
   fechaTocada = false;
+  generoTocado = false;
 
   // Nombre / apellido (editable)
   nombre: string = '';
@@ -59,6 +65,9 @@ export class Configuracion implements OnInit {
   fotoPreview: string | null = null;
   eliminarPending: boolean = false; // mark delete locally until update
   fotoChanged: boolean = false; // mark new photo selected
+
+  // Flag para evitar resetear el formulario cuando solo cambia la foto
+  private actualizandoFoto: boolean = false;
 
   isLoading = false;
 
@@ -108,9 +117,71 @@ export class Configuracion implements OnInit {
   }
 
   ngOnInit(): void {
+    // Suscribirse a cambios del usuario para actualización automática
+    this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      if (user) {
+        this.usuario = user;
+        this.actualizarCamposDesdeUsuario();
+      }
+    });
+
+    // Cargar datos actualizados del servidor
+    this.cargarPerfilDesdeServidor();
+
     // Ajustar días si ya hay fecha seleccionada
     if (this.fechaNacimiento.mes) {
       this.actualizarDias();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /**
+   * Carga el perfil del usuario desde el servidor y actualiza los campos
+   */
+  private cargarPerfilDesdeServidor(): void {
+    this.authService.obtenerPerfilServidor().subscribe({
+      next: (response) => {
+        if (response.success && response.user) {
+          this.usuario = response.user;
+          this.actualizarCamposDesdeUsuario();
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar perfil:', error);
+        // Si falla, mantener los datos locales
+      }
+    });
+  }
+
+  /**
+   * Actualiza los campos del formulario con los datos del usuario.
+   * Si se está actualizando solo la foto, no resetea los demás campos.
+   */
+  private actualizarCamposDesdeUsuario(): void {
+    if (this.usuario) {
+      // Si estamos actualizando solo la foto, solo actualizar fotoPreview
+      if (this.actualizandoFoto) {
+        this.fotoPreview = this.usuario.foto_perfil || null;
+        return;
+      }
+
+      this.nombre = this.usuario.nombres || '';
+      this.apellido = this.usuario.apellidos || '';
+      this.genero = this.usuario.genero || '';
+      this.fotoPreview = this.usuario.foto_perfil || null;
+      if (this.usuario.fecha_nacimiento) {
+        const parts = this.usuario.fecha_nacimiento.split('-');
+        if (parts.length === 3) {
+          this.fechaNacimiento.anio = parts[0];
+          this.fechaNacimiento.mes = String(parseInt(parts[1], 10));
+          this.fechaNacimiento.dia = String(parseInt(parts[2], 10));
+          this.actualizarDias();
+        }
+      }
     }
   }
 
@@ -361,6 +432,7 @@ export class Configuracion implements OnInit {
     // Llamada inmediata para eliminar la foto
     if (!this.usuario) return;
     this.isLoading = true;
+    this.actualizandoFoto = true; // Evitar resetear el formulario
     const form = new FormData();
     form.append('userId', String(this.usuario.id));
     form.append('eliminar_foto', 'true');
@@ -383,24 +455,17 @@ export class Configuracion implements OnInit {
           ...base,
           foto_perfil: fotoFinal,
         } as Usuario;
-        try {
-          localStorage.setItem('user_data', JSON.stringify(nuevo));
-        } catch (e) {
-          console.warn('No se pudo guardar user_data en localStorage', e);
-        }
+
+        // Actualizar usando el servicio de autenticación (sin recargar página)
+        this.authService.actualizarUsuario({ foto_perfil: fotoFinal as string | undefined });
         this.usuario = nuevo;
+        this.actualizandoFoto = false; // Restablecer flag después de la actualización
         this.alertService.toastSuccess('Foto eliminada correctamente');
-        setTimeout(() => {
-          try {
-            window.location.reload();
-          } catch (e) {
-            location.reload();
-          }
-        }, 600);
       },
       error: (err) => {
         console.error('Error eliminando foto', err);
         this.isLoading = false;
+        this.actualizandoFoto = false; // Restablecer flag en caso de error
         this.alertService.error('Error', 'No se pudo eliminar la foto. Intenta de nuevo.');
       },
     });
@@ -409,6 +474,7 @@ export class Configuracion implements OnInit {
   subirFotoInmediata() {
     if (!this.usuario || !this.fotoFile) return;
     this.isLoading = true;
+    this.actualizandoFoto = true; // Evitar resetear el formulario
 
     const form = new FormData();
     form.append('userId', String(this.usuario.id));
@@ -432,45 +498,86 @@ export class Configuracion implements OnInit {
           ...base,
           foto_perfil: fotoFinal,
         } as Usuario;
-        try {
-          localStorage.setItem('user_data', JSON.stringify(nuevo));
-        } catch (e) {
-          console.warn('No se pudo guardar user_data en localStorage', e);
-        }
+
+        // Actualizar usando el servicio de autenticación (sin recargar página)
+        this.authService.actualizarUsuario({ foto_perfil: fotoFinal as string | undefined });
         this.usuario = nuevo;
+        this.actualizandoFoto = false; // Restablecer flag después de la actualización
         this.alertService.toastSuccess('Foto actualizada correctamente');
-        setTimeout(() => {
-          try {
-            window.location.reload();
-          } catch (e) {
-            location.reload();
-          }
-        }, 700);
       },
       error: (err) => {
         console.error('Error subiendo foto', err);
         this.isLoading = false;
+        this.actualizandoFoto = false; // Restablecer flag en caso de error
         this.alertService.error('Error', 'No se pudo subir la foto. Intenta de nuevo.');
       },
     });
   }
 
-  // Nombre/apellido validations (template-driven compatible with mensajes similares a datos-basicos)
+  // Nombre/apellido validations (template-driven compatible con datos-basicos)
+  // Configuración de validación (igual que datos-basicos)
+  readonly NOMBRE_MIN_LENGTH = VALIDATION_CONFIG.nombre.minLength;
+  readonly NOMBRE_MAX_LENGTH = VALIDATION_CONFIG.nombre.maxLength;
+  readonly APELLIDO_MIN_LENGTH = VALIDATION_CONFIG.apellido.minLength;
+  readonly APELLIDO_MAX_LENGTH = VALIDATION_CONFIG.apellido.maxLength;
+  readonly MIN_PALABRA_LENGTH = VALIDATION_CONFIG.nombre.minPalabraLength;
+
+  // Regex para solo letras (igual que datos-basicos)
+  private readonly soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]+$/;
+
+  /**
+   * Verifica si cada palabra tiene al menos el mínimo de caracteres requerido
+   */
+  private verificarPalabrasMinimas(valor: string): boolean {
+    if (!valor) return true;
+    const palabras = valor.trim().split(/\s+/);
+    return palabras.every((palabra: string) => palabra.length >= this.MIN_PALABRA_LENGTH);
+  }
+
+  /**
+   * Validación completa del nombre (igual que datos-basicos)
+   */
   nombreValidoLocal(): boolean {
-    return !!(
-      this.nombre &&
-      this.nombre.trim().length >= 2 &&
-      /^[A-Za-zÀ-ÿ\s]+$/.test(this.nombre)
+    if (!this.nombre) return false;
+    const nombreTrim = this.nombre.trim();
+    return (
+      nombreTrim.length >= this.NOMBRE_MIN_LENGTH &&
+      nombreTrim.length <= this.NOMBRE_MAX_LENGTH &&
+      this.soloLetrasRegex.test(nombreTrim) &&
+      this.verificarPalabrasMinimas(nombreTrim)
     );
   }
 
+  /**
+   * Validación completa del apellido (igual que datos-basicos)
+   */
   apellidoValidoLocal(): boolean {
-    return !!(
-      this.apellido &&
-      this.apellido.trim().length >= 2 &&
-      /^[A-Za-zÀ-ÿ\s]+$/.test(this.apellido)
+    if (!this.apellido) return false;
+    const apellidoTrim = this.apellido.trim();
+    return (
+      apellidoTrim.length >= this.APELLIDO_MIN_LENGTH &&
+      apellidoTrim.length <= this.APELLIDO_MAX_LENGTH &&
+      this.soloLetrasRegex.test(apellidoTrim) &&
+      this.verificarPalabrasMinimas(apellidoTrim)
     );
   }
+
+  /**
+   * Verifica si el nombre tiene error de palabras mínimas
+   */
+  nombreTienePalabrasCortas(): boolean {
+    if (!this.nombre) return false;
+    return !this.verificarPalabrasMinimas(this.nombre.trim());
+  }
+
+  /**
+   * Verifica si el apellido tiene error de palabras mínimas
+   */
+  apellidoTienePalabrasCortas(): boolean {
+    if (!this.apellido) return false;
+    return !this.verificarPalabrasMinimas(this.apellido.trim());
+  }
+
   // Backwards-compatible aliases used by template edits
   nombreValido(): boolean {
     return this.nombreValidoLocal();
@@ -482,6 +589,13 @@ export class Configuracion implements OnInit {
 
   validarNombreApellido(): boolean {
     return this.nombreValidoLocal() && this.apellidoValidoLocal();
+  }
+
+  /**
+   * Marca el género como tocado para mostrar validaciones
+   */
+  marcarGeneroTocado(): void {
+    this.generoTocado = true;
   }
 
   async actualizarDatos() {
@@ -529,28 +643,20 @@ export class Configuracion implements OnInit {
             fotoFinal = this.fotoPreview;
           }
 
-          const nuevo = {
-            ...base,
+          const datosActualizados: Partial<Usuario> = {
             nombres: this.nombre || base.nombres,
             apellidos: this.apellido || base.apellidos,
-            genero: this.genero || base.genero,
+            genero: (this.genero || base.genero) as Usuario['genero'],
             fecha_nacimiento: (form.get('fecha_nacimiento') as string) || base.fecha_nacimiento,
-            foto_perfil: fotoFinal,
-          } as Usuario;
-          localStorage.setItem('user_data', JSON.stringify(nuevo));
-          this.usuario = nuevo;
+            foto_perfil: fotoFinal as string | undefined,
+          };
+
+          // Actualizar usando el servicio de autenticación (sin recargar página)
+          this.authService.actualizarUsuario(datosActualizados);
+          this.usuario = { ...base, ...datosActualizados } as Usuario;
           this.fotoChanged = false;
           this.eliminarPending = false;
           this.alertService.toastSuccess('Configuración actualizada exitosamente');
-          // Persisted — reload page so sidebar and other components read updated localStorage
-          setTimeout(() => {
-            try {
-              window.location.reload();
-            } catch (e) {
-              // fallback
-              location.reload();
-            }
-          }, 700);
         },
         error: (err) => {
           console.error('Error actualizando perfil', err);
@@ -558,7 +664,7 @@ export class Configuracion implements OnInit {
           this.alertService.error('Error', 'Error al actualizar datos. Intenta de nuevo.');
         },
       });
-    }, 3000);
+    }, 300);
   }
 
   // Password UI/validation copied from datos-basicos
@@ -612,7 +718,7 @@ export class Configuracion implements OnInit {
 
     setTimeout(() => {
       const token = localStorage.getItem('access_token');
-      fetch('http://localhost:3000/api/auth/change-password', {
+      fetch(`${environment.apiBaseUrl}/auth/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -646,6 +752,6 @@ export class Configuracion implements OnInit {
           this.isLoading = false;
           this.alertService.error('Error', 'Error al cambiar la contraseña.');
         });
-    }, 3000);
+    }, 300);
   }
 }

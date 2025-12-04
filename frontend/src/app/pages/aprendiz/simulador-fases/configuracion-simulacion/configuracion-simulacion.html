@@ -1,255 +1,172 @@
 <form
   #form="ngForm"
   (ngSubmit)="enviarFormulario(form)"
-  class="flex min-h-[calc(100vh-65px)] w-full flex-col items-center bg-[#F9F9FA] p-3 sm:p-4 md:p-6 lg:p-8 dark:bg-gray-900"
+  class="flex min-h-full w-full flex-col items-center px-2 xs:px-0"
 >
-  <!-- Contenedor principal - Ahora controla el tamaño de sus elementos hijos -->
-  <div
-    class="rounded-plataforma flex w-full max-w-4xl flex-1 flex-col items-center justify-between bg-white p-4 sm:p-5 md:p-6 lg:p-8 dark:border-gray-700 dark:bg-gray-800"
-  >
-    <!-- Título principal -->
-    <h1
-      class="mb-6 w-full text-center text-xl font-medium sm:text-2xl md:mb-8 md:text-[22px] lg:text-2xl dark:text-gray-100"
-    >
-      Configurar la simulación
-    </h1>
+  <!-- Contenedor principal que ocupa todo el alto -->
+  <section class="flex w-full max-w-5xl flex-1 flex-col">
+    <div class="relative flex flex-1 flex-col overflow-hidden rounded-2xl border border-[#e8f4fc] bg-white p-4 shadow-lg shadow-gray-200/60 xs:p-5 sm:p-6 md:p-8 lg:p-10 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/30">
+      <!-- Decoraciones de fondo -->
+      <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#00A448]/10 to-transparent xs:h-24 xs:w-24 sm:h-32 sm:w-32 dark:from-[#00A448]/20"></div>
+      <div class="absolute bottom-0 left-0 h-16 w-16 rounded-tr-full bg-linear-to-tr from-[#1788EF]/10 to-transparent xs:h-20 xs:w-20 sm:h-28 sm:w-28 dark:from-[#1788EF]/20"></div>
 
-    <!-- Sección 1: Seleccionar producto -->
-    <article class="flex w-full flex-col">
-      <div class="mb-4 flex items-center gap-2 md:mb-6">
-        <span
-          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#545454] text-sm font-bold text-white sm:h-7 sm:w-7"
-          >1</span
-        >
-        <h2 class="text-base font-medium sm:text-lg md:text-xl dark:text-gray-200">
-          Selecciona un producto
-        </h2>
-      </div>
-
-      <!-- Contenedor de productos - Se adapta al ancho del contenedor padre -->
-      <div class="w-full">
-        <p
-          class="mb-3 text-center text-sm font-medium sm:mb-4 sm:text-base md:text-left dark:text-gray-200"
-        >
-          Aleatorio
-        </p>
-
-        <!-- Grid que se adapta al contenedor -->
-        <ul
-          class="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 md:px-[8%] lg:grid-cols-3 lg:px-0"
-        >
-          <!-- Todos los productos -->
-          <li class="w-full">
-            <label class="block w-full text-slate-400 dark:text-gray-300">
-              <input
-                type="radio"
-                name="producto"
-                value="todos-productos"
-                [(ngModel)]="datosFormulario.producto"
-                class="peer absolute h-px w-px overflow-hidden whitespace-nowrap opacity-0"
-                required
-              />
-              <span
-                class="relative flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-3 transition-all duration-200 peer-checked:border-blue-500 peer-checked:text-blue-600 peer-checked:shadow-md before:absolute before:top-3 before:left-3 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-[3px] before:text-xs before:font-bold before:text-white before:opacity-0 before:transition-all before:content-['✓'] peer-checked:before:scale-100 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 hover:border-blue-400 hover:shadow-sm hover:before:scale-100 hover:before:border-gray-400 hover:before:opacity-50 peer-checked:hover:before:opacity-100 dark:border-gray-700 dark:bg-gray-800 dark:peer-checked:border-blue-400 dark:peer-checked:text-blue-400 dark:hover:border-gray-600"
-              >
-                <div
-                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#797979]"
-                >
-                  <span class="icon-[fad--random-1dice] h-8 w-8 text-white sm:h-9 sm:w-9"></span>
-                </div>
-                <p class="text-sm font-medium sm:text-base dark:text-gray-200">
-                  Todos los productos
-                </p>
-              </span>
-            </label>
-          </li>
-
-          <!-- Productos de captación -->
-          <li class="w-full">
-            <label class="block w-full text-slate-400 dark:text-gray-300">
-              <input
-                type="radio"
-                name="producto"
-                value="productos-captacion"
-                [(ngModel)]="datosFormulario.producto"
-                class="peer absolute h-px w-px overflow-hidden whitespace-nowrap opacity-0"
-              />
-              <span
-                class="relative flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-3 transition-all duration-200 peer-checked:border-blue-500 peer-checked:text-blue-600 peer-checked:shadow-md before:absolute before:top-3 before:left-3 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-[3px] before:text-xs before:font-bold before:text-white before:opacity-0 before:transition-all before:content-['✓'] peer-checked:before:scale-100 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 hover:border-blue-400 hover:shadow-sm hover:before:scale-100 hover:before:border-gray-400 hover:before:opacity-50 peer-checked:hover:before:opacity-100 dark:border-gray-700 dark:bg-gray-800 dark:peer-checked:border-blue-400 dark:peer-checked:text-blue-400 dark:hover:border-gray-600"
-              >
-                <div
-                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#3D9A66]"
-                >
-                  <span class="icon-[fad--random-1dice] h-8 w-8 text-white sm:h-9 sm:w-9"></span>
-                </div>
-                <p class="text-sm font-medium sm:text-base dark:text-gray-200">
-                  Productos de captación
-                </p>
-              </span>
-            </label>
-          </li>
-
-          <!-- Productos de colocación -->
-          <li class="w-full">
-            <label class="block w-full text-slate-400 dark:text-gray-300">
-              <input
-                type="radio"
-                name="producto"
-                value="productos-colocacion"
-                [(ngModel)]="datosFormulario.producto"
-                class="peer absolute h-px w-px overflow-hidden whitespace-nowrap opacity-0"
-              />
-              <span
-                class="relative flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-3 transition-all duration-200 peer-checked:border-blue-500 peer-checked:text-blue-600 peer-checked:shadow-md before:absolute before:top-3 before:left-3 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-[3px] before:text-xs before:font-bold before:text-white before:opacity-0 before:transition-all before:content-['✓'] peer-checked:before:scale-100 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 hover:border-blue-400 hover:shadow-sm hover:before:scale-100 hover:before:border-gray-400 hover:before:opacity-50 peer-checked:hover:before:opacity-100 dark:border-gray-700 dark:bg-gray-800 dark:peer-checked:border-blue-400 dark:peer-checked:text-blue-400 dark:hover:border-gray-600"
-              >
-                <div
-                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#4B73BD]"
-                >
-                  <span class="icon-[fad--random-1dice] h-8 w-8 text-white sm:h-9 sm:w-9"></span>
-                </div>
-                <p class="text-sm font-medium sm:text-base dark:text-gray-200">
-                  Productos de colocación
-                </p>
-              </span>
-            </label>
-          </li>
-        </ul>
-      </div>
-    </article>
-
-    <!-- Sección 2 y 3: Modo e Interacción -->
-    <article class="mt-8 grid w-full grid-cols-1 gap-8 md:mt-12 lg:grid-cols-2 lg:gap-8 xl:gap-12">
-      <!-- Modo -->
-      <div class="w-full">
-        <div class="mb-4 flex items-center gap-2 md:mb-6">
-          <span
-            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#545454] text-sm font-bold text-white sm:h-7 sm:w-7"
-            >2</span
-          >
-          <h2 class="text-base font-medium sm:text-lg md:text-xl dark:text-gray-200">
-            Selecciona el modo
-          </h2>
+      <div class="relative z-10 flex flex-1 flex-col">
+        <!-- Header - Centrado -->
+        <div class="mb-6 flex flex-col items-center gap-3 text-center sm:mb-8 md:mb-10">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#00A448]/10 xs:h-16 xs:w-16 sm:h-20 sm:w-20 dark:bg-[#00A448]/20">
+            <span class="icon-[hugeicons--vr-glasses] h-7 w-7 text-[#00A448] xs:h-8 xs:w-8 sm:h-10 sm:w-10"></span>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-[#034D82] xs:text-2xl sm:text-3xl dark:text-white">Configurar Simulación</h1>
+            <p class="text-xs text-[#4a5d6f] xs:text-sm sm:text-base dark:text-gray-400">Personaliza tu experiencia de simulación bancaria</p>
+          </div>
         </div>
 
-        <!-- Grid que ocupa el 100% del contenedor padre -->
-        <ul
-          class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:px-[17%] lg:gap-8 lg:px-0"
-        >
-          <li class="w-full">
-            <label class="block w-full text-slate-400 dark:text-gray-300">
-              <input
-                type="radio"
-                name="modo"
-                value="aprendizaje"
-                class="peer absolute h-px w-px opacity-0"
-                [(ngModel)]="datosFormulario.modo"
-                required
-              />
-              <span
-                class="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-3 transition-all duration-200 peer-checked:border-blue-500 peer-checked:text-blue-600 peer-checked:shadow-md before:absolute before:top-2 before:left-2 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-[3px] before:text-xs before:font-bold before:text-white before:opacity-0 before:transition-all before:content-['✓'] peer-checked:before:scale-100 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 hover:border-blue-400 hover:shadow-sm hover:before:scale-100 hover:before:border-gray-400 hover:before:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
-              >
-                <span class="icon-[noto--brain] h-14 w-14 sm:h-16 sm:w-16"></span>
-                <p class="text-sm font-medium sm:text-base dark:text-gray-200">Aprendizaje</p>
-              </span>
-            </label>
-          </li>
+        <!-- Contenido principal con flex-1 para ocupar espacio -->
+        <div class="flex flex-1 flex-col justify-between gap-6 sm:gap-8">
+          <!-- Secciones de configuración -->
+          <div class="space-y-5 xs:space-y-6 sm:space-y-8 md:space-y-10">
+            <!-- Sección 1: Producto -->
+            <div class="rounded-lg border border-[#e8f4fc] bg-gray-50/50 p-3 xs:rounded-xl xs:p-4 sm:p-5 md:p-6 dark:border-gray-700 dark:bg-gray-900/30">
+              <h2 class="mb-2 flex items-center gap-2 text-sm font-semibold text-[#034D82] xs:mb-3 xs:gap-3 xs:text-base sm:mb-4 sm:text-lg dark:text-white">
+                <span class="flex h-6 w-6 items-center justify-center rounded-md bg-[#00A448] text-xs font-bold text-white xs:h-7 xs:w-7 xs:rounded-lg xs:text-sm">1</span>
+                Selecciona un producto
+              </h2>
+              <p class="mb-3 text-xs text-[#4a5d6f] xs:mb-4 xs:text-sm dark:text-gray-400">Elige la categoría de producto bancario que deseas practicar</p>
 
-          <li class="w-full">
-            <label class="block w-full text-slate-400 dark:text-gray-300">
-              <input
-                type="radio"
-                name="modo"
-                value="evaluativo"
-                class="peer absolute h-px w-px opacity-0"
-                [(ngModel)]="datosFormulario.modo"
-              />
-              <span
-                class="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-3 transition-all duration-200 peer-checked:border-blue-500 peer-checked:text-blue-600 peer-checked:shadow-md before:absolute before:top-2 before:left-2 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-[3px] before:text-xs before:font-bold before:text-white before:opacity-0 before:transition-all before:content-['✓'] peer-checked:before:scale-100 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 hover:border-blue-400 hover:shadow-sm hover:before:scale-100 hover:before:border-gray-400 hover:before:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
-              >
-                <span class="icon-[noto--graduation-cap] h-14 w-14 sm:h-16 sm:w-16"></span>
-                <p class="text-sm font-medium sm:text-base dark:text-gray-200">Evaluativo</p>
-              </span>
-            </label>
-          </li>
-        </ul>
-      </div>
+              <!-- Grid de productos - 1 col en móvil, 3 en sm+ -->
+              <div class="grid grid-cols-1 gap-2 xs:gap-3 sm:grid-cols-3 sm:gap-4 md:gap-5">
+                <!-- Todos los productos -->
+                <label class="cursor-pointer select-none">
+                  <input type="radio" name="producto" value="todos-productos" [(ngModel)]="datosFormulario.producto" class="peer absolute h-[1px] w-[1px] overflow-hidden whitespace-nowrap opacity-0" required />
+                  <span class="relative flex h-full items-center gap-3 rounded-lg border-2 border-gray-200 bg-white p-3 transition-all duration-200 before:absolute before:left-1.5 before:top-1.5 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-2 before:border-gray-200 before:text-xs before:text-white before:opacity-0 before:transition-transform before:content-['✓'] hover:border-[#00A448] hover:before:scale-100 hover:before:opacity-100 peer-checked:border-[#00A448] peer-checked:before:scale-100 peer-checked:before:border-[#00A448] peer-checked:before:bg-[#00A448] peer-checked:before:opacity-100 xs:gap-4 xs:rounded-xl xs:p-4 xs:before:left-2 xs:before:top-2 xs:before:h-6 xs:before:w-6 sm:min-h-32 sm:flex-col sm:items-center sm:justify-center sm:p-5 dark:border-gray-600 dark:bg-gray-800 dark:before:border-gray-500 dark:peer-checked:border-[#00A448] dark:peer-checked:before:border-[#00A448]">
+                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#797979] xs:h-14 xs:w-14 sm:h-16 sm:w-16">
+                      <span class="icon-[fad--random-1dice] h-7 w-7 text-white xs:h-8 xs:w-8 sm:h-10 sm:w-10"></span>
+                    </span>
+                    <span class="min-w-0 flex-1 sm:text-center">
+                      <span class="block text-sm font-semibold text-[#034D82] xs:text-base dark:text-white">Todos los productos</span>
+                      <span class="block text-xs text-[#4a5d6f] xs:text-sm dark:text-gray-400">Aleatorio completo</span>
+                    </span>
+                  </span>
+                </label>
+                <!-- Captación -->
+                <label class="cursor-pointer select-none">
+                  <input type="radio" name="producto" value="productos-captacion" [(ngModel)]="datosFormulario.producto" class="peer absolute h-[1px] w-[1px] overflow-hidden whitespace-nowrap opacity-0" />
+                  <span class="relative flex h-full items-center gap-3 rounded-lg border-2 border-gray-200 bg-white p-3 transition-all duration-200 before:absolute before:left-1.5 before:top-1.5 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-2 before:border-gray-200 before:text-xs before:text-white before:opacity-0 before:transition-transform before:content-['✓'] hover:border-[#3D9A66] hover:before:scale-100 hover:before:opacity-100 peer-checked:border-[#3D9A66] peer-checked:before:scale-100 peer-checked:before:border-[#3D9A66] peer-checked:before:bg-[#3D9A66] peer-checked:before:opacity-100 xs:gap-4 xs:rounded-xl xs:p-4 xs:before:left-2 xs:before:top-2 xs:before:h-6 xs:before:w-6 sm:min-h-32 sm:flex-col sm:items-center sm:justify-center sm:p-5 dark:border-gray-600 dark:bg-gray-800 dark:before:border-gray-500 dark:peer-checked:border-[#3D9A66] dark:peer-checked:before:border-[#3D9A66]">
+                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#3D9A66] xs:h-14 xs:w-14 sm:h-16 sm:w-16">
+                      <span class="icon-[fad--random-1dice] h-7 w-7 text-white xs:h-8 xs:w-8 sm:h-10 sm:w-10"></span>
+                    </span>
+                    <span class="min-w-0 flex-1 sm:text-center">
+                      <span class="block text-sm font-semibold text-[#034D82] xs:text-base dark:text-white">Productos de captación</span>
+                      <span class="block text-xs text-[#4a5d6f] xs:text-sm dark:text-gray-400">Aleatorio captación</span>
+                    </span>
+                  </span>
+                </label>
+                <!-- Colocación -->
+                <label class="cursor-pointer select-none">
+                  <input type="radio" name="producto" value="productos-colocacion" [(ngModel)]="datosFormulario.producto" class="peer absolute h-[1px] w-[1px] overflow-hidden whitespace-nowrap opacity-0" />
+                  <span class="relative flex h-full items-center gap-3 rounded-lg border-2 border-gray-200 bg-white p-3 transition-all duration-200 before:absolute before:left-1.5 before:top-1.5 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-2 before:border-gray-200 before:text-xs before:text-white before:opacity-0 before:transition-transform before:content-['✓'] hover:border-[#4B73BD] hover:before:scale-100 hover:before:opacity-100 peer-checked:border-[#4B73BD] peer-checked:before:scale-100 peer-checked:before:border-[#4B73BD] peer-checked:before:bg-[#4B73BD] peer-checked:before:opacity-100 xs:gap-4 xs:rounded-xl xs:p-4 xs:before:left-2 xs:before:top-2 xs:before:h-6 xs:before:w-6 sm:min-h-32 sm:flex-col sm:items-center sm:justify-center sm:p-5 dark:border-gray-600 dark:bg-gray-800 dark:before:border-gray-500 dark:peer-checked:border-[#4B73BD] dark:peer-checked:before:border-[#4B73BD]">
+                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#4B73BD] xs:h-14 xs:w-14 sm:h-16 sm:w-16">
+                      <span class="icon-[fad--random-1dice] h-7 w-7 text-white xs:h-8 xs:w-8 sm:h-10 sm:w-10"></span>
+                    </span>
+                    <span class="min-w-0 flex-1 sm:text-center">
+                      <span class="block text-sm font-semibold text-[#034D82] xs:text-base dark:text-white">Productos de colocación</span>
+                      <span class="block text-xs text-[#4a5d6f] xs:text-sm dark:text-gray-400">Aleatorio colocación</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
 
-      <!-- Interacción -->
-      <div class="w-full">
-        <div class="mb-4 flex items-center gap-2 md:mb-6">
-          <span
-            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#545454] text-sm font-bold text-white sm:h-7 sm:w-7"
-            >3</span
-          >
-          <h2 class="text-base font-medium sm:text-lg md:text-xl dark:text-gray-200">
-            Selecciona la interacción
-          </h2>
+            <!-- Sección 2 y 3: Modo e Interacción -->
+            <div class="grid grid-cols-1 gap-4 xs:gap-5 sm:gap-6 md:grid-cols-2 md:gap-8">
+              <!-- Modo -->
+              <div class="rounded-lg border border-[#e8f4fc] bg-gray-50/50 p-3 xs:rounded-xl xs:p-4 sm:p-5 md:p-6 dark:border-gray-700 dark:bg-gray-900/30">
+                <h2 class="mb-2 flex items-center gap-2 text-sm font-semibold text-[#034D82] xs:mb-3 xs:gap-3 xs:text-base sm:mb-4 sm:text-lg dark:text-white">
+                  <span class="flex h-6 w-6 items-center justify-center rounded-md bg-[#8b5cf6] text-xs font-bold text-white xs:h-7 xs:w-7 xs:rounded-lg xs:text-sm">2</span>
+                  Selecciona el modo
+                </h2>
+                <p class="mb-3 text-xs text-[#4a5d6f] xs:mb-4 xs:text-sm dark:text-gray-400">Define si deseas practicar con ayuda o evaluar tus conocimientos</p>
+                <!-- Grid 2 columnas siempre, con altura igual -->
+                <div class="grid auto-rows-fr grid-cols-2 gap-2 xs:gap-3 sm:gap-4 md:gap-5">
+                  <label class="cursor-pointer select-none">
+                    <input type="radio" name="modo" value="aprendizaje" [(ngModel)]="datosFormulario.modo" class="peer absolute h-[1px] w-[1px] overflow-hidden whitespace-nowrap opacity-0" required />
+                    <span class="relative flex h-full min-h-24 flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-gray-200 bg-white p-2.5 text-center transition-all duration-200 before:absolute before:left-1.5 before:top-1.5 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-2 before:border-gray-200 before:text-xs before:text-white before:opacity-0 before:transition-transform before:content-['✓'] hover:border-[#8b5cf6] hover:before:scale-100 hover:before:opacity-100 peer-checked:border-[#8b5cf6] peer-checked:before:scale-100 peer-checked:before:border-[#8b5cf6] peer-checked:before:bg-[#8b5cf6] peer-checked:before:opacity-100 xs:min-h-28 xs:gap-2 xs:rounded-xl xs:p-3 xs:before:left-2 xs:before:top-2 xs:before:h-6 xs:before:w-6 sm:min-h-32 sm:gap-3 sm:p-4 md:p-5 dark:border-gray-600 dark:bg-gray-800 dark:before:border-gray-500 dark:peer-checked:border-[#8b5cf6] dark:peer-checked:before:border-[#8b5cf6]">
+                      <span class="icon-[noto--brain] h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 md:h-16 md:w-16"></span>
+                      <span class="block">
+                        <span class="block text-xs font-semibold text-[#034D82] xs:text-sm sm:text-base dark:text-white">Aprendizaje</span>
+                        <span class="hidden text-xs text-[#4a5d6f] xs:block sm:text-sm dark:text-gray-400">Con retroalimentación</span>
+                      </span>
+                    </span>
+                  </label>
+                  <label class="cursor-pointer select-none">
+                    <input type="radio" name="modo" value="evaluativo" [(ngModel)]="datosFormulario.modo" class="peer absolute h-[1px] w-[1px] overflow-hidden whitespace-nowrap opacity-0" />
+                    <span class="relative flex h-full min-h-24 flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-gray-200 bg-white p-2.5 text-center transition-all duration-200 before:absolute before:left-1.5 before:top-1.5 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-2 before:border-gray-200 before:text-xs before:text-white before:opacity-0 before:transition-transform before:content-['✓'] hover:border-[#f59e0b] hover:before:scale-100 hover:before:opacity-100 peer-checked:border-[#f59e0b] peer-checked:before:scale-100 peer-checked:before:border-[#f59e0b] peer-checked:before:bg-[#f59e0b] peer-checked:before:opacity-100 xs:min-h-28 xs:gap-2 xs:rounded-xl xs:p-3 xs:before:left-2 xs:before:top-2 xs:before:h-6 xs:before:w-6 sm:min-h-32 sm:gap-3 sm:p-4 md:p-5 dark:border-gray-600 dark:bg-gray-800 dark:before:border-gray-500 dark:peer-checked:border-[#f59e0b] dark:peer-checked:before:border-[#f59e0b]">
+                      <span class="icon-[noto--graduation-cap] h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 md:h-16 md:w-16"></span>
+                      <span class="block">
+                        <span class="block text-xs font-semibold text-[#034D82] xs:text-sm sm:text-base dark:text-white">Evaluativo</span>
+                        <span class="hidden text-xs text-[#4a5d6f] xs:block sm:text-sm dark:text-gray-400">Mide tu desempeño</span>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Interacción -->
+              <div class="rounded-lg border border-[#e8f4fc] bg-gray-50/50 p-3 xs:rounded-xl xs:p-4 sm:p-5 md:p-6 dark:border-gray-700 dark:bg-gray-900/30">
+                <h2 class="mb-2 flex items-center gap-2 text-sm font-semibold text-[#034D82] xs:mb-3 xs:gap-3 xs:text-base sm:mb-4 sm:text-lg dark:text-white">
+                  <span class="flex h-6 w-6 items-center justify-center rounded-md bg-[#1788EF] text-xs font-bold text-white xs:h-7 xs:w-7 xs:rounded-lg xs:text-sm">3</span>
+                  Selecciona la interacción
+                </h2>
+                <p class="mb-3 text-xs text-[#4a5d6f] xs:mb-4 xs:text-sm dark:text-gray-400">Elige cómo deseas escuchar las respuestas del cliente virtual</p>
+                <!-- Grid 2 columnas siempre, con altura igual -->
+                <div class="grid auto-rows-fr grid-cols-2 gap-2 xs:gap-3 sm:gap-4 md:gap-5">
+                  <label class="cursor-pointer select-none">
+                    <input type="radio" name="interaccion" value="automatico" [(ngModel)]="datosFormulario.interaccion" class="peer absolute h-px w-px overflow-hidden whitespace-nowrap opacity-0" required />
+                    <span class="relative flex h-full min-h-24 flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-gray-200 bg-white p-2.5 text-center transition-all duration-200 before:absolute before:left-1.5 before:top-1.5 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-2 before:border-gray-200 before:text-xs before:text-white before:opacity-0 before:transition-transform before:content-['✓'] hover:border-[#1788EF] hover:before:scale-100 hover:before:opacity-100 peer-checked:border-[#1788EF] peer-checked:before:scale-100 peer-checked:before:border-[#1788EF] peer-checked:before:bg-[#1788EF] peer-checked:before:opacity-100 xs:min-h-28 xs:gap-2 xs:rounded-xl xs:p-3 xs:before:left-2 xs:before:top-2 xs:before:h-6 xs:before:w-6 sm:min-h-32 sm:gap-3 sm:p-4 md:p-5 dark:border-gray-600 dark:bg-gray-800 dark:before:border-gray-500 dark:peer-checked:border-[#1788EF] dark:peer-checked:before:border-[#1788EF]">
+                      <span class="icon-[emojione-v1--right-speaker-3-sound-waves] h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 md:h-16 md:w-16"></span>
+                      <span class="block">
+                        <span class="block text-xs font-semibold text-[#034D82] xs:text-sm sm:text-base dark:text-white">Automático</span>
+                        <span class="hidden text-xs text-[#4a5d6f] xs:block sm:text-sm dark:text-gray-400">Voz automática</span>
+                      </span>
+                    </span>
+                  </label>
+                  <label class="cursor-pointer select-none">
+                    <input type="radio" name="interaccion" value="manual" [(ngModel)]="datosFormulario.interaccion" class="peer absolute h-px w-px overflow-hidden whitespace-nowrap opacity-0" />
+                    <span class="relative flex h-full min-h-24 flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-gray-200 bg-white p-2.5 text-center transition-all duration-200 before:absolute before:left-1.5 before:top-1.5 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-2 before:border-gray-200 before:text-xs before:text-white before:opacity-0 before:transition-transform before:content-['✓'] hover:border-[#034D82] hover:before:scale-100 hover:before:opacity-100 peer-checked:border-[#034D82] peer-checked:before:scale-100 peer-checked:before:border-[#034D82] peer-checked:before:bg-[#034D82] peer-checked:before:opacity-100 xs:min-h-28 xs:gap-2 xs:rounded-xl xs:p-3 xs:before:left-2 xs:before:top-2 xs:before:h-6 xs:before:w-6 sm:min-h-32 sm:gap-3 sm:p-4 md:p-5 dark:border-gray-600 dark:bg-gray-800 dark:before:border-gray-500 dark:peer-checked:border-blue-400 dark:peer-checked:before:border-blue-400 dark:peer-checked:before:bg-blue-400">
+                      <span class="icon-[emojione-v1--speaker-with-1-sound-wave] h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 md:h-16 md:w-16"></span>
+                      <span class="block">
+                        <span class="block text-xs font-semibold text-[#034D82] xs:text-sm sm:text-base dark:text-white">Manual</span>
+                        <span class="hidden text-xs text-[#4a5d6f] xs:block sm:text-sm dark:text-gray-400">Control de voz</span>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón de envío -->
+          <div class="flex justify-center pt-2 xs:pt-4 sm:pt-6">
+            <button
+              type="submit"
+              [disabled]="!form.valid || cargando"
+              class="group flex w-full max-w-xs cursor-pointer items-center justify-center gap-2 rounded-full bg-[#00A448] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#00A448]/25 transition-all duration-300 hover:bg-[#008a3a] hover:shadow-xl hover:shadow-[#00A448]/30 focus:ring-2 focus:ring-[#00A448]/50 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-[#00A448] disabled:hover:shadow-lg xs:gap-3 xs:px-6 xs:py-3.5 xs:text-base sm:w-auto sm:min-w-60 sm:px-8 sm:py-4 sm:text-lg dark:shadow-[#00A448]/20 dark:focus:ring-offset-gray-800"
+            >
+              <ng-container *ngIf="!cargando; else loadingTemplate">
+                <span>Empezar simulación</span>
+                <div class="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1 xs:h-6 xs:w-6 sm:h-7 sm:w-7">
+                  <span class="icon-[hugeicons--play] h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4"></span>
+                </div>
+              </ng-container>
+              <ng-template #loadingTemplate>
+                <span class="loading loading-spinner loading-xs xs:loading-sm"></span>
+                <span>Iniciando...</span>
+              </ng-template>
+            </button>
+          </div>
         </div>
-
-        <!-- Grid que ocupa el 100% del contenedor padre -->
-        <ul
-          class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:px-[17%] lg:gap-8 lg:px-0"
-        >
-          <li class="w-full">
-            <label class="block w-full text-slate-400 dark:text-gray-300">
-              <input
-                type="radio"
-                name="interaccion"
-                value="automatico"
-                [(ngModel)]="datosFormulario.interaccion"
-                required
-                class="peer absolute h-px w-px opacity-0"
-              />
-              <span
-                class="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-3 transition-all duration-200 peer-checked:border-blue-500 peer-checked:text-blue-600 peer-checked:shadow-md before:absolute before:top-2 before:left-2 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-[3px] before:text-xs before:font-bold before:text-white before:opacity-0 before:transition-all before:content-['✓'] peer-checked:before:scale-100 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 hover:border-blue-400 hover:shadow-sm hover:before:scale-100 hover:before:border-gray-400 hover:before:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
-              >
-                <span
-                  class="icon-[emojione-v1--right-speaker-3-sound-waves] h-14 w-14 sm:h-16 sm:w-16"
-                ></span>
-                <p class="text-center text-sm font-medium sm:text-base dark:text-gray-200">
-                  Automático
-                </p>
-              </span>
-            </label>
-          </li>
-
-          <li class="w-full">
-            <label class="block w-full text-slate-400 dark:text-gray-300">
-              <input
-                type="radio"
-                name="interaccion"
-                value="manual"
-                [(ngModel)]="datosFormulario.interaccion"
-                class="peer absolute h-px w-px opacity-0"
-              />
-              <span
-                class="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-gray-300 bg-white p-3 transition-all duration-200 peer-checked:border-blue-500 peer-checked:text-blue-600 peer-checked:shadow-md before:absolute before:top-2 before:left-2 before:flex before:h-5 before:w-5 before:scale-0 before:items-center before:justify-center before:rounded-full before:border-[3px] before:text-xs before:font-bold before:text-white before:opacity-0 before:transition-all before:content-['✓'] peer-checked:before:scale-100 peer-checked:before:border-blue-500 peer-checked:before:bg-blue-500 peer-checked:before:opacity-100 hover:border-blue-400 hover:shadow-sm hover:before:scale-100 hover:before:border-gray-400 hover:before:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
-              >
-                <span
-                  class="icon-[emojione-v1--speaker-with-1-sound-wave] h-14 w-14 sm:h-16 sm:w-16"
-                ></span>
-                <p class="text-center text-sm font-medium sm:text-base dark:text-gray-200">
-                  Manual
-                </p>
-              </span>
-            </label>
-          </li>
-        </ul>
       </div>
-    </article>
-
-    <!-- Botón de envío -->
-    <button
-      type="submit"
-      [disabled]="!form.valid"
-      class="my-8 flex w-full max-w-xs cursor-pointer items-center justify-center gap-3 rounded-full bg-[#009040] px-6 py-3 font-medium text-white shadow-md transition-all duration-200 hover:bg-[#007a33] hover:shadow-lg focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#009040] sm:px-8 sm:py-3.5 md:mt-12 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-500"
-    >
-      <p class="text-sm sm:text-base">Empezar simulación</p>
-      <div
-        class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-700 p-1 sm:h-7 sm:w-7 dark:bg-gray-700"
-      >
-        <span class="icon-[solar--play-linear] h-full w-full dark:text-green-300"></span>
-      </div>
-    </button>
-  </div>
+    </div>
+  </section>
 </form>

@@ -1,45 +1,72 @@
-<article
-  class="flex h-full flex-col rounded-lg border-2 border-[#E7E9EB] bg-white dark:border-gray-700 dark:bg-gray-800"
->
-  <div
-    class="flex flex-shrink-0 items-center justify-center border-b-2 border-[#E7E9EB] p-2.5 dark:border-gray-700"
-  >
-    <p class="text-[20px] font-medium text-elegant-700 dark:text-gray-200">
-      Consigue Logros y presume de lograr grandes cosas en SimulaBank
-    </p>
-  </div>
-  <div class="flex-grow overflow-auto p-5 dark:text-gray-300">
-    <div class="mx-auto flex max-w-6xl flex-col items-center gap-4">
-      <ng-container *ngIf="logrosPlataforma.length; else sinLogrosPlataforma">
-        <div class="flex w-full flex-wrap justify-center gap-4">
-          <ng-container *ngFor="let logro of logrosPlataforma">
-            <div
-              class="flex w-52 flex-col overflow-hidden rounded-lg border-2 border-[#E7E9EB] dark:border-gray-700"
-            >
-              <div
-                class="flex h-40 items-center justify-center overflow-hidden bg-gray-100 p-3 dark:bg-gray-900"
-              >
-                <img
-                  [src]="logro.imagen"
-                  class="max-h-full max-w-full object-contain drop-shadow-lg"
-                  [alt]="logro.nombre"
-                />
-              </div>
-              <div
-                class="flex h-20 items-center justify-center border-t-2 border-[#E7E9EB] bg-white p-2 text-center dark:border-gray-700 dark:bg-gray-800"
-              >
-                <p class="text-sm">{{ logro.nombre }}</p>
+<div class="flex min-h-full w-full flex-col items-center gap-6 sm:gap-8">
+  <!-- Hero Section -->
+  <section class="w-full max-w-5xl">
+    <div class="relative overflow-hidden rounded-2xl border border-[#e8f4fc] bg-white p-6 shadow-lg shadow-gray-200/60 sm:p-8 md:p-10 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/30">
+      <!-- Decoraciones de fondo -->
+      <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#f59e0b]/10 to-transparent sm:h-28 sm:w-28 md:h-40 md:w-40 dark:from-[#f59e0b]/20"></div>
+      <div class="absolute bottom-0 left-0 h-16 w-16 rounded-tr-full bg-linear-to-tr from-[#00A448]/10 to-transparent sm:h-24 sm:w-24 md:h-36 md:w-36 dark:from-[#00A448]/20"></div>
+
+      <div class="relative z-10">
+        <!-- Encabezado con icono -->
+        <div class="mb-4 flex flex-col items-center md:mb-6">
+          <div class="mb-4 flex items-center justify-center">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f59e0b]/10 sm:h-16 sm:w-16 md:h-20 md:w-20 dark:bg-[#f59e0b]/20">
+              <span class="icon-[hugeicons--award-01] h-8 w-8 text-[#f59e0b] sm:h-10 sm:w-10 md:h-12 md:w-12"></span>
+            </div>
+          </div>
+          <h1 class="text-center text-2xl font-bold text-[#034D82] sm:text-3xl md:text-4xl dark:text-white">
+            Logros
+          </h1>
+        </div>
+
+        <!-- Descripción principal -->
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base md:text-lg md:leading-[1.8] dark:text-gray-300">
+            Consigue <span class="font-medium text-[#f59e0b]">logros especiales</span> completando simulaciones y
+            dominando las habilidades de <span class="font-medium text-[#00A448]">asesoría financiera</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Logros -->
+  <section class="w-full max-w-5xl">
+    <ng-container *ngIf="logrosPlataforma.length; else sinLogrosPlataforma">
+      <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <ng-container *ngFor="let logro of logrosPlataforma">
+          <div class="overflow-hidden rounded-xl border border-[#e8f4fc] bg-white shadow-sm shadow-gray-200/60 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+            <!-- Imagen del logro -->
+            <div class="relative flex h-36 items-center justify-center overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 p-4 sm:h-40 dark:from-gray-900 dark:to-gray-800">
+              <img
+                [src]="logro.imagen"
+                class="relative z-10 max-h-full max-w-full object-contain drop-shadow-lg"
+                [alt]="logro.nombre"
+              />
+            </div>
+            <!-- Info del logro -->
+            <div class="flex items-center justify-center border-t border-[#e8f4fc] bg-white p-4 text-center dark:border-gray-700 dark:bg-gray-800">
+              <div class="flex items-center gap-2">
+                <span *ngIf="tieneLogro(logro.id_logro)" class="icon-[heroicons-solid--star] h-4 w-4 text-[#f59e0b]" title="¡Logro conseguido!"></span>
+                <p class="text-sm font-medium text-[#034D82] dark:text-white">{{ logro.nombre }}</p>
               </div>
             </div>
-          </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <!-- Estado vacío -->
+    <ng-template #sinLogrosPlataforma>
+      <div class="flex flex-col items-center justify-center rounded-xl border border-[#e8f4fc] bg-white p-8 text-center shadow-md sm:p-12 dark:border-gray-700 dark:bg-gray-800">
+        <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 sm:h-20 sm:w-20 dark:bg-gray-700">
+          <span class="icon-[hugeicons--award-01] h-8 w-8 text-gray-400 sm:h-10 sm:w-10 dark:text-gray-500"></span>
         </div>
-      </ng-container>
-      <ng-template #sinLogrosPlataforma>
-        <p class="max-w-xl text-center text-sm text-elegant-500 dark:text-gray-400">
-          No tienes logros. Ve a la sección de logros de la plataforma para enterarte qué debes
-          hacer.
+        <h3 class="mb-2 text-lg font-semibold text-[#034D82] sm:text-xl dark:text-white">No hay logros disponibles</h3>
+        <p class="max-w-md text-sm text-[#4a5d6f] sm:text-base dark:text-gray-400">
+          Pronto habrá logros disponibles para que puedas conseguirlos.
         </p>
-      </ng-template>
-    </div>
-  </div>
-</article>
+      </div>
+    </ng-template>
+  </section>
+</div>

@@ -1,147 +1,207 @@
-<div
-  class="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-xl border-2 border-[#E7E9EB] bg-white leading-relaxed text-gray-800 md:p-10 md:leading-loose dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
->
-  <!-- TÍTULO PRINCIPAL -->
-  <h1 class="text-center text-3xl font-bold md:text-4xl dark:text-gray-100">
-    Información de las simulaciones - SimulaBank
-  </h1>
+<div class="flex min-h-full w-full flex-col items-center gap-6 sm:gap-8">
+  <!-- Hero Section -->
+  <section class="w-full max-w-5xl">
+    <div class="relative overflow-hidden rounded-2xl border border-[#e8f4fc] bg-white p-6 shadow-lg shadow-gray-200/60 sm:p-8 md:p-10 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/30">
+      <!-- Decoraciones de fondo -->
+      <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#1788EF]/10 to-transparent sm:h-28 sm:w-28 md:h-40 md:w-40 dark:from-[#1788EF]/20"></div>
+      <div class="absolute bottom-0 left-0 h-16 w-16 rounded-tr-full bg-linear-to-tr from-[#00A448]/10 to-transparent sm:h-24 sm:w-24 md:h-36 md:w-36 dark:from-[#00A448]/20"></div>
 
-  <!-- CONTENIDO -->
-  <section>
-    <h2 class="mt-6 text-2xl font-semibold dark:text-gray-100">Perfil de clientes</h2>
-    <p class="dark:text-gray-300">
-      En <strong class="dark:text-gray-200">SimulaBank</strong> ofrecemos servicios financieros
-      ajustados a distintos perfiles de clientes:
-    </p>
+      <div class="relative z-10">
+        <!-- Encabezado con icono -->
+        <div class="mb-6 flex flex-col items-center md:mb-8">
+          <div class="mb-4 flex items-center justify-center">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1788EF]/10 sm:h-16 sm:w-16 md:h-20 md:w-20 dark:bg-[#1788EF]/20">
+              <span class="icon-[hugeicons--document-validation] h-8 w-8 text-[#1788EF] sm:h-10 sm:w-10 md:h-12 md:w-12"></span>
+            </div>
+          </div>
+          <h1 class="text-center text-2xl font-bold text-[#034D82] sm:text-3xl md:text-4xl dark:text-white">
+            Información de las simulaciones - SimulaBank
+          </h1>
+        </div>
 
-    <!-- Perfil Privado -->
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Privado / Private Banking</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>
-          Personas con altos ingresos o patrimonio elevado (ingresos desde $25.000.000/mes o
-          patrimonio desde $1.000.000.000).
-        </li>
-        <li>Atención 100% personalizada, con un ejecutivo exclusivo.</li>
-      </ul>
-    </div>
-
-    <!-- Persona Natural -->
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Persona Natural</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Personas con ingresos altos, medios o modestos (desde $0 hasta $25.000.000/mes).</li>
-        <li>Atención personalizada o mixta, de acuerdo con sus necesidades.</li>
-      </ul>
-    </div>
-
-    <!-- Básico -->
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Básico / Salario Mínimo</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Personas con ingresos cercanos al SMLV ($1.300.000 – $2.600.000/mes).</li>
-        <li>Acceso a productos de bajo costo, cuentas de ahorro básicas y educación financiera.</li>
-      </ul>
-    </div>
-
-    <!-- Pyme -->
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold">PYME / MiPyme / Microcréditos</h3>
-      <ul class="list-disc space-y-2 pl-6">
-        <li>
-          Empresas pequeñas, medianas o independientes, con ventas anuales entre $400.000.000 y
-          $12.000.000.000.
-        </li>
-        <li>Atención guiada por un asesor empresarial.</li>
-      </ul>
-    </div>
-
-    <!-- Empresarial -->
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold">Empresarial / Corporativo</h3>
-      <ul class="list-disc space-y-2 pl-6">
-        <li>Grandes empresas y corporaciones con ventas anuales superiores a $12.000.000.000.</li>
-        <li>Soluciones integrales y personalizadas para gestión financiera.</li>
-      </ul>
+        <!-- Descripción principal -->
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base md:text-lg md:leading-[1.8] dark:text-gray-300">
+            Conoce los diferentes <span class="font-medium text-[#00A448]">perfiles de clientes</span>,
+            <span class="font-medium text-[#1788EF]">tipos de personalidades</span> y
+            <span class="font-medium text-[#034D82] dark:text-blue-400">productos financieros</span>
+            que encontrarás en las simulaciones de <strong class="text-[#034D82] dark:text-white">SimulaBank</strong>.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Tipos de clientes -->
-  <section class="mt-8">
-    <h2 class="text-2xl font-semibold dark:text-gray-100">Tipos de clientes</h2>
-    <p class="dark:text-gray-300">
-      En SimulaBank entendemos que cada cliente tiene un estilo de interacción distinto. Algunos
-      ejemplos:
-    </p>
-    <ul class="mt-2 list-disc space-y-2 pl-6 dark:text-gray-300">
-      <li>Ideal o fiel: confía en la marca y compra de forma recurrente.</li>
-      <li>Amigable: cordial y cercano en la atención.</li>
-      <li>Detallista: revisa minuciosamente cada característica antes de decidir.</li>
-      <li>Conversador: busca interacción constante con el asesor.</li>
-      <li>Racional: toma decisiones basadas en datos y cifras claras.</li>
-      <li>Impaciente: quiere soluciones rápidas e inmediatas.</li>
-      <li>Negociador: busca mejores condiciones.</li>
-      <li>Crítico: encuentra fallas y exige mejoras.</li>
-      <li>Entusiasta: receptivo a nuevas ideas.</li>
-      <li>Informado: llega con conocimiento previo sobre los productos.</li>
-    </ul>
-  </section>
+  <!-- Contenido Principal -->
+  <section class="w-full max-w-5xl space-y-6">
+    <!-- Perfil de Clientes -->
+    <div class="rounded-xl border border-[#e8f4fc] bg-white p-5 shadow-sm shadow-gray-200/60 sm:p-6 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="icon-[heroicons-outline--users] h-5 w-5 shrink-0 text-[#1788EF] sm:h-6 sm:w-6"></span>
+        <h2 class="text-base font-semibold text-[#034D82] sm:text-lg dark:text-white">Perfil de Clientes</h2>
+      </div>
+      <p class="mb-4 text-sm text-[#4a5d6f] sm:text-base dark:text-gray-300">
+        En <strong class="text-[#034D82] dark:text-white">SimulaBank</strong> ofrecemos servicios financieros ajustados a distintos perfiles de clientes:
+      </p>
+      <div class="space-y-4">
+        <!-- Privado -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="badge badge-sm border-none bg-[#034D82] text-white sm:badge-md">Premium</span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Privado / Private Banking</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Personas con altos ingresos o patrimonio elevado (ingresos desde $25.000.000/mes o patrimonio desde $1.000.000.000).</li>
+            <li>Atención 100% personalizada, con un ejecutivo exclusivo.</li>
+          </ul>
+        </div>
+        <!-- Persona Natural -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="badge badge-sm border-none bg-[#1788EF] text-white sm:badge-md">Personal</span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Persona Natural</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Personas con ingresos altos, medios o modestos (desde $0 hasta $25.000.000/mes).</li>
+            <li>Atención personalizada o mixta, de acuerdo con sus necesidades.</li>
+          </ul>
+        </div>
+        <!-- Básico -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="badge badge-sm border-none bg-[#00A448] text-white sm:badge-md">Básico</span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Básico / Salario Mínimo</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Personas con ingresos cercanos al SMLV ($1.300.000 – $2.600.000/mes).</li>
+            <li>Acceso a productos de bajo costo, cuentas de ahorro básicas y educación financiera.</li>
+          </ul>
+        </div>
+        <!-- PYME -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="badge badge-sm border-none bg-[#f59e0b] text-white sm:badge-md">PYME</span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">PYME / MiPyme / Microcréditos</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Empresas pequeñas, medianas o independientes, con ventas anuales entre $400.000.000 y $12.000.000.000.</li>
+            <li>Atención guiada por un asesor empresarial.</li>
+          </ul>
+        </div>
+        <!-- Empresarial -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="badge badge-sm border-none bg-[#6366f1] text-white sm:badge-md">Corporativo</span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Empresarial / Corporativo</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Grandes empresas y corporaciones con ventas anuales superiores a $12.000.000.000.</li>
+            <li>Soluciones integrales y personalizadas para gestión financiera.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  <!-- Productos financieros -->
-  <section class="mt-8">
-    <h2 class="text-2xl font-semibold dark:text-gray-100">Productos financieros</h2>
-    <p class="dark:text-gray-300">
-      Estos son algunos de los principales productos financieros que ofrece SimulaBank:
-    </p>
-
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Cuenta de Ahorros SimulaBank</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Depósito seguro sin cuota de manejo, con tarjeta débito digital y física.</li>
-        <li>Ideal para manejar el dinero de forma práctica y segura desde la App.</li>
+    <!-- Tipos de Clientes -->
+    <div class="rounded-xl border border-[#e8f4fc] bg-white p-5 shadow-sm shadow-gray-200/60 sm:p-6 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="icon-[heroicons-outline--user-group] h-5 w-5 shrink-0 text-[#00A448] sm:h-6 sm:w-6"></span>
+        <h2 class="text-base font-semibold text-[#034D82] sm:text-lg dark:text-white">Tipos de Clientes</h2>
+      </div>
+      <p class="mb-4 text-sm text-[#4a5d6f] sm:text-base dark:text-gray-300">
+        En SimulaBank entendemos que cada cliente tiene un estilo de interacción distinto. Algunos ejemplos:
+      </p>
+      <ul class="ml-4 list-disc space-y-2 text-sm text-[#4a5d6f] dark:text-gray-400">
+        <li><strong class="text-[#034D82] dark:text-white">Ideal o fiel:</strong> confía en la marca y compra de forma recurrente.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Amigable:</strong> cordial y cercano en la atención.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Detallista:</strong> revisa minuciosamente cada característica antes de decidir.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Conversador:</strong> busca interacción constante con el asesor.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Racional:</strong> toma decisiones basadas en datos y cifras claras.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Impaciente:</strong> quiere soluciones rápidas e inmediatas.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Negociador:</strong> busca mejores condiciones.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Crítico:</strong> encuentra fallas y exige mejoras.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Entusiasta:</strong> receptivo a nuevas ideas.</li>
+        <li><strong class="text-[#034D82] dark:text-white">Informado:</strong> llega con conocimiento previo sobre los productos.</li>
       </ul>
     </div>
 
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Cuenta Corriente SimulaBank</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Producto flexible con chequera, sobregiro autorizado y acceso a canales digitales.</li>
-        <li>
-          Perfecto para pagos y cobros empresariales, con control de transacciones en tiempo real.
-        </li>
-      </ul>
-    </div>
-
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">CDT Digital SimulaBank</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Inversión a plazo fijo con tasas garantizadas y apertura 100% en línea.</li>
-        <li>Rentabilidad asegurada, respaldada por Fogafín.</li>
-      </ul>
-    </div>
-
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Crédito de Libre Inversión</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Préstamo sin destinación específica, con plazos de hasta 60 meses.</li>
-        <li>Aprobación rápida y sin necesidad de codeudor en montos bajos.</li>
-      </ul>
-    </div>
-
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Crédito Educativo EducaPlus</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Financiación de estudios técnicos, tecnológicos o profesionales.</li>
-        <li>Desembolso directo a la institución, tasa fija desde el inicio.</li>
-      </ul>
-    </div>
-
-    <div class="mt-4">
-      <h3 class="text-xl font-semibold dark:text-gray-100">Crédito Rotativo Empresarial</h3>
-      <ul class="list-disc space-y-2 pl-6 dark:text-gray-300">
-        <li>Línea de crédito flexible con cupo reutilizable y pagos según necesidades.</li>
-        <li>Liquidez inmediata para mantener el flujo de caja.</li>
-      </ul>
+    <!-- Productos Financieros -->
+    <div class="rounded-xl border border-[#e8f4fc] bg-white p-5 shadow-sm shadow-gray-200/60 sm:p-6 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="icon-[heroicons-outline--banknotes] h-5 w-5 shrink-0 text-[#034D82] sm:h-6 sm:w-6"></span>
+        <h2 class="text-base font-semibold text-[#034D82] sm:text-lg dark:text-white">Productos Financieros</h2>
+      </div>
+      <p class="mb-4 text-sm text-[#4a5d6f] sm:text-base dark:text-gray-300">
+        Estos son algunos de los principales productos financieros que ofrece SimulaBank:
+      </p>
+      <div class="space-y-4">
+        <!-- Cuenta de Ahorros -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--banknotes] h-5 w-5 text-[#00A448]"></span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Cuenta de Ahorros SimulaBank</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Depósito seguro sin cuota de manejo, con tarjeta débito digital y física.</li>
+            <li>Ideal para manejar el dinero de forma práctica y segura desde la App.</li>
+          </ul>
+        </div>
+        <!-- Cuenta Corriente -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--building-library] h-5 w-5 text-[#1788EF]"></span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Cuenta Corriente SimulaBank</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Producto flexible con chequera, sobregiro autorizado y acceso a canales digitales.</li>
+            <li>Perfecto para pagos y cobros empresariales, con control de transacciones en tiempo real.</li>
+          </ul>
+        </div>
+        <!-- CDT -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--chart-bar] h-5 w-5 text-[#6366f1]"></span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">CDT Digital SimulaBank</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Inversión a plazo fijo con tasas garantizadas y apertura 100% en línea.</li>
+            <li>Rentabilidad asegurada, respaldada por Fogafín.</li>
+          </ul>
+        </div>
+        <!-- Crédito Libre Inversión -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--credit-card] h-5 w-5 text-[#f59e0b]"></span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Crédito de Libre Inversión</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Préstamo sin destinación específica, con plazos de hasta 60 meses.</li>
+            <li>Aprobación rápida y sin necesidad de codeudor en montos bajos.</li>
+          </ul>
+        </div>
+        <!-- Crédito Educativo -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--academic-cap] h-5 w-5 text-[#ec4899]"></span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Crédito Educativo EducaPlus</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Financiación de estudios técnicos, tecnológicos o profesionales.</li>
+            <li>Desembolso directo a la institución, tasa fija desde el inicio.</li>
+          </ul>
+        </div>
+        <!-- Crédito Rotativo -->
+        <div class="rounded-lg border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--arrow-path] h-5 w-5 text-[#14b8a6]"></span>
+            <h3 class="font-semibold text-[#034D82] dark:text-white">Crédito Rotativo Empresarial</h3>
+          </div>
+          <ul class="ml-4 list-disc space-y-1 text-sm text-[#4a5d6f] dark:text-gray-400">
+            <li>Línea de crédito flexible con cupo reutilizable y pagos según necesidades.</li>
+            <li>Liquidez inmediata para mantener el flujo de caja.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 </div>

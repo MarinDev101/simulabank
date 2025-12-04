@@ -1,199 +1,247 @@
-<div class="h-full w-full rounded-xl bg-white dark:bg-gray-800">
-  <!-- TABS -->
-  <div class="flex border-b border-gray-300 dark:border-gray-700">
-    <button
-      (click)="changeTab('tab1')"
-      class="cursor-pointer rounded-t-md border-b-2 px-5 py-2 text-sm font-medium transition hover:bg-calm-50"
-      [class.bg-calm-100]="activeTab === 'tab1'"
-      [class.border-indigo-500]="activeTab === 'tab1'"
-      [class.text-indigo-600]="activeTab === 'tab1'"
-      [class.border-transparent]="activeTab !== 'tab1'"
-    >
-      Datos personales
-    </button>
+<div class="flex min-h-full w-full flex-col items-center gap-6 sm:gap-8">
+  <!-- Hero Section - Configuración -->
+  <section class="w-full max-w-5xl">
+    <div class="relative overflow-hidden rounded-2xl border border-[#e8f4fc] bg-white shadow-lg shadow-gray-200/60 dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/30">
+      <!-- Decoraciones de fondo -->
+      <div class="absolute right-0 top-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#00A448]/10 to-transparent sm:h-28 sm:w-28 md:h-40 md:w-40 dark:from-[#00A448]/20"></div>
+      <div class="absolute bottom-0 left-0 h-16 w-16 rounded-tr-full bg-linear-to-tr from-[#1788EF]/10 to-transparent sm:h-24 sm:w-24 md:h-36 md:w-36 dark:from-[#1788EF]/20"></div>
 
-    <button
-      (click)="changeTab('tab2')"
-      class="cursor-pointer rounded-t-md border-b-2 px-5 py-2 text-sm font-medium transition hover:bg-calm-50"
-      [class.bg-calm-100]="activeTab === 'tab2'"
-      [class.border-indigo-500]="activeTab === 'tab2'"
-      [class.text-indigo-600]="activeTab === 'tab2'"
-      [class.border-transparent]="activeTab !== 'tab2'"
-    >
-      Seguridad
-    </button>
-  </div>
-
-  <!-- TAB 1 -->
-  <div class="min-h-[640px] w-[70vw] p-8" *ngIf="activeTab === 'tab1'">
-    <article class="flex gap-8">
-      <ul>
-        <li>
-          <div class="avatar">
-            <div
-              class="w-40 rounded-full ring-2 ring-gray-300 ring-offset-2 dark:ring-gray-600 dark:ring-offset-gray-900"
-            >
-              <img
-                [src]="fotoPreview || usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'"
-                [alt]="nombreCompleto"
-              />
+      <!-- Header con información del usuario -->
+      <div class="relative z-10 p-6 sm:p-8 md:p-10 border-b border-[#e8f4fc] dark:border-gray-700">
+        <div class="flex flex-col items-center gap-4 md:flex-row md:gap-8">
+          <!-- Avatar -->
+          <div class="shrink-0">
+            <div class="relative">
+              <div class="h-24 w-24 overflow-hidden rounded-full ring-4 ring-[#00A448]/20 ring-offset-2 sm:h-28 sm:w-28 md:h-32 md:w-32 dark:ring-[#00A448]/30 dark:ring-offset-gray-800">
+                <img
+                  [src]="fotoPreview || usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'"
+                  [alt]="nombreCompleto"
+                  class="h-full w-full object-cover"
+                />
+              </div>
             </div>
           </div>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <p
-            class="max-w-[500px] truncate text-2xl font-bold dark:text-gray-200"
-            [title]="nombreCompleto"
-          >
-            Nombre: {{ nombreCompleto }}
-          </p>
-        </li>
-        <li>
-          <p class="font-medium text-gray-700 dark:text-gray-300">
-            Correo electrónico: {{ correo }}
-          </p>
-        </li>
-        <li class="flex items-center gap-2">
-          Rol:
-          <span class="badge p-2 font-bold text-white" [ngClass]="rolBadge.color">
-            {{ rolBadge.text }}
-          </span>
-        </li>
-        <li class="mt-5 flex gap-5">
-          <input
-            type="file"
-            #fileInput
-            accept="image/jpeg,image/png"
-            (change)="onFotoSeleccionada($event)"
-            class="hidden"
-          />
-          <button
-            type="button"
-            (click)="fileInput.click()"
-            class="flex cursor-pointer items-center gap-1 rounded bg-sky-600 p-1.5 text-white transition-colors hover:bg-sky-700"
-          >
-            <span class="icon-[material-symbols--image-outline] size-6"></span>
-            Cargar nueva foto
-          </button>
-          <button
-            type="button"
-            (click)="eliminarFoto()"
-            class="flex cursor-pointer items-center gap-1 rounded bg-red-500 p-1.5 text-white transition-colors hover:bg-red-600"
-          >
-            <span class="icon-[material-symbols--delete-outline] size-6"></span>
-            Eliminar foto
-          </button>
-        </li>
-        <li class="mt-1">
-          <p class="text-gray-600 dark:text-gray-300">Solo JPEG/PNG — máx. 2 MB</p>
-        </li>
-      </ul>
-    </article>
-    <article class="mt-10 rounded border border-gray-300 p-8 dark:border-gray-700">
-      <form class="flex flex-col gap-6">
-        <p class="font-medium">Selecciona tu nombre y apellido:</p>
-        <div class="flex gap-6">
-          <!-- Nombre -->
-          <div class="relative flex flex-col">
-            <label class="floating-label relative block">
-              <span class="text-base text-gray-600 dark:text-gray-300">Nombre</span>
-              <div class="relative">
-                <input
-                  type="text"
-                  #nombreCtrl="ngModel"
-                  [(ngModel)]="nombre"
-                  name="nombre"
-                  placeholder="Ingresa tu nombre"
-                  required
-                  minlength="2"
-                  maxlength="50"
-                  pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]+$"
-                  appSoloLetras
-                  [class.border-red-500]="nombreCtrl.invalid && nombreCtrl.touched"
-                  [class.border-green-500]="nombreCtrl.valid && nombreCtrl.touched"
-                  class="input input-lg w-full border-gray-300 pr-10 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
-                />
-                <span
-                  class="pointer-events-none absolute top-1/2 right-3 z-10 icon-[material-symbols-light--id-card-rounded] -translate-y-1/2 text-xl text-gray-500"
-                ></span>
-              </div>
-            </label>
-            <div class="min-h-6">
-              <small
-                class="block text-sm transition-opacity duration-200"
-                [class.text-red-600]="nombreCtrl.invalid && nombreCtrl.touched"
-                [class.opacity-100]="nombreCtrl.invalid && nombreCtrl.touched"
-                [class.opacity-0]="!(nombreCtrl.invalid && nombreCtrl.touched)"
-              >
-                <span *ngIf="nombreCtrl.errors?.['required']">El nombre es obligatorio.</span>
-                <span *ngIf="nombreCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
-                <span *ngIf="nombreCtrl.errors?.['maxlength']">Máximo 50 caracteres.</span>
-                <span *ngIf="nombreCtrl.errors?.['pattern']">Solo se permiten letras.</span>
-              </small>
-              <p *ngIf="nombreCtrl.valid && nombreCtrl.touched" class="text-sm text-green-600">
-                Nombre válido
-              </p>
+          <!-- Info del usuario -->
+          <div class="flex min-w-0 flex-1 flex-col items-center text-center md:items-start md:text-left">
+            <div class="mb-1 flex items-center gap-2 text-sm text-[#4a5d6f] dark:text-gray-400">
+              <span class="icon-[hugeicons--settings-01] h-4 w-4"></span>
+              <span>Configuración de cuenta</span>
             </div>
-          </div>
-
-          <!-- Apellido -->
-          <div class="relative flex flex-col">
-            <label class="floating-label relative block">
-              <span class="text-base text-gray-600 dark:text-gray-300">Apellido</span>
-              <div class="relative">
-                <input
-                  type="text"
-                  #apellidoCtrl="ngModel"
-                  [(ngModel)]="apellido"
-                  name="apellido"
-                  placeholder="Ingresa tu apellido"
-                  required
-                  minlength="2"
-                  maxlength="50"
-                  pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]+$"
-                  appSoloLetras
-                  [class.border-red-500]="apellidoCtrl.invalid && apellidoCtrl.touched"
-                  [class.border-green-500]="apellidoCtrl.valid && apellidoCtrl.touched"
-                  class="input input-lg w-full border-gray-300 pr-10 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
-                />
-                <span
-                  class="pointer-events-none absolute top-1/2 right-3 z-10 icon-[material-symbols-light--id-card-rounded] -translate-y-1/2 text-xl text-gray-500"
-                ></span>
-              </div>
-            </label>
-            <div class="min-h-6">
-              <small
-                class="block text-sm transition-opacity duration-200"
-                [class.text-red-600]="apellidoCtrl.invalid && apellidoCtrl.touched"
-                [class.opacity-100]="apellidoCtrl.invalid && apellidoCtrl.touched"
-                [class.opacity-0]="!(apellidoCtrl.invalid && apellidoCtrl.touched)"
-              >
-                <span *ngIf="apellidoCtrl.errors?.['required']">El apellido es obligatorio.</span>
-                <span *ngIf="apellidoCtrl.errors?.['minlength']">Mínimo 2 caracteres.</span>
-                <span *ngIf="apellidoCtrl.errors?.['maxlength']">Máximo 50 caracteres.</span>
-                <span *ngIf="apellidoCtrl.errors?.['pattern']">Solo se permiten letras.</span>
-              </small>
-              <p
-                *ngIf="apellidoCtrl.valid && apellidoCtrl.touched"
-                class="text-sm text-green-600"
-              >
-                Apellido válido
-              </p>
+            <h1 class="mb-2 w-full break-words text-xl font-bold text-[#034D82] sm:text-2xl md:text-3xl lg:text-4xl dark:text-white" style="hyphens: auto; hyphenate-limit-chars: 10;">
+              {{ nombreCompleto }}
+            </h1>
+            <div class="mb-3 inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-1.5 dark:bg-gray-700">
+              <span class="icon-[hugeicons--mail-02] h-4 w-4 text-[#4a5d6f] dark:text-gray-400"></span>
+              <p class="text-sm font-medium text-[#4a5d6f] dark:text-gray-300">{{ correo }}</p>
             </div>
+            <span class="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold text-white sm:text-base"
+              [ngClass]="rolBadge.color">
+              <span class="icon-[hugeicons--user-03] h-4 w-4"></span>
+              {{ rolBadge.text }}
+            </span>
           </div>
         </div>
-        <!-- Fecha de nacimiento -->
-        <article>
-          <p class="mb-2 font-medium dark:text-gray-200">Selecciona tu fecha de nacimiento:</p>
-          <div class="mt-3 flex gap-5">
-            <div class="flex flex-col">
-              <label for="dia" class="mb-1 text-gray-600 dark:text-gray-400">Día:</label>
+      </div>
+
+      <!-- TABS -->
+      <div class="relative z-10 flex gap-1 border-b border-[#e8f4fc] px-4 sm:px-6 dark:border-gray-700">
+        <button
+          (click)="changeTab('tab1')"
+          class="relative flex cursor-pointer items-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-all duration-200 sm:gap-2 sm:px-4 sm:py-3 sm:text-sm"
+          [class.text-[#034D82]]="activeTab === 'tab1'"
+          [class.dark:text-white]="activeTab === 'tab1'"
+          [class.text-[#4a5d6f]]="activeTab !== 'tab1'"
+          [class.dark:text-gray-400]="activeTab !== 'tab1'"
+          [class.hover:text-[#034D82]]="activeTab !== 'tab1'"
+          [class.dark:hover:text-gray-300]="activeTab !== 'tab1'"
+        >
+          <span class="icon-[hugeicons--user-circle] text-base sm:text-lg"></span>
+          <span>Datos personales</span>
+          <!-- Indicador activo -->
+          <span
+            class="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#034D82] transition-all duration-200 dark:bg-blue-400"
+            [class.opacity-100]="activeTab === 'tab1'"
+            [class.opacity-0]="activeTab !== 'tab1'"
+          ></span>
+        </button>
+
+        <button
+          (click)="changeTab('tab2')"
+          class="relative flex cursor-pointer items-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-all duration-200 sm:gap-2 sm:px-4 sm:py-3 sm:text-sm"
+          [class.text-[#034D82]]="activeTab === 'tab2'"
+          [class.dark:text-white]="activeTab === 'tab2'"
+          [class.text-[#4a5d6f]]="activeTab !== 'tab2'"
+          [class.dark:text-gray-400]="activeTab !== 'tab2'"
+          [class.hover:text-[#034D82]]="activeTab !== 'tab2'"
+          [class.dark:hover:text-gray-300]="activeTab !== 'tab2'"
+        >
+          <span class="icon-[hugeicons--shield-02] text-base sm:text-lg"></span>
+          <span>Seguridad</span>
+          <!-- Indicador activo -->
+          <span
+            class="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#034D82] transition-all duration-200 dark:bg-blue-400"
+            [class.opacity-100]="activeTab === 'tab2'"
+            [class.opacity-0]="activeTab !== 'tab2'"
+          ></span>
+        </button>
+      </div>
+
+      <!-- TAB 1: Datos personales -->
+      <div class="relative z-10 p-4 sm:p-6 lg:p-8" *ngIf="activeTab === 'tab1'">
+      <form class="flex flex-col gap-6 sm:gap-8">
+        <!-- Sección: Foto de perfil -->
+        <article class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <p class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--camera] text-lg sm:text-xl text-[#034D82] dark:text-blue-400"></span>
+            Foto de perfil
+          </p>
+          <div class="flex flex-col items-center gap-4">
+            <div class="avatar">
+              <div class="w-28 sm:w-32 md:w-36 rounded-full ring-2 ring-[#034D82]/30 ring-offset-2 ring-offset-white dark:ring-offset-gray-900 shadow-lg">
+                <img [src]="fotoPreview || usuario?.foto_perfil || '/images/ilustraciones/perfil_default.png'" [alt]="nombreCompleto" />
+              </div>
+            </div>
+            <input
+              type="file"
+              #fileInput
+              accept="image/jpeg,image/png"
+              (change)="onFotoSeleccionada($event)"
+              class="hidden"
+            />
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                (click)="fileInput.click()"
+                [disabled]="isLoading"
+                class="btn btn-sm sm:btn-md border-2 border-[#034D82]/60 bg-transparent text-[#034D82] dark:text-blue-400 dark:border-blue-400/60 font-medium rounded-xl
+                hover:bg-[#034D82]/10 dark:hover:bg-blue-400/10 hover:border-[#034D82] dark:hover:border-blue-400 transition-all duration-200 disabled:opacity-50"
+              >
+                <span class="icon-[heroicons-outline--photo] text-base sm:text-lg"></span>
+                <span class="text-xs sm:text-sm">{{ fotoPreview || usuario?.foto_perfil ? 'Cambiar' : 'Añadir' }}</span>
+              </button>
+              @if (fotoPreview || usuario?.foto_perfil) {
+                <button
+                  type="button"
+                  (click)="eliminarFoto()"
+                  [disabled]="isLoading"
+                  class="btn btn-sm sm:btn-md border-2 border-red-400 dark:border-red-500/60 bg-transparent text-red-500 dark:text-red-400 font-medium rounded-xl
+                  hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-500 transition-all duration-200 disabled:opacity-50"
+                >
+                  <span class="icon-[heroicons-outline--trash] text-base sm:text-lg"></span>
+                  <span class="text-xs sm:text-sm">Eliminar</span>
+                </button>
+              }
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Solo JPEG/PNG — máx. 2 MB</p>
+          </div>
+        </article>
+
+        <!-- Sección: Nombre y Apellido -->
+        <article class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <p class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--identification] text-lg sm:text-xl text-[#034D82] dark:text-blue-400"></span>
+            Información personal
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <!-- Nombre -->
+            <div class="flex-1 space-y-1">
+              <label class="block">
+                <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</span>
+                <div class="mt-1 relative">
+                  <input
+                    type="text"
+                    #nombreCtrl="ngModel"
+                    [(ngModel)]="nombre"
+                    name="nombre"
+                    placeholder="Ingresa tu nombre"
+                    required
+                    [minlength]="NOMBRE_MIN_LENGTH"
+                    [maxlength]="NOMBRE_MAX_LENGTH"
+                    pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]+$"
+                    appSoloLetras
+                    [class.border-red-500]="(nombreCtrl.invalid || nombreTienePalabrasCortas()) && nombreCtrl.touched"
+                    [class.border-green-500]="nombreCtrl.valid && nombreCtrl.touched && !nombreTienePalabrasCortas()"
+                    class="input input-sm sm:input-md w-full border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 pr-10 rounded-xl
+                    transition-all duration-200 focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                  />
+                  <span class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-lg sm:text-xl pointer-events-none"></span>
+                </div>
+              </label>
+              <div class="min-h-5">
+                <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+                  [class.opacity-100]="(nombreCtrl.invalid || nombreTienePalabrasCortas()) && nombreCtrl.touched"
+                  [class.opacity-0]="!((nombreCtrl.invalid || nombreTienePalabrasCortas()) && nombreCtrl.touched)">
+                  <span *ngIf="nombreCtrl.errors?.['required']">El nombre es obligatorio.</span>
+                  <span *ngIf="nombreCtrl.errors?.['minlength']">Mínimo {{ NOMBRE_MIN_LENGTH }} caracteres.</span>
+                  <span *ngIf="nombreCtrl.errors?.['maxlength']">Máximo {{ NOMBRE_MAX_LENGTH }} caracteres.</span>
+                  <span *ngIf="nombreCtrl.errors?.['pattern']">Solo se permiten letras.</span>
+                  <span *ngIf="!nombreCtrl.errors?.['required'] && !nombreCtrl.errors?.['minlength'] && !nombreCtrl.errors?.['maxlength'] && !nombreCtrl.errors?.['pattern'] && nombreTienePalabrasCortas()">Cada palabra debe tener al menos {{ MIN_PALABRA_LENGTH }} letras.</span>
+                </small>
+                <p *ngIf="nombreCtrl.valid && nombreCtrl.touched && !nombreTienePalabrasCortas()" class="text-[10px] sm:text-xs text-green-600 dark:text-green-500">
+                  <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
+                  Nombre válido
+                </p>
+              </div>
+            </div>
+
+            <!-- Apellido -->
+            <div class="flex-1 space-y-1">
+              <label class="block">
+                <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Apellido</span>
+                <div class="mt-1 relative">
+                  <input
+                    type="text"
+                    #apellidoCtrl="ngModel"
+                    [(ngModel)]="apellido"
+                    name="apellido"
+                    placeholder="Ingresa tu apellido"
+                    required
+                    [minlength]="APELLIDO_MIN_LENGTH"
+                    [maxlength]="APELLIDO_MAX_LENGTH"
+                    pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü'\-\s]+$"
+                    appSoloLetras
+                    [class.border-red-500]="(apellidoCtrl.invalid || apellidoTienePalabrasCortas()) && apellidoCtrl.touched"
+                    [class.border-green-500]="apellidoCtrl.valid && apellidoCtrl.touched && !apellidoTienePalabrasCortas()"
+                    class="input input-sm sm:input-md w-full border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 pr-10 rounded-xl
+                    transition-all duration-200 focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                  />
+                  <span class="icon-[material-symbols-light--id-card-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-lg sm:text-xl pointer-events-none"></span>
+                </div>
+              </label>
+              <div class="min-h-5">
+                <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+                  [class.opacity-100]="(apellidoCtrl.invalid || apellidoTienePalabrasCortas()) && apellidoCtrl.touched"
+                  [class.opacity-0]="!((apellidoCtrl.invalid || apellidoTienePalabrasCortas()) && apellidoCtrl.touched)">
+                  <span *ngIf="apellidoCtrl.errors?.['required']">El apellido es obligatorio.</span>
+                  <span *ngIf="apellidoCtrl.errors?.['minlength']">Mínimo {{ APELLIDO_MIN_LENGTH }} caracteres.</span>
+                  <span *ngIf="apellidoCtrl.errors?.['maxlength']">Máximo {{ APELLIDO_MAX_LENGTH }} caracteres.</span>
+                  <span *ngIf="apellidoCtrl.errors?.['pattern']">Solo se permiten letras.</span>
+                  <span *ngIf="!apellidoCtrl.errors?.['required'] && !apellidoCtrl.errors?.['minlength'] && !apellidoCtrl.errors?.['maxlength'] && !apellidoCtrl.errors?.['pattern'] && apellidoTienePalabrasCortas()">Cada palabra debe tener al menos {{ MIN_PALABRA_LENGTH }} letras.</span>
+                </small>
+                <p *ngIf="apellidoCtrl.valid && apellidoCtrl.touched && !apellidoTienePalabrasCortas()" class="text-[10px] sm:text-xs text-green-600 dark:text-green-500">
+                  <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
+                  Apellido válido
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Sección: Fecha de nacimiento -->
+        <article class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <p class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--calendar] text-lg sm:text-xl text-[#034D82] dark:text-blue-400"></span>
+            Fecha de nacimiento
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 md:gap-5">
+            <!-- Día -->
+            <div class="flex flex-col flex-1 sm:flex-initial">
+              <label for="dia" class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1 sm:mb-1.5">Día</label>
               <select id="dia" name="dia" [(ngModel)]="fechaNacimiento.dia"
                 (change)="marcarFechaTocada()"
                 (blur)="marcarFechaTocada()"
-                class="select w-24"
+                class="select select-sm sm:select-md w-full sm:w-20 md:w-24 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-xl
+                focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                 [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
                 [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.dia">
                 <option value="">--</option>
@@ -203,12 +251,14 @@
               </select>
             </div>
 
-            <div class="flex flex-col">
-              <label for="mes" class="mb-1 text-gray-600 dark:text-gray-400">Mes:</label>
+            <!-- Mes -->
+            <div class="flex flex-col flex-1 sm:flex-initial">
+              <label for="mes" class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1 sm:mb-1.5">Mes</label>
               <select id="mes" name="mes" [(ngModel)]="fechaNacimiento.mes"
                 (change)="actualizarDias(); marcarFechaTocada()"
                 (blur)="marcarFechaTocada()"
-                class="select w-36"
+                class="select select-sm sm:select-md w-full sm:w-32 md:w-36 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-xl
+                focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                 [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
                 [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.mes">
                 <option value="">--</option>
@@ -218,12 +268,14 @@
               </select>
             </div>
 
-            <div class="flex flex-col">
-              <label for="anio" class="mb-1 text-gray-600 dark:text-gray-400">Año:</label>
+            <!-- Año -->
+            <div class="flex flex-col flex-1 sm:flex-initial">
+              <label for="anio" class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1 sm:mb-1.5">Año</label>
               <select id="anio" name="anio" [(ngModel)]="fechaNacimiento.anio"
                 (change)="actualizarDias(); marcarFechaTocada()"
                 (blur)="marcarFechaTocada()"
-                class="select w-28"
+                class="select select-sm sm:select-md w-full sm:w-24 md:w-28 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-xl
+                focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                 [class.border-red-500]="fechaTocada && (fechaIncompleta || (fechaCompleta && !fechaValida))"
                 [class.border-amber-500]="fechaIncompleta && !fechaNacimiento.anio">
                 <option value="">--</option>
@@ -234,21 +286,21 @@
             </div>
           </div>
           <!-- Mensajes de información/error -->
-          <div class="min-h-5 mt-2">
+          <div class="min-h-5 mt-3 text-center">
             @if (fechaCompleta && fechaValida && edadCalculada !== null) {
-              <p class="text-sm text-green-600">
+              <p class="text-xs sm:text-sm text-green-600 dark:text-green-500">
                 <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
                 Tendrás {{ edadCalculada }} años
               </p>
             }
             @if (fechaTocada && fechaIncompleta) {
-              <p class="text-sm text-amber-600">
-                <span class="icon-[heroicons-outline--exclamation-triangle] inline-block align-middle mr-1"></span>
+              <p class="text-xs sm:text-sm text-amber-600 dark:text-amber-500">
+                <span class="icon-[heroicons-outline--exclamation] inline-block align-middle mr-1"></span>
                 Debes completar todos los campos de fecha
               </p>
             }
             @if (fechaTocada && fechaCompleta && !fechaValida) {
-              <p class="text-sm text-red-500">
+              <p class="text-xs sm:text-sm text-red-500">
                 <span class="icon-[heroicons-outline--exclamation-circle] inline-block align-middle mr-1"></span>
                 Debes tener al menos {{ EDAD_MINIMA }} años
               </p>
@@ -256,11 +308,11 @@
           </div>
           <!-- Botón para limpiar fecha -->
           @if (fechaIniciada) {
-            <div class="mt-2">
+            <div class="mt-3 text-center">
               <button
                 type="button"
                 (click)="limpiarFecha()"
-                class="text-sm text-gray-500 hover:text-red-500 transition-colors underline"
+                class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors underline"
               >
                 <span class="icon-[heroicons-outline--x-mark] inline-block align-middle mr-1"></span>
                 Limpiar fecha
@@ -269,47 +321,51 @@
           }
         </article>
 
-        <!-- Género -->
-        <article>
-          <p class="mb-2 font-medium dark:text-gray-200">
-            Selecciona el género con el que te identificas:
+        <!-- Sección: Género -->
+        <article class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <p class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--user] text-lg sm:text-xl text-[#034D82] dark:text-blue-400"></span>
+            Género con el que te identificas
           </p>
-          <div class="mt-3 flex gap-6">
-            <label class="flex cursor-pointer items-center gap-2">
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 md:gap-8">
+            <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
               <input
                 type="radio"
-                name="radio-genero"
-                class="radio radio-neutral"
+                name="genero"
+                class="radio radio-sm sm:radio-md radio-primary"
                 [(ngModel)]="genero"
                 value="femenino"
+                (change)="marcarGeneroTocado()"
               />
-              <span class="dark:text-gray-300">Femenino</span>
+              <span class="text-sm sm:text-base text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">Femenino</span>
             </label>
-            <label class="flex cursor-pointer items-center gap-2">
+            <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
               <input
                 type="radio"
-                name="radio-genero"
-                class="radio radio-neutral"
+                name="genero"
+                class="radio radio-sm sm:radio-md radio-primary"
                 [(ngModel)]="genero"
                 value="masculino"
+                (change)="marcarGeneroTocado()"
               />
-              <span class="dark:text-gray-300">Masculino</span>
+              <span class="text-sm sm:text-base text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">Masculino</span>
             </label>
-            <label class="flex cursor-pointer items-center gap-2">
+            <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group">
               <input
                 type="radio"
-                name="radio-genero"
-                class="radio radio-neutral"
+                name="genero"
+                class="radio radio-sm sm:radio-md radio-primary"
                 [(ngModel)]="genero"
                 value="otro"
+                (change)="marcarGeneroTocado()"
               />
-              <span class="dark:text-gray-300">Otro</span>
+              <span class="text-sm sm:text-base text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">Otro</span>
             </label>
           </div>
           <!-- Mensaje de confirmación -->
-          <div class="min-h-5 mt-2">
+          <div class="min-h-5 mt-3 text-center">
             @if (genero) {
-              <p class="text-sm text-green-600">
+              <p class="text-xs sm:text-sm text-green-600 dark:text-green-500">
                 <span class="icon-[heroicons-outline--check-circle] inline-block align-middle mr-1"></span>
                 Género seleccionado
               </p>
@@ -317,11 +373,11 @@
           </div>
           <!-- Botón para limpiar género -->
           @if (genero) {
-            <div class="mt-2">
+            <div class="mt-3 text-center">
               <button
                 type="button"
                 (click)="limpiarGenero()"
-                class="text-sm text-gray-500 hover:text-red-500 transition-colors underline"
+                class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors underline"
               >
                 <span class="icon-[heroicons-outline--x-mark] inline-block align-middle mr-1"></span>
                 Limpiar género
@@ -330,223 +386,249 @@
           }
         </article>
 
-        <div class="mt-2 flex justify-center">
+        <!-- Botón de guardar -->
+        <div class="flex justify-center mt-4">
           <button
             type="button"
             (click)="actualizarDatos()"
-            [disabled]="isLoading || fechaIncompleta || (fechaCompleta && !fechaValida)"
-            class="flex w-40 cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042] disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="isLoading || fechaIncompleta || (fechaCompleta && !fechaValida) || !nombreValidoLocal() || !apellidoValidoLocal()"
+            class="btn btn-md sm:btn-lg bg-[#034D82] hover:bg-[#023a63] border-[#034D82] text-white font-semibold rounded-xl
+            shadow-lg shadow-[#034D82]/25 hover:shadow-[#034D82]/30 px-8 sm:px-12
+            transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             @if (isLoading) {
-              <span class="loading mr-2 loading-sm loading-spinner"></span>
+              <span class="loading loading-spinner loading-sm"></span>
+              <span class="text-sm sm:text-base">Guardando...</span>
+            } @else {
+              <span class="icon-[heroicons-outline--check] text-lg sm:text-xl"></span>
+              <span class="text-sm sm:text-base">Guardar cambios</span>
             }
-            <span class="icon-[lucide--save] size-6"></span>
-            Actualizar
           </button>
         </div>
       </form>
-    </article>
-  </div>
+      </div>
 
-  <!-- TAB 2 -->
-  <div class="min-h-[710px] w-[70vw] p-8" *ngIf="activeTab === 'tab2'">
-    <article class="rounded border border-gray-300 p-8">
-      <form #passwordForm="ngForm" class="flex flex-col gap-6">
-        <article class="flex gap-50">
-          <div class="flex flex-col gap-6">
-            <div class="flex-1">
-              <label class="block">
-                <span class="text-base text-gray-600 dark:text-gray-300">Contraseña actual</span>
-                <div class="flex items-center gap-3">
-                  <input
-                    [type]="mostrarContrasenaActual ? 'text' : 'password'"
-                    #conActual="ngModel"
-                    [(ngModel)]="contrasenaActual"
-                    name="contrasenaActual"
-                    required
-                    appPasswordFormat
-                    [class.border-red-500]="conActual.invalid && conActual.touched"
-                    [class.border-green-500]="conActual.valid && conActual.touched && contrasenaActual"
-                    placeholder="Contraseña actual"
-                    class="input input-lg w-full border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
-                  />
-                  <button
-                    type="button"
-                    (mousedown)="$event.preventDefault()"
-                    (click)="toggleContrasenaActual()"
-                    class="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  >
-                    <span
-                      *ngIf="!mostrarContrasenaActual"
-                      class="icon-[fluent--eye-16-regular] text-xl"
-                    ></span>
-                    <span
-                      *ngIf="mostrarContrasenaActual"
-                      class="icon-[fluent--eye-off-16-regular] text-xl"
-                    ></span>
-                  </button>
+      <!-- TAB 2: Seguridad -->
+      <div class="relative z-10 p-4 sm:p-6 lg:p-8" *ngIf="activeTab === 'tab2'">
+      <form #passwordForm="ngForm" class="flex flex-col gap-6 sm:gap-8">
+        <!-- Sección: Cambiar contraseña -->
+        <article class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+          <p class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-6 flex items-center gap-2">
+            <span class="icon-[heroicons-outline--lock-closed] text-lg sm:text-xl text-[#034D82] dark:text-blue-400"></span>
+            Cambiar contraseña
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+            <!-- Columna de inputs -->
+            <div class="flex flex-col gap-4 sm:gap-5">
+              <!-- Contraseña actual -->
+              <div class="space-y-1">
+                <label class="block">
+                  <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña actual</span>
+                  <div class="mt-1 flex items-center gap-2">
+                    <input
+                      [type]="mostrarContrasenaActual ? 'text' : 'password'"
+                      #conActual="ngModel"
+                      [(ngModel)]="contrasenaActual"
+                      name="contrasenaActual"
+                      required
+                      appPasswordFormat
+                      [class.border-red-500]="conActual.invalid && conActual.touched"
+                      [class.border-green-500]="conActual.valid && conActual.touched && contrasenaActual"
+                      placeholder="••••••••"
+                      class="input input-sm sm:input-md flex-1 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl
+                      transition-all duration-200 focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      (mousedown)="$event.preventDefault()"
+                      (click)="toggleContrasenaActual()"
+                      class="btn btn-square btn-sm sm:btn-md border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-xl
+                      transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      <span *ngIf="!mostrarContrasenaActual" class="icon-[fluent--eye-16-regular] text-base sm:text-lg"></span>
+                      <span *ngIf="mostrarContrasenaActual" class="icon-[fluent--eye-off-16-regular] text-base sm:text-lg"></span>
+                    </button>
+                  </div>
+                </label>
+                <div class="min-h-5">
+                  <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+                    [class.opacity-100]="conActual.invalid && conActual.touched"
+                    [class.opacity-0]="!(conActual.invalid && conActual.touched)">
+                    La contraseña actual es obligatoria.
+                  </small>
                 </div>
-              </label>
-              <div class="min-h-6">
-                <small
-                  class="block text-sm transition-opacity duration-200"
-                  [class.text-red-600]="conActual.invalid && conActual.touched"
-                  [class.opacity-100]="conActual.invalid && conActual.touched"
-                  [class.opacity-0]="!(conActual.invalid && conActual.touched)"
-                >
-                  La contraseña actual es obligatoria.
-                </small>
+              </div>
+
+              <!-- Nueva contraseña -->
+              <div class="space-y-1">
+                <label class="block">
+                  <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Nueva contraseña</span>
+                  <div class="mt-1 flex items-center gap-2">
+                    <input
+                      [type]="mostrarContrasena ? 'text' : 'password'"
+                      #conNueva="ngModel"
+                      [(ngModel)]="contrasenaNueva"
+                      name="contrasenaNueva"
+                      required
+                      minlength="8"
+                      appPasswordFormat
+                      (input)="verificarIndicaciones()"
+                      [class.border-red-500]="conNueva.invalid && conNueva.touched"
+                      [class.border-green-500]="conNueva.valid && conNueva.touched && indicaciones.longitud && indicaciones.numero && indicaciones.mayuscula"
+                      placeholder="••••••••"
+                      class="input input-sm sm:input-md flex-1 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl
+                      transition-all duration-200 focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      (mousedown)="$event.preventDefault()"
+                      (click)="toggleContrasena()"
+                      class="btn btn-square btn-sm sm:btn-md border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-xl
+                      transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      <span *ngIf="!mostrarContrasena" class="icon-[fluent--eye-16-regular] text-base sm:text-lg"></span>
+                      <span *ngIf="mostrarContrasena" class="icon-[fluent--eye-off-16-regular] text-base sm:text-lg"></span>
+                    </button>
+                  </div>
+                </label>
+                <div class="min-h-5">
+                  <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+                    [class.opacity-100]="conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula)"
+                    [class.opacity-0]="!(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))">
+                    Faltan requerimientos para la contraseña.
+                  </small>
+                </div>
+              </div>
+
+              <!-- Confirmar contraseña -->
+              <div class="space-y-1">
+                <label class="block">
+                  <span class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Confirmar contraseña</span>
+                  <div class="mt-1 flex items-center gap-2">
+                    <input
+                      [type]="mostrarConfirmarContrasena ? 'text' : 'password'"
+                      #conConfirm="ngModel"
+                      [(ngModel)]="contrasenaConfirmar"
+                      name="contrasenaConfirmar"
+                      required
+                      appPasswordFormat
+                      [class.border-red-500]="(conConfirm.touched && (contrasenaConfirmar !== contrasenaNueva)) || (conConfirm.invalid && conConfirm.touched)"
+                      [class.border-green-500]="conConfirm.valid && conConfirm.touched && contrasenaConfirmar === contrasenaNueva && contrasenaConfirmar"
+                      placeholder="••••••••"
+                      class="input input-sm sm:input-md flex-1 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 rounded-xl
+                      transition-all duration-200 focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      (mousedown)="$event.preventDefault()"
+                      (click)="toggleConfirmarContrasena()"
+                      class="btn btn-square btn-sm sm:btn-md border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-xl
+                      transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      <span *ngIf="!mostrarConfirmarContrasena" class="icon-[fluent--eye-16-regular] text-base sm:text-lg"></span>
+                      <span *ngIf="mostrarConfirmarContrasena" class="icon-[fluent--eye-off-16-regular] text-base sm:text-lg"></span>
+                    </button>
+                  </div>
+                </label>
+                <div class="min-h-5">
+                  <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+                    [class.opacity-100]="((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched)"
+                    [class.opacity-0]="!(((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched))">
+                    <span *ngIf="conConfirm.invalid && conConfirm.touched">Debes confirmar la contraseña.</span>
+                    <span *ngIf="(contrasenaConfirmar !== contrasenaNueva) && !conConfirm.invalid && conConfirm.touched">Las contraseñas no coinciden.</span>
+                  </small>
+                </div>
+              </div>
+
+              <!-- Indicaciones de contraseña -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 border border-gray-200 dark:border-gray-700">
+                <ul class="space-y-1.5 sm:space-y-2">
+                  <li class="flex items-center gap-2 transition-colors duration-200"
+                    [class.text-green-600]="indicaciones.longitud"
+                    [class.dark:text-green-500]="indicaciones.longitud"
+                    [class.text-gray-500]="!indicaciones.longitud"
+                    [class.dark:text-gray-400]="!indicaciones.longitud">
+                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-colors duration-200"
+                      [class.bg-green-500]="indicaciones.longitud"
+                      [class.bg-gray-300]="!indicaciones.longitud && !conNueva.touched"
+                      [class.dark:bg-gray-600]="!indicaciones.longitud && !conNueva.touched"
+                      [class.bg-red-500]="!indicaciones.longitud && conNueva.touched"></span>
+                    Usa 8 o más caracteres
+                  </li>
+                  <li class="flex items-center gap-2 transition-colors duration-200"
+                    [class.text-green-600]="indicaciones.numero"
+                    [class.dark:text-green-500]="indicaciones.numero"
+                    [class.text-gray-500]="!indicaciones.numero"
+                    [class.dark:text-gray-400]="!indicaciones.numero">
+                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-colors duration-200"
+                      [class.bg-green-500]="indicaciones.numero"
+                      [class.bg-gray-300]="!indicaciones.numero && !conNueva.touched"
+                      [class.dark:bg-gray-600]="!indicaciones.numero && !conNueva.touched"
+                      [class.bg-red-500]="!indicaciones.numero && conNueva.touched"></span>
+                    Incluye al menos un número
+                  </li>
+                </ul>
+                <ul class="space-y-1.5 sm:space-y-2">
+                  <li class="flex items-center gap-2 transition-colors duration-200"
+                    [class.text-green-600]="indicaciones.mayuscula"
+                    [class.dark:text-green-500]="indicaciones.mayuscula"
+                    [class.text-gray-500]="!indicaciones.mayuscula"
+                    [class.dark:text-gray-400]="!indicaciones.mayuscula">
+                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-colors duration-200"
+                      [class.bg-green-500]="indicaciones.mayuscula"
+                      [class.bg-gray-300]="!indicaciones.mayuscula && !conNueva.touched"
+                      [class.dark:bg-gray-600]="!indicaciones.mayuscula && !conNueva.touched"
+                      [class.bg-red-500]="!indicaciones.mayuscula && conNueva.touched"></span>
+                    Mayúsculas y minúsculas
+                  </li>
+                  <li class="flex items-center gap-2 transition-colors duration-200"
+                    [class.text-green-600]="indicaciones.simbolo"
+                    [class.dark:text-green-500]="indicaciones.simbolo"
+                    [class.text-gray-500]="!indicaciones.simbolo"
+                    [class.dark:text-gray-400]="!indicaciones.simbolo">
+                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-colors duration-200"
+                      [class.bg-green-500]="indicaciones.simbolo"
+                      [class.bg-gray-300]="!indicaciones.simbolo"
+                      [class.dark:bg-gray-600]="!indicaciones.simbolo"></span>
+                    Incluye un símbolo (!@#$)
+                  </li>
+                </ul>
               </div>
             </div>
 
-            <div class="flex-1">
-              <label class="block">
-                <span class="text-base text-gray-600 dark:text-gray-300">Nueva contraseña</span>
-                <div class="flex items-center gap-3">
-                  <input
-                    [type]="mostrarContrasena ? 'text' : 'password'"
-                    #conNueva="ngModel"
-                    [(ngModel)]="contrasenaNueva"
-                    name="contrasenaNueva"
-                    required
-                    minlength="8"
-                    appPasswordFormat
-                    (input)="verificarIndicaciones()"
-                    [class.border-red-500]="conNueva.invalid && conNueva.touched"
-                    [class.border-green-500]="conNueva.valid && conNueva.touched && indicaciones.longitud && indicaciones.numero && indicaciones.mayuscula"
-                    placeholder="Nueva contraseña"
-                    class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
-                  />
-                  <button
-                    type="button"
-                    (mousedown)="$event.preventDefault()"
-                    (click)="toggleContrasena()"
-                    class="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  >
-                    <span
-                      *ngIf="!mostrarContrasena"
-                      class="icon-[fluent--eye-16-regular] text-xl"
-                    ></span>
-                    <span
-                      *ngIf="mostrarContrasena"
-                      class="icon-[fluent--eye-off-16-regular] text-xl"
-                    ></span>
-                  </button>
-                </div>
-              </label>
-              <div class="min-h-6">
-                <small
-                  class="block text-sm transition-opacity duration-200"
-                  [class.text-red-600]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
-                  [class.opacity-100]="(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
-                  [class.opacity-0]="!(conNueva.touched && (!indicaciones.longitud || !indicaciones.numero || !indicaciones.mayuscula))"
-                >
-                  Faltan requerimientos para la contraseña.
-                </small>
-              </div>
-            </div>
-
-            <div class="flex-1">
-              <label class="block">
-                <span class="text-base text-gray-600 dark:text-gray-300">Confirmar contraseña</span>
-                <div class="flex items-center gap-3">
-                  <input
-                    [type]="mostrarConfirmarContrasena ? 'text' : 'password'"
-                    #conConfirm="ngModel"
-                    [(ngModel)]="contrasenaConfirmar"
-                    name="contrasenaConfirmar"
-                    required
-                    appPasswordFormat
-                    [class.border-red-500]="(conConfirm.touched && (contrasenaConfirmar !== contrasenaNueva)) || (conConfirm.invalid && conConfirm.touched)"
-                    [class.border-green-500]="conConfirm.valid && conConfirm.touched && contrasenaConfirmar === contrasenaNueva && contrasenaConfirmar"
-                    placeholder="Confirmar contraseña"
-                    class="input input-lg flex-1 border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
-                  />
-                  <button
-                    type="button"
-                    (mousedown)="$event.preventDefault()"
-                    (click)="toggleConfirmarContrasena()"
-                    class="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 shadow-sm hover:border-blue-500 hover:text-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  >
-                    <span
-                      *ngIf="!mostrarConfirmarContrasena"
-                      class="icon-[fluent--eye-16-regular] text-xl"
-                    ></span>
-                    <span
-                      *ngIf="mostrarConfirmarContrasena"
-                      class="icon-[fluent--eye-off-16-regular] text-xl"
-                    ></span>
-                  </button>
-                </div>
-              </label>
-              <div class="min-h-6">
-                <small
-                  class="block text-sm transition-opacity duration-200"
-                  [class.text-red-600]="((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched)"
-                  [class.opacity-100]="((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched)"
-                  [class.opacity-0]="!(((contrasenaConfirmar !== contrasenaNueva) && conConfirm.touched) || (conConfirm.invalid && conConfirm.touched))"
-                >
-                  <span *ngIf="conConfirm.invalid && conConfirm.touched">Debes confirmar la contraseña.</span>
-                  <span *ngIf="(contrasenaConfirmar !== contrasenaNueva) && !conConfirm.invalid && conConfirm.touched">Las contraseñas no coinciden.</span>
-                </small>
-              </div>
-            </div>
-            <div class="flex gap-12 text-sm">
-              <ul class="space-y-2">
-                <li class="flex items-center gap-2">
-                  <span
-                    class="h-2 w-2 rounded-full"
-                    [ngClass]="indicaciones.longitud ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
-                  ></span>
-                  Usa 8 o más caracteres
-                </li>
-                <li class="flex items-center gap-2">
-                  <span
-                    class="h-2 w-2 rounded-full"
-                    [ngClass]="indicaciones.numero ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
-                  ></span>
-                  Incluye al menos un número
-                </li>
-              </ul>
-
-              <ul class="space-y-2">
-                <li class="flex items-center gap-2">
-                  <span
-                    class="h-2 w-2 rounded-full"
-                    [ngClass]="indicaciones.mayuscula ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
-                  ></span>
-                  Usa letras mayúsculas y minúsculas
-                </li>
-                <li class="flex items-center gap-2">
-                  <span
-                    class="h-2 w-2 rounded-full"
-                    [ngClass]="indicaciones.simbolo ? 'bg-green-500' : (conNueva.touched ? 'bg-red-500' : 'bg-gray-300')"
-                  ></span>
-                  Incluye un símbolo (!@#$)
-                </li>
-              </ul>
+            <!-- Columna de imagen (solo en pantallas grandes) -->
+            <div class="hidden lg:flex items-center justify-center">
+              <img
+                class="w-full max-w-[280px] xl:max-w-[320px] object-contain"
+                src="/images/ilustraciones/password-image.png"
+                alt="Password Strength"
+              />
             </div>
           </div>
-          <div class="flex content-center justify-center">
-            <img
-              class="w-100"
-              src="/images/ilustraciones/password-image.png"
-              alt="Password Strength"
-            />
+
+          <!-- Botón de cambiar contraseña -->
+          <div class="flex justify-center mt-6">
+            <button
+              type="button"
+              (click)="cambiarContrasena()"
+              [disabled]="isLoading"
+              class="btn btn-md sm:btn-lg bg-[#034D82] hover:bg-[#023a63] border-[#034D82] text-white font-semibold rounded-xl
+              shadow-lg shadow-[#034D82]/25 hover:shadow-[#034D82]/30 px-8 sm:px-12
+              transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              @if (isLoading) {
+                <span class="loading loading-spinner loading-sm"></span>
+                <span class="text-sm sm:text-base">Cambiando...</span>
+              } @else {
+                <span class="icon-[heroicons-outline--key] text-lg sm:text-xl"></span>
+                <span class="text-sm sm:text-base">Cambiar contraseña</span>
+              }
+            </button>
           </div>
         </article>
-
-        <div class="flex">
-          <button
-            type="button"
-            (click)="cambiarContrasena()"
-            class="flex w-55 cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#01162E] p-2 text-white hover:bg-[#012042]"
-          >
-            <span class="icon-[lucide--save] size-6"></span>
-            Cambiar contraseña
-          </button>
-        </div>
       </form>
-    </article>
-  </div>
+      </div>
+    </div>
+  </section>
 </div>

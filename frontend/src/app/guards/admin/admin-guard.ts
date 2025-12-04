@@ -8,7 +8,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
 
   // Verificar si está autenticado
   if (!authService.estaAutenticado()) {
-    router.navigate(['/iniciar-sesion']);
+    router.navigate(['/inicio']);
     return false;
   }
 

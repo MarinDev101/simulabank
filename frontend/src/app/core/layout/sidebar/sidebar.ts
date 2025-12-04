@@ -1,16 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderPlataforma } from '../headers/header-plataforma/header-plataforma';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
 import { AlertService } from '@app/services/alert/alert.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, filter } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, HeaderPlataforma, MatTooltipModule, RouterLink],
+  imports: [CommonModule, HeaderPlataforma, MatTooltipModule, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
 })
 export class Sidebar implements OnInit, OnDestroy {
@@ -18,6 +18,8 @@ export class Sidebar implements OnInit, OnDestroy {
   isDrawerClosed = false;
   usuario: Usuario | null = null;
   private destroy$ = new Subject<void>();
+  private readonly SIDEBAR_STATE_KEY = 'sidebarState';
+  private readonly SMALL_SCREEN_BREAKPOINT = 1024; // lg breakpoint in Tailwind
 
   constructor(
     private authService: AuthService,
@@ -29,23 +31,66 @@ export class Sidebar implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Suscribirse a cambios del usuario
+    // Suscribirse a cambios del usuario y actualizar tema cuando cambie
     this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
       this.usuario = user;
+      // Actualizar tema cuando cambie la preferencia del usuario (ej: desde otra pestaña)
+      if (user?.preferencia_tema) {
+        this.actualizarTemaDesdePreferencia(user.preferencia_tema);
+      }
     });
 
-    // Configurar tema
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
-    if (savedTheme) {
-      this.currentTheme = savedTheme;
-      this.applyTheme(savedTheme);
+    // Configurar tema basado en la preferencia del usuario guardada en BD
+    this.cargarTemaUsuario();
+
+    // Restaurar estado del sidebar desde localStorage
+    this.restaurarEstadoSidebar();
+
+    // Escuchar cambios de navegación para cerrar sidebar en pantalla pequeña
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.cerrarSidebarEnPantallasPequenas();
+      });
+
+    this.checkDrawerState();
+  }
+
+  /**
+   * Carga el tema basado en la preferencia del usuario guardada en la base de datos
+   */
+  private cargarTemaUsuario(): void {
+    const usuario = this.authService.obtenerUsuario();
+    if (usuario?.preferencia_tema) {
+      this.actualizarTemaDesdePreferencia(usuario.preferencia_tema);
     } else {
+      // Si no hay preferencia guardada, usar la del sistema
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       this.currentTheme = prefersDark ? 'dark' : 'light';
       this.applyTheme(this.currentTheme);
     }
+  }
 
-    this.checkDrawerState();
+  /**
+   * Actualiza el tema basado en la preferencia del usuario
+   */
+  private actualizarTemaDesdePreferencia(preferencia: string): void {
+    let nuevoTema: 'light' | 'dark';
+    if (preferencia === 'auto') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      nuevoTema = prefersDark ? 'dark' : 'light';
+    } else {
+      nuevoTema = preferencia === 'oscuro' ? 'dark' : 'light';
+    }
+
+    // Solo aplicar si cambió el tema
+    if (this.currentTheme !== nuevoTema) {
+      this.currentTheme = nuevoTema;
+      this.applyTheme(this.currentTheme);
+    }
   }
 
   ngOnDestroy(): void {
@@ -56,10 +101,21 @@ export class Sidebar implements OnInit, OnDestroy {
   toggleTheme(): void {
     this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
     this.applyTheme(this.currentTheme);
-    localStorage.setItem('theme', this.currentTheme);
+
+    // Guardar en la base de datos
+    const temaParaGuardar: 'claro' | 'oscuro' = this.currentTheme === 'dark' ? 'oscuro' : 'claro';
+    this.authService.actualizarTemaServidor(temaParaGuardar).subscribe({
+      error: (error) => {
+        console.error('Error al guardar preferencia de tema:', error);
+        // Opcionalmente, podrías mostrar un mensaje al usuario
+      }
+    });
   }
 
   private applyTheme(theme: 'light' | 'dark'): void {
+    // Agregar clase para deshabilitar transiciones durante el cambio de tema
+    document.documentElement.classList.add('theme-transitioning');
+
     document.documentElement.setAttribute('data-theme', theme);
 
     if (theme === 'dark') {
@@ -67,19 +123,86 @@ export class Sidebar implements OnInit, OnDestroy {
     } else {
       document.documentElement.classList.remove('dark');
     }
+
+    // Remover clase después de que el cambio de tema se haya aplicado
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove('theme-transitioning');
+      });
+    });
   }
 
   toggleDrawer(): void {
     const drawer = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawer) {
       drawer.click();
-      setTimeout(() => this.checkDrawerState(), 0);
+      setTimeout(() => {
+        this.checkDrawerState();
+        this.guardarEstadoSidebar();
+      }, 0);
     }
   }
 
   checkDrawerState(): void {
     const drawer = document.getElementById('my-drawer') as HTMLInputElement;
     this.isDrawerClosed = !drawer?.checked;
+  }
+
+  /**
+   * Guarda el estado del sidebar en localStorage
+   */
+  private guardarEstadoSidebar(): void {
+    const drawer = document.getElementById('my-drawer') as HTMLInputElement;
+    if (drawer) {
+      localStorage.setItem(this.SIDEBAR_STATE_KEY, drawer.checked ? 'open' : 'closed');
+    }
+  }
+
+  /**
+   * Restaura el estado del sidebar desde localStorage
+   * En pantallas pequeñas siempre inicia cerrado
+   */
+  private restaurarEstadoSidebar(): void {
+    const drawer = document.getElementById('my-drawer') as HTMLInputElement;
+    if (!drawer) return;
+
+    // En pantallas pequeñas siempre cerrar el sidebar
+    if (window.innerWidth < this.SMALL_SCREEN_BREAKPOINT) {
+      drawer.checked = false;
+      this.checkDrawerState();
+      return;
+    }
+
+    // En pantallas grandes, restaurar el estado guardado
+    const estadoGuardado = localStorage.getItem(this.SIDEBAR_STATE_KEY);
+    if (estadoGuardado) {
+      const debeEstarAbierto = estadoGuardado === 'open';
+      if (drawer.checked !== debeEstarAbierto) {
+        drawer.checked = debeEstarAbierto;
+        this.checkDrawerState();
+      }
+    }
+  }
+
+  /**
+   * Cierra el sidebar automáticamente en pantallas pequeñas
+   */
+  private cerrarSidebarEnPantallasPequenas(): void {
+    if (window.innerWidth < this.SMALL_SCREEN_BREAKPOINT) {
+      const drawer = document.getElementById('my-drawer') as HTMLInputElement;
+      if (drawer && drawer.checked) {
+        drawer.checked = false;
+        this.checkDrawerState();
+      }
+    }
+  }
+
+  /**
+   * Maneja el cambio del checkbox del drawer (llamado desde el template)
+   */
+  onDrawerChange(): void {
+    this.checkDrawerState();
+    this.guardarEstadoSidebar();
   }
 
   shouldShowTooltip(): boolean {
@@ -96,15 +219,15 @@ export class Sidebar implements OnInit, OnDestroy {
     );
 
     if (confirmado) {
+      // Limpiar el estado del sidebar antes de cerrar sesión
+      localStorage.removeItem(this.SIDEBAR_STATE_KEY);
+
       this.authService.logout().subscribe({
         next: () => {
           this.alertService.toastSuccess('Sesión cerrada correctamente');
-          this.router.navigate(['/iniciar-sesion']);
         },
         error: (error) => {
           console.error('Error al cerrar sesión:', error);
-          // Aunque falle, redirigir al login
-          this.router.navigate(['/iniciar-sesion']);
         },
       });
     }

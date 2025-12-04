@@ -381,14 +381,20 @@ export class MiPersonal implements OnInit {
   }
 
   /**
-   * Formatea la fecha
+   * Formatea la fecha en formato dd/mm/yyyy hh:mm AM/PM
    */
   formatearFecha(fecha: string): string {
-    return new Date(fecha).toLocaleDateString('es-CO', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    const date = new Date(fecha);
+    const dia = date.getDate().toString().padStart(2, '0');
+    const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+    const anio = date.getFullYear();
+    let horas = date.getHours();
+    const minutos = date.getMinutes().toString().padStart(2, '0');
+    const ampm = horas >= 12 ? 'PM' : 'AM';
+    horas = horas % 12;
+    horas = horas ? horas : 12; // La hora 0 debe ser 12
+    const horasStr = horas.toString().padStart(2, '0');
+    return `${dia}/${mes}/${anio} ${horasStr}:${minutos} ${ampm}`;
   }
 
   /**
@@ -409,6 +415,8 @@ export class MiPersonal implements OnInit {
    * Obtiene el color del badge según el modo
    */
   getColorModo(modo: string): string {
-    return modo === 'aprendizaje' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600';
+    return modo === 'aprendizaje'
+      ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400'
+      : 'bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400';
   }
 }

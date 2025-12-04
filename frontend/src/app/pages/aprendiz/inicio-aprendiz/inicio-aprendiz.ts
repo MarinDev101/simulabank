@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService, Usuario } from '@app/core/auth/service/auth';
 import { RouterLink } from '@angular/router';
 import { Estadisticas, InfoInicioAprendiz, Logro } from '@app/services/estadisticas/estadisticas';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-inicio-aprendiz',
@@ -10,10 +11,12 @@ import { Estadisticas, InfoInicioAprendiz, Logro } from '@app/services/estadisti
   imports: [CommonModule, RouterLink],
   templateUrl: './inicio-aprendiz.html',
 })
-export class InicioAprendiz {
+export class InicioAprendiz implements OnInit, OnDestroy {
   usuario: Usuario | null = null;
   infoInicio: InfoInicioAprendiz | null = null;
   logrosAprendiz: Logro[] = [];
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private authService: AuthService,
@@ -21,8 +24,22 @@ export class InicioAprendiz {
   ) {
     // Inicializar usuario inmediatamente desde localStorage
     this.usuario = this.authService.obtenerUsuario();
+  }
+
+  ngOnInit(): void {
+    // Suscribirse a cambios del usuario para actualización automática
+    this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      this.usuario = user;
+    });
+
+    // Cargar datos adicionales
     this.cargarInfoInicio();
     this.cargarLogrosAprendiz();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // Método para obtener el nombre completo
