@@ -1,8 +1,40 @@
-const { createTransporter } = require('../config/email.config');
+const { createTransporter, createResendClient, isProduction } = require('../config/email.config');
 
 class EmailService {
   constructor() {
-    this.transporter = createTransporter();
+    if (isProduction) {
+      this.resend = createResendClient();
+      console.log('📧 Email Service: Usando Resend (producción)');
+    } else {
+      this.transporter = createTransporter();
+      console.log('📧 Email Service: Usando Gmail/Nodemailer (desarrollo)');
+    }
+  }
+
+  // Método interno para enviar email
+  async _sendEmail(mailOptions) {
+    if (isProduction) {
+      // Usar Resend en producción
+      const { data, error } = await this.resend.emails.send({
+        from: `SimulaBank <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`,
+        to: mailOptions.to,
+        subject: mailOptions.subject,
+        html: mailOptions.html,
+      });
+
+      if (error) {
+        console.error('Error al enviar correo con Resend:', error);
+        throw new Error('Error al enviar el correo');
+      }
+
+      console.log('Correo enviado con Resend:', data.id);
+      return { success: true, messageId: data.id };
+    } else {
+      // Usar Nodemailer en desarrollo
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log('Correo enviado con Nodemailer:', info.messageId);
+      return { success: true, messageId: info.messageId };
+    }
   }
 
   // Enviar código de verificación
@@ -135,9 +167,7 @@ class EmailService {
     };
 
     try {
-      const info = await this.transporter.sendMail(mailOptions);
-      console.log('Correo enviado:', info.messageId);
-      return { success: true, messageId: info.messageId };
+      return await this._sendEmail(mailOptions);
     } catch (error) {
       console.error('Error al enviar correo:', error);
       throw new Error('Error al enviar el correo de verificación');
@@ -274,9 +304,7 @@ class EmailService {
     };
 
     try {
-      const info = await this.transporter.sendMail(mailOptions);
-      console.log('Correo de recuperación enviado:', info.messageId);
-      return { success: true, messageId: info.messageId };
+      return await this._sendEmail(mailOptions);
     } catch (error) {
       console.error('Error al enviar correo de recuperación:', error);
       throw new Error('Error al enviar el correo de recuperación');

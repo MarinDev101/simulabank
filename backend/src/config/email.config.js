@@ -1,14 +1,23 @@
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// Configuración del transporter de nodemailer para Gmail
+// Determinar si estamos en producción
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Configuración del transporter de nodemailer para Gmail (desarrollo)
 const createTransporter = () => {
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER, // Tu correo de Gmail
-      pass: process.env.EMAIL_PASSWORD, // Tu contraseña de aplicación de Gmail
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
     },
   });
 };
 
-module.exports = { createTransporter };
+// Configuración de Resend para producción
+const createResendClient = () => {
+  return new Resend(process.env.RESEND_API_KEY);
+};
+
+module.exports = { createTransporter, createResendClient, isProduction };

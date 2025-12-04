@@ -8,12 +8,13 @@ class VerificacionService {
   async guardarCodigoVerificacion(correo, nombres, apellidos, contrasena) {
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
     const hashedPassword = await bcrypt.hash(contrasena, 10);
-    const expiracion = new Date(Date.now() + 5 * 60 * 1000); // 5 minutos
+    // Usar 15 minutos de expiración y formato UTC para evitar problemas de zona horaria
+    const expiracionMinutos = 15;
 
     await pool.query(
       `INSERT INTO codigos_verificacion
        (correo_electronico, codigo, nombres, apellidos, contrasena_hash, tipo, fecha_expiracion)
-       VALUES (?, ?, ?, ?, ?, 'registro', ?)
+       VALUES (?, ?, ?, ?, ?, 'registro', DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? MINUTE))
        ON DUPLICATE KEY UPDATE
        codigo = VALUES(codigo),
        nombres = VALUES(nombres),
@@ -23,7 +24,7 @@ class VerificacionService {
        fecha_expiracion = VALUES(fecha_expiracion),
        usado = 0,
        intentos = 0`,
-      [correo, codigo, nombres, apellidos, hashedPassword, expiracion]
+      [correo, codigo, nombres, apellidos, hashedPassword, expiracionMinutos]
     );
 
     return codigo;
@@ -34,19 +35,20 @@ class VerificacionService {
    */
   async guardarCodigoRecuperacion(correo) {
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiracion = new Date(Date.now() + 5 * 60 * 1000); // 5 minutos
+    // Usar 15 minutos de expiración y formato UTC para evitar problemas de zona horaria
+    const expiracionMinutos = 15;
 
     await pool.query(
       `INSERT INTO codigos_verificacion
        (correo_electronico, codigo, tipo, fecha_expiracion)
-       VALUES (?, ?, 'recuperacion', ?)
+       VALUES (?, ?, 'recuperacion', DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? MINUTE))
        ON DUPLICATE KEY UPDATE
        codigo = VALUES(codigo),
        tipo = 'recuperacion',
        fecha_expiracion = VALUES(fecha_expiracion),
        usado = 0,
        intentos = 0`,
-      [correo, codigo, expiracion]
+      [correo, codigo, expiracionMinutos]
     );
 
     return codigo;
@@ -62,7 +64,7 @@ class VerificacionService {
        AND codigo = ?
        AND tipo = 'registro'
        AND usado = 0
-       AND fecha_expiracion > NOW()
+       AND fecha_expiracion > UTC_TIMESTAMP()
        LIMIT 1`,
       [correo, codigo]
     );
@@ -84,7 +86,7 @@ class VerificacionService {
        AND codigo = ?
        AND tipo = 'recuperacion'
        AND usado = 0
-       AND fecha_expiracion > NOW()
+       AND fecha_expiracion > UTC_TIMESTAMP()
        LIMIT 1`,
       [correo, codigo]
     );
