@@ -1,10 +1,10 @@
-const { createTransporter, createResendClient, isProduction } = require('../config/email.config');
+const { createTransporter, createMailjetClient, isProduction } = require('../config/email.config');
 
 class EmailService {
   constructor() {
     if (isProduction) {
-      this.resend = createResendClient();
-      console.log('📧 Email Service: Usando Resend (producción)');
+      this.mailjet = createMailjetClient();
+      console.log('📧 Email Service: Usando Mailjet (producción)');
     } else {
       this.transporter = createTransporter();
       console.log('📧 Email Service: Usando Gmail/Nodemailer (desarrollo)');
@@ -14,21 +14,29 @@ class EmailService {
   // Método interno para enviar email
   async _sendEmail(mailOptions) {
     if (isProduction) {
-      // Usar Resend en producción
-      const { data, error } = await this.resend.emails.send({
-        from: `SimulaBank <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`,
-        to: mailOptions.to,
-        subject: mailOptions.subject,
-        html: mailOptions.html,
-      });
+      // Usar Mailjet en producción
+      const result = await this.mailjet
+        .post('send', { version: 'v3.1' })
+        .request({
+          Messages: [
+            {
+              From: {
+                Email: process.env.MAILJET_FROM_EMAIL || 'simulabank.noreply.123@gmail.com',
+                Name: 'SimulaBank'
+              },
+              To: [
+                {
+                  Email: mailOptions.to
+                }
+              ],
+              Subject: mailOptions.subject,
+              HTMLPart: mailOptions.html
+            }
+          ]
+        });
 
-      if (error) {
-        console.error('Error al enviar correo con Resend:', error);
-        throw new Error('Error al enviar el correo');
-      }
-
-      console.log('Correo enviado con Resend:', data.id);
-      return { success: true, messageId: data.id };
+      console.log('Correo enviado con Mailjet:', result.body.Messages[0].To[0].MessageID);
+      return { success: true, messageId: result.body.Messages[0].To[0].MessageID };
     } else {
       // Usar Nodemailer en desarrollo
       const info = await this.transporter.sendMail(mailOptions);

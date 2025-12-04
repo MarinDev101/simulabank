@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { Resend } = require('resend');
+const Mailjet = require('node-mailjet');
 
 // Determinar si estamos en producción
 const isProduction = process.env.NODE_ENV === 'production';
@@ -15,9 +15,12 @@ const createTransporter = () => {
   });
 };
 
-// Configuración de Resend para producción
-const createResendClient = () => {
-  return new Resend(process.env.RESEND_API_KEY);
+// Configuración de Mailjet para producción
+const createMailjetClient = () => {
+  return Mailjet.apiConnect(
+    process.env.MAILJET_API_KEY,
+    process.env.MAILJET_SECRET_KEY
+  );
 };
 
-module.exports = { createTransporter, createResendClient, isProduction };
+module.exports = { createTransporter, createMailjetClient, isProduction };
