@@ -10,7 +10,7 @@ import { ConfiguracionSimulacionComponent } from '../simulador-fases/configuraci
   standalone: true,
   imports: [CommonModule, ConfiguracionSimulacionComponent, SimuladorPlataformaComponent],
   template: `
-    <div class="w-full">
+    <div class="h-full w-full overflow-hidden">
       @if (vistaActual === 'configuracion') {
         <app-configuracion-simulacion
           (onIniciarSimulacion)="manejarInicioSimulacion($event)"

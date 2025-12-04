@@ -105,6 +105,14 @@ Grupo de iconos de un paquete
     hyphenate-limit-chars: 10;
   }
 
+  /* Clase para textos con guiones pero sin justify (evita espacios grandes) */
+  .text-hyphen {
+    text-wrap: pretty;
+    hyphens: auto;
+    hyphenate-limit-chars: 8;
+    word-break: break-word;
+  }
+
   /* Clase personalizada para títulos */
   .nunito-sans-title {
     @apply font-nunito font-extrabold not-italic;

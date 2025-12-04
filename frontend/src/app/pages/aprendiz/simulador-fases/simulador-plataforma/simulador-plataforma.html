@@ -65,7 +65,7 @@
       >
         <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
           <span
-            class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm"
+            class="rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-white shadow-md backdrop-blur-sm sm:text-xs"
           >
             {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
           </span>
@@ -79,15 +79,15 @@
         @if (recomendacionActual) {
         <div>
           <h3
-            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+            class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
           >
-            <span class="icon-[hugeicons--idea] size-4 text-blue-600 dark:text-blue-400"></span>
+            <span class="icon-[hugeicons--idea] size-3.5 text-blue-600 sm:size-4 dark:text-blue-400"></span>
             Recomendaciones IA
           </h3>
           <div
-            class="rounded-lg border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-800 dark:bg-blue-900/30"
+            class="rounded-lg border border-blue-200 bg-blue-50 p-3 shadow-sm sm:p-4 dark:border-blue-800 dark:bg-blue-900/30"
           >
-            <p class="text-sm leading-relaxed text-blue-900 dark:text-blue-100">
+            <p class="text-hyphen text-xs leading-relaxed text-blue-900 sm:text-sm dark:text-blue-100">
               {{ recomendacionActual.recomendacionParaAsesor }}
             </p>
           </div>
@@ -95,9 +95,9 @@
         } @else {
         <div class="flex flex-col items-center justify-center py-12 text-center">
           <span
-            class="mb-4 icon-[hugeicons--loading-03] size-16 animate-spin text-slate-300 dark:text-slate-600"
+            class="mb-4 icon-[hugeicons--loading-03] size-12 animate-spin text-slate-300 sm:size-16 dark:text-slate-600"
           ></span>
-          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+          <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
             Esperando interacción...
           </p>
         </div>
@@ -155,14 +155,14 @@
               <img [src]="avatarCliente" [alt]="nombreCliente" />
             </div>
           </div>
-          <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">
+          <h3 class="text-base font-bold text-slate-800 sm:text-lg dark:text-slate-200">
             {{ infoCliente.nombre }}
           </h3>
-          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+          <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
             {{ infoCliente.edad }}
           </p>
           <span
-            class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md dark:from-amber-600 dark:to-orange-600"
+            class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-[10px] font-bold text-white shadow-md sm:text-xs dark:from-amber-600 dark:to-orange-600"
           >
             {{ infoCliente.profesion }}
           </span>
@@ -173,62 +173,62 @@
           class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
         >
           <h3
-            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+            class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
           >
             <span
-              class="icon-[hugeicons--user] size-4 text-emerald-600 dark:text-emerald-400"
+              class="icon-[hugeicons--user] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
             ></span>
             Perfil del Cliente
           </h3>
 
-          <div class="space-y-2 text-sm">
+          <div class="space-y-2 text-xs sm:text-sm">
             <div class="hover-item flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--briefcase-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
               ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Situación</p>
-                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.situacion_actual }}</p>
+              <div class="min-w-0">
+                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Situación</p>
+                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.situacion_actual }}</p>
               </div>
             </div>
 
             <div class="hover-item flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--target-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--target-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
               ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Motivación</p>
-                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
+              <div class="min-w-0">
+                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Motivación</p>
+                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
               </div>
             </div>
 
             <div class="hover-item flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--flag-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--flag-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
               ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Objetivo</p>
-                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
+              <div class="min-w-0">
+                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Objetivo</p>
+                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
               </div>
             </div>
 
             <div class="hover-item flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--chart-increase] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--chart-increase] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
               ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Riesgo</p>
-                <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
+              <div class="min-w-0">
+                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Riesgo</p>
+                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
               </div>
             </div>
 
             <div class="hover-item flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--book-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--book-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
               ></span>
-              <div>
-                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Conocimiento</p>
-                <p class="text-slate-800 dark:text-slate-200">
+              <div class="min-w-0">
+                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Conocimiento</p>
+                <p class="text-hyphen text-slate-800 dark:text-slate-200">
                   {{ infoCliente.nivel_conocimiento }}
                 </p>
               </div>
@@ -241,14 +241,14 @@
           class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
         >
           <h3
-            class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+            class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
           >
             <span
-              class="icon-[hugeicons--information-circle] size-4 text-emerald-600 dark:text-emerald-400"
+              class="icon-[hugeicons--information-circle] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
             ></span>
             Escenario
           </h3>
-          <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          <p class="text-hyphen text-xs leading-relaxed text-slate-700 sm:text-sm dark:text-slate-300">
             {{ infoCliente.escenario_narrativo }}
           </p>
         </div>
@@ -259,19 +259,19 @@
 </div>
 
 <!-- CONTENIDO PRINCIPAL -->
-<main class="container mx-auto h-full max-w-7xl dark:bg-slate-900 dark:text-slate-100">
+<main class="simulador-container p-2 sm:p-4 dark:bg-slate-900 dark:text-slate-100">
   @if (error) {
-  <div class="fade-in mb-4 alert alert-error shadow-lg dark:bg-red-900 dark:text-red-200">
+  <div class="fade-in mb-2 alert alert-error shadow-lg dark:bg-red-900 dark:text-red-200">
     <span class="icon-[hugeicons--alert-circle] size-5"></span>
     <span>{{ error }}</span>
   </div>
   }
 
-  <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
+  <div class="simulador-grid">
     <!-- PANEL DE RECOMENDACIONES (Desktop - Solo en modo aprendizaje) -->
     @if (esModoAprendizaje) {
-    <div class="hidden lg:order-1 lg:col-span-3 lg:block">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
+    <div class="simulador-panel hidden min-[1327px]:order-1 min-[1327px]:col-span-3 min-[1327px]:block">
+      <div class="card overflow-hidden bg-white shadow-xl dark:bg-slate-900">
         <div
           class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
         >
@@ -319,7 +319,7 @@
         >
           <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
             <span
-              class="rounded-full bg-primary px-3 py-1 text-xs font-bold text-white shadow-md backdrop-blur-sm"
+              class="rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-white shadow-md backdrop-blur-sm sm:text-xs"
             >
               {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
             </span>
@@ -328,20 +328,20 @@
 
         <!-- Contenido de recomendaciones -->
         <div
-          class="max-h-[calc(100vh-220px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="panel-content-scroll space-y-4 bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
         >
           @if (recomendacionActual) {
           <div>
             <h3
-              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+              class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
             >
-              <span class="icon-[hugeicons--idea] size-4 text-blue-600 dark:text-blue-400"></span>
+              <span class="icon-[hugeicons--idea] size-3.5 text-blue-600 sm:size-4 dark:text-blue-400"></span>
               Recomendaciones IA
             </h3>
             <div
-              class="rounded-lg border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-800 dark:bg-blue-900/30"
+              class="rounded-lg border border-blue-200 bg-blue-50 p-3 shadow-sm sm:p-4 dark:border-blue-800 dark:bg-blue-900/30"
             >
-              <p class="text-sm leading-relaxed text-blue-900 dark:text-blue-100">
+              <p class="text-hyphen text-xs leading-relaxed text-blue-900 sm:text-sm dark:text-blue-100">
                 {{ recomendacionActual.recomendacionParaAsesor }}
               </p>
             </div>
@@ -349,9 +349,9 @@
           } @else {
           <div class="flex flex-col items-center justify-center py-12 text-center">
             <span
-              class="mb-4 icon-[hugeicons--loading-03] size-16 animate-spin text-slate-300 dark:text-slate-600"
+              class="mb-4 icon-[hugeicons--loading-03] size-12 animate-spin text-slate-300 sm:size-16 dark:text-slate-600"
             ></span>
-            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+            <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
               Esperando interacción...
             </p>
           </div>
@@ -362,23 +362,23 @@
     }
 
     <!-- PANEL DE CHAT -->
-    <div class="order-1 lg:order-2" [class]="esModoAprendizaje ? 'lg:col-span-6' : 'lg:col-span-9'">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
+    <div class="simulador-panel min-[1327px]:order-2" [class]="esModoAprendizaje ? 'min-[1327px]:col-span-6' : 'min-[1327px]:col-span-9'">
+      <div class="card overflow-hidden bg-white shadow-xl dark:bg-slate-900">
         <div
           class="flex h-[60px] items-center border-b border-slate-200 bg-gradient-to-r from-purple-500 to-pink-500 px-3 dark:border-slate-700 dark:from-purple-600 dark:to-pink-700"
         >
           <div class="flex w-full items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="avatar">
-                <div class="w-10 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
+            <div class="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+              <div class="avatar shrink-0">
+                <div class="w-8 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100 sm:w-10">
                   <img [src]="avatarCliente" [alt]="nombreCliente" />
                 </div>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex min-w-0 flex-1 items-center gap-2">
                 <span
-                  class="icon-[hugeicons--message-02] size-5 text-pink-200 dark:text-pink-300"
+                  class="icon-[hugeicons--message-02] size-4 shrink-0 text-pink-200 sm:size-5 dark:text-pink-300"
                 ></span>
-                <h2 class="card-title hidden text-base font-bold text-white sm:block">
+                <h2 class="card-title hidden min-w-0 flex-1 truncate text-sm font-bold text-white sm:block sm:text-base">
                   {{ nombreCliente }}
                 </h2>
               </div>
@@ -397,7 +397,7 @@
               </button>
 
               <!-- Botones de drawer para móvil (solo mostrar en móvil) -->
-              <div class="flex gap-2 lg:hidden">
+              <div class="flex gap-2 min-[1327px]:hidden">
                 @if (esModoAprendizaje) {
                 <label
                   for="drawer-recommendations"
@@ -535,7 +535,7 @@
         <div
           #chatContainer
           (scroll)="onChatScroll()"
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto scroll-smooth bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="panel-content-scroll space-y-4 scroll-smooth bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
         >
           <!-- Mostrar marcador de la etapa actual aunque no haya mensajes aún -->
           @if (indicesEtapas.length === 0 && etapaActual) {
@@ -578,14 +578,14 @@
           <div class="fade-in relative chat-start chat">
             <div class="avatar chat-image mt-[22px] self-start">
               <div
-                class="mt-0 w-10 rounded-full ring ring-emerald-500 ring-offset-2 ring-offset-base-100 dark:ring-emerald-600"
+                class="mt-0 w-8 rounded-full ring ring-emerald-500 ring-offset-2 ring-offset-base-100 sm:w-10 dark:ring-emerald-600"
               >
                 <img [src]="avatarCliente" [alt]="nombreCliente" />
               </div>
             </div>
 
             <div
-              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
+              class="chat-header mb-1 flex items-center gap-2 text-xs text-slate-700 sm:text-sm dark:text-slate-300"
             >
               <button
                 (click)="toggleAudio(mensaje.mensaje, 'msg-' + indiceEtapa + '-' + $index)"
@@ -595,8 +595,8 @@
               >
                 <span
                   [class]="isPlaying('msg-' + indiceEtapa + '-' + $index)
-                    ? 'icon-[hugeicons--stop] size-4 text-white'
-                    : 'icon-[hugeicons--volume-high] size-4 text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300'"
+                    ? 'icon-[hugeicons--stop] size-3.5 text-white sm:size-4'
+                    : 'icon-[hugeicons--volume-high] size-3.5 text-emerald-500 hover:text-emerald-600 sm:size-4 dark:text-emerald-400 dark:hover:text-emerald-300'"
                 ></span>
               </button>
               <span>Cliente</span>
@@ -607,9 +607,9 @@
                 class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-900 shadow-sm dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
+                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-900 shadow-sm sm:px-4 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
               >
-                <span class="relative z-10">{{ mensaje.mensaje }}</span>
+                <span class="text-hyphen relative z-10 text-xs sm:text-sm">{{ mensaje.mensaje }}</span>
               </div>
             </div>
           </div>
@@ -618,14 +618,14 @@
           <div class="fade-in relative chat-end chat">
             <div class="avatar chat-image mt-[22px] self-start">
               <div
-                class="mt-0 w-10 rounded-full ring ring-blue-500 ring-offset-2 ring-offset-base-100 dark:ring-blue-600"
+                class="mt-0 w-8 rounded-full ring ring-blue-500 ring-offset-2 ring-offset-base-100 sm:w-10 dark:ring-blue-600"
               >
                 <img [src]="avatarAsesor" alt="Asesor" />
               </div>
             </div>
 
             <div
-              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
+              class="chat-header mb-1 flex items-center gap-2 text-xs text-slate-700 sm:text-sm dark:text-slate-300"
             >
               <span>Asesor</span>
             </div>
@@ -635,9 +635,9 @@
                 class="absolute top-4 -right-[6px] z-0 h-3 w-3 rotate-45 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-2 text-blue-900 shadow-sm dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
+                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-3 py-2 text-blue-900 shadow-sm sm:px-4 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
               >
-                <span class="relative z-10">{{ mensaje.mensaje }}</span>
+                <span class="text-hyphen relative z-10 text-xs sm:text-sm">{{ mensaje.mensaje }}</span>
               </div>
             </div>
           </div>
@@ -652,7 +652,7 @@
           <div class="fade-in relative chat-start chat">
             <div class="avatar chat-image mt-[22px] self-start">
               <div
-                class="mt-0 w-10 rounded-full ring ring-emerald-500 ring-offset-2 ring-offset-base-100 dark:ring-emerald-600"
+                class="mt-0 w-8 rounded-full ring ring-emerald-500 ring-offset-2 ring-offset-base-100 sm:w-10 dark:ring-emerald-600"
               >
                 <img
                   [src]="indicadorEmisor === 'Cliente' ? avatarCliente : avatarAsesor"
@@ -662,7 +662,7 @@
             </div>
 
             <div
-              class="chat-header mb-1 flex items-center gap-2 text-slate-700 dark:text-slate-300"
+              class="chat-header mb-1 flex items-center gap-2 text-xs text-slate-700 sm:text-sm dark:text-slate-300"
             >
               <span>{{ indicadorEmisor }}</span>
             </div>
@@ -672,7 +672,7 @@
                 class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-900 shadow-sm dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
+                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-900 shadow-sm sm:px-4 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
               >
                 <div class="flex gap-1">
                   <div class="typing-indicator"></div>
@@ -687,7 +687,7 @@
 
         <!-- Input de mensaje -->
         <div
-          class="flex flex-col gap-2 border-t border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
+          class="shrink-0 flex flex-col gap-2 border-t border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
         >
           <div class="flex w-full gap-2">
             <details #etapa class="relative">
@@ -726,7 +726,7 @@
               (keydown)="onTextareaKeyDown($event)"
               [disabled]="modoSoloLectura || enviandoMensaje || finalizandoSimulacion"
               placeholder="Escribe tu mensaje al cliente..."
-              class="textarea h-25 flex-1 resize-none border-slate-300 bg-white text-slate-900 placeholder-slate-500 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none disabled:opacity-50 dark:border-slate-600 dark:bg-[#0f1724] dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-purple-400"
+              class="textarea h-16 sm:h-20 flex-1 resize-none border-slate-300 bg-white text-slate-900 placeholder-slate-500 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none disabled:opacity-50 dark:border-slate-600 dark:bg-[#0f1724] dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-purple-400"
             ></textarea>
             <div class="flex flex-col justify-between gap-2">
               <button
@@ -764,8 +764,8 @@
     </div>
 
     <!-- PANEL DE INFORMACIÓN DEL CLIENTE (Desktop) -->
-    <div class="hidden lg:order-3 lg:col-span-3 lg:block">
-      <div class="card flex h-full flex-col overflow-hidden bg-white shadow-xl dark:bg-slate-900">
+    <div class="simulador-panel hidden min-[1327px]:order-3 min-[1327px]:col-span-3 min-[1327px]:block">
+      <div class="card overflow-hidden bg-white shadow-xl dark:bg-slate-900">
         <div
           class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
         >
@@ -778,7 +778,7 @@
         </div>
 
         <div
-          class="max-h-[calc(100vh-100px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="panel-content-scroll space-y-4 bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
         >
           @if (infoCliente) {
           <div
@@ -791,14 +791,14 @@
                 <img [src]="avatarCliente" [alt]="nombreCliente" />
               </div>
             </div>
-            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">
+            <h3 class="text-base font-bold text-slate-800 sm:text-lg dark:text-slate-200">
               {{ infoCliente.nombre }}
             </h3>
-            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+            <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
               {{ infoCliente.edad }}
             </p>
             <span
-              class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md dark:from-amber-600 dark:to-orange-600"
+              class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-[10px] font-bold text-white shadow-md sm:text-xs dark:from-amber-600 dark:to-orange-600"
             >
               {{ infoCliente.profesion }}
             </span>
@@ -808,22 +808,22 @@
             class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
           >
             <h3
-              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+              class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
             >
               <span
-                class="icon-[hugeicons--user] size-4 text-emerald-600 dark:text-emerald-400"
+                class="icon-[hugeicons--user] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
               ></span>
               Perfil del Cliente
             </h3>
 
-            <div class="space-y-2 text-sm">
+            <div class="space-y-2 text-xs sm:text-sm">
               <div class="hover-item flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--briefcase-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--briefcase-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
                 ></span>
-                <div>
-                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Situación</p>
-                  <p class="text-slate-800 dark:text-slate-200">
+                <div class="min-w-0">
+                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Situación</p>
+                  <p class="text-hyphen text-slate-800 dark:text-slate-200">
                     {{ infoCliente.situacion_actual }}
                   </p>
                 </div>
@@ -831,43 +831,43 @@
 
               <div class="hover-item flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--target-01] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--target-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
                 ></span>
-                <div>
-                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Motivación</p>
-                  <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
+                <div class="min-w-0">
+                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Motivación</p>
+                  <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
                 </div>
               </div>
 
               <div class="hover-item flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--flag-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--flag-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
                 ></span>
-                <div>
-                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Objetivo</p>
-                  <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
+                <div class="min-w-0">
+                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Objetivo</p>
+                  <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
                 </div>
               </div>
 
               <div class="hover-item flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--chart-increase] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--chart-increase] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
                 ></span>
-                <div>
-                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Riesgo</p>
-                  <p class="text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
+                <div class="min-w-0">
+                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Riesgo</p>
+                  <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
                 </div>
               </div>
 
               <div class="hover-item flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--book-02] size-4 shrink-0 text-slate-600 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--book-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
                 ></span>
-                <div>
-                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                <div class="min-w-0">
+                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">
                     Conocimiento
                   </p>
-                  <p class="text-slate-800 dark:text-slate-200">
+                  <p class="text-hyphen text-slate-800 dark:text-slate-200">
                     {{ infoCliente.nivel_conocimiento }}
                   </p>
                 </div>
@@ -879,14 +879,14 @@
             class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
           >
             <h3
-              class="mb-3 flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200"
+              class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
             >
               <span
-                class="icon-[hugeicons--information-circle] size-4 text-emerald-600 dark:text-emerald-400"
+                class="icon-[hugeicons--information-circle] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
               ></span>
               Escenario
             </h3>
-            <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            <p class="text-hyphen text-xs leading-relaxed text-slate-700 sm:text-sm dark:text-slate-300">
               {{ infoCliente.escenario_narrativo }}
             </p>
           </div>

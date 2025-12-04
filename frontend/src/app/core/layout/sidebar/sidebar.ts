@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderPlataforma } from '../headers/header-plataforma/header-plataforma';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -13,7 +13,9 @@ import { Subject, takeUntil, filter } from 'rxjs';
   imports: [CommonModule, HeaderPlataforma, MatTooltipModule, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
 })
-export class Sidebar implements OnInit, OnDestroy {
+export class Sidebar implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('mainContent') mainContentRef!: ElementRef<HTMLElement>;
+
   currentTheme: 'light' | 'dark' = 'light';
   isDrawerClosed = false;
   usuario: Usuario | null = null;
@@ -46,7 +48,7 @@ export class Sidebar implements OnInit, OnDestroy {
     // Restaurar estado del sidebar desde localStorage
     this.restaurarEstadoSidebar();
 
-    // Escuchar cambios de navegación para cerrar sidebar en pantalla pequeña
+    // Escuchar cambios de navegación para cerrar sidebar en pantalla pequeña y scroll al top
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -54,9 +56,23 @@ export class Sidebar implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.cerrarSidebarEnPantallasPequenas();
+        this.scrollToTop();
       });
 
     this.checkDrawerState();
+  }
+
+  ngAfterViewInit(): void {
+    // El ViewChild ya está disponible aquí
+  }
+
+  /**
+   * Hace scroll al inicio del contenido principal
+   */
+  private scrollToTop(): void {
+    if (this.mainContentRef?.nativeElement) {
+      this.mainContentRef.nativeElement.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }
 
   /**

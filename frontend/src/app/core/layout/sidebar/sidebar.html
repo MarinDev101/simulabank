@@ -1,4 +1,4 @@
-<div class="drawer min-h-dvh overflow-visible lg:drawer-open">
+<div class="drawer min-h-dvh overflow-hidden lg:drawer-open">
   <input
     id="my-drawer"
     type="checkbox"
@@ -7,7 +7,7 @@
     (change)="onDrawerChange()"
   />
 
-  <div class="drawer-content flex h-dvh flex-col overflow-y-auto overflow-x-visible">
+  <div #mainContent class="drawer-content flex h-dvh flex-col overflow-y-auto overflow-x-hidden">
     <app-header-plataforma class="sticky top-0 z-30">
       <div class="p-2 lg:hidden">
         <label
