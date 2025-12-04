@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface Evidencia {
   id_simulacion: number;
@@ -39,8 +40,7 @@ export interface MensajeResponse {
 })
 export class EvidenciasService {
   private http = inject(HttpClient);
-  // Cambia esto a la URL de tu backend
-  private readonly API_URL = 'http://localhost:3000/api/evidencias';
+  private readonly API_URL = `${environment.apiBaseUrl}/evidencias`;
 
   /**
    * Obtiene los headers con el token JWT
