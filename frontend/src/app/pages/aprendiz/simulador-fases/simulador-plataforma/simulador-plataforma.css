@@ -192,12 +192,26 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #e5e7eb 15%, #e5e7eb 85%, transparent 100%);
+  /* Línea más sutil en modo claro: baja opacidad con color primario suave */
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(23, 136, 239, 0.06) 15%,
+    rgba(23, 136, 239, 0.06) 85%,
+    transparent 100%
+  );
   z-index: 1;
 }
 
 .dark .etapa-marker::before {
-  background: linear-gradient(90deg, transparent 0%, #4b5563 15%, #4b5563 85%, transparent 100%);
+  /* Línea más sutil en modo oscuro: baja opacidad, evita tonos muy contrastados */
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(23, 136, 239, 0.06) 15%,
+    rgba(23, 136, 239, 0.06) 85%,
+    transparent 100%
+  );
 }
 
 /* Hover effects que requieren transiciones específicas */
@@ -240,6 +254,34 @@
   max-width: 100vw;
 }
 
+/* Ajuste conservador para móviles: reservar 60px (header) y dejar que el padre controle el espacio
+   Esto evita usar position:fixed y previene micro-scrolls por paddings/borders */
+@media (max-width: 639px) {
+  :host {
+    height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
+  }
+
+  .simulador-container {
+    height: 100%;
+    max-height: 100%;
+    padding: 0; /* evitar sumar píxeles extras */
+  }
+
+  .simulador-grid {
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  }
+
+  /* Quitar border-radius, border y sombra en cards dentro de paneles en móviles pequeños */
+  .simulador-panel > .card {
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
 /* Contenedor principal sin scroll */
 .simulador-container {
   display: flex;
@@ -274,13 +316,26 @@
   gap: 0.5rem;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
+  /* Padding para permitir que las sombras se muestren */
+  padding: 0.25rem;
+  margin: -0.25rem;
+}
+
+@media (max-width: 687px) {
+  .simulador-grid {
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  }
 }
 
 @media (min-width: 1327px) {
   .simulador-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 1rem;
+    padding: 0.5rem;
+    margin: -0.5rem;
   }
 }
 
@@ -288,7 +343,7 @@
 .simulador-panel {
   min-height: 0;
   max-height: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Solo aplicar flex cuando el panel es visible (en pantallas grandes) */
@@ -305,7 +360,10 @@
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  /* Solo overflow hidden en las cards, no en todo el panel */
   overflow: hidden;
+  /* Bordes consistentes */
+  border-radius: 1rem;
 }
 
 /* Contenido scrolleable dentro de cada panel */

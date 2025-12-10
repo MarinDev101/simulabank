@@ -68,35 +68,37 @@ function createExpressApp() {
 // Rate limiter para login/registro (más estricto para prevenir fuerza bruta)
 // Estándar: 5-10 intentos por 15 minutos
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 10, // 10 intentos de login/registro
+  windowMs: 1 * 60 * 1000, // 1 minuto (antes 15 min)
+  max: 1000, // 1000 intentos (antes 10) - Restricción relajada
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     success: false,
-    message: 'Demasiados intentos de autenticación, intenta de nuevo en 15 minutos.',
+    message: 'Demasiados intentos de autenticación, intenta de nuevo en un momento.',
   },
-  skipFailedRequests: false, // Contar también peticiones fallidas
+  skipFailedRequests: false,
+  skip: () => isDevelopment, // Desactivar en desarrollo
 });
 
 // Rate limiter para endpoints de creación (POST)
 // Estándar: 30-50 creaciones por minuto
 const createLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minuto
-  max: 30, // 30 creaciones por minuto
+  max: 1000, // 1000 creaciones (antes 30) - Restricción relajada
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     success: false,
     message: 'Has creado demasiados recursos, espera un momento.',
   },
+  skip: () => isDevelopment, // Desactivar en desarrollo
 });
 
 // Rate limiter para operaciones sensibles (cambio de contraseña, etc.)
 // Estándar: 5 intentos por hora
 const sensitiveLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hora
-  max: 5, // 5 intentos por hora
+  windowMs: 1 * 60 * 1000, // 1 minuto (antes 1 hora)
+  max: 100, // 100 intentos (antes 5) - Restricción relajada
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -105,7 +107,21 @@ const sensitiveLimiter = rateLimit({
   },
 });
 
+// Rate limiter para reenvío de códigos de verificación
+// Permite reenvíos frecuentes pero con límite razonable
+const resendCodeLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutos
+  max: 10, // 10 intentos por cada 5 minutos
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Demasiados intentos de reenvío, espera unos minutos.',
+  },
+});
+
 module.exports = createExpressApp;
 module.exports.authLimiter = authLimiter;
 module.exports.createLimiter = createLimiter;
 module.exports.sensitiveLimiter = sensitiveLimiter;
+module.exports.resendCodeLimiter = resendCodeLimiter;

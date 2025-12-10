@@ -67,10 +67,7 @@ export class PersonalizarPerfil implements OnInit {
     const anioMaximo = anioActual - this.EDAD_MINIMA; // Edad mínima (ej: 2007)
 
     // Crear array de años desde el más reciente al más antiguo
-    this.anios = Array.from(
-      { length: anioMaximo - anioMinimo + 1 },
-      (_, i) => anioMaximo - i
-    );
+    this.anios = Array.from({ length: anioMaximo - anioMinimo + 1 }, (_, i) => anioMaximo - i);
   }
 
   /**
@@ -113,7 +110,7 @@ export class PersonalizarPerfil implements OnInit {
    * Verifica si un año es bisiesto
    */
   private esAnioBisiesto(anio: number): boolean {
-    return (anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0);
+    return (anio % 4 === 0 && anio % 100 !== 0) || anio % 400 === 0;
   }
 
   /**
@@ -231,7 +228,10 @@ export class PersonalizarPerfil implements OnInit {
     // Validar que sea jpeg o png
     const allowedTypes = ['image/jpeg', 'image/png'];
     if (!allowedTypes.includes(file.type)) {
-      this.alertService.error('Formato no válido', 'Solo se permiten imágenes en formato JPEG o PNG.');
+      this.alertService.error(
+        'Formato no válido',
+        'Solo se permiten imágenes en formato JPEG o PNG.'
+      );
       return;
     }
 
@@ -263,7 +263,6 @@ export class PersonalizarPerfil implements OnInit {
       }
       // Si result es null, el usuario canceló
     } catch (err) {
-      console.error('Error al abrir el cropper', err);
       this.alertService.error('Error', 'No se pudo procesar la imagen. Intenta de nuevo.');
     }
 
@@ -300,14 +299,12 @@ export class PersonalizarPerfil implements OnInit {
     // Llamar al servicio para actualizar
     this.registroService.actualizarPerfilInicial(datosActualizar).subscribe({
       next: (response) => {
-        console.log('Perfil actualizado:', response);
         this.alertService.toastSuccess('¡Perfil guardado correctamente!');
         // Limpiar localStorage y redirigir al login
         this.limpiarYRedirigir();
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error al actualizar perfil:', error);
         this.alertService.error('Error', 'Error al guardar el perfil. Intenta nuevamente.');
       },
     });

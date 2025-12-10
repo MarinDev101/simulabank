@@ -95,8 +95,8 @@ export class InicioAprendiz implements OnInit, OnDestroy {
       next: (info) => {
         this.infoInicio = info;
       },
-      error: (err) => {
-        console.error('Error obteniendo información de inicio del aprendiz', err);
+      error: () => {
+        // Error silencioso
       },
     });
   }
@@ -106,8 +106,8 @@ export class InicioAprendiz implements OnInit, OnDestroy {
       next: (logros) => {
         this.logrosAprendiz = logros;
       },
-      error: (err) => {
-        console.error('Error obteniendo logros del aprendiz', err);
+      error: () => {
+        // Error silencioso
       },
     });
   }

@@ -1,33 +1,54 @@
 <div class="flex min-h-screen flex-col overflow-x-hidden">
   <app-header-basico></app-header-basico>
-  <main class="flex flex-1 flex-col items-center bg-geometria bg-size-[275px_275px] bg-repeat pt-[120px] md:pt-[140px] lg:pt-[160px] pb-12 md:pb-16 lg:pb-20 px-4 sm:px-6 md:px-8 overflow-x-hidden">
-
+  <main
+    class="flex flex-1 flex-col items-center overflow-x-hidden bg-geometria bg-size-[275px_275px] bg-repeat px-4 pt-[120px] pb-12 sm:px-6 md:px-8 md:pt-[140px] md:pb-16 lg:pt-[160px] lg:pb-20"
+  >
     <!-- Hero Section -->
-    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto mb-8 md:mb-12">
-      <div class="relative bg-white rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-xl border border-[#e8f4fc] overflow-hidden">
+    <section
+      class="mx-auto mb-8 w-full max-w-[95%] sm:max-w-[90%] md:mb-12 md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px]"
+    >
+      <div
+        class="relative overflow-hidden rounded-2xl border border-[#e8f4fc] bg-white p-6 shadow-xl sm:p-8 md:p-10 lg:p-12"
+      >
         <!-- Decoraciones de fondo -->
-        <div class="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28 md:w-40 md:h-40 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
-        <div class="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 md:w-36 md:h-36 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
+        <div
+          class="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-linear-to-bl from-[#1788EF]/10 to-transparent sm:h-28 sm:w-28 md:h-40 md:w-40"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 h-16 w-16 rounded-tr-full bg-linear-to-tr from-[#00A448]/10 to-transparent sm:h-24 sm:w-24 md:h-36 md:w-36"
+        ></div>
 
         <div class="relative z-10">
           <!-- Encabezado con icono -->
-          <div class="flex flex-col items-center mb-6 md:mb-8">
+          <div class="mb-6 flex flex-col items-center md:mb-8">
             <div class="mb-4 flex items-center justify-center">
-              <div class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-[#1788EF]/10 rounded-2xl flex items-center justify-center">
-                <span class="icon-[heroicons-outline--document-text] w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#1788EF]"></span>
+              <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1788EF]/10 sm:h-16 sm:w-16 md:h-20 md:w-20"
+              >
+                <span
+                  class="icon-[heroicons-outline--document-text] h-8 w-8 text-[#1788EF] sm:h-10 sm:w-10 md:h-12 md:w-12"
+                ></span>
               </div>
             </div>
-            <h1 class="nunito-sans-title text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#034D82] leading-tight text-center">
+            <h1
+              class="nunito-sans-title text-center text-2xl leading-tight text-[#034D82] sm:text-3xl md:text-4xl lg:text-[42px]"
+            >
               Términos y Condiciones
             </h1>
           </div>
 
           <!-- Descripción principal -->
-          <div class="max-w-[800px] mx-auto text-center">
-            <p class="nunito-sans-body text-sm sm:text-base md:text-lg text-[#4a5d6f] leading-relaxed md:leading-[1.8]">
-              A través de <span class="font-bold text-[#034D82]">www.simulabank.com</span>, ofrecemos a aprendices, instructores y público académico en general, una
-              herramienta digital interactiva que simula procesos de asesoría financiera con clientes virtuales para apoyar la
-              formación en gestión bancaria mediante <span class="text-[#00A448] font-medium">escenarios prácticos</span>, <span class="text-[#1788EF] font-medium">simulaciones guiadas</span> y retroalimentación del desempeño.
+          <div class="mx-auto max-w-[800px] text-center">
+            <p
+              class="nunito-sans-body text-sm leading-relaxed text-[#4a5d6f] sm:text-base md:text-lg md:leading-[1.8]"
+            >
+              A través de <span class="font-bold text-[#034D82]">www.simulabank.com</span>,
+              ofrecemos a aprendices, instructores y público académico en general, una herramienta
+              digital interactiva que simula procesos de asesoría financiera con clientes virtuales
+              para apoyar la formación en gestión bancaria mediante
+              <span class="font-medium text-[#00A448]">escenarios prácticos</span>,
+              <span class="font-medium text-[#1788EF]">simulaciones guiadas</span> y
+              retroalimentación del desempeño.
             </p>
           </div>
         </div>
@@ -35,36 +56,64 @@
     </section>
 
     <!-- Contenido Principal -->
-    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto space-y-4 md:space-y-6">
-
+    <section
+      class="mx-auto w-full max-w-[95%] space-y-4 sm:max-w-[90%] md:max-w-[85%] md:space-y-6 lg:max-w-[900px] xl:max-w-[1000px]"
+    >
       <!-- 1. Qué encontrarás -->
-      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" checked="checked" />
-        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
-          <span class="icon-[heroicons-outline--magnifying-glass] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0"></span>
+      <div
+        class="collapse-arrow collapse rounded-xl border border-base-300 bg-white shadow-md transition-all duration-200 hover:shadow-lg"
+      >
+        <input
+          type="checkbox"
+          name="terms-accordion"
+          class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+          checked="checked"
+        />
+        <div
+          class="collapse-title flex cursor-pointer items-center gap-3 text-base font-semibold text-[#034D82] sm:text-lg"
+        >
+          <span
+            class="icon-[heroicons-outline--magnifying-glass] h-5 w-5 shrink-0 text-[#1788EF] sm:h-6 sm:w-6"
+          ></span>
           ¿Qué encontrarás en este sitio web?
         </div>
         <div class="collapse-content bg-[#f8fbff] pt-4">
           <div class="space-y-4">
-            <div class="flex gap-3 items-start">
-              <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0 mt-1">Info</span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Información académica que incluye escenarios de atención, simulación de productos financieros y
-                retroalimentación de desempeño. También encontrarás reportes de avance y herramientas de práctica.
+            <div class="flex items-start gap-3">
+              <span
+                class="mt-1 badge shrink-0 border-none bg-[#1788EF] badge-sm text-white sm:badge-md"
+                >Info</span
+              >
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Información académica que incluye escenarios de atención, simulación de productos
+                financieros y retroalimentación de desempeño. También encontrarás reportes de avance
+                y herramientas de práctica.
               </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-4">
-              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
-                <span class="badge badge-sm sm:badge-md bg-[#00A448] text-white border-none shrink-0">A</span>
-                <p class="text-sm sm:text-base text-[#4a5d6f]">
-                  Los aprendices podrán acceder al historial de prácticas, casos simulados y resultados de evaluaciones.
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+              <div
+                class="flex items-start gap-3 rounded-lg border border-[#e8f4fc] bg-white p-3 sm:p-4"
+              >
+                <span
+                  class="badge shrink-0 border-none bg-[#00A448] badge-sm text-white sm:badge-md"
+                  >A</span
+                >
+                <p class="text-sm text-[#4a5d6f] sm:text-base">
+                  Los aprendices podrán acceder al historial de prácticas, casos simulados y
+                  resultados de evaluaciones.
                 </p>
               </div>
-              <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
-                <span class="badge badge-sm sm:badge-md bg-[#034D82] text-white border-none shrink-0">B</span>
-                <p class="text-sm sm:text-base text-[#4a5d6f]">
-                  La información es educativa y está diseñada para el proceso formativo de los aprendices.
+              <div
+                class="flex items-start gap-3 rounded-lg border border-[#e8f4fc] bg-white p-3 sm:p-4"
+              >
+                <span
+                  class="badge shrink-0 border-none bg-[#034D82] badge-sm text-white sm:badge-md"
+                  >B</span
+                >
+                <p class="text-sm text-[#4a5d6f] sm:text-base">
+                  La información es educativa y está diseñada para el proceso formativo de los
+                  aprendices.
                 </p>
               </div>
             </div>
@@ -73,31 +122,51 @@
       </div>
 
       <!-- 2. Información de terceros -->
-      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
-          <span class="icon-[heroicons-outline--link] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0"></span>
+      <div
+        class="collapse-arrow collapse rounded-xl border border-base-300 bg-white shadow-md transition-all duration-200 hover:shadow-lg"
+      >
+        <input
+          type="checkbox"
+          name="terms-accordion"
+          class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+          checked="checked"
+        />
+        <div
+          class="collapse-title flex cursor-pointer items-center gap-3 text-base font-semibold text-[#034D82] sm:text-lg"
+        >
+          <span
+            class="icon-[heroicons-outline--link] h-5 w-5 shrink-0 text-[#00A448] sm:h-6 sm:w-6"
+          ></span>
           Información de terceros en nuestro sitio web
         </div>
         <div class="collapse-content bg-[#f8fbff] pt-4">
           <ul class="space-y-3 sm:space-y-4">
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--building-office] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Alguna información presentada en el Sitio Web es obtenida de entidades financieras y aliados académicos
-                con los que no tenemos relación directa, pero nos autorizaron a incluirla con fines educativos.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--building-office] h-5 w-5 shrink-0 text-[#1788EF] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Alguna información presentada en el Sitio Web es obtenida de entidades financieras y
+                aliados académicos con los que no tenemos relación directa, pero nos autorizaron a
+                incluirla con fines educativos.
               </p>
             </li>
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--arrow-top-right-on-square] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Encontrarás accesos a sitios de terceros a través de vínculos. Esto no implica que SimulaBank esté aprobando esos sitios ni su contenido.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--arrow-top-right-on-square] h-5 w-5 shrink-0 text-[#00A448] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Encontrarás accesos a sitios de terceros a través de vínculos. Esto no implica que
+                SimulaBank esté aprobando esos sitios ni su contenido.
               </p>
             </li>
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--exclamation] w-5 h-5 sm:w-6 sm:h-6 text-[#f59e0b] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Cualquier transacción que realices con terceros en estos sitios vinculados será de tu responsabilidad.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--exclamation] h-5 w-5 shrink-0 text-[#f59e0b] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Cualquier transacción que realices con terceros en estos sitios vinculados será de
+                tu responsabilidad.
               </p>
             </li>
           </ul>
@@ -105,45 +174,68 @@
       </div>
 
       <!-- 3. Propiedad de la información -->
-      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
-          <span class="icon-[heroicons-outline--document-check] w-5 h-5 sm:w-6 sm:h-6 text-[#034D82] shrink-0"></span>
+      <div
+        class="collapse-arrow collapse rounded-xl border border-base-300 bg-white shadow-md transition-all duration-200 hover:shadow-lg"
+      >
+        <input
+          type="checkbox"
+          name="terms-accordion"
+          class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+          checked="checked"
+        />
+        <div
+          class="collapse-title flex cursor-pointer items-center gap-3 text-base font-semibold text-[#034D82] sm:text-lg"
+        >
+          <span
+            class="icon-[heroicons-outline--document-check] h-5 w-5 shrink-0 text-[#034D82] sm:h-6 sm:w-6"
+          ></span>
           Propiedad de la información
         </div>
         <div class="collapse-content bg-[#f8fbff] pt-4">
           <div class="space-y-4 sm:space-y-5">
-            <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-              La información contenida en el Sitio Web está protegida por derechos de autor, marcas, patentes o formas similares de propiedad.
-              Esto aplica para textos, software, audios, fotografías, videos, gráficos y demás contenidos.
+            <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+              La información contenida en el Sitio Web está protegida por derechos de autor, marcas,
+              patentes o formas similares de propiedad. Esto aplica para textos, software, audios,
+              fotografías, videos, gráficos y demás contenidos.
             </p>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              <div class="flex flex-col gap-3 bg-white p-4 sm:p-5 rounded-xl border border-[#e8f4fc]">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+              <div
+                class="flex flex-col gap-3 rounded-xl border border-[#e8f4fc] bg-white p-4 sm:p-5"
+              >
                 <div class="flex items-center gap-2">
-                  <span class="icon-[mi--circle-check] w-6 h-6 sm:w-8 sm:h-8 text-[#00A448]"></span>
-                  <span class="text-xs sm:text-sm font-semibold text-[#00A448]">Permitido</span>
+                  <span class="icon-[mi--circle-check] h-6 w-6 text-[#00A448] sm:h-8 sm:w-8"></span>
+                  <span class="text-xs font-semibold text-[#00A448] sm:text-sm">Permitido</span>
                 </div>
-                <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                  Podrás hacer copia del contenido para uso personal y no comercial, manteniendo los avisos de derechos de autor.
+                <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                  Podrás hacer copia del contenido para uso personal y no comercial, manteniendo los
+                  avisos de derechos de autor.
                 </p>
               </div>
-              <div class="flex flex-col gap-3 bg-white p-4 sm:p-5 rounded-xl border border-[#e8f4fc]">
+              <div
+                class="flex flex-col gap-3 rounded-xl border border-[#e8f4fc] bg-white p-4 sm:p-5"
+              >
                 <div class="flex items-center gap-2">
-                  <span class="icon-[mi--circle-error] w-6 h-6 sm:w-8 sm:h-8 text-[#e74c3c]"></span>
-                  <span class="text-xs sm:text-sm font-semibold text-[#e74c3c]">Prohibido</span>
+                  <span class="icon-[mi--circle-error] h-6 w-6 text-[#e74c3c] sm:h-8 sm:w-8"></span>
+                  <span class="text-xs font-semibold text-[#e74c3c] sm:text-sm">Prohibido</span>
                 </div>
-                <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                  No podrás transmitir, publicar, reproducir, distribuir, vender o comercializar la información sin autorización.
+                <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                  No podrás transmitir, publicar, reproducir, distribuir, vender o comercializar la
+                  información sin autorización.
                 </p>
               </div>
-              <div class="flex flex-col gap-3 bg-white p-4 sm:p-5 rounded-xl border border-[#e8f4fc] sm:col-span-2 lg:col-span-1">
+              <div
+                class="flex flex-col gap-3 rounded-xl border border-[#e8f4fc] bg-white p-4 sm:col-span-2 sm:p-5 lg:col-span-1"
+              >
                 <div class="flex items-center gap-2">
-                  <span class="icon-[mi--circle-information] w-6 h-6 sm:w-8 sm:h-8 text-[#1788EF]"></span>
-                  <span class="text-xs sm:text-sm font-semibold text-[#1788EF]">Importante</span>
+                  <span
+                    class="icon-[mi--circle-information] h-6 w-6 text-[#1788EF] sm:h-8 sm:w-8"
+                  ></span>
+                  <span class="text-xs font-semibold text-[#1788EF] sm:text-sm">Importante</span>
                 </div>
-                <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                  Eres responsable de la interpretación y uso de los datos e información suministrada en este Sitio Web.
+                <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                  Eres responsable de la interpretación y uso de los datos e información
+                  suministrada en este Sitio Web.
                 </p>
               </div>
             </div>
@@ -152,30 +244,50 @@
       </div>
 
       <!-- 4. Protección de datos -->
-      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
-          <span class="icon-[heroicons-outline--lock-closed] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0"></span>
+      <div
+        class="collapse-arrow collapse rounded-xl border border-base-300 bg-white shadow-md transition-all duration-200 hover:shadow-lg"
+      >
+        <input
+          type="checkbox"
+          name="terms-accordion"
+          class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+          checked="checked"
+        />
+        <div
+          class="collapse-title flex cursor-pointer items-center gap-3 text-base font-semibold text-[#034D82] sm:text-lg"
+        >
+          <span
+            class="icon-[heroicons-outline--lock-closed] h-5 w-5 shrink-0 text-[#1788EF] sm:h-6 sm:w-6"
+          ></span>
           Protección de datos
         </div>
         <div class="collapse-content bg-[#f8fbff] pt-4">
           <ul class="space-y-3 sm:space-y-4">
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--shield-check] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Para nosotros es muy importante el derecho a la privacidad. Contamos con lineamientos para la administración y tratamiento de datos personales.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--shield-check] h-5 w-5 shrink-0 text-[#00A448] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Para nosotros es muy importante el derecho a la privacidad. Contamos con
+                lineamientos para la administración y tratamiento de datos personales.
               </p>
             </li>
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--device-phone-mobile] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                A través del Sitio Web podremos acceder a funcionalidades del dispositivo como conexión a internet, almacenamiento o identificación del equipo.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--device-phone-mobile] h-5 w-5 shrink-0 text-[#1788EF] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                A través del Sitio Web podremos acceder a funcionalidades del dispositivo como
+                conexión a internet, almacenamiento o identificación del equipo.
               </p>
             </li>
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--chat-bubble-left-right] w-5 h-5 sm:w-6 sm:h-6 text-[#034D82] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Al entregar información, autorizas a SimulaBank a utilizarla para comunicarse contigo y dar soporte a tu proceso de aprendizaje.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--chat-bubble-left-right] h-5 w-5 shrink-0 text-[#034D82] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Al entregar información, autorizas a SimulaBank a utilizarla para comunicarse
+                contigo y dar soporte a tu proceso de aprendizaje.
               </p>
             </li>
           </ul>
@@ -183,30 +295,56 @@
       </div>
 
       <!-- 5. Seguridad -->
-      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
-          <span class="icon-[heroicons-outline--shield-exclamation] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0"></span>
+      <div
+        class="collapse-arrow collapse rounded-xl border border-base-300 bg-white shadow-md transition-all duration-200 hover:shadow-lg"
+      >
+        <input
+          type="checkbox"
+          name="terms-accordion"
+          class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+          checked="checked"
+        />
+        <div
+          class="collapse-title flex cursor-pointer items-center gap-3 text-base font-semibold text-[#034D82] sm:text-lg"
+        >
+          <span
+            class="icon-[heroicons-outline--shield-exclamation] h-5 w-5 shrink-0 text-[#00A448] sm:h-6 sm:w-6"
+          ></span>
           Seguridad
         </div>
         <div class="collapse-content bg-[#f8fbff] pt-4">
           <div class="space-y-3 sm:space-y-4">
-            <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
-              <span class="badge badge-sm sm:badge-md bg-[#1788EF] text-white border-none shrink-0">A</span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Hemos implementado procedimientos electrónicos y administrativos para proteger la información, prevenir accesos no autorizados y evitar pérdida o mal uso de datos.
+            <div
+              class="flex items-start gap-3 rounded-lg border border-[#e8f4fc] bg-white p-3 sm:p-4"
+            >
+              <span class="badge shrink-0 border-none bg-[#1788EF] badge-sm text-white sm:badge-md"
+                >A</span
+              >
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Hemos implementado procedimientos electrónicos y administrativos para proteger la
+                información, prevenir accesos no autorizados y evitar pérdida o mal uso de datos.
               </p>
             </div>
-            <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
-              <span class="badge badge-sm sm:badge-md bg-[#f59e0b] text-white border-none shrink-0">B</span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Podrás ser responsable de los daños o perjuicios que puedas causar a SimulaBank o a terceros por los usos indebidos del Sitio Web.
+            <div
+              class="flex items-start gap-3 rounded-lg border border-[#e8f4fc] bg-white p-3 sm:p-4"
+            >
+              <span class="badge shrink-0 border-none bg-[#f59e0b] badge-sm text-white sm:badge-md"
+                >B</span
+              >
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Podrás ser responsable de los daños o perjuicios que puedas causar a SimulaBank o a
+                terceros por los usos indebidos del Sitio Web.
               </p>
             </div>
-            <div class="flex gap-3 items-start bg-white p-3 sm:p-4 rounded-lg border border-[#e8f4fc]">
-              <span class="badge badge-sm sm:badge-md bg-[#034D82] text-white border-none shrink-0">C</span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Debes contar con los medios físicos y tecnológicos para acceder a la información y asumir los costos del equipo, internet y demás recursos necesarios.
+            <div
+              class="flex items-start gap-3 rounded-lg border border-[#e8f4fc] bg-white p-3 sm:p-4"
+            >
+              <span class="badge shrink-0 border-none bg-[#034D82] badge-sm text-white sm:badge-md"
+                >C</span
+              >
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Debes contar con los medios físicos y tecnológicos para acceder a la información y
+                asumir los costos del equipo, internet y demás recursos necesarios.
               </p>
             </div>
           </div>
@@ -214,43 +352,61 @@
       </div>
 
       <!-- 6. Legales -->
-      <div class="collapse collapse-arrow bg-white border border-base-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
-        <input type="radio" name="terms-accordion" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-        <div class="collapse-title text-base sm:text-lg font-semibold text-[#034D82] flex items-center gap-3 cursor-pointer">
-          <span class="icon-[heroicons-outline--scale] w-5 h-5 sm:w-6 sm:h-6 text-[#034D82] shrink-0"></span>
+      <div
+        class="collapse-arrow collapse rounded-xl border border-base-300 bg-white shadow-md transition-all duration-200 hover:shadow-lg"
+      >
+        <input
+          type="checkbox"
+          name="terms-accordion"
+          class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+          checked="checked"
+        />
+        <div
+          class="collapse-title flex cursor-pointer items-center gap-3 text-base font-semibold text-[#034D82] sm:text-lg"
+        >
+          <span
+            class="icon-[heroicons-outline--scale] h-5 w-5 shrink-0 text-[#034D82] sm:h-6 sm:w-6"
+          ></span>
           Legales
         </div>
         <div class="collapse-content bg-[#f8fbff] pt-4">
           <ul class="space-y-3 sm:space-y-4">
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--arrow-path] w-5 h-5 sm:w-6 sm:h-6 text-[#1788EF] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                Podremos incluir funcionalidades, modificar o suprimir contenidos del Sitio Web y actualizar estos términos y condiciones. Procuraremos informarlo previamente.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--arrow-path] h-5 w-5 shrink-0 text-[#1788EF] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                Podremos incluir funcionalidades, modificar o suprimir contenidos del Sitio Web y
+                actualizar estos términos y condiciones. Procuraremos informarlo previamente.
               </p>
             </li>
-            <li class="flex gap-3 items-start">
-              <span class="icon-[heroicons-outline--flag] w-5 h-5 sm:w-6 sm:h-6 text-[#00A448] shrink-0 mt-0.5"></span>
-              <p class="text-sm sm:text-base text-[#4a5d6f] leading-relaxed">
-                A estos términos y condiciones, la información contenida en el Sitio Web y cualquier conflicto le aplica la <strong class="text-[#034D82]">ley colombiana</strong> y se somete a los jueces y tribunales colombianos.
+            <li class="flex items-start gap-3">
+              <span
+                class="mt-0.5 icon-[heroicons-outline--flag] h-5 w-5 shrink-0 text-[#00A448] sm:h-6 sm:w-6"
+              ></span>
+              <p class="text-sm leading-relaxed text-[#4a5d6f] sm:text-base">
+                A estos términos y condiciones, la información contenida en el Sitio Web y cualquier
+                conflicto le aplica la <strong class="text-[#034D82]">ley colombiana</strong> y se
+                somete a los jueces y tribunales colombianos.
               </p>
             </li>
           </ul>
         </div>
       </div>
-
     </section>
 
     <!-- Footer info -->
-    <section class="w-full max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px] mx-auto mt-8 md:mt-12">
-      <div class="text-center p-4 sm:p-6 bg-white/60 rounded-xl border border-[#e8f4fc]">
-        <p class="text-xs sm:text-sm text-[#6b7c8a]">
+    <section
+      class="mx-auto mt-8 w-full max-w-[95%] sm:max-w-[90%] md:mt-12 md:max-w-[85%] lg:max-w-[900px] xl:max-w-[1000px]"
+    >
+      <div class="rounded-xl border border-[#e8f4fc] bg-white/60 p-4 text-center sm:p-6">
+        <p class="text-xs text-[#6b7c8a] sm:text-sm">
           Estos términos y condiciones fueron actualizados por última vez en 2025.
-          <br class="hidden sm:block"/>
+          <br class="hidden sm:block" />
           Al usar este sitio, aceptas cumplir con estos términos.
         </p>
       </div>
     </section>
-
   </main>
   <app-footer></app-footer>
 </div>

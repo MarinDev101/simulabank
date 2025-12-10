@@ -62,8 +62,10 @@ export class GestionAprendices implements OnInit {
       error: (err) => {
         this.error = 'Error al cargar los aprendices. Por favor, intenta de nuevo.';
         this.cargando = false;
-        console.error('Error detallado:', err);
-        this.alertService.error('Error', 'No se pudieron cargar los aprendices. Por favor, intenta de nuevo.');
+        this.alertService.error(
+          'Error',
+          'No se pudieron cargar los aprendices. Por favor, intenta de nuevo.'
+        );
       },
     });
   }
@@ -206,7 +208,6 @@ export class GestionAprendices implements OnInit {
    */
   editarAprendiz(aprendiz: Usuario): void {
     this.aprendizEditando = { ...aprendiz };
-    console.log('Editando aprendiz:', this.aprendizEditando);
   }
 
   /**
@@ -215,12 +216,8 @@ export class GestionAprendices implements OnInit {
   guardarAprendiz(): void {
     if (!this.aprendizEditando) return;
 
-    console.log('💾 Guardando aprendiz:', this.aprendizEditando);
-
     this.adminService.actualizarAprendiz(this.aprendizEditando).subscribe({
       next: (response) => {
-        console.log('Aprendiz actualizado exitosamente:', response);
-
         // Actualizar en la lista local
         const index = this.aprendices.findIndex((a) => a.id === this.aprendizEditando!.id);
         if (index !== -1) {
@@ -235,9 +232,6 @@ export class GestionAprendices implements OnInit {
         this.alertService.toastSuccess('Aprendiz actualizado correctamente');
       },
       error: (err) => {
-        console.error('Error al actualizar aprendiz:', err);
-        console.error('Detalles del error:', err.error);
-
         if (err.status === 403) {
           this.alertService.error('Sesión expirada', 'Por favor, inicia sesión nuevamente.');
           setTimeout(() => {
@@ -246,7 +240,8 @@ export class GestionAprendices implements OnInit {
             });
           }, 2000);
         } else {
-          const mensajeError = err.error?.error || 'Error al actualizar el aprendiz. Por favor, intenta de nuevo.';
+          const mensajeError =
+            err.error?.error || 'Error al actualizar el aprendiz. Por favor, intenta de nuevo.';
           this.alertService.error('Error', mensajeError);
         }
       },
@@ -281,8 +276,10 @@ export class GestionAprendices implements OnInit {
         this.alertService.toastSuccess('Aprendiz inhabilitado correctamente');
       },
       error: (err) => {
-        console.error('Error al inhabilitar aprendiz:', err);
-        this.alertService.error('Error', 'Error al inhabilitar el aprendiz. Por favor, intenta de nuevo.');
+        this.alertService.error(
+          'Error',
+          'Error al inhabilitar el aprendiz. Por favor, intenta de nuevo.'
+        );
       },
     });
   }
@@ -308,8 +305,10 @@ export class GestionAprendices implements OnInit {
         this.alertService.toastSuccess('Aprendiz habilitado correctamente');
       },
       error: (err) => {
-        console.error('Error al habilitar aprendiz:', err);
-        this.alertService.error('Error', 'Error al habilitar el aprendiz. Por favor, intenta de nuevo.');
+        this.alertService.error(
+          'Error',
+          'Error al habilitar el aprendiz. Por favor, intenta de nuevo.'
+        );
       },
     });
   }
@@ -330,8 +329,8 @@ export class GestionAprendices implements OnInit {
    */
   getColorEstado(estado: string): string {
     return estado === 'activo'
-      ? 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400'
-      : 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400';
+      ? 'bg-[#00A448]/10 text-[#00A448] dark:bg-[#00A448]/20'
+      : 'bg-[#f59e0b]/10 text-[#f59e0b] dark:bg-[#f59e0b]/20';
   }
 
   /**

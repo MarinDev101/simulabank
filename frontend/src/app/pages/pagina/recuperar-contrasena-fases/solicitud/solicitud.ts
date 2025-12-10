@@ -7,18 +7,26 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha-2';
 import { RecuperacionService } from '@app/core/auth/service/recuperacion';
 import { AlertService } from '@app/services/alert/alert.service';
+import { environment } from '../../../../../environments/environment';
 import { EmailFormatDirective } from '@app/shared/directives';
 import { VALIDATION_CONFIG, emailRobustoValidator } from '@app/shared/validators';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_recuperacion'; // Cooldown global para recuperación
-const COOLDOWN_TIME = 300000; // 5 minutos en milisegundos
+const COOLDOWN_TIME = 60000; // 60 segundos en milisegundos
 
 @Component({
   selector: 'app-solicitud',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, EmailFormatDirective],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    EmailFormatDirective,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+  ],
   templateUrl: './solicitud.html',
 })
 export class Solicitud implements OnInit, OnDestroy {
@@ -27,6 +35,7 @@ export class Solicitud implements OnInit, OnDestroy {
 
   form!: FormGroup;
   isLoading = false;
+  siteKey = environment.recaptchaSiteKey;
 
   // Rate limiting
   cooldownSeconds = 0;
@@ -46,6 +55,7 @@ export class Solicitud implements OnInit, OnDestroy {
           emailRobustoValidator(),
         ],
       ],
+      recaptcha: [null, Validators.required],
     });
   }
 
@@ -56,7 +66,7 @@ export class Solicitud implements OnInit, OnDestroy {
     // Cargar datos guardados si existen (cuando el usuario vuelve del paso 2)
     if (this.datosGuardados?.correo) {
       this.form.patchValue({
-        correo: this.datosGuardados.correo
+        correo: this.datosGuardados.correo,
       });
     }
   }
@@ -105,6 +115,10 @@ export class Solicitud implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
+  onRecaptchaResolved(token: string | null) {
+    this.form.patchValue({ recaptcha: token });
+  }
+
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -121,7 +135,10 @@ export class Solicitud implements OnInit, OnDestroy {
       if (remaining > 0) {
         this.cooldownSeconds = Math.ceil(remaining / 1000);
         this.iniciarContadorCooldown();
-        this.alertService.warning('Espera un momento', `Debes esperar ${this.cooldownSeconds} segundos antes de solicitar otro código.`);
+        this.alertService.warning(
+          'Espera un momento',
+          `Debes esperar ${this.cooldownSeconds} segundos antes de solicitar otro código.`
+        );
         return;
       }
     }
@@ -135,13 +152,12 @@ export class Solicitud implements OnInit, OnDestroy {
         this.alertService.toastSuccess('Código de recuperación enviado a tu correo');
         // Guardar cooldown global
         this.guardarCooldown();
-        this.cooldownSeconds = 300;
+        this.cooldownSeconds = 60;
         this.iniciarContadorCooldown();
         this.continuar.emit({ correo });
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error al solicitar recuperación:', error);
 
         let mensaje = 'Ocurrió un error inesperado. Intenta nuevamente.';
 
@@ -152,7 +168,7 @@ export class Solicitud implements OnInit, OnDestroy {
         } else if (error.status === 429) {
           mensaje = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
           this.guardarCooldown();
-          this.cooldownSeconds = 300;
+          this.cooldownSeconds = 60;
           this.iniciarContadorCooldown();
         } else if (error.status === 0) {
           mensaje = 'No se pudo conectar con el servidor. Verifica tu conexión.';

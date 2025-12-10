@@ -43,6 +43,9 @@ interface AudioQueueItem {
   imports: [CommonModule, FormsModule, PoliticasPlataforma],
   templateUrl: './simulador-plataforma.html',
   styleUrls: ['./simulador-plataforma.css'],
+  host: {
+    class: 'simulador-plataforma-page',
+  },
 })
 export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('chatContainer') chatContainer!: ElementRef;
@@ -69,6 +72,7 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
   error: string | null = null;
   tiempoTranscurrido = '00:00';
   sonidoHabilitado = true;
+  menuAbierto = false;
 
   // Datos de finalización
   datosFinalizacion: any = null;
@@ -187,6 +191,29 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
     } catch (e) {
       console.warn('No se pudieron inicializar listeners de drawers:', e);
     }
+
+    // Quitar padding en móvil
+    this.aplicarEstilosSinPadding();
+  }
+
+  private aplicarEstilosSinPadding() {
+    const aplicarEstilo = () => {
+      // Solo aplicar si estamos en la ruta del simulador
+      if (!window.location.pathname.includes('/simulador')) {
+        return;
+      }
+
+      const contenedor = document.querySelector('.drawer-content > div:last-child') as HTMLElement;
+      if (contenedor && window.innerWidth <= 639) {
+        contenedor.style.padding = '0';
+      } else if (contenedor) {
+        contenedor.style.padding = '';
+      }
+    };
+
+    aplicarEstilo();
+    window.addEventListener('resize', aplicarEstilo);
+    this.drawerListeners.push(() => window.removeEventListener('resize', aplicarEstilo));
   }
 
   // ============================================
@@ -242,10 +269,7 @@ export class SimuladorPlataformaComponent implements OnInit, OnDestroy, AfterVie
         // Detectar cambio de etapa
         if (prevIndex !== null && newIndex !== null && prevIndex !== newIndex) {
           console.log(`🎯 Cambio de etapa detectado: ${prevIndex} → ${newIndex}`);
-          this.agregarMensajeSistema(
-            'info',
-            `➡ Se inició la etapa: ${estado.etapa_actual.nombre}`
-          );
+          this.agregarMensajeSistema('info', `➡ Se inició la etapa: ${estado.etapa_actual.nombre}`);
 
           if (estado.historial_conversacion && estado.historial_conversacion.length) {
             this.historialMensajes = estado.historial_conversacion;

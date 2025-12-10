@@ -17,7 +17,7 @@ import { AlertService } from '@app/services/alert/alert.service';
 import { SoloNumerosDirective } from '@app/shared/directives';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_registro'; // Mismo cooldown global que datos-basicos.ts
-const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
+const COOLDOWN_TIME_MS = 60000; // 60 segundos en milisegundos
 
 @Component({
   selector: 'app-validar-cuenta',
@@ -148,7 +148,10 @@ export class ValidarCuenta implements OnInit, OnDestroy {
     const codigo = Object.values(this.pinForm.value).join('');
 
     if (codigo.length !== 6) {
-      this.alertService.warning('Código incompleto', 'Por favor, ingresa el código completo de 6 dígitos');
+      this.alertService.warning(
+        'Código incompleto',
+        'Por favor, ingresa el código completo de 6 dígitos'
+      );
       return;
     }
 
@@ -156,15 +159,16 @@ export class ValidarCuenta implements OnInit, OnDestroy {
 
     this.registroService.verificarCodigo({ correo: this.correoUsuario, codigo }).subscribe({
       next: (response: any) => {
-        console.log('Verificación exitosa:', response);
-
         // Guardar tokens y datos del usuario
         localStorage.setItem('access_token', response.token);
         localStorage.setItem('refresh_token', response.refreshToken);
         localStorage.setItem('user_data', JSON.stringify(response.user));
 
         // Mostrar alerta de cuenta creada exitosamente
-        this.alertService.success('¡Cuenta creada!', 'Tu cuenta ha sido creada exitosamente. Ahora puedes personalizar tu perfil.');
+        this.alertService.success(
+          '¡Cuenta creada!',
+          'Tu cuenta ha sido creada exitosamente. Ahora puedes personalizar tu perfil.'
+        );
 
         // Continuar al siguiente paso (personalizar perfil)
         setTimeout(() => {
@@ -174,12 +178,17 @@ export class ValidarCuenta implements OnInit, OnDestroy {
       },
       error: (error: any) => {
         this.isLoading = false;
-        console.error('Error al verificar código:', error);
 
         if (error.status === 400) {
-          this.alertService.error('Código inválido', error.error?.error || 'Código inválido o expirado');
+          this.alertService.error(
+            'Código inválido',
+            error.error?.error || 'Código inválido o expirado'
+          );
         } else if (error.status === 0) {
-          this.alertService.error('Error de conexión', 'No se pudo conectar con el servidor. Verifica tu conexión.');
+          this.alertService.error(
+            'Error de conexión',
+            'No se pudo conectar con el servidor. Verifica tu conexión.'
+          );
         } else {
           this.alertService.error('Error', 'Ocurrió un error inesperado. Intenta nuevamente.');
         }
@@ -213,7 +222,7 @@ export class ValidarCuenta implements OnInit, OnDestroy {
 
         // Iniciar cooldown y guardar en localStorage
         this.guardarCooldown();
-        this.cooldownSeconds = 300;
+        this.cooldownSeconds = 60;
         this.iniciarCooldown();
 
         // Limpiar campos y enfocar el primero
@@ -221,14 +230,16 @@ export class ValidarCuenta implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.isResending = false;
-        console.error('Error al reenviar código:', error);
 
         if (error.status === 400) {
           this.alertService.error('Error', error.error?.error || 'Error al reenviar el código');
         } else if (error.status === 429) {
-          this.alertService.warning('Demasiadas solicitudes', 'Espera un momento antes de intentar de nuevo.');
+          this.alertService.warning(
+            'Demasiadas solicitudes',
+            'Espera un momento antes de intentar de nuevo.'
+          );
           this.guardarCooldown();
-          this.cooldownSeconds = 300;
+          this.cooldownSeconds = 60;
           this.iniciarCooldown();
         } else {
           this.alertService.error('Error', 'No se pudo reenviar el código. Intenta nuevamente.');

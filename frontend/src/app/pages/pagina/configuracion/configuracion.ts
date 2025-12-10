@@ -110,10 +110,7 @@ export class Configuracion implements OnInit, OnDestroy {
     const anioActual = new Date().getFullYear();
     const anioMinimo = anioActual - this.EDAD_MAXIMA; // Edad máxima (ej: 1925)
     const anioMaximo = anioActual - this.EDAD_MINIMA; // Edad mínima (ej: 2012)
-    this.anios = Array.from(
-      { length: anioMaximo - anioMinimo + 1 },
-      (_, i) => anioMaximo - i
-    );
+    this.anios = Array.from({ length: anioMaximo - anioMinimo + 1 }, (_, i) => anioMaximo - i);
   }
 
   ngOnInit(): void {
@@ -150,10 +147,9 @@ export class Configuracion implements OnInit, OnDestroy {
           this.actualizarCamposDesdeUsuario();
         }
       },
-      error: (error) => {
-        console.error('Error al cargar perfil:', error);
+      error: () => {
         // Si falla, mantener los datos locales
-      }
+      },
     });
   }
 
@@ -225,7 +221,7 @@ export class Configuracion implements OnInit, OnDestroy {
    * Verifica si un año es bisiesto
    */
   private esAnioBisiesto(anio: number): boolean {
-    return (anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0);
+    return (anio % 4 === 0 && anio % 100 !== 0) || anio % 400 === 0;
   }
 
   /**
@@ -367,7 +363,10 @@ export class Configuracion implements OnInit, OnDestroy {
     // Validar que sea jpeg o png
     const allowedTypes = ['image/jpeg', 'image/png'];
     if (!allowedTypes.includes(file.type)) {
-      this.alertService.error('Formato no válido', 'Solo se permiten imágenes en formato JPEG o PNG.');
+      this.alertService.error(
+        'Formato no válido',
+        'Solo se permiten imágenes en formato JPEG o PNG.'
+      );
       return;
     }
 
@@ -403,12 +402,11 @@ export class Configuracion implements OnInit, OnDestroy {
         try {
           this.subirFotoInmediata();
         } catch (err) {
-          console.error('Error al iniciar subida inmediata', err);
+          // Error silencioso
         }
       }
       // Si result es null, el usuario canceló
     } catch (err) {
-      console.error('Error al abrir el cropper', err);
       this.alertService.error('Error', 'No se pudo procesar la imagen. Intenta de nuevo.');
     }
 
@@ -463,7 +461,6 @@ export class Configuracion implements OnInit, OnDestroy {
         this.alertService.toastSuccess('Foto eliminada correctamente');
       },
       error: (err) => {
-        console.error('Error eliminando foto', err);
         this.isLoading = false;
         this.actualizandoFoto = false; // Restablecer flag en caso de error
         this.alertService.error('Error', 'No se pudo eliminar la foto. Intenta de nuevo.');
@@ -506,7 +503,6 @@ export class Configuracion implements OnInit, OnDestroy {
         this.alertService.toastSuccess('Foto actualizada correctamente');
       },
       error: (err) => {
-        console.error('Error subiendo foto', err);
         this.isLoading = false;
         this.actualizandoFoto = false; // Restablecer flag en caso de error
         this.alertService.error('Error', 'No se pudo subir la foto. Intenta de nuevo.');
@@ -659,7 +655,6 @@ export class Configuracion implements OnInit, OnDestroy {
           this.alertService.toastSuccess('Configuración actualizada exitosamente');
         },
         error: (err) => {
-          console.error('Error actualizando perfil', err);
           this.isLoading = false;
           this.alertService.error('Error', 'Error al actualizar datos. Intenta de nuevo.');
         },
@@ -700,7 +695,10 @@ export class Configuracion implements OnInit, OnDestroy {
     }
     this.verificarIndicaciones();
     if (!this.indicaciones.longitud || !this.indicaciones.numero || !this.indicaciones.mayuscula) {
-      this.alertService.warning('Contraseña débil', 'La nueva contraseña no cumple los requisitos.');
+      this.alertService.warning(
+        'Contraseña débil',
+        'La nueva contraseña no cumple los requisitos.'
+      );
       return;
     }
 
@@ -748,7 +746,6 @@ export class Configuracion implements OnInit, OnDestroy {
           this.indicaciones = { longitud: false, numero: false, mayuscula: false, simbolo: false };
         })
         .catch((err) => {
-          console.error('Error cambiar contraseña', err);
           this.isLoading = false;
           this.alertService.error('Error', 'Error al cambiar la contraseña.');
         });

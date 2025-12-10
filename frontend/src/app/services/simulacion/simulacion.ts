@@ -236,11 +236,12 @@ export class SimulacionService {
     if (haySimulacionGuardada) {
       if (!usuarioActual) {
         // No hay usuario logueado pero hay simulación guardada - limpiar
-        console.log('🧹 Limpiando simulación: no hay usuario autenticado');
         this.limpiarSimulacionLocal();
-      } else if (usuarioSimulacionGuardado && usuarioSimulacionGuardado !== usuarioActual.id.toString()) {
+      } else if (
+        usuarioSimulacionGuardado &&
+        usuarioSimulacionGuardado !== usuarioActual.id.toString()
+      ) {
         // El usuario actual es diferente al que guardó la simulación - limpiar
-        console.log('🧹 Limpiando simulación: pertenece a otro usuario');
         this.limpiarSimulacionLocal();
       }
     }
@@ -257,12 +258,10 @@ export class SimulacionService {
       if (!usuario) {
         // Usuario cerró sesión - limpiar simulación
         if (this.simulacionActivaSubject.value) {
-          console.log('🧹 Usuario cerró sesión - limpiando simulación');
           this.limpiarSimulacionLocal();
         }
       } else if (usuarioSimulacionGuardado && usuarioSimulacionGuardado !== usuario.id.toString()) {
         // Cambió a un usuario diferente - limpiar simulación del usuario anterior
-        console.log('🧹 Cambio de usuario detectado - limpiando simulación anterior');
         this.limpiarSimulacionLocal();
       }
     });
@@ -280,7 +279,6 @@ export class SimulacionService {
     const estadoLocal = this.obtenerEstadoLocal();
 
     if (estadoLocal) {
-      console.log('📦 Estado local encontrado');
       this.estadoSimulacionSubject.next(estadoLocal);
       this.simulacionActivaSubject.next(true);
 
@@ -289,8 +287,6 @@ export class SimulacionService {
       setTimeout(() => {
         this.sincronizarConServidorUnaVez();
       }, 500);
-    } else {
-      console.log('ℹ️ No hay estado local, esperando inicio de simulación');
     }
   }
 
@@ -304,21 +300,18 @@ export class SimulacionService {
         if (event.newValue) {
           try {
             const nuevoEstado = JSON.parse(event.newValue);
-            console.log('📱 Estado actualizado desde otra pestaña');
             this.estadoSimulacionSubject.next(nuevoEstado);
             this.simulacionActivaSubject.next(true);
           } catch (e) {
-            console.error('Error al parsear estado:', e);
+            // Error al parsear estado
           }
         } else {
-          console.log('🚫 Estado removido desde otra pestaña');
           this.limpiarSimulacionLocal();
         }
       }
 
       // Cambios en simulación activa
       if (event.key === this.simulacionActivaKey && event.newValue === null) {
-        console.log('🚫 Simulación finalizada en otra pestaña');
         this.limpiarSimulacionLocal();
       }
     });
@@ -335,7 +328,6 @@ export class SimulacionService {
         debounceTime(500)
       )
       .subscribe(() => {
-        console.log('👁️ Usuario regresó a la pestaña, sincronizando...');
         this.sincronizarConServidorUnaVez();
       });
   }
@@ -350,7 +342,6 @@ export class SimulacionService {
         debounceTime(500)
       )
       .subscribe(() => {
-        console.log('🔍 Ventana recuperó el foco, sincronizando...');
         this.sincronizarConServidorUnaVez();
       });
   }
@@ -365,12 +356,10 @@ export class SimulacionService {
    */
   private sincronizarConServidorUnaVez(): void {
     if (this.sincronizandoEstado) {
-      console.log('⏸️ Sincronización ya en curso');
       return;
     }
 
     if (!this.puedeHacerPeticion()) {
-      console.log('⏳ Esperando rate limit...');
       return;
     }
 
@@ -382,19 +371,13 @@ export class SimulacionService {
         const estadoLocal = this.obtenerEstadoLocal();
 
         if (this.hayDiferenciasConServidor(estadoLocal, estadoServidor)) {
-          console.log('🔄 Actualizando estado desde servidor');
           this.guardarEstadoSimulacion(estadoServidor);
-        } else {
-          console.log('✅ Estado local sincronizado');
         }
 
         this.sincronizandoEstado = false;
       },
       error: (error) => {
-        console.error('❌ Error en sincronización:', error);
-
         if (error.status === 404) {
-          console.log('🚫 No hay simulación activa en servidor');
           this.limpiarSimulacionLocal();
         }
 
@@ -469,7 +452,6 @@ export class SimulacionService {
           }
         }),
         catchError((error) => {
-          console.error('❌ Error al iniciar simulación:', error);
           return throwError(() => error);
         })
       );
@@ -481,7 +463,11 @@ export class SimulacionService {
   async enviarMensaje(mensaje: string): Promise<Observable<EnviarMensajeResponse>> {
     await this.esperarRateLimit();
 
-    const headers = this.getHeaders();
+    // Agregar header para evitar el loading global (X-Skip-Loading)
+    // ya que el chat tiene su propio indicador de escritura
+    let headers = this.getHeaders();
+    headers = headers.append('X-Skip-Loading', 'true');
+
     this.ultimaPeticionTimestamp = Date.now();
 
     return this.http
@@ -499,7 +485,6 @@ export class SimulacionService {
           }
         }),
         catchError((error) => {
-          console.error('❌ Error al enviar mensaje:', error);
           return throwError(() => error);
         })
       );

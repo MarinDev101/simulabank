@@ -1,58 +1,102 @@
-<div class="relative flex flex-col gap-4 sm:gap-5 w-full h-full bg-white rounded-2xl p-5 sm:p-8 md:p-10 lg:p-12 shadow-xl border border-[#e8f4fc] overflow-hidden">
+<div
+  class="relative flex h-full w-full flex-col gap-4 overflow-hidden rounded-2xl border border-[#e8f4fc] bg-white p-5 shadow-xl sm:gap-5 sm:p-8 md:p-10 lg:p-12"
+>
   <!-- Decoraciones de fondo -->
-  <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
-  <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
+  <div
+    class="absolute top-0 right-0 h-24 w-24 rounded-bl-full bg-linear-to-bl from-[#1788EF]/10 to-transparent sm:h-32 sm:w-32"
+  ></div>
+  <div
+    class="absolute bottom-0 left-0 h-20 w-20 rounded-tr-full bg-linear-to-tr from-[#00A448]/10 to-transparent sm:h-28 sm:w-28"
+  ></div>
 
   <!-- Header del paso -->
   <div class="relative z-10 flex items-center gap-3">
-    <span class="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-linear-to-br from-[#034D82] to-[#01162E] text-sm sm:text-base font-bold text-white shadow-md">1</span>
+    <span
+      class="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-[#034D82] to-[#01162E] text-sm font-bold text-white shadow-md sm:h-9 sm:w-9 sm:text-base"
+      >1</span
+    >
     <div>
-      <p class="text-base sm:text-lg font-semibold text-gray-800">Solicita Recuperación</p>
-      <p class="text-xs sm:text-sm text-gray-500">Ingresa tu correo electrónico</p>
+      <p class="text-base font-semibold text-gray-800 sm:text-lg">Solicita Recuperación</p>
+      <p class="text-xs text-gray-500 sm:text-sm">Ingresa tu correo electrónico</p>
     </div>
   </div>
 
   <!-- Descripción -->
   <div class="relative z-10 text-center sm:text-left">
-    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+    <p class="text-sm leading-relaxed text-gray-600 sm:text-base">
       Por favor, introduce tu correo electrónico para restablecer la contraseña.
     </p>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="relative z-10 flex flex-col gap-4 sm:gap-5">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    class="relative z-10 flex flex-col gap-4 sm:gap-5"
+  >
     <!-- Correo -->
     <div class="space-y-1">
       <label class="floating-label block">
-        <span class="text-xs sm:text-sm font-medium text-gray-700">Correo electrónico</span>
-        <div class="mt-1 relative">
-          <input type="text" formControlName="correo" placeholder="mail@site.com"
+        <span class="text-xs font-medium text-gray-700 sm:text-sm">Correo electrónico</span>
+        <div class="relative mt-1">
+          <input
+            type="text"
+            formControlName="correo"
+            placeholder="mail@site.com"
             appEmailFormat
             [class.border-red-500]="f['correo'].invalid && f['correo'].touched"
             [class.border-green-500]="f['correo'].valid && f['correo'].touched"
-            class="input input-sm sm:input-md w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 pr-10 rounded-xl
-            transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
-          <span class="icon-[material-symbols-light--mail-rounded] absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none"></span>
+            class="input input-sm w-full rounded-xl border-gray-200 bg-gray-50/50 pr-10 text-gray-800 placeholder-gray-400 transition-all duration-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none sm:input-md"
+          />
+          <span
+            class="pointer-events-none absolute top-1/2 right-3 icon-[material-symbols-light--mail-rounded] -translate-y-1/2 text-lg text-gray-400 sm:text-xl"
+          ></span>
         </div>
       </label>
       <div class="min-h-5">
-        <small class="block text-[10px] sm:text-xs text-red-500 font-medium transition-opacity duration-200"
+        <small
+          class="block text-[10px] font-medium text-red-500 transition-opacity duration-200 sm:text-xs"
           [class.opacity-100]="f['correo'].invalid && f['correo'].touched"
-          [class.opacity-0]="!(f['correo'].invalid && f['correo'].touched)">
-          <span *ngIf="f['correo'].hasError('required')">El correo electrónico es obligatorio.</span>
+          [class.opacity-0]="!(f['correo'].invalid && f['correo'].touched)"
+        >
+          <span *ngIf="f['correo'].hasError('required')"
+            >El correo electrónico es obligatorio.</span
+          >
           <span *ngIf="f['correo'].hasError('email')">Ingresa un correo electrónico válido.</span>
           <span *ngIf="f['correo'].hasError('maxlength')">El correo es demasiado largo.</span>
         </small>
       </div>
     </div>
 
+    <!-- reCAPTCHA -->
+    <div class="flex w-full flex-col items-center overflow-hidden">
+      <div
+        class="xs:scale-[0.75] origin-center scale-[0.65] transform transition-transform duration-200 sm:scale-[0.85] md:scale-100"
+      >
+        <re-captcha
+          [siteKey]="siteKey"
+          formControlName="recaptcha"
+          (resolved)="onRecaptchaResolved($event)"
+        ></re-captcha>
+      </div>
+      <div class="mt-1 min-h-5">
+        <small
+          class="block text-center text-[10px] font-medium text-red-500 transition-opacity duration-200 sm:text-xs"
+          [class.opacity-100]="f['recaptcha']?.invalid && f['recaptcha']?.touched"
+          [class.opacity-0]="!(f['recaptcha']?.invalid && f['recaptcha']?.touched)"
+        >
+          Por favor, complete el captcha.
+        </small>
+      </div>
+    </div>
+
     <!-- Botón Submit -->
-    <button type="submit"
-      class="btn btn-block btn-sm sm:btn-md bg-blue-600 border-blue-600 text-white font-semibold rounded-xl
-      shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:border-blue-700 hover:shadow-blue-700/30
-      transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
-      [disabled]="isLoading || cooldownSeconds > 0">
+    <button
+      type="submit"
+      class="btn mt-2 btn-block rounded-xl border-blue-600 bg-blue-600 font-semibold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 btn-sm hover:border-blue-700 hover:bg-blue-700 hover:shadow-blue-700/30 disabled:cursor-not-allowed disabled:opacity-70 sm:btn-md"
+      [disabled]="isLoading || cooldownSeconds > 0"
+    >
       @if (isLoading) {
-      <span class="loading loading-spinner loading-xs sm:loading-sm"></span>
+      <span class="loading loading-xs loading-spinner sm:loading-sm"></span>
       <span class="text-xs sm:text-sm">Enviando código...</span>
       } @else if (cooldownSeconds > 0) {
       <span class="icon-[heroicons-outline--clock] text-base sm:text-lg"></span>

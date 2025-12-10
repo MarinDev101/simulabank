@@ -6,7 +6,7 @@ const { upload } = require('../config/multer.config');
 // Middlewares
 const { authenticateJWT } = require('../middlewares/jwt.middleware');
 const { requireAdmin } = require('../middlewares/admin.middleware');
-const { authLimiter, sensitiveLimiter } = require('../config/express.config');
+const { authLimiter, sensitiveLimiter, resendCodeLimiter } = require('../config/express.config');
 
 // Validadores
 const {
@@ -61,6 +61,7 @@ function crearAuthRouter() {
   );
   router.post(
     '/registrar-inicio',
+    resendCodeLimiter, // Rate limit para envío/reenvío de códigos
     registerRules(), // Puedes usar las mismas validaciones
     runValidation,
     asyncHandler(authController.iniciarRegistro.bind(authController))
@@ -74,7 +75,7 @@ function crearAuthRouter() {
   // Rutas de recuperación de contraseña
   router.post(
     '/solicitar-recuperacion',
-    sensitiveLimiter, // Rate limit estricto para recuperación
+    resendCodeLimiter, // Rate limit para reenvío de códigos
     recuperacionRules(),
     runValidation,
     asyncHandler(authController.solicitarRecuperacion.bind(authController))

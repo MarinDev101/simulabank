@@ -18,7 +18,6 @@ export const adminGuard: CanActivateFn = (route, state) => {
   }
 
   // Si no es admin, redirigir según su rol
-  console.warn('Acceso denegado: Se requiere rol de administrador');
   authService.navegarSegunRol();
   return false;
 };

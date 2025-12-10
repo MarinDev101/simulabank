@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { AuthService } from '@app/core/auth/service/auth';
 import { ReturnButton } from '@app/components/return-button/return-button';
 import { AlertService } from '@app/services/alert/alert.service';
 import { EmailFormatDirective, PasswordFormatDirective } from '@app/shared/directives';
+import { AnimateOnScroll } from '@app/shared/directives/animate-on-scroll';
 import { VALIDATION_CONFIG, emailRobustoValidator } from '@app/shared/validators';
 
 @Component({
@@ -17,7 +18,9 @@ import { VALIDATION_CONFIG, emailRobustoValidator } from '@app/shared/validators
     ReturnButton,
     EmailFormatDirective,
     PasswordFormatDirective,
+    AnimateOnScroll,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './iniciar-sesion.html',
 })
 export class IniciarSesion implements OnInit {
@@ -96,12 +99,17 @@ export class IniciarSesion implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error en login:', error);
 
         if (error.status === 401) {
-          this.alertService.error('Credenciales incorrectas', 'Por favor, verifica tu correo y contraseña.');
+          this.alertService.error(
+            'Credenciales incorrectas',
+            'Por favor, verifica tu correo y contraseña.'
+          );
         } else if (error.status === 0) {
-          this.alertService.error('Error de conexión', 'No se pudo conectar con el servidor. Verifica tu conexión.');
+          this.alertService.error(
+            'Error de conexión',
+            'No se pudo conectar con el servidor. Verifica tu conexión.'
+          );
         } else if (error.error?.error) {
           this.alertService.error('Error', error.error.error);
         } else {

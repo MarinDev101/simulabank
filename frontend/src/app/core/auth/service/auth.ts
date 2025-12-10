@@ -87,7 +87,13 @@ export class AuthService {
    */
   private setupProfileAutoRefresh(): void {
     // Rutas públicas donde no necesitamos refrescar el perfil
-    const rutasPublicas = ['/inicio', '/iniciar-sesion', '/registrarse', '/crear-cuenta', '/recuperar-contrasena'];
+    const rutasPublicas = [
+      '/inicio',
+      '/iniciar-sesion',
+      '/registrarse',
+      '/crear-cuenta',
+      '/recuperar-contrasena',
+    ];
 
     // Flag para ignorar la primera navegación (al cargar la página)
     let isFirstNavigation = true;
@@ -97,7 +103,9 @@ export class AuthService {
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
         const navEvent = event as NavigationEnd;
-        const esRutaPublica = rutasPublicas.some((ruta) => navEvent.urlAfterRedirects.startsWith(ruta));
+        const esRutaPublica = rutasPublicas.some((ruta) =>
+          navEvent.urlAfterRedirects.startsWith(ruta)
+        );
 
         // Actualizar timestamp de actividad en cada navegación (si está autenticado)
         if (this.estaAutenticado()) {
@@ -195,14 +203,14 @@ export class AuthService {
    * sesiones de navegador (cerrar y abrir navegador).
    *
    * Lógica:
-   * - Si marcó "Recuérdame" (remember_user = true), la sesión siempre persiste
+   * - Si marcó "Recuérdame" (remember_user = true en localStorage), la sesión siempre persiste
    * - Si NO marcó "Recuérdame":
    *   - Usamos sessionStorage.browser_session como indicador de sesión de navegador
    *   - Si browser_session no existe pero hay token, significa que el navegador se cerró y reabrió
    *   - En ese caso, limpiamos la sesión
    *
-   * NOTA: Al recargar la página, sessionStorage DEBE mantener browser_session.
-   * Si por alguna razón no lo tiene, primero lo establecemos para evitar pérdida de sesión.
+   * NOTA: sessionStorage se mantiene en recargas de página, pero se borra al cerrar el navegador.
+   * Esto nos permite detectar exactamente cuándo el usuario cerró y reabrió el navegador.
    */
   private verificarSesionNavegador(): void {
     const browserSession = sessionStorage.getItem('browser_session');
@@ -211,37 +219,38 @@ export class AuthService {
 
     // Si el usuario marcó "Recuérdame", siempre mantener la sesión
     if (rememberMe) {
-      // Asegurar que browser_session esté establecido
+      // Asegurar que browser_session esté establecido para esta sesión de navegador
       sessionStorage.setItem('browser_session', 'true');
       localStorage.setItem(this.sessionActiveKey, 'true');
       return;
     }
 
-    // Si hay token y NO hay browser_session, verificar si es una nueva sesión de navegador
-    // o simplemente una recarga de página donde sessionStorage aún no se ha inicializado
+    // Si NO marcó "Recuérdame" y hay token pero NO hay browser_session,
+    // significa que el navegador se cerró y reabrió -> limpiar sesión
     if (hasToken && !browserSession) {
-      // Verificar si hay un timestamp de última actividad en localStorage
-      // que indique que la sesión estaba activa recientemente
+      // Verificar si hay un timestamp de última actividad reciente (ej. < 1 minuto)
+      // Esto permite abrir nuevas pestañas sin perder la sesión, asumiendo que el usuario sigue activo
       const lastActivity = localStorage.getItem('last_activity_timestamp');
       const now = Date.now();
+      const ONE_MINUTE = 60 * 1000;
 
-      // Si la última actividad fue hace menos de 30 segundos, es probablemente una recarga
-      // y no un cierre de navegador. Los navegadores modernos pueden tardar en restaurar sessionStorage.
       if (lastActivity) {
         const timeSinceLastActivity = now - parseInt(lastActivity, 10);
-        const THIRTY_SECONDS = 30 * 1000;
-
-        if (timeSinceLastActivity < THIRTY_SECONDS) {
-          // Es una recarga reciente, mantener la sesión
+        if (timeSinceLastActivity < ONE_MINUTE) {
+          // Es una nueva pestaña de una sesión activa -> mantener sesión
           sessionStorage.setItem('browser_session', 'true');
           localStorage.setItem(this.sessionActiveKey, 'true');
           return;
         }
       }
 
-      // Si llegamos aquí, es una nueva sesión de navegador - limpiar
+      // El usuario no marcó "Recuérdame" y cerró el navegador (o pasó mucho tiempo) - limpiar sesión
       this.clearSessionSilent();
+      return;
     }
+
+    // Si hay token y hay browser_session, es una recarga de página -> mantener sesión
+    // Si no hay token, simplemente marcar la sesión para futuros logins
 
     // Marcar que esta es una sesión activa del navegador
     // sessionStorage se limpia automáticamente al cerrar el navegador
@@ -250,7 +259,7 @@ export class AuthService {
     // También marcar en localStorage para que otras pestañas sepan que hay actividad
     localStorage.setItem(this.sessionActiveKey, 'true');
 
-    // Guardar timestamp de actividad para detectar recargas vs nuevo navegador
+    // Guardar timestamp de actividad para otros usos
     localStorage.setItem('last_activity_timestamp', Date.now().toString());
   }
 
@@ -292,6 +301,9 @@ export class AuthService {
 
           if (!teníaToken && tieneTokenAhora) {
             // CASO: No estaba autenticado y ahora sí (otra pestaña hizo login)
+            // Marcar sesión en esta pestaña antes de recargar para evitar que se borre al iniciar
+            sessionStorage.setItem('browser_session', 'true');
+
             // Recargar la página para que cargue la vista del usuario correctamente
             window.location.reload();
           } else if (teníaToken && !tieneTokenAhora) {
@@ -358,7 +370,6 @@ export class AuthService {
         }
       }),
       catchError((error) => {
-        console.error('Error en login:', error);
         return throwError(() => error);
       })
     );
@@ -424,7 +435,6 @@ export class AuthService {
         }
       }),
       catchError((error) => {
-        console.error('Error al obtener perfil:', error);
         return throwError(() => error);
       })
     );
@@ -511,7 +521,6 @@ export class AuthService {
       try {
         return JSON.parse(userData);
       } catch (e) {
-        console.error('Error parsing user data:', e);
         return null;
       }
     }
@@ -524,9 +533,9 @@ export class AuthService {
   }
 
   obtenerCorreo(): string | null {
-  const user = this.obtenerUsuario();
-  return user?.correo || null;
-}
+    const user = this.obtenerUsuario();
+    return user?.correo || null;
+  }
 
   // ============================================
   // NAVEGACIÓN SEGÚN ROL
@@ -613,19 +622,25 @@ export class AuthService {
    * Actualiza la preferencia de tema del usuario en el servidor
    * @param tema 'claro' | 'oscuro' | 'auto'
    */
-  actualizarTemaServidor(tema: 'claro' | 'oscuro' | 'auto'): Observable<{ success: boolean; preferencia_tema: string }> {
-    return this.http.put<{ success: boolean; preferencia_tema: string }>(`${this.apiUrl}/actualizar-tema`, { tema }).pipe(
-      tap((response) => {
-        if (response.success) {
-          // Actualizar datos locales del usuario
-          this.actualizarUsuario({ preferencia_tema: tema });
-        }
-      }),
-      catchError((error) => {
-        console.error('Error al actualizar tema:', error);
-        return throwError(() => error);
-      })
-    );
+  actualizarTemaServidor(
+    tema: 'claro' | 'oscuro' | 'auto'
+  ): Observable<{ success: boolean; preferencia_tema: string }> {
+    return this.http
+      .put<{
+        success: boolean;
+        preferencia_tema: string;
+      }>(`${this.apiUrl}/actualizar-tema`, { tema })
+      .pipe(
+        tap((response) => {
+          if (response.success) {
+            // Actualizar datos locales del usuario
+            this.actualizarUsuario({ preferencia_tema: tema });
+          }
+        }),
+        catchError((error) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   /**

@@ -69,7 +69,6 @@ export class EvidenciasService {
           throw new Error('Error al obtener evidencias');
         }),
         catchError((error) => {
-          console.error('Error listando evidencias:', error);
           return throwError(() => error);
         })
       );
@@ -85,7 +84,6 @@ export class EvidenciasService {
       })
       .pipe(
         catchError((error) => {
-          console.error('Error obteniendo evidencia:', error);
           return throwError(() => error);
         })
       );
@@ -111,7 +109,6 @@ export class EvidenciasService {
           window.URL.revokeObjectURL(url);
         }),
         catchError((error) => {
-          console.error('Error descargando evidencia:', error);
           return throwError(() => error);
         })
       );
@@ -129,7 +126,6 @@ export class EvidenciasService {
       )
       .pipe(
         catchError((error) => {
-          console.error('Error archivando evidencia:', error);
           return throwError(() => error);
         })
       );
@@ -147,7 +143,6 @@ export class EvidenciasService {
       )
       .pipe(
         catchError((error) => {
-          console.error('Error desarchivando evidencia:', error);
           return throwError(() => error);
         })
       );
@@ -163,7 +158,6 @@ export class EvidenciasService {
       })
       .pipe(
         catchError((error) => {
-          console.error('Error eliminando evidencia:', error);
           return throwError(() => error);
         })
       );

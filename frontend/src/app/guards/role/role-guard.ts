@@ -27,7 +27,6 @@ export const roleGuard: CanActivateFn = (route, state) => {
   }
 
   // Si no tiene el rol correcto, redirigir según su rol
-  console.warn(`Acceso denegado. Rol requerido: ${rolRequerido}, Rol usuario: ${rolUsuario}`);
   authService.navegarSegunRol();
   return false;
 };

@@ -1,142 +1,228 @@
-<div class="flex min-h-screen flex-col">
-  <main class="flex flex-1 flex-col lg:flex-row">
-    <!-- Mitad izquierda (formulario) -->
-    <div class="relative flex w-full lg:w-1/2 min-h-screen lg:min-h-0 flex-col bg-white bg-geometria bg-repeat bg-size-[275px_275px]">
-      <!-- Botón arriba a la izquierda -->
-      <div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
-        <app-return-button></app-return-button>
-      </div>
+<div class="flex min-h-screen w-full bg-white">
+  <!-- Left Side: Form Section -->
+  <div
+    class="relative flex min-h-screen w-full flex-col items-center justify-center bg-white bg-geometria bg-size-[275px_275px] bg-repeat p-6 sm:p-12 lg:min-h-0 lg:w-1/2 lg:p-12 xl:p-24"
+  >
+    <!-- Return Button -->
+    <div class="absolute top-6 left-6 z-20">
+      <app-return-button></app-return-button>
+    </div>
 
-      <!-- Contenedor centrado del formulario -->
-      <div class="flex flex-1 items-center justify-center px-4 py-8 pt-16 sm:px-8 sm:py-12 md:px-16 lg:px-16">
-        <form class="relative w-full max-w-[360px] sm:max-w-[420px] md:max-w-[480px] rounded-3xl border border-[#e8f4fc] bg-white/95 backdrop-blur-sm p-5 sm:p-8 md:p-10 shadow-xl overflow-hidden"
-          (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+    <!-- Form Container -->
+    <div class="flex w-full justify-center">
+      <form
+        class="relative w-full max-w-[360px] overflow-hidden rounded-3xl border border-[#e8f4fc] bg-white/95 p-5 shadow-xl backdrop-blur-sm sm:max-w-[420px] sm:p-8 md:max-w-[480px] md:p-10"
+        (ngSubmit)="onSubmit()"
+        [formGroup]="loginForm"
+      >
+        <!-- Decoraciones de fondo -->
+        <div
+          class="absolute top-0 right-0 h-24 w-24 rounded-bl-full bg-linear-to-bl from-[#1788EF]/10 to-transparent sm:h-32 sm:w-32"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 h-20 w-20 rounded-tr-full bg-linear-to-tr from-[#00A448]/10 to-transparent sm:h-28 sm:w-28"
+        ></div>
 
-          <!-- Decoraciones de fondo -->
-          <div class="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-bl from-[#1788EF]/10 to-transparent rounded-bl-full"></div>
-          <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28 bg-linear-to-tr from-[#00A448]/10 to-transparent rounded-tr-full"></div>
-
-          <!-- Encabezado del formulario -->
-          <div class="relative z-10 text-center space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-            <h2 class="nunito-sans-title text-[22px] sm:text-3xl md:text-[36px] lg:text-[40px] font-bold text-gray-800">
-              Iniciar sesión
-            </h2>
-            <p class="text-xs sm:text-sm md:text-base text-gray-500 leading-relaxed">
-              ¡Bienvenido de nuevo! Ingresa tus credenciales para acceder a tu cuenta
-            </p>
-          </div>
-
-          <!-- Campos del formulario -->
-          <div class="relative z-10 space-y-4 sm:space-y-5">
-            <!-- Campo de correo -->
-            <div class="space-y-1 sm:space-y-1.5">
-              <label class="floating-label block">
-                <span class="text-xs sm:text-sm font-medium text-gray-700">Correo electrónico</span>
-                <div class="mt-1 sm:mt-1.5">
-                  <input type="text" formControlName="email" placeholder="mail@site.com" autocomplete="username"
-                    appEmailFormat
-                    [class.border-red-500]="emailInvalid && loginForm.get('email')?.touched"
-                    [class.border-green-500]="!emailInvalid && loginForm.get('email')?.touched && loginForm.get('email')?.value"
-                    class="input input-sm sm:input-md md:input-lg w-full border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
-                    transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
-                </div>
-              </label>
-              <div class="min-h-5 sm:min-h-[20px]">
-                <small class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium transition-opacity duration-200 opacity-0"
-                  [class.opacity-100]="formInitialized && emailInvalid && loginForm.get('email')?.touched">
-                  <span *ngIf="loginForm.get('email')?.hasError('required')">El correo electrónico es obligatorio.</span>
-                  <span *ngIf="loginForm.get('email')?.hasError('email')">Ingresa un correo electrónico válido.</span>
-                  <span *ngIf="loginForm.get('email')?.hasError('maxlength')">El correo es demasiado largo.</span>
-                </small>
-              </div>
-            </div>
-
-            <!-- Campo de contraseña -->
-            <div class="space-y-1 sm:space-y-1.5">
-              <label class="floating-label block">
-                <span class="text-xs sm:text-sm font-medium text-gray-700">Contraseña</span>
-                <div class="mt-1 sm:mt-1.5 flex items-center gap-2">
-                  <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••"
-                    id="passwordInput" autocomplete="current-password"
-                    appPasswordFormat
-                    [class.border-red-500]="passwordInvalid && loginForm.get('password')?.touched"
-                    [class.border-green-500]="!passwordInvalid && loginForm.get('password')?.touched && loginForm.get('password')?.value"
-                    class="input input-sm sm:input-md md:input-lg flex-1 border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 rounded-xl
-                    transition-all duration-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" />
-                  <button type="button" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility()"
-                    class="btn btn-square btn-sm sm:btn-md md:btn-lg border-gray-200 bg-gray-50/50 text-gray-500 rounded-xl
-                    transition-all duration-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600"
-                    [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
-                    <span *ngIf="!showPassword" class="icon-[fluent--eye-16-regular] text-base sm:text-lg md:text-xl"></span>
-                    <span *ngIf="showPassword" class="icon-[fluent--eye-off-16-regular] text-base sm:text-lg md:text-xl"></span>
-                  </button>
-                </div>
-              </label>
-              <div class="min-h-5 sm:min-h-[20px]">
-                <small class="block text-[10px] sm:text-xs md:text-sm text-red-500 font-medium transition-opacity duration-200 opacity-0"
-                  [class.opacity-100]="formInitialized && passwordInvalid && loginForm.get('password')?.touched">
-                  <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es obligatoria.</span>
-                  <span *ngIf="loginForm.get('password')?.hasError('minlength')">Mínimo 8 caracteres.</span>
-                </small>
-              </div>
-            </div>
-          </div>
-
-          <!-- Recordarme y Olvidé contraseña -->
-          <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mt-4 sm:mt-5 mb-5 sm:mb-7">
-            <label class="flex cursor-pointer items-center gap-2 sm:gap-3 group select-none">
-              <input type="checkbox" formControlName="remember" class="checkbox checkbox-xs sm:checkbox-sm checkbox-primary rounded-md" />
-              <span class="text-xs sm:text-sm text-gray-600 group-hover:text-gray-800 transition-colors">Recordarme</span>
-            </label>
-            <a href="/recuperar-contrasena"
-              class="text-xs sm:text-sm text-blue-600 font-medium hover:text-blue-700 hover:underline underline-offset-2 transition-colors self-end sm:self-auto">
-              ¿Olvidaste tu contraseña?
-            </a>
-          </div>
-
-          <!-- Botón de submit -->
-          <button type="submit"
-            class="relative z-10 btn btn-block btn-sm sm:btn-md md:btn-lg bg-blue-600 border-blue-600 text-white font-semibold rounded-xl
-            shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:border-blue-700 hover:shadow-blue-700/30
-            transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
-            [disabled]="isLoading">
-            @if (isLoading) {
-            <span class="loading loading-spinner loading-xs sm:loading-sm"></span>
-            <span class="text-xs sm:text-sm md:text-base">Ingresando...</span>
-            } @else {
-            <span class="text-xs sm:text-sm md:text-base">Ingresar</span>
-            }
-          </button>
-
-          <!-- Separador -->
-          <div class="relative z-10 divider text-gray-400 text-[10px] sm:text-xs my-4 sm:my-6">o</div>
-
-          <!-- Link de registro -->
-          <p class="relative z-10 text-center text-xs sm:text-sm text-gray-500">
-            ¿No tienes una cuenta?
-            <a href="/crear-cuenta" class="text-blue-600 font-semibold hover:text-blue-700 hover:underline transition-colors ml-1">
-              Regístrate aquí
-            </a>
+        <!-- Encabezado del formulario -->
+        <div class="relative z-10 mb-6 space-y-2 text-center sm:mb-8 sm:space-y-3">
+          <h2
+            class="nunito-sans-title text-[22px] font-bold text-gray-800 sm:text-3xl md:text-[36px] lg:text-[40px]"
+          >
+            Iniciar sesión
+          </h2>
+          <p class="text-xs leading-relaxed text-gray-500 sm:text-sm md:text-base">
+            ¡Bienvenido de nuevo! Ingresa tus credenciales para acceder a tu cuenta
           </p>
-        </form>
+        </div>
+
+        <!-- Campos del formulario -->
+        <div class="relative z-10 space-y-4 sm:space-y-5">
+          <!-- Campo de correo -->
+          <div class="space-y-1 sm:space-y-1.5">
+            <label class="floating-label block">
+              <span class="text-xs font-medium text-gray-700 sm:text-sm">Correo electrónico</span>
+              <div class="mt-1 sm:mt-1.5">
+                <input
+                  type="text"
+                  formControlName="email"
+                  placeholder="mail@site.com"
+                  autocomplete="username"
+                  appEmailFormat
+                  [class.border-red-500]="emailInvalid && loginForm.get('email')?.touched"
+                  [class.border-green-500]="!emailInvalid && loginForm.get('email')?.touched && loginForm.get('email')?.value"
+                  class="input input-sm w-full rounded-xl border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 transition-all duration-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none sm:input-md md:input-lg"
+                />
+              </div>
+            </label>
+            <div class="min-h-5 sm:min-h-5">
+              <small
+                class="block text-[10px] font-medium text-red-500 opacity-0 transition-opacity duration-200 sm:text-xs md:text-sm"
+                [class.opacity-100]="formInitialized && emailInvalid && loginForm.get('email')?.touched"
+              >
+                <span *ngIf="loginForm.get('email')?.hasError('required')"
+                  >El correo electrónico es obligatorio.</span
+                >
+                <span *ngIf="loginForm.get('email')?.hasError('email')"
+                  >Ingresa un correo electrónico válido.</span
+                >
+                <span *ngIf="loginForm.get('email')?.hasError('maxlength')"
+                  >El correo es demasiado largo.</span
+                >
+              </small>
+            </div>
+          </div>
+
+          <!-- Campo de contraseña -->
+          <div class="space-y-1 sm:space-y-1.5">
+            <label class="floating-label block">
+              <span class="text-xs font-medium text-gray-700 sm:text-sm">Contraseña</span>
+              <div class="mt-1 flex items-center gap-2 sm:mt-1.5">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  formControlName="password"
+                  placeholder="••••••••"
+                  id="passwordInput"
+                  autocomplete="current-password"
+                  appPasswordFormat
+                  [class.border-red-500]="passwordInvalid && loginForm.get('password')?.touched"
+                  [class.border-green-500]="!passwordInvalid && loginForm.get('password')?.touched && loginForm.get('password')?.value"
+                  class="input input-sm flex-1 rounded-xl border-gray-200 bg-gray-50/50 text-gray-800 placeholder-gray-400 transition-all duration-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:outline-none sm:input-md md:input-lg"
+                />
+                <button
+                  type="button"
+                  (mousedown)="$event.preventDefault()"
+                  (click)="togglePasswordVisibility()"
+                  class="btn btn-square rounded-xl border-gray-200 bg-gray-50/50 text-gray-500 transition-all duration-200 btn-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 sm:btn-md md:btn-lg"
+                  [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                >
+                  <span
+                    *ngIf="!showPassword"
+                    class="icon-[fluent--eye-16-regular] text-base sm:text-lg md:text-xl"
+                  ></span>
+                  <span
+                    *ngIf="showPassword"
+                    class="icon-[fluent--eye-off-16-regular] text-base sm:text-lg md:text-xl"
+                  ></span>
+                </button>
+              </div>
+            </label>
+            <div class="min-h-5 sm:min-h-5">
+              <small
+                class="block text-[10px] font-medium text-red-500 opacity-0 transition-opacity duration-200 sm:text-xs md:text-sm"
+                [class.opacity-100]="formInitialized && passwordInvalid && loginForm.get('password')?.touched"
+              >
+                <span *ngIf="loginForm.get('password')?.hasError('required')"
+                  >La contraseña es obligatoria.</span
+                >
+                <span *ngIf="loginForm.get('password')?.hasError('minlength')"
+                  >Mínimo 8 caracteres.</span
+                >
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recordarme y Olvidé contraseña -->
+        <div
+          class="relative z-10 mt-4 mb-5 flex flex-col gap-3 sm:mt-5 sm:mb-7 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+        >
+          <label class="group flex cursor-pointer items-center gap-2 select-none sm:gap-3">
+            <input
+              type="checkbox"
+              formControlName="remember"
+              class="checkbox rounded-md checkbox-xs checkbox-primary sm:checkbox-sm"
+            />
+            <span
+              class="text-xs text-gray-600 transition-colors group-hover:text-gray-800 sm:text-sm"
+              >Recordarme</span
+            >
+          </label>
+          <a
+            href="/recuperar-contrasena"
+            class="self-end text-xs font-medium text-blue-600 underline-offset-2 transition-colors hover:text-blue-700 hover:underline sm:self-auto sm:text-sm"
+          >
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <!-- Botón de submit -->
+        <button
+          type="submit"
+          class="btn relative z-10 btn-block rounded-xl border-blue-600 bg-blue-600 font-semibold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 btn-sm hover:border-blue-700 hover:bg-blue-700 hover:shadow-blue-700/30 disabled:cursor-not-allowed disabled:opacity-70 sm:btn-md md:btn-lg"
+          [disabled]="isLoading"
+        >
+          @if (isLoading) {
+          <span class="loading loading-xs loading-spinner sm:loading-sm"></span>
+          <span class="text-xs sm:text-sm md:text-base">Ingresando...</span>
+          } @else {
+          <span class="text-xs sm:text-sm md:text-base">Ingresar</span>
+          }
+        </button>
+
+        <!-- Separador -->
+        <div class="relative z-10 divider my-4 text-[10px] text-gray-400 sm:my-6 sm:text-xs">o</div>
+
+        <!-- Link de registro -->
+        <p class="relative z-10 text-center text-xs text-gray-500 sm:text-sm">
+          ¿No tienes una cuenta?
+          <a
+            href="/crear-cuenta"
+            class="ml-1 font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
+          >
+            Regístrate aquí
+          </a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Right Side: Branding Section -->
+  <div
+    class="relative hidden min-h-screen w-1/2 flex-col overflow-hidden bg-olas_azules bg-cover bg-center lg:flex"
+  >
+    <!-- Overlay Gradient -->
+    <div
+      class="absolute inset-0 bg-linear-to-b from-blue-900/30 to-blue-800/10 backdrop-blur-[1px]"
+    ></div>
+
+    <!-- Content -->
+    <div
+      class="relative z-10 flex flex-1 flex-col items-center justify-center p-12 text-center"
+      appAnimateOnScroll="animate-fade-left"
+      animationDuration="slow"
+    >
+      <div class="mb-12">
+        <img
+          src="images/imagotipo/imagotipo_simulabank_claro.svg"
+          class="h-auto w-[450px] drop-shadow-2xl"
+          alt="SimulaBank"
+        />
+      </div>
+
+      <div class="max-w-xl space-y-6">
+        <h1 class="text-4xl font-bold tracking-tight text-white drop-shadow-lg">
+          Domina la asesoría bancaria hoy
+        </h1>
+        <p class="text-lg leading-relaxed font-medium text-blue-50/90 drop-shadow-md">
+          Experiencias interactivas con IA para entrenar, fortalecer decisiones y potenciar tu
+          desarrollo profesional en un espacio confiable y auténtico.
+        </p>
+
+        <div class="mx-auto mt-8 flex w-full max-w-[400px] justify-center">
+          <dotlottie-player
+            src="lotties/asesor_animado_2.lottie"
+            background="transparent"
+            speed="1"
+            style="width: 100%; height: 100%"
+            loop
+            autoplay
+          ></dotlottie-player>
+        </div>
       </div>
     </div>
 
-    <!-- Mitad derecha (solo visible en lg y superiores) -->
-    <div class="hidden lg:flex w-1/2 h-screen flex-col bg-olas_azules bg-cover bg-center overflow-hidden">
-      <!-- Contenido superior con logo -->
-      <div class="shrink-0 p-6 xl:p-8 flex justify-end">
-        <img src="images/imagotipo/imagotipo_simulabank_claro.svg"
-          class="h-auto w-[400px] drop-shadow-lg"
-          alt="SimulaBank" />
-      </div>
-
-      <!-- Imagen del chat cliente tocando el fondo -->
-      <div class="flex-1 flex items-end justify-end overflow-hidden min-h-0">
-        <img src="images/ilustraciones/chat_cliente.png"
-          class="w-[95%] xl:w-[90%] 2xl:w-[85%] max-w-[750px] max-h-full h-auto object-contain object-bottom drop-shadow-2xl"
-          alt="Chat con cliente" />
-      </div>
-    </div>
-  </main>
+    <!-- Decorative Elements -->
+    <div class="absolute -right-24 -bottom-24 h-96 w-96 rounded-full bg-blue-400/20 blur-3xl"></div>
+    <div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-blue-300/10 blur-3xl"></div>
+  </div>
 </div>

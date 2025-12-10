@@ -107,13 +107,14 @@ export class NuevaContrasena {
 
     this.recuperacionService.restablecerContrasena(datos).subscribe({
       next: (response) => {
-        console.log('Contraseña restablecida exitosamente:', response);
-
         // Limpiar token temporal
         localStorage.removeItem('token_recuperacion');
 
         // Mostrar éxito
-        this.alertService.success('¡Contraseña restablecida!', 'Tu contraseña ha sido cambiada exitosamente. Por favor, inicia sesión.');
+        this.alertService.success(
+          '¡Contraseña restablecida!',
+          'Tu contraseña ha sido cambiada exitosamente. Por favor, inicia sesión.'
+        );
 
         // Redirigir al login
         setTimeout(() => {
@@ -122,14 +123,19 @@ export class NuevaContrasena {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error al restablecer contraseña:', error);
 
         if (error.status === 400 && error.error?.error) {
           this.alertService.error('Error', error.error.error);
         } else if (error.status === 401) {
-          this.alertService.error('Sesión expirada', 'Token inválido o expirado. Inicia el proceso nuevamente.');
+          this.alertService.error(
+            'Sesión expirada',
+            'Token inválido o expirado. Inicia el proceso nuevamente.'
+          );
         } else if (error.status === 0) {
-          this.alertService.error('Error de conexión', 'No se pudo conectar con el servidor. Verifica tu conexión.');
+          this.alertService.error(
+            'Error de conexión',
+            'No se pudo conectar con el servidor. Verifica tu conexión.'
+          );
         } else {
           this.alertService.error('Error', 'Ocurrió un error inesperado. Intenta nuevamente.');
         }

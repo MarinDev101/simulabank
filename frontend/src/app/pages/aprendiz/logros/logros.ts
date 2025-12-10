@@ -30,8 +30,8 @@ export class Logros implements OnInit {
         // Guardar los IDs de los logros que tiene el aprendiz
         this.logrosAprendizIds = new Set(aprendiz.map((l) => l.id_logro));
       },
-      error: (err) => {
-        console.error('Error obteniendo logros', err);
+      error: () => {
+        // Error silencioso
       },
     });
   }

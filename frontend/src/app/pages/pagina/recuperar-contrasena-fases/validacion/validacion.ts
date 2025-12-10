@@ -15,7 +15,7 @@ import { AlertService } from '@app/services/alert/alert.service';
 import { SoloNumerosDirective } from '@app/shared/directives';
 
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_recuperacion'; // Mismo cooldown global que solicitud.ts
-const COOLDOWN_TIME_MS = 300000; // 5 minutos en milisegundos
+const COOLDOWN_TIME_MS = 60000; // 60 segundos en milisegundos
 
 @Component({
   selector: 'app-validacion',
@@ -145,10 +145,11 @@ export class Validacion implements OnInit, OnDestroy {
       .map((v) => String(v || '').trim())
       .join('');
 
-    console.log('Código construido:', codigo, 'Largo:', codigo.length);
-
     if (codigo.length !== 6) {
-      this.alertService.warning('Código incompleto', 'Por favor, ingresa el código completo de 6 dígitos');
+      this.alertService.warning(
+        'Código incompleto',
+        'Por favor, ingresa el código completo de 6 dígitos'
+      );
       return;
     }
 
@@ -159,13 +160,10 @@ export class Validacion implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    console.log('Enviando solicitud:', { correo: this.correoUsuario, codigo });
-
     this.recuperacionService
       .verificarCodigoRecuperacion({ correo: this.correoUsuario, codigo })
       .subscribe({
         next: (response: any) => {
-          console.log('Verificación exitosa:', response);
           this.tokenTemporal = response.token_temporal;
 
           // Guardar token temporal en localStorage para usarlo en el siguiente paso
@@ -180,8 +178,6 @@ export class Validacion implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           this.isLoading = false;
-          console.error('Error al verificar código:', error);
-          console.error('Respuesta de error:', error.error);
 
           let mensaje = 'Ocurrió un error inesperado. Intenta nuevamente.';
 
@@ -212,14 +208,13 @@ export class Validacion implements OnInit, OnDestroy {
 
         // Iniciar cooldown y guardar en localStorage
         this.guardarCooldown();
-        this.cooldownSeconds = 300;
+        this.cooldownSeconds = 60;
         this.iniciarCooldown();
 
         this.limpiarCodigo();
       },
       error: (error) => {
         this.isResending = false;
-        console.error('Error al reenviar código:', error);
 
         let mensaje = 'No se pudo reenviar el código. Intenta nuevamente.';
 
@@ -228,7 +223,7 @@ export class Validacion implements OnInit, OnDestroy {
         } else if (error.status === 429) {
           mensaje = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
           this.guardarCooldown();
-          this.cooldownSeconds = 300;
+          this.cooldownSeconds = 60;
           this.iniciarCooldown();
         }
 

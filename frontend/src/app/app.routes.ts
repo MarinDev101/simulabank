@@ -3,10 +3,7 @@ import { authGuard } from './core/auth/guard/auth-guard';
 import { roleGuard } from './guards/role/role-guard';
 import { adminGuard } from './guards/admin/admin-guard';
 import { publicGuard } from './guards/public/public-guard';
-import {
-  maintenanceGuard,
-  maintenancePageGuard,
-} from './guards/maintenance/maintenance-guard';
+import { maintenanceGuard, maintenancePageGuard } from './guards/maintenance/maintenance-guard';
 
 export const routes: Routes = [
   // ============================================
@@ -21,6 +18,11 @@ export const routes: Routes = [
     path: 'inicio',
     loadComponent: () => import('./pages/pagina/inicio/inicio').then((m) => m.Inicio),
     title: 'Inicio',
+    data: {
+      description:
+        'Bienvenido a SimulaBank. Practica tus habilidades de asesoría bancaria con simulaciones realistas.',
+      keywords: 'inicio, simulabank, simulador, banca, asesoría',
+    },
     canActivate: [maintenanceGuard, publicGuard],
   },
   {
@@ -28,6 +30,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/pagina/iniciar-sesion/iniciar-sesion').then((m) => m.IniciarSesion),
     title: 'Iniciar sesión',
+    data: {
+      description:
+        'Inicia sesión en tu cuenta de SimulaBank para acceder a tus simulaciones y progreso.',
+      keywords: 'login, iniciar sesión, simulabank, cuenta',
+    },
     canActivate: [maintenanceGuard, publicGuard],
   },
   {
@@ -35,6 +42,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/pagina/crear-cuenta/crear-cuenta').then((m) => m.CrearCuenta),
     title: 'Crear cuenta',
+    data: {
+      description:
+        'Regístrate en SimulaBank y comienza a mejorar tus habilidades financieras hoy mismo.',
+      keywords: 'registro, crear cuenta, simulabank, nuevo usuario',
+    },
     canActivate: [maintenanceGuard, publicGuard],
   },
   {
@@ -53,6 +65,11 @@ export const routes: Routes = [
         (m) => m.PoliticasPrivacidadPagina
       ),
     title: 'Políticas de privacidad',
+    data: {
+      description:
+        'Consulta nuestras políticas de privacidad y cómo protegemos tus datos en SimulaBank.',
+      keywords: 'privacidad, datos, protección, simulabank',
+    },
     canActivate: [maintenanceGuard, publicGuard],
   },
   {
@@ -62,6 +79,10 @@ export const routes: Routes = [
         (m) => m.TerminosCondicionesPagina
       ),
     title: 'Términos y condiciones',
+    data: {
+      description: 'Lee los términos y condiciones de uso de la plataforma SimulaBank.',
+      keywords: 'términos, condiciones, uso, legal, simulabank',
+    },
     canActivate: [maintenanceGuard, publicGuard],
   },
 
@@ -97,7 +118,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/aprendiz/simulador/simulador').then((m) => m.Simulador),
         title: 'Simulador', // opcional (fallback)
-        data: { headerText: 'Simulador de Asesoría Bancaria' }, // preferido ahora
+        data: { headerText: 'Simulador' }, // preferido ahora
       },
       {
         path: 'mi-personal',

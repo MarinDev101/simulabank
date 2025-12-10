@@ -30,7 +30,7 @@ import {
 
 const FORM_STORAGE_KEY = 'registro_datos_temporales';
 const CODE_COOLDOWN_KEY = 'codigo_cooldown_registro'; // Cooldown global para registro
-const COOLDOWN_TIME = 300000; // 5 minutos en milisegundos
+const COOLDOWN_TIME = 60000; // 60 segundos en milisegundos
 
 @Component({
   selector: 'app-datos-basicos',
@@ -289,7 +289,10 @@ export class DatosBasicos implements OnInit, OnDestroy {
       if (remaining > 0) {
         this.cooldownSeconds = Math.ceil(remaining / 1000);
         this.iniciarContadorCooldown();
-        this.alertService.warning('Espera un momento', `Debes esperar ${this.cooldownSeconds} segundos antes de solicitar otro código.`);
+        this.alertService.warning(
+          'Espera un momento',
+          `Debes esperar ${this.cooldownSeconds} segundos antes de solicitar otro código.`
+        );
         return;
       }
     }
@@ -308,14 +311,13 @@ export class DatosBasicos implements OnInit, OnDestroy {
         this.alertService.toastSuccess('Código de verificación enviado a tu correo');
         // Guardar cooldown global
         this.guardarCooldown();
-        this.cooldownSeconds = 300;
+        this.cooldownSeconds = 60;
         this.iniciarContadorCooldown();
         // Emitir todos los datos para poder reenviar el código después
         this.continuar.emit(datos);
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error al enviar código:', error);
 
         let mensaje = 'Ocurrió un error inesperado. Intenta nuevamente.';
 
@@ -324,7 +326,7 @@ export class DatosBasicos implements OnInit, OnDestroy {
         } else if (error.status === 429) {
           mensaje = 'Demasiadas solicitudes. Espera un momento antes de intentar de nuevo.';
           this.guardarCooldown();
-          this.cooldownSeconds = 300;
+          this.cooldownSeconds = 60;
           this.iniciarContadorCooldown();
         } else if (error.status === 0) {
           mensaje = 'No se pudo conectar con el servidor. Verifica tu conexión.';

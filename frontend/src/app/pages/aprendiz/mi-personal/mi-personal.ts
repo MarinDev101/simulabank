@@ -64,8 +64,10 @@ export class MiPersonal implements OnInit {
       error: (err) => {
         this.error = 'Error al cargar las evidencias. Por favor, intenta de nuevo.';
         this.cargando = false;
-        console.error(err);
-        this.alertService.error('Error', 'No se pudieron cargar las evidencias. Por favor, intenta de nuevo.');
+        this.alertService.error(
+          'Error',
+          'No se pudieron cargar las evidencias. Por favor, intenta de nuevo.'
+        );
       },
     });
   }
@@ -209,7 +211,6 @@ export class MiPersonal implements OnInit {
         this.cargandoPdf = false;
       },
       error: (err) => {
-        console.error('Error al visualizar PDF:', err);
         this.alertService.error('Error', 'Error al cargar el PDF. Por favor, intenta de nuevo.');
         this.cerrarModalPdf();
       },
@@ -248,11 +249,13 @@ export class MiPersonal implements OnInit {
           .descargarEvidencia(this.evidenciaEnModalId, this.nombreArchivoPdf)
           .subscribe({
             next: () => {
-              console.log('Descarga iniciada (servicio)');
+              // Descarga iniciada
             },
             error: (err) => {
-              console.error('Error al descargar (servicio):', err);
-              this.alertService.error('Error', 'Error al descargar el archivo. Por favor, intenta de nuevo.');
+              this.alertService.error(
+                'Error',
+                'Error al descargar el archivo. Por favor, intenta de nuevo.'
+              );
             },
           });
       }
@@ -287,14 +290,18 @@ export class MiPersonal implements OnInit {
             setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
           })
           .catch((err) => {
-            console.error('Error descargando desde URL:', err);
-            this.alertService.error('Error', 'No se pudo iniciar la descarga. Intenta descargar desde la lista.');
+            this.alertService.error(
+              'Error',
+              'No se pudo iniciar la descarga. Intenta descargar desde la lista.'
+            );
           });
         return;
       }
     } catch (err) {
-      console.error('Error al iniciar descarga del PDF:', err);
-      this.alertService.error('Error', 'Error al descargar el archivo. Por favor, intenta de nuevo.');
+      this.alertService.error(
+        'Error',
+        'Error al descargar el archivo. Por favor, intenta de nuevo.'
+      );
     }
   }
 
@@ -306,11 +313,13 @@ export class MiPersonal implements OnInit {
       .descargarEvidencia(evidencia.id_simulacion, evidencia.nombreSugerido)
       .subscribe({
         next: () => {
-          console.log('Descarga iniciada');
+          // Descarga iniciada
         },
         error: (err) => {
-          console.error('Error al descargar:', err);
-          this.alertService.error('Error', 'Error al descargar el archivo. Por favor, intenta de nuevo.');
+          this.alertService.error(
+            'Error',
+            'Error al descargar el archivo. Por favor, intenta de nuevo.'
+          );
         },
       });
   }
@@ -345,11 +354,15 @@ export class MiPersonal implements OnInit {
       next: () => {
         evidencia.estado = accion === 'archivar' ? 'archivada' : 'visible';
         this.aplicarFiltros();
-        this.alertService.toastSuccess(`Evidencia ${accion === 'archivar' ? 'archivada' : 'desarchivada'} correctamente`);
+        this.alertService.toastSuccess(
+          `Evidencia ${accion === 'archivar' ? 'archivada' : 'desarchivada'} correctamente`
+        );
       },
       error: (err) => {
-        console.error(`Error al ${accion}:`, err);
-        this.alertService.error('Error', `Error al ${accion} la evidencia. Por favor, intenta de nuevo.`);
+        this.alertService.error(
+          'Error',
+          `Error al ${accion} la evidencia. Por favor, intenta de nuevo.`
+        );
       },
     });
   }
@@ -374,8 +387,10 @@ export class MiPersonal implements OnInit {
         this.alertService.toastSuccess('Evidencia eliminada correctamente');
       },
       error: (err) => {
-        console.error('Error al eliminar:', err);
-        this.alertService.error('Error', 'Error al eliminar la evidencia. Por favor, intenta de nuevo.');
+        this.alertService.error(
+          'Error',
+          'Error al eliminar la evidencia. Por favor, intenta de nuevo.'
+        );
       },
     });
   }

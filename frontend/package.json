@@ -39,6 +39,7 @@
     "@angular/material": "^20.2.10",
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
+    "@dotlottie/player-component": "^2.7.12",
     "@sweetalert2/ngx-sweetalert2": "^14.0.0",
     "@tailwindcss/postcss": "^4.1.12",
     "ng-recaptcha-2": "^16.0.1",

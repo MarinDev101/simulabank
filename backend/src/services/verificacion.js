@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 class VerificacionService {
   /**
    * Guardar código de verificación para REGISTRO
+   * Invalida códigos anteriores del mismo correo y tipo antes de crear uno nuevo
    */
   async guardarCodigoVerificacion(correo, nombres, apellidos, contrasena) {
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
@@ -11,19 +12,17 @@ class VerificacionService {
     // Usar 15 minutos de expiración y formato UTC para evitar problemas de zona horaria
     const expiracionMinutos = 15;
 
+    // Invalidar códigos anteriores del mismo correo y tipo (registro)
+    await pool.query(
+      `UPDATE codigos_verificacion SET usado = 1 WHERE correo_electronico = ? AND tipo = 'registro' AND usado = 0`,
+      [correo]
+    );
+
+    // Insertar nuevo código
     await pool.query(
       `INSERT INTO codigos_verificacion
        (correo_electronico, codigo, nombres, apellidos, contrasena_hash, tipo, fecha_expiracion)
-       VALUES (?, ?, ?, ?, ?, 'registro', DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? MINUTE))
-       ON DUPLICATE KEY UPDATE
-       codigo = VALUES(codigo),
-       nombres = VALUES(nombres),
-       apellidos = VALUES(apellidos),
-       contrasena_hash = VALUES(contrasena_hash),
-       tipo = 'registro',
-       fecha_expiracion = VALUES(fecha_expiracion),
-       usado = 0,
-       intentos = 0`,
+       VALUES (?, ?, ?, ?, ?, 'registro', DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? MINUTE))`,
       [correo, codigo, nombres, apellidos, hashedPassword, expiracionMinutos]
     );
 
@@ -32,22 +31,24 @@ class VerificacionService {
 
   /**
    * Guardar código de verificación para RECUPERACIÓN DE CONTRASEÑA
+   * Invalida códigos anteriores del mismo correo y tipo antes de crear uno nuevo
    */
   async guardarCodigoRecuperacion(correo) {
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
     // Usar 15 minutos de expiración y formato UTC para evitar problemas de zona horaria
     const expiracionMinutos = 15;
 
+    // Invalidar códigos anteriores del mismo correo y tipo (recuperacion)
+    await pool.query(
+      `UPDATE codigos_verificacion SET usado = 1 WHERE correo_electronico = ? AND tipo = 'recuperacion' AND usado = 0`,
+      [correo]
+    );
+
+    // Insertar nuevo código
     await pool.query(
       `INSERT INTO codigos_verificacion
        (correo_electronico, codigo, tipo, fecha_expiracion)
-       VALUES (?, ?, 'recuperacion', DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? MINUTE))
-       ON DUPLICATE KEY UPDATE
-       codigo = VALUES(codigo),
-       tipo = 'recuperacion',
-       fecha_expiracion = VALUES(fecha_expiracion),
-       usado = 0,
-       intentos = 0`,
+       VALUES (?, ?, 'recuperacion', DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? MINUTE))`,
       [correo, codigo, expiracionMinutos]
     );
 

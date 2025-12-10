@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderPlataforma } from '../headers/header-plataforma/header-plataforma';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -121,10 +129,9 @@ export class Sidebar implements OnInit, OnDestroy, AfterViewInit {
     // Guardar en la base de datos
     const temaParaGuardar: 'claro' | 'oscuro' = this.currentTheme === 'dark' ? 'oscuro' : 'claro';
     this.authService.actualizarTemaServidor(temaParaGuardar).subscribe({
-      error: (error) => {
-        console.error('Error al guardar preferencia de tema:', error);
-        // Opcionalmente, podrías mostrar un mensaje al usuario
-      }
+      error: () => {
+        // Error silencioso - el tema ya se aplicó localmente
+      },
     });
   }
 
@@ -242,8 +249,8 @@ export class Sidebar implements OnInit, OnDestroy, AfterViewInit {
         next: () => {
           this.alertService.toastSuccess('Sesión cerrada correctamente');
         },
-        error: (error) => {
-          console.error('Error al cerrar sesión:', error);
+        error: () => {
+          // Error silencioso - la sesión ya se cerró localmente
         },
       });
     }

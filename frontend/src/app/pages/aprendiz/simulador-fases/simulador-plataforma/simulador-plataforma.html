@@ -1,22 +1,22 @@
 <!-- DRAWER DE RECOMENDACIONES (Solo en modo aprendizaje) - DISEÑO MEJORADO -->
 @if (esModoAprendizaje) {
-<div class="drawer z-40 drawer-end">
+<div class="drawer z-[60] drawer-end">
   <input id="drawer-recommendations" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content"></div>
-  <div class="drawer-side z-40">
+  <div class="drawer-side z-[60]">
     <label
       for="drawer-recommendations"
       aria-label="close sidebar"
       class="drawer-overlay bg-black/60 backdrop-blur-sm"
     ></label>
-    <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
+    <div class="menu min-h-full w-80 bg-white p-0 font-nunito dark:bg-gray-800">
       <!-- Header idéntico a desktop -->
       <div
-        class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
+        class="flex h-[60px] items-center justify-center border-b border-[#e8f4fc] bg-[#1788EF] dark:border-gray-700 dark:bg-[#1270c7]"
       >
         <div class="flex w-full items-center justify-between px-4">
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--bulb] size-5 text-amber-200 dark:text-amber-300"></span>
+            <span class="icon-[hugeicons--bulb] size-5 text-amber-300"></span>
             <h2 class="text-base font-bold text-white">Aprendizaje</h2>
           </div>
           <label
@@ -29,17 +29,17 @@
       </div>
       <!-- Barra de acciones -->
       <div
-        class="border-b border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
+        class="border-b border-[#e8f4fc] bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-900/50"
       >
         <div class="flex items-center justify-between gap-3">
           <button
             (click)="recomendacionActual && toggleAudio(recomendacionActual.recomendacionParaAsesor, 'rec')"
             [disabled]="!recomendacionActual"
             [class]="
-              'btn min-w-0 flex-1 gap-2 border-0 text-white shadow-md btn-sm disabled:opacity-50 ' +
+              'btn min-w-0 flex-1 gap-2 rounded-lg border-0 text-white shadow-sm btn-sm transition-colors disabled:opacity-50 ' +
               (isPlaying('rec')
-                ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700'
-                : 'bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700')
+                ? 'bg-red-500 hover:bg-red-600'
+                : 'bg-[#1788EF] hover:bg-[#1270c7]')
             "
             [attr.title]="isPlaying('rec') ? 'Detener' : 'Reproducir'"
           >
@@ -51,7 +51,7 @@
 
           <button
             (click)="abrirModalPoliticas()"
-            class="btn min-w-0 flex-1 gap-2 border-0 bg-amber-500 text-white shadow-md btn-sm hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700"
+            class="btn min-w-0 flex-1 gap-2 rounded-lg border-0 bg-[#f59e0b] text-white shadow-sm transition-colors btn-sm hover:bg-[#d97706]"
             title="Ver políticas del banco"
           >
             <span class="icon-[hugeicons--bank] size-4"></span>
@@ -59,35 +59,44 @@
           </button>
         </div>
       </div>
-      <!-- Divider con etapa actual -->
-      <div
-        class="border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
-      >
-        <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
-          <span
-            class="rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-white shadow-md backdrop-blur-sm sm:text-xs"
-          >
-            {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
-          </span>
-        </div>
-      </div>
 
       <!-- Contenido de recomendaciones -->
       <div
-        class="max-h-[calc(100vh-220px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+        class="scrollbar-thin max-h-[calc(100vh-180px)] flex-1 space-y-4 overflow-y-auto bg-white p-4 scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:bg-gray-800 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500"
       >
         @if (recomendacionActual) {
         <div>
           <h3
-            class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
+            class="mb-2 flex items-center gap-2 text-xs font-bold text-[#034D82] sm:text-sm dark:text-white"
           >
-            <span class="icon-[hugeicons--idea] size-3.5 text-blue-600 sm:size-4 dark:text-blue-400"></span>
+            <span class="icon-[hugeicons--idea] size-3.5 text-[#1788EF] sm:size-4"></span>
             Recomendaciones IA
           </h3>
+          <!-- Etapa actual debajo del título -->
+          <div class="mb-3 flex items-center justify-center">
+            <span
+              class="inline-flex w-full max-w-full flex-col items-center gap-1 rounded-xl border border-[#e8f4fc] bg-white px-3 py-2 text-center sm:flex-row sm:gap-2 sm:rounded-full sm:px-4 sm:py-1.5 dark:border-gray-600 dark:bg-gray-800"
+            >
+              <span
+                class="flex items-center gap-1.5 font-semibold text-[#034D82] sm:gap-2 dark:text-gray-200"
+              >
+                <span
+                  class="icon-[hugeicons--flag-02] size-3.5 shrink-0 text-[#1788EF] sm:size-4 dark:text-[#60a5fa]"
+                ></span>
+                <span class="text-xs sm:text-sm">{{ nombreEtapaActual }}</span>
+              </span>
+              <span
+                class="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[#1788EF]/10 px-2 py-0.5 text-[10px] font-medium text-[#1788EF] sm:ml-1 sm:rounded-full sm:bg-[#1788EF]/10 sm:px-3 sm:py-1 sm:text-xs dark:bg-[#60a5fa]/20 dark:text-[#93c5fd] sm:dark:bg-[#60a5fa]/20"
+                >Etapa {{ indiceEtapaActual }}</span
+              >
+            </span>
+          </div>
           <div
-            class="rounded-lg border border-blue-200 bg-blue-50 p-3 shadow-sm sm:p-4 dark:border-blue-800 dark:bg-blue-900/30"
+            class="rounded-xl border border-[#e8f4fc] bg-[#1788EF]/5 p-3 sm:p-4 dark:border-gray-700 dark:bg-[#1788EF]/10"
           >
-            <p class="text-hyphen text-xs leading-relaxed text-blue-900 sm:text-sm dark:text-blue-100">
+            <p
+              class="text-hyphen text-xs leading-relaxed text-[#4a5d6f] sm:text-sm dark:text-gray-300"
+            >
               {{ recomendacionActual.recomendacionParaAsesor }}
             </p>
           </div>
@@ -95,9 +104,9 @@
         } @else {
         <div class="flex flex-col items-center justify-center py-12 text-center">
           <span
-            class="mb-4 icon-[hugeicons--loading-03] size-12 animate-spin text-slate-300 sm:size-16 dark:text-slate-600"
+            class="mb-4 icon-[hugeicons--loading-03] size-12 animate-spin text-gray-300 sm:size-16 dark:text-gray-600"
           ></span>
-          <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
+          <p class="text-xs font-medium text-[#4a5d6f] sm:text-sm dark:text-gray-400">
             Esperando interacción...
           </p>
         </div>
@@ -109,25 +118,23 @@
 }
 
 <!-- DRAWER DE INFORMACIÓN DEL CLIENTE - DISEÑO MEJORADO -->
-<div class="drawer z-40 drawer-end">
+<div class="drawer z-[60] drawer-end">
   <input id="drawer-client-info" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content"></div>
-  <div class="drawer-side z-40">
+  <div class="drawer-side z-[60]">
     <label
       for="drawer-client-info"
       aria-label="close sidebar"
       class="drawer-overlay bg-black/60 backdrop-blur-sm"
     ></label>
-    <div class="menu min-h-full w-80 bg-white p-0 dark:bg-slate-900">
+    <div class="menu min-h-full w-80 bg-white p-0 font-nunito dark:bg-gray-800">
       <!-- Header idéntico a desktop -->
       <div
-        class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
+        class="flex h-[60px] items-center justify-center border-b border-[#e8f4fc] bg-[#00A448] dark:border-gray-700 dark:bg-[#008a3a]"
       >
         <div class="flex w-full items-center justify-between px-4">
           <div class="flex items-center gap-2">
-            <span
-              class="icon-[hugeicons--user-circle] size-5 text-teal-200 dark:text-teal-300"
-            ></span>
+            <span class="icon-[hugeicons--user-circle] size-5 text-white/90"></span>
             <h2 class="text-base font-bold text-white">Información del Cliente</h2>
           </div>
           <label
@@ -141,28 +148,28 @@
 
       <!-- Contenido del cliente -->
       <div
-        class="max-h-[calc(100vh-60px)] flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+        class="scrollbar-thin max-h-[calc(100vh-60px)] flex-1 space-y-4 overflow-y-auto bg-white p-4 scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:bg-gray-800 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500"
       >
         @if (infoCliente) {
         <!-- Avatar y datos básicos -->
         <div
-          class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800"
+          class="flex flex-col items-center rounded-xl border border-[#e8f4fc] bg-white p-4 text-center dark:border-gray-700 dark:bg-gray-900/50"
         >
           <div class="avatar mb-3">
             <div
-              class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2 ring-offset-white dark:ring-emerald-600 dark:ring-offset-slate-900"
+              class="w-24 rounded-full shadow-lg ring-4 ring-[#00A448] ring-offset-2 ring-offset-white dark:ring-[#00A448]/80 dark:ring-offset-gray-800"
             >
               <img [src]="avatarCliente" [alt]="nombreCliente" />
             </div>
           </div>
-          <h3 class="text-base font-bold text-slate-800 sm:text-lg dark:text-slate-200">
+          <h3 class="text-base font-bold text-[#034D82] sm:text-lg dark:text-white">
             {{ infoCliente.nombre }}
           </h3>
-          <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
-            {{ infoCliente.edad }}
+          <p class="text-xs font-medium text-[#4a5d6f] sm:text-sm dark:text-gray-400">
+            {{ infoCliente.edad }} años
           </p>
           <span
-            class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-[10px] font-bold text-white shadow-md sm:text-xs dark:from-amber-600 dark:to-orange-600"
+            class="mt-2 rounded-full bg-[#f59e0b] px-3 py-1 text-[10px] font-bold text-white sm:text-xs"
           >
             {{ infoCliente.profesion }}
           </span>
@@ -170,65 +177,81 @@
 
         <!-- Perfil del cliente -->
         <div
-          class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+          class="space-y-3 rounded-xl border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50"
         >
           <h3
-            class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
+            class="mb-3 flex items-center gap-2 text-xs font-bold text-[#034D82] sm:text-sm dark:text-white"
           >
-            <span
-              class="icon-[hugeicons--user] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
-            ></span>
+            <span class="icon-[hugeicons--user] size-3.5 text-[#00A448] sm:size-4"></span>
             Perfil del Cliente
           </h3>
 
           <div class="space-y-2 text-xs sm:text-sm">
-            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+            <div class="flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--briefcase-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--briefcase-01] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
               ></span>
               <div class="min-w-0">
-                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Situación</p>
-                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.situacion_actual }}</p>
+                <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                  Situación
+                </p>
+                <p class="text-hyphen text-[#034D82] dark:text-gray-200">
+                  {{ infoCliente.situacion_actual }}
+                </p>
               </div>
             </div>
 
-            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+            <div class="flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--target-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--target-01] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
               ></span>
               <div class="min-w-0">
-                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Motivación</p>
-                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
+                <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                  Motivación
+                </p>
+                <p class="text-hyphen text-[#034D82] dark:text-gray-200">
+                  {{ infoCliente.motivacion }}
+                </p>
               </div>
             </div>
 
-            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+            <div class="flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--flag-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--flag-02] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
               ></span>
               <div class="min-w-0">
-                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Objetivo</p>
-                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
+                <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                  Objetivo
+                </p>
+                <p class="text-hyphen text-[#034D82] dark:text-gray-200">
+                  {{ infoCliente.objetivo }}
+                </p>
               </div>
             </div>
 
-            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+            <div class="flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--chart-increase] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--chart-increase] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
               ></span>
               <div class="min-w-0">
-                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Riesgo</p>
-                <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
+                <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                  Riesgo
+                </p>
+                <p class="text-hyphen text-[#034D82] dark:text-gray-200">
+                  {{ infoCliente.perfil_riesgo }}
+                </p>
               </div>
             </div>
 
-            <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+            <div class="flex items-start gap-2 rounded-lg p-2">
               <span
-                class="mt-0.5 icon-[hugeicons--book-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                class="mt-0.5 icon-[hugeicons--book-02] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
               ></span>
               <div class="min-w-0">
-                <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Conocimiento</p>
-                <p class="text-hyphen text-slate-800 dark:text-slate-200">
+                <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                  Conocimiento
+                </p>
+                <p class="text-hyphen text-[#034D82] dark:text-gray-200">
                   {{ infoCliente.nivel_conocimiento }}
                 </p>
               </div>
@@ -238,17 +261,19 @@
 
         <!-- Escenario -->
         <div
-          class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+          class="rounded-xl border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50"
         >
           <h3
-            class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
+            class="mb-3 flex items-center gap-2 text-xs font-bold text-[#034D82] sm:text-sm dark:text-white"
           >
             <span
-              class="icon-[hugeicons--information-circle] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
+              class="icon-[hugeicons--information-circle] size-3.5 text-[#00A448] sm:size-4"
             ></span>
             Escenario
           </h3>
-          <p class="text-hyphen text-xs leading-relaxed text-slate-700 sm:text-sm dark:text-slate-300">
+          <p
+            class="text-hyphen text-xs leading-relaxed text-[#4a5d6f] sm:text-sm dark:text-gray-300"
+          >
             {{ infoCliente.escenario_narrativo }}
           </p>
         </div>
@@ -259,7 +284,9 @@
 </div>
 
 <!-- CONTENIDO PRINCIPAL -->
-<main class="simulador-container p-2 sm:p-4 dark:bg-slate-900 dark:text-slate-100">
+<main
+  class="simulador-container p-2 font-nunito max-[687px]:p-0 sm:p-4 dark:bg-gray-900 dark:text-gray-100"
+>
   @if (error) {
   <div class="fade-in mb-2 alert alert-error shadow-lg dark:bg-red-900 dark:text-red-200">
     <span class="icon-[hugeicons--alert-circle] size-5"></span>
@@ -270,30 +297,34 @@
   <div class="simulador-grid">
     <!-- PANEL DE RECOMENDACIONES (Desktop - Solo en modo aprendizaje) -->
     @if (esModoAprendizaje) {
-    <div class="simulador-panel hidden min-[1327px]:order-1 min-[1327px]:col-span-3 min-[1327px]:block">
-      <div class="card overflow-hidden bg-white shadow-xl dark:bg-slate-900">
+    <div
+      class="simulador-panel hidden min-[1327px]:order-1 min-[1327px]:col-span-3 min-[1327px]:block"
+    >
+      <div
+        class="card overflow-hidden rounded-xl border border-[#e8f4fc] bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
+      >
         <div
-          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-blue-500 to-indigo-500 dark:border-slate-700 dark:from-blue-600 dark:to-indigo-700"
+          class="flex h-[60px] items-center justify-center border-b border-[#e8f4fc] bg-[#1788EF] dark:border-gray-700 dark:bg-[#1270c7]"
         >
           <div class="flex items-center gap-2">
-            <span class="icon-[hugeicons--bulb] size-5 text-amber-200 dark:text-amber-300"></span>
+            <span class="icon-[hugeicons--bulb] size-5 text-amber-300"></span>
             <h2 class="card-title text-base font-bold text-white">Aprendizaje</h2>
           </div>
         </div>
 
         <!-- Barra de acciones -->
         <div
-          class="border-b border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
+          class="border-b border-[#e8f4fc] bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-900/50"
         >
           <div class="flex items-center justify-between gap-3">
             <button
               (click)="recomendacionActual && toggleAudio(recomendacionActual.recomendacionParaAsesor, 'rec')"
               [disabled]="!recomendacionActual"
               [class]="
-                'btn min-w-0 flex-1 gap-2 border-0 text-white shadow-md btn-sm disabled:opacity-50 ' +
+                'btn min-w-0 flex-1 gap-2 rounded-lg border-0 text-white shadow-sm btn-sm transition-colors disabled:opacity-50 ' +
                 (isPlaying('rec')
-                  ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700'
-                  : 'bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700')
+                  ? 'bg-red-500 hover:bg-red-600'
+                  : 'bg-[#1788EF] hover:bg-[#1270c7]')
               "
               [attr.title]="isPlaying('rec') ? 'Detener reproducción' : 'Reproducir consejos'"
             >
@@ -305,7 +336,7 @@
 
             <button
               (click)="abrirModalPoliticas()"
-              class="btn min-w-0 flex-1 gap-2 border-0 bg-amber-500 text-white shadow-md btn-sm hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700"
+              class="btn min-w-0 flex-1 gap-2 rounded-lg border-0 bg-[#f59e0b] text-white shadow-sm transition-colors btn-sm hover:bg-[#d97706]"
               title="Ver políticas del banco"
             >
               <span class="icon-[hugeicons--bank] size-4"></span>
@@ -313,35 +344,43 @@
             </button>
           </div>
         </div>
-        <!-- Divider con etapa actual -->
-        <div
-          class="border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
-        >
-          <div class="divider m-0 gap-0 divider-primary dark:border-slate-700">
-            <span
-              class="rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-white shadow-md backdrop-blur-sm sm:text-xs"
-            >
-              {{ indiceEtapaActual }}. {{ nombreEtapaActual }}
-            </span>
-          </div>
-        </div>
-
         <!-- Contenido de recomendaciones -->
         <div
-          class="panel-content-scroll space-y-4 bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="panel-content-scroll scrollbar-thin space-y-4 bg-white p-4 scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:bg-gray-800 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500"
         >
           @if (recomendacionActual) {
           <div>
             <h3
-              class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
+              class="mb-2 flex items-center gap-2 text-xs font-bold text-[#034D82] sm:text-sm dark:text-white"
             >
-              <span class="icon-[hugeicons--idea] size-3.5 text-blue-600 sm:size-4 dark:text-blue-400"></span>
+              <span class="icon-[hugeicons--idea] size-3.5 text-[#1788EF] sm:size-4"></span>
               Recomendaciones IA
             </h3>
+            <!-- Etapa actual debajo del título -->
+            <div class="mb-3 flex items-center justify-center">
+              <span
+                class="inline-flex flex-col items-center gap-1 rounded-xl border border-[#e8f4fc] bg-white px-3 py-2 text-center sm:flex-row sm:gap-2 sm:rounded-full sm:px-4 sm:py-1.5 dark:border-gray-600 dark:bg-gray-800"
+              >
+                <span
+                  class="flex items-center gap-1.5 font-semibold text-[#034D82] sm:gap-2 dark:text-gray-200"
+                >
+                  <span
+                    class="icon-[hugeicons--flag-02] size-3.5 text-[#1788EF] sm:size-4 dark:text-[#60a5fa]"
+                  ></span>
+                  <span class="text-xs sm:text-sm">{{ nombreEtapaActual }}</span>
+                </span>
+                <span
+                  class="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[#1788EF]/10 px-2 py-0.5 text-[10px] font-medium text-[#1788EF] sm:ml-1 sm:rounded-full sm:bg-[#1788EF]/10 sm:px-3 sm:py-1 sm:text-xs dark:bg-[#60a5fa]/20 dark:text-[#93c5fd] sm:dark:bg-[#60a5fa]/20"
+                  >Etapa {{ indiceEtapaActual }}</span
+                >
+              </span>
+            </div>
             <div
-              class="rounded-lg border border-blue-200 bg-blue-50 p-3 shadow-sm sm:p-4 dark:border-blue-800 dark:bg-blue-900/30"
+              class="rounded-xl border border-[#e8f4fc] bg-[#1788EF]/5 p-3 sm:p-4 dark:border-gray-700 dark:bg-[#1788EF]/10"
             >
-              <p class="text-hyphen text-xs leading-relaxed text-blue-900 sm:text-sm dark:text-blue-100">
+              <p
+                class="text-hyphen text-xs leading-relaxed text-[#4a5d6f] sm:text-sm dark:text-gray-300"
+              >
                 {{ recomendacionActual.recomendacionParaAsesor }}
               </p>
             </div>
@@ -349,9 +388,9 @@
           } @else {
           <div class="flex flex-col items-center justify-center py-12 text-center">
             <span
-              class="mb-4 icon-[hugeicons--loading-03] size-12 animate-spin text-slate-300 sm:size-16 dark:text-slate-600"
+              class="mb-4 icon-[hugeicons--loading-03] size-12 animate-spin text-gray-300 sm:size-16 dark:text-gray-600"
             ></span>
-            <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
+            <p class="text-xs font-medium text-[#4a5d6f] sm:text-sm dark:text-gray-400">
               Esperando interacción...
             </p>
           </div>
@@ -362,15 +401,22 @@
     }
 
     <!-- PANEL DE CHAT -->
-    <div class="simulador-panel min-[1327px]:order-2" [class]="esModoAprendizaje ? 'min-[1327px]:col-span-6' : 'min-[1327px]:col-span-9'">
-      <div class="card overflow-hidden bg-white shadow-xl dark:bg-slate-900">
+    <div
+      class="simulador-panel min-[1327px]:order-2"
+      [class]="esModoAprendizaje ? 'min-[1327px]:col-span-6' : 'min-[1327px]:col-span-9'"
+    >
+      <div
+        class="card overflow-hidden rounded-xl border border-[#e8f4fc] bg-white shadow-lg max-[687px]:rounded-none max-[687px]:border-0 max-[687px]:shadow-none dark:border-gray-700 dark:bg-gray-800"
+      >
         <div
-          class="flex h-[60px] items-center border-b border-slate-200 bg-gradient-to-r from-purple-500 to-pink-500 px-3 dark:border-slate-700 dark:from-purple-600 dark:to-pink-700"
+          class="flex h-[60px] items-center border-b border-[#e8f4fc] bg-[#8b5cf6] px-3 dark:border-gray-700 dark:bg-[#7c3aed]"
         >
           <div class="flex w-full items-center justify-between">
             <div class="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
               <div class="avatar shrink-0">
-                <div class="w-8 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100 sm:w-10">
+                <div
+                  class="w-8 rounded-full ring-2 ring-white/30 ring-offset-1 ring-offset-[#8b5cf6] sm:w-10 dark:ring-offset-[#7c3aed]"
+                >
                   <img [src]="avatarCliente" [alt]="nombreCliente" />
                 </div>
               </div>
@@ -378,7 +424,9 @@
                 <span
                   class="icon-[hugeicons--message-02] size-4 shrink-0 text-pink-200 sm:size-5 dark:text-pink-300"
                 ></span>
-                <h2 class="card-title hidden min-w-0 flex-1 truncate text-sm font-bold text-white sm:block sm:text-base">
+                <h2
+                  class="card-title hidden min-w-0 flex-1 truncate text-sm font-bold text-white sm:block sm:text-base"
+                >
                   {{ nombreCliente }}
                 </h2>
               </div>
@@ -389,7 +437,7 @@
               <button
                 (click)="analisisDesempeno ? mostrarModalAnalisisDesempeno(datosFinalizacion) : mostrarModalResumen()"
                 [disabled]="!modoSoloLectura || !datosFinalizacion"
-                class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md btn-sm hover:shadow-lg disabled:opacity-50 dark:from-cyan-600 dark:to-blue-700"
+                class="btn gap-2 rounded-lg border-0 bg-[#06b6d4] text-white shadow-sm transition-colors btn-sm hover:bg-[#0891b2] disabled:opacity-50 dark:bg-[#0891b2] dark:hover:bg-[#0e7490]"
                 title="Ver análisis de desempeño"
               >
                 <span class="icon-[hugeicons--audit-02] size-4"></span>
@@ -401,7 +449,7 @@
                 @if (esModoAprendizaje) {
                 <label
                   for="drawer-recommendations"
-                  class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-blue-600 dark:to-indigo-700"
+                  class="btn gap-2 rounded-lg border-0 bg-[#1788EF] text-white shadow-sm transition-colors btn-sm hover:bg-[#1270c7] dark:bg-[#1270c7] dark:hover:bg-[#0d5ba8]"
                 >
                   <span class="icon-[hugeicons--bulb] size-4"></span>
                   <span class="hidden sm:inline">Aprendizaje</span>
@@ -409,123 +457,149 @@
                 }
                 <label
                   for="drawer-client-info"
-                  class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md btn-sm hover:shadow-lg dark:from-emerald-600 dark:to-teal-700"
+                  class="btn gap-2 rounded-lg border-0 bg-[#00A448] text-white shadow-sm transition-colors btn-sm hover:bg-[#008a3a] dark:bg-[#008a3a] dark:hover:bg-[#006e2e]"
                 >
                   <span class="icon-[hugeicons--user-circle] size-4"></span>
                   <span class="hidden sm:inline">Cliente</span>
                 </label>
               </div>
 
-              <!-- Menú desplegable (siempre visible) -->
-              <div class="dropdown dropdown-end">
-                <div
-                  tabindex="0"
-                  role="button"
-                  class="btn gap-2 rounded-lg border-0 bg-[#6b21a8] text-white shadow-md btn-sm hover:bg-[#7c2dbe] dark:bg-[#6b21a8] dark:hover:bg-[#7c2dbe]"
+              <!-- Menú desplegable personalizado -->
+              <div class="relative" #menuContainer>
+                <button
+                  (click)="menuAbierto = !menuAbierto"
+                  class="btn gap-2 rounded-xl border-0 bg-[#4a5d6f] text-white shadow-sm transition-colors btn-sm hover:bg-[#3d4f5f] dark:bg-gray-600 dark:hover:bg-gray-500"
                 >
                   <span class="icon-[hugeicons--menu-01] size-4"></span>
-                </div>
-                <ul
-                  tabindex="-1"
-                  class="dropdown-content menu z-[100] mt-3 w-64 rounded-box bg-white p-2 shadow-xl dark:bg-slate-800"
-                >
-                  <!-- Sección: Controles -->
-                  <li class="menu-title">
-                    <span class="text-slate-600 dark:text-slate-400">Controles</span>
-                  </li>
+                </button>
 
-                  <!-- Tiempo transcurrido -->
-                  <li class="disabled">
-                    <a class="flex items-center justify-between">
-                      <span class="flex items-center gap-2">
-                        <span class="icon-[hugeicons--clock-01] size-4"></span>
+                <!-- Panel del menú -->
+                @if (menuAbierto) {
+                <!-- Backdrop invisible para cerrar -->
+                <div class="fixed inset-0 z-[99]" (click)="menuAbierto = false"></div>
+                <div
+                  class="animate-fade-in absolute top-full right-0 z-100 mt-2 w-72 rounded-xl border border-[#e8f4fc] bg-white shadow-xl animate-duration-150 dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <!-- Header del menú -->
+                  <div
+                    class="rounded-t-xl border-b border-[#e8f4fc] bg-[#034D82] px-4 py-3 dark:border-gray-700 dark:bg-[#1270c7]"
+                  >
+                    <div class="flex items-center gap-2">
+                      <span class="icon-[hugeicons--settings-02] size-4 text-white/80"></span>
+                      <span class="text-sm font-semibold text-white">Opciones de simulación</span>
+                    </div>
+                  </div>
+
+                  <div class="space-y-2 p-3">
+                    <!-- Tiempo transcurrido -->
+                    <div
+                      class="flex items-center justify-between rounded-xl bg-[#1788EF]/10 px-3 py-2.5 dark:bg-[#1788EF]/20"
+                    >
+                      <span
+                        class="flex items-center gap-2.5 text-sm text-[#034D82] dark:text-gray-200"
+                      >
+                        <span class="icon-[hugeicons--clock-01] size-4 text-[#1788EF]"></span>
                         Tiempo
                       </span>
-                      <span class="tiempo-real text-sm font-bold">{{ tiempoTranscurrido }}</span>
-                    </a>
-                  </li>
+                      <span
+                        class="tiempo-real rounded-lg bg-[#1788EF] px-2.5 py-1 text-xs font-bold text-white"
+                        >{{ tiempoTranscurrido }}</span
+                      >
+                    </div>
 
-                  <!-- Botón de sonido -->
-                  <li>
-                    <button (click)="toggleSonido()" class="flex items-center justify-between">
-                      <span class="flex items-center gap-2">
+                    <!-- Botón de sonido -->
+                    <button
+                      (click)="toggleSonido()"
+                      class="flex w-full items-center justify-between rounded-xl px-3 py-2.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      <span
+                        class="flex items-center gap-2.5 text-sm text-[#4a5d6f] dark:text-gray-300"
+                      >
                         <span
                           class="size-4"
-                          [class]="sonidoHabilitado ? 'icon-[hugeicons--volume-high]' : 'icon-[hugeicons--volume-mute-02]'"
+                          [class]="sonidoHabilitado ? 'icon-[hugeicons--volume-high] text-[#00A448]' : 'icon-[hugeicons--volume-mute-02] text-gray-400'"
                         ></span>
-                        {{ sonidoHabilitado ? 'Sonido' : 'Silenciado' }}
+                        {{ sonidoHabilitado ? 'Sonido activado' : 'Sonido silenciado' }}
                       </span>
-                      <input
-                        type="checkbox"
-                        [checked]="sonidoHabilitado"
-                        class="pointer-events-none toggle toggle-primary toggle-sm"
-                        readonly
-                      />
+                      <div
+                        class="relative h-5 w-9 rounded-full transition-colors"
+                        [class]="sonidoHabilitado ? 'bg-[#00A448]' : 'bg-gray-300 dark:bg-gray-600'"
+                      >
+                        <div
+                          class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all"
+                          [class]="sonidoHabilitado ? 'left-4' : 'left-0.5'"
+                        ></div>
+                      </div>
                     </button>
-                  </li>
 
-                  <!-- Botón de análisis (si está en modo solo lectura) -->
-                  <li *ngIf="modoSoloLectura && datosFinalizacion">
+                    <!-- Botón de análisis (si está en modo solo lectura) -->
+                    @if (modoSoloLectura && datosFinalizacion) {
                     <button
-                      (click)="analisisDesempeno ? mostrarModalAnalisisDesempeno(datosFinalizacion) : mostrarModalResumen()"
+                      (click)="analisisDesempeno ? mostrarModalAnalisisDesempeno(datosFinalizacion) : mostrarModalResumen(); menuAbierto = false"
+                      class="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-[#4a5d6f] transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                     >
-                      <span class="icon-[hugeicons--audit-02] size-4"></span>
+                      <span class="icon-[hugeicons--audit-02] size-4 text-[#8b5cf6]"></span>
                       Ver Análisis
                     </button>
-                  </li>
+                    }
 
-                  <!-- Botón de finalizar -->
-                  <li>
-                    <button
-                      (click)="confirmarFinalizacion()"
-                      [disabled]="finalizandoSimulacion"
-                      class="text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                    <!-- Divider -->
+                    <hr class="border-[#e8f4fc] dark:border-gray-700" />
+
+                    <!-- Modo de simulación -->
+                    <div
+                      class="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-900/50"
                     >
-                      <span class="icon-[hugeicons--stop] size-4"></span>
-                      {{ finalizandoSimulacion ? 'Finalizando...' : 'Finalizar' }}
-                    </button>
-                  </li>
-
-                  <!-- Divider -->
-                  <li><hr class="my-2 border-slate-200 dark:border-slate-700" /></li>
-
-                  <!-- Sección: Estado -->
-                  <li class="menu-title">
-                    <span class="text-slate-600 dark:text-slate-400">Estado</span>
-                  </li>
-
-                  <!-- Modo de simulación -->
-                  <li class="disabled">
-                    <a class="flex items-center justify-between">
-                      <span class="flex items-center gap-2">
+                      <span
+                        class="flex items-center gap-2.5 text-sm text-[#4a5d6f] dark:text-gray-300"
+                      >
                         <span
                           class="size-4"
-                          [class]="esModoAprendizaje ? 'icon-[hugeicons--book-02]' : 'icon-[hugeicons--tick-02]'"
+                          [class]="esModoAprendizaje ? 'icon-[hugeicons--book-02] text-[#1788EF]' : 'icon-[hugeicons--tick-02] text-[#00A448]'"
                         ></span>
-                        {{ modoSimulacion }}
+                        Modo
                       </span>
                       <span
-                        class="badge badge-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                        [class]="esModoAprendizaje ? 'badge-primary' : 'badge-secondary'"
+                        class="rounded-lg px-2.5 py-1 text-xs font-semibold text-white"
+                        [class]="esModoAprendizaje ? 'bg-[#1788EF]' : 'bg-[#00A448]'"
                       >
                         {{ esModoAprendizaje ? 'Aprendizaje' : 'Evaluación' }}
                       </span>
-                    </a>
-                  </li>
+                    </div>
 
-                  <!-- Estado de sincronización -->
-                  <li class="disabled">
-                    <a class="flex items-center justify-between">
-                      <span class="flex items-center gap-2">
-                        <span
-                          class="icon-[hugeicons--refresh] size-4 text-green-600 dark:text-green-400"
-                        ></span>
-                        Sincronizado
+                    <!-- Estado de sincronización -->
+                    <div
+                      class="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-900/50"
+                    >
+                      <span
+                        class="flex items-center gap-2.5 text-sm text-[#4a5d6f] dark:text-gray-300"
+                      >
+                        <span class="size-4 text-[#00A448] icon-[hugeicons--wifi]"></span>
+                        Estado
                       </span>
-                      <span class="badge badge-sm badge-success">En línea</span>
-                    </a>
-                  </li>
-                </ul>
+                      <span
+                        class="flex items-center gap-1.5 rounded-lg bg-[#00A448]/10 px-2.5 py-1 text-xs font-semibold text-[#00A448] dark:bg-[#00A448]/20"
+                      >
+                        <span class="size-1.5 animate-pulse rounded-full bg-[#00A448]"></span>
+                        En línea
+                      </span>
+                    </div>
+
+                    <!-- Divider antes de finalizar -->
+                    <hr class="border-[#e8f4fc] dark:border-gray-700" />
+
+                    <!-- Botón de finalizar -->
+                    <button
+                      (click)="confirmarFinalizacion(); menuAbierto = false"
+                      [disabled]="finalizandoSimulacion"
+                      class="flex w-full items-center justify-center gap-2.5 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+                    >
+                      <span class="icon-[hugeicons--stop] size-4"></span>
+                      {{ finalizandoSimulacion ? 'Finalizando...' : 'Finalizar simulación' }}
+                    </button>
+                  </div>
+                </div>
+                }
               </div>
             </div>
           </div>
@@ -535,20 +609,24 @@
         <div
           #chatContainer
           (scroll)="onChatScroll()"
-          class="panel-content-scroll space-y-4 scroll-smooth bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="panel-content-scroll scrollbar-thin space-y-4 scroll-smooth bg-white p-4 scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:bg-gray-800 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500"
         >
           <!-- Mostrar marcador de la etapa actual aunque no haya mensajes aún -->
           @if (indicesEtapas.length === 0 && etapaActual) {
-          <div
-            class="etapa-marker fade-in relative my-6 flex items-center justify-center font-semibold text-slate-600 dark:text-slate-400"
-          >
+          <div class="etapa-marker fade-in relative my-4 flex items-center justify-center sm:my-6">
             <span
-              class="relative z-10 inline-flex items-center gap-2 rounded-full border-2 border-slate-200 bg-white px-3 py-1.5 font-semibold text-slate-700 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200"
+              class="relative z-10 inline-flex flex-col items-center gap-1 rounded-xl border border-[#e8f4fc] bg-white px-3 py-2 text-center sm:flex-row sm:gap-2 sm:rounded-full sm:px-4 sm:py-1.5 dark:border-gray-600 dark:bg-gray-800"
             >
-              <span class="icon-[hugeicons--flag-02] size-4"></span>
-              {{ nombreEtapaActual }}
               <span
-                class="ml-2 inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300"
+                class="flex items-center gap-1.5 truncate font-semibold text-[#034D82] sm:gap-2 dark:text-gray-200"
+              >
+                <span
+                  class="icon-[hugeicons--flag-02] size-3.5 text-[#1788EF] sm:size-4 dark:text-[#60a5fa]"
+                ></span>
+                <span class="truncate text-xs sm:text-sm">{{ nombreEtapaActual }}</span>
+              </span>
+              <span
+                class="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[#1788EF]/10 px-2 py-0.5 text-[10px] font-medium text-[#1788EF] sm:ml-1 sm:rounded-full sm:bg-[#1788EF]/10 sm:px-3 sm:py-1 sm:text-xs dark:bg-[#60a5fa]/20 dark:text-[#93c5fd] sm:dark:bg-[#60a5fa]/20"
                 >Etapa {{ indiceEtapaActual }}</span
               >
             </span>
@@ -557,17 +635,23 @@
           mensajesPorEtapa[indiceEtapa]; @let primerMensaje = mensajesEtapa[0];
 
           <!-- Marcador de etapa -->
-          <div
-            class="etapa-marker fade-in relative my-6 flex items-center justify-center font-semibold text-slate-600 dark:text-slate-400"
-          >
+          <div class="etapa-marker fade-in relative my-4 flex items-center justify-center sm:my-6">
             <span
-              class="relative z-10 inline-flex items-center gap-2 rounded-full border-2 border-slate-200 bg-white px-3 py-1.5 font-semibold text-slate-700 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200"
+              class="relative z-10 inline-flex flex-col items-center gap-1 rounded-xl border border-[#e8f4fc] bg-white px-3 py-2 text-center sm:flex-row sm:gap-2 sm:rounded-full sm:px-4 sm:py-1.5 dark:border-gray-600 dark:bg-gray-800"
             >
-              <span class="icon-[hugeicons--flag-02] size-4"></span>
-              {{ (mensajesEtapa && mensajesEtapa.length) ? primerMensaje.nombreEtapa :
-              (etapaActual?.nombre || 'Etapa') }}
               <span
-                class="ml-2 inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300"
+                class="flex items-center gap-1.5 truncate font-semibold text-[#034D82] sm:gap-2 dark:text-gray-200"
+              >
+                <span
+                  class="icon-[hugeicons--flag-02] size-3.5 text-[#1788EF] sm:size-4 dark:text-[#60a5fa]"
+                ></span>
+                <span class="truncate text-xs sm:text-sm"
+                  >{{ (mensajesEtapa && mensajesEtapa.length) ? primerMensaje.nombreEtapa :
+                  (etapaActual?.nombre || 'Etapa') }}</span
+                >
+              </span>
+              <span
+                class="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[#1788EF]/10 px-2 py-0.5 text-[10px] font-medium text-[#1788EF] sm:ml-1 sm:rounded-full sm:bg-[#1788EF]/10 sm:px-3 sm:py-1 sm:text-xs dark:bg-[#60a5fa]/20 dark:text-[#93c5fd] sm:dark:bg-[#60a5fa]/20"
                 >Etapa {{ indiceEtapa }}</span
               >
             </span>
@@ -585,7 +669,7 @@
             </div>
 
             <div
-              class="chat-header mb-1 flex items-center gap-2 text-xs text-slate-700 sm:text-sm dark:text-slate-300"
+              class="chat-header mb-1 flex items-center gap-2 text-xs text-[#4a5d6f] sm:text-sm dark:text-gray-300"
             >
               <button
                 (click)="toggleAudio(mensaje.mensaje, 'msg-' + indiceEtapa + '-' + $index)"
@@ -604,12 +688,14 @@
 
             <div class="relative max-w-[85%]">
               <div
-                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"
+                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-100 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-900/40"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-900 shadow-sm sm:px-4 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
+                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-900 sm:px-4 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
               >
-                <span class="text-hyphen relative z-10 text-xs sm:text-sm">{{ mensaje.mensaje }}</span>
+                <span class="text-hyphen relative z-10 text-xs sm:text-sm"
+                  >{{ mensaje.mensaje }}</span
+                >
               </div>
             </div>
           </div>
@@ -625,19 +711,21 @@
             </div>
 
             <div
-              class="chat-header mb-1 flex items-center gap-2 text-xs text-slate-700 sm:text-sm dark:text-slate-300"
+              class="chat-header mb-1 flex items-center gap-2 text-xs text-[#4a5d6f] sm:text-sm dark:text-gray-300"
             >
               <span>Asesor</span>
             </div>
 
             <div class="relative max-w-[85%]">
               <div
-                class="absolute top-4 -right-[6px] z-0 h-3 w-3 rotate-45 border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
+                class="absolute top-4 -right-[6px] z-0 h-3 w-3 rotate-45 border border-blue-100 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/40"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-3 py-2 text-blue-900 shadow-sm sm:px-4 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
+                class="relative z-10 rounded-2xl border border-blue-200 bg-blue-50 px-3 py-2 text-blue-900 sm:px-4 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
               >
-                <span class="text-hyphen relative z-10 text-xs sm:text-sm">{{ mensaje.mensaje }}</span>
+                <span class="text-hyphen relative z-10 text-xs sm:text-sm"
+                  >{{ mensaje.mensaje }}</span
+                >
               </div>
             </div>
           </div>
@@ -662,17 +750,17 @@
             </div>
 
             <div
-              class="chat-header mb-1 flex items-center gap-2 text-xs text-slate-700 sm:text-sm dark:text-slate-300"
+              class="chat-header mb-1 flex items-center gap-2 text-xs text-[#4a5d6f] sm:text-sm dark:text-gray-300"
             >
               <span>{{ indicadorEmisor }}</span>
             </div>
 
             <div class="relative max-w-[85%]">
               <div
-                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"
+                class="absolute top-4 -left-[6px] z-0 h-3 w-3 rotate-45 border border-emerald-100 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-900/40"
               ></div>
               <div
-                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-900 shadow-sm sm:px-4 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
+                class="relative z-10 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-emerald-900 sm:px-5 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100"
               >
                 <div class="flex gap-1">
                   <div class="typing-indicator"></div>
@@ -687,36 +775,58 @@
 
         <!-- Input de mensaje -->
         <div
-          class="shrink-0 flex flex-col gap-2 border-t border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
+          class="flex shrink-0 flex-col gap-3 border-t border-[#e8f4fc] bg-gray-50 p-3 sm:p-4 dark:border-gray-700 dark:bg-gray-900/50"
         >
-          <div class="flex w-full gap-2">
+          <!-- Barra superior con indicaciones y etapa -->
+          <div class="flex w-full items-center gap-2">
             <details #etapa class="relative">
               <summary
-                class="btn cursor-pointer gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md select-none hover:from-purple-600 hover:to-pink-600 dark:from-purple-600 dark:to-pink-700 dark:hover:from-purple-700 dark:hover:to-pink-800"
+                class="btn cursor-pointer gap-2 rounded-xl border-0 bg-[#034D82] text-white shadow-sm transition-colors btn-sm select-none hover:bg-[#023a5e] sm:btn-md dark:bg-[#1788EF] dark:hover:bg-[#1270c7]"
               >
                 <span class="icon-[hugeicons--information-circle] size-4"></span>
                 <span class="hidden sm:inline">Indicaciones</span>
               </summary>
 
               <div
-                class="card absolute bottom-full left-0 z-20 mb-2 w-64 rounded-sm bg-base-100 p-4 shadow-xl dark:bg-slate-800"
+                class="card absolute bottom-full left-0 z-20 mb-2 w-64 rounded-xl border border-[#e8f4fc] bg-white p-4 shadow-xl sm:w-72 dark:border-gray-700 dark:bg-gray-800"
               >
-                <h3 class="mb-2 text-lg font-bold dark:text-white">Objetivo de la etapa</h3>
-                <div class="text-sm opacity-80 dark:text-slate-300">{{ objetivoEtapaActual }}</div>
-                <button class="btn mt-3 w-full btn-sm btn-primary" (click)="cerrarIndicaciones()">
+                <h3 class="mb-2 text-base font-bold text-[#034D82] dark:text-white">
+                  Objetivo de la etapa
+                </h3>
+                <div class="text-sm text-[#4a5d6f] dark:text-gray-300">
+                  {{ objetivoEtapaActual }}
+                </div>
+                <button
+                  class="btn mt-3 w-full rounded-xl border-0 bg-[#1788EF] text-white transition-colors btn-sm hover:bg-[#1270c7]"
+                  (click)="cerrarIndicaciones()"
+                >
                   Entendido
                 </button>
               </div>
             </details>
 
-            <p
-              class="flex-1 rounded-sm bg-blue-50 p-2 text-sm text-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
-            >
-              <strong>Etapa actual:</strong> {{ nombreEtapaActual }}
-            </p>
+            <div class="flex flex-1 items-center justify-center">
+              <span
+                class="inline-flex w-full flex-wrap items-center justify-center gap-2 rounded-full border border-[#e8f4fc] bg-white px-4 py-1.5 text-center dark:border-gray-600 dark:bg-gray-800"
+              >
+                <span
+                  class="flex items-center gap-2 font-semibold text-[#034D82] dark:text-gray-200"
+                >
+                  <span
+                    class="icon-[hugeicons--flag-02] size-3.5 shrink-0 text-[#1788EF] sm:size-4 dark:text-[#60a5fa]"
+                  ></span>
+                  <span class="text-xs sm:text-sm">{{ nombreEtapaActual }}</span>
+                </span>
+                <span
+                  class="hidden shrink-0 items-center gap-1 rounded-full bg-[#1788EF]/10 px-3 py-1 text-[10px] font-medium text-[#1788EF] min-[420px]:inline-flex sm:text-xs dark:bg-[#60a5fa]/20 dark:text-[#93c5fd]"
+                  >Etapa {{ indiceEtapaActual }}</span
+                >
+              </span>
+            </div>
           </div>
 
-          <div class="flex gap-2">
+          <!-- Área de escritura y botones -->
+          <div class="flex gap-3">
             <textarea
               #mensajeTextarea
               [(ngModel)]="mensajeAsesor"
@@ -726,13 +836,15 @@
               (keydown)="onTextareaKeyDown($event)"
               [disabled]="modoSoloLectura || enviandoMensaje || finalizandoSimulacion"
               placeholder="Escribe tu mensaje al cliente..."
-              class="textarea h-16 sm:h-20 flex-1 resize-none border-slate-300 bg-white text-slate-900 placeholder-slate-500 shadow-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none disabled:opacity-50 dark:border-slate-600 dark:bg-[#0f1724] dark:text-slate-100 dark:placeholder-slate-400 dark:focus:border-purple-400"
+              class="textarea h-16 flex-1 resize-none rounded-xl border border-[#e8f4fc] bg-white text-[#034D82] placeholder-[#4a5d6f]/60 transition-colors focus:border-[#8b5cf6] focus:ring-2 focus:ring-[#8b5cf6]/20 focus:outline-none disabled:opacity-50 sm:h-20 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:border-[#8b5cf6]"
             ></textarea>
-            <div class="flex flex-col justify-between gap-2">
+
+            <!-- Columna de botones -->
+            <div class="flex flex-col gap-2">
               <button
                 (click)="enviarMensaje()"
                 [disabled]="modoSoloLectura || !mensajeAsesor.trim() || enviandoMensaje || finalizandoSimulacion"
-                class="btn gap-2 border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 dark:from-purple-600 dark:to-pink-700 dark:hover:from-purple-700 dark:hover:to-pink-800"
+                class="btn h-auto min-h-0 flex-1 gap-2 rounded-xl border-0 bg-[#8b5cf6] px-4 py-2 text-white shadow-sm transition-colors hover:bg-[#7c3aed] disabled:opacity-50"
               >
                 @if (enviandoMensaje) {
                 <span class="loading loading-sm loading-spinner"></span>
@@ -743,19 +855,18 @@
                   >{{ enviandoMensaje ? 'Enviando...' : 'Enviar' }}</span
                 >
               </button>
-              <div class="divider my-0 h-0 dark:border-slate-700"></div>
               <button
                 (click)="toggleDictado()"
                 [disabled]="modoSoloLectura || enviandoMensaje || finalizandoSimulacion"
-                [ngClass]="grabandoVoz ? 'bg-gradient-to-r from-red-600 to-red-700 text-white border-0 shadow-md inline-flex items-center justify-center dark:from-red-700 dark:to-red-800' : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-md hover:from-purple-700 hover:to-pink-700 dark:from-purple-700 dark:to-pink-800'"
-                class="btn gap-2 disabled:opacity-50"
+                class="btn h-auto min-h-0 flex-1 gap-2 rounded-xl border-0 px-4 py-2 shadow-sm transition-colors disabled:opacity-50"
+                [ngClass]="grabandoVoz ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-[#06b6d4] hover:bg-[#0891b2] text-white'"
                 title="Dictar mensaje por voz"
               >
                 <span
-                  class="icon-[hugeicons--mic-01] inline-block size-4 transition-transform duration-[120ms] ease-in-out"
+                  class="icon-[hugeicons--mic-01] inline-block size-4 transition-transform duration-100 ease-in-out"
                   [class.pulse-mic]="grabandoVoz"
                 ></span>
-                <span *ngIf="!grabandoVoz" class="hidden sm:inline">Dictar</span>
+                <span class="hidden sm:inline">{{ grabandoVoz ? 'Grabando...' : 'Dictar' }}</span>
               </button>
             </div>
           </div>
@@ -764,110 +875,124 @@
     </div>
 
     <!-- PANEL DE INFORMACIÓN DEL CLIENTE (Desktop) -->
-    <div class="simulador-panel hidden min-[1327px]:order-3 min-[1327px]:col-span-3 min-[1327px]:block">
-      <div class="card overflow-hidden bg-white shadow-xl dark:bg-slate-900">
+    <div
+      class="simulador-panel hidden min-[1327px]:order-3 min-[1327px]:col-span-3 min-[1327px]:block"
+    >
+      <div
+        class="card overflow-hidden rounded-xl border border-[#e8f4fc] bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
+      >
         <div
-          class="flex h-[60px] items-center justify-center border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 dark:border-slate-700 dark:from-emerald-600 dark:to-teal-700"
+          class="flex h-[60px] items-center justify-center border-b border-[#e8f4fc] bg-[#00A448] dark:border-gray-700 dark:bg-[#008a3a]"
         >
           <div class="flex items-center gap-2">
-            <span
-              class="icon-[hugeicons--user-circle] size-5 text-teal-200 dark:text-teal-300"
-            ></span>
+            <span class="icon-[hugeicons--user-circle] size-5 text-white/90"></span>
             <h2 class="card-title text-base font-bold text-white">Información del Cliente</h2>
           </div>
         </div>
 
         <div
-          class="panel-content-scroll space-y-4 bg-gradient-to-b from-slate-50 to-white p-4 dark:from-slate-800 dark:to-slate-900"
+          class="panel-content-scroll scrollbar-thin space-y-4 bg-white p-4 scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:bg-gray-800 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500"
         >
           @if (infoCliente) {
           <div
-            class="flex flex-col items-center rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800"
+            class="flex flex-col items-center rounded-xl border border-[#e8f4fc] bg-white p-4 text-center dark:border-gray-700 dark:bg-gray-900/50"
           >
             <div class="avatar mb-3">
               <div
-                class="w-24 rounded-full shadow-lg ring-4 ring-emerald-500 ring-offset-2 ring-offset-white dark:ring-emerald-600 dark:ring-offset-slate-900"
+                class="w-24 rounded-full shadow-lg ring-4 ring-[#00A448] ring-offset-2 ring-offset-white dark:ring-[#00A448]/80 dark:ring-offset-gray-800"
               >
                 <img [src]="avatarCliente" [alt]="nombreCliente" />
               </div>
             </div>
-            <h3 class="text-base font-bold text-slate-800 sm:text-lg dark:text-slate-200">
+            <h3 class="text-base font-bold text-[#034D82] sm:text-lg dark:text-white">
               {{ infoCliente.nombre }}
             </h3>
-            <p class="text-xs font-medium text-slate-600 sm:text-sm dark:text-slate-400">
-              {{ infoCliente.edad }}
+            <p class="text-xs font-medium text-[#4a5d6f] sm:text-sm dark:text-gray-400">
+              {{ infoCliente.edad }} años
             </p>
             <span
-              class="mt-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-[10px] font-bold text-white shadow-md sm:text-xs dark:from-amber-600 dark:to-orange-600"
+              class="mt-2 rounded-full bg-[#f59e0b] px-3 py-1 text-[10px] font-bold text-white sm:text-xs"
             >
               {{ infoCliente.profesion }}
             </span>
           </div>
 
           <div
-            class="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+            class="space-y-3 rounded-xl border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50"
           >
             <h3
-              class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
+              class="mb-3 flex items-center gap-2 text-xs font-bold text-[#034D82] sm:text-sm dark:text-white"
             >
-              <span
-                class="icon-[hugeicons--user] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
-              ></span>
+              <span class="icon-[hugeicons--user] size-3.5 text-[#00A448] sm:size-4"></span>
               Perfil del Cliente
             </h3>
 
             <div class="space-y-2 text-xs sm:text-sm">
-              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <div class="flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--briefcase-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--briefcase-01] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
                 ></span>
                 <div class="min-w-0">
-                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Situación</p>
-                  <p class="text-hyphen text-slate-800 dark:text-slate-200">
+                  <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                    Situación
+                  </p>
+                  <p class="text-hyphen text-[#034D82] dark:text-gray-200">
                     {{ infoCliente.situacion_actual }}
                   </p>
                 </div>
               </div>
 
-              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <div class="flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--target-01] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--target-01] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
                 ></span>
                 <div class="min-w-0">
-                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Motivación</p>
-                  <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.motivacion }}</p>
+                  <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                    Motivación
+                  </p>
+                  <p class="text-hyphen text-[#034D82] dark:text-gray-200">
+                    {{ infoCliente.motivacion }}
+                  </p>
                 </div>
               </div>
 
-              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <div class="flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--flag-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--flag-02] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
                 ></span>
                 <div class="min-w-0">
-                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Objetivo</p>
-                  <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.objetivo }}</p>
+                  <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                    Objetivo
+                  </p>
+                  <p class="text-hyphen text-[#034D82] dark:text-gray-200">
+                    {{ infoCliente.objetivo }}
+                  </p>
                 </div>
               </div>
 
-              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <div class="flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--chart-increase] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--chart-increase] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
                 ></span>
                 <div class="min-w-0">
-                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">Riesgo</p>
-                  <p class="text-hyphen text-slate-800 dark:text-slate-200">{{ infoCliente.perfil_riesgo }}</p>
+                  <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
+                    Riesgo
+                  </p>
+                  <p class="text-hyphen text-[#034D82] dark:text-gray-200">
+                    {{ infoCliente.perfil_riesgo }}
+                  </p>
                 </div>
               </div>
 
-              <div class="hover-item flex items-start gap-2 rounded-lg p-2">
+              <div class="flex items-start gap-2 rounded-lg p-2">
                 <span
-                  class="mt-0.5 icon-[hugeicons--book-02] size-3.5 shrink-0 text-slate-600 sm:size-4 dark:text-slate-400"
+                  class="mt-0.5 icon-[hugeicons--book-02] size-3.5 shrink-0 text-[#4a5d6f] sm:size-4 dark:text-gray-400"
                 ></span>
                 <div class="min-w-0">
-                  <p class="text-[10px] font-semibold text-slate-600 sm:text-xs dark:text-slate-400">
+                  <p class="text-[10px] font-semibold text-[#4a5d6f] sm:text-xs dark:text-gray-400">
                     Conocimiento
                   </p>
-                  <p class="text-hyphen text-slate-800 dark:text-slate-200">
+                  <p class="text-hyphen text-[#034D82] dark:text-gray-200">
                     {{ infoCliente.nivel_conocimiento }}
                   </p>
                 </div>
@@ -876,17 +1001,19 @@
           </div>
 
           <div
-            class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+            class="rounded-xl border border-[#e8f4fc] bg-white p-4 dark:border-gray-700 dark:bg-gray-900/50"
           >
             <h3
-              class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-800 sm:text-sm dark:text-slate-200"
+              class="mb-3 flex items-center gap-2 text-xs font-bold text-[#034D82] sm:text-sm dark:text-white"
             >
               <span
-                class="icon-[hugeicons--information-circle] size-3.5 text-emerald-600 sm:size-4 dark:text-emerald-400"
+                class="icon-[hugeicons--information-circle] size-3.5 text-[#00A448] sm:size-4"
               ></span>
               Escenario
             </h3>
-            <p class="text-hyphen text-xs leading-relaxed text-slate-700 sm:text-sm dark:text-slate-300">
+            <p
+              class="text-hyphen text-xs leading-relaxed text-[#4a5d6f] sm:text-sm dark:text-gray-300"
+            >
               {{ infoCliente.escenario_narrativo }}
             </p>
           </div>
@@ -900,36 +1027,38 @@
 <!-- MODAL DE POLÍTICAS DEL BANCO -->
 <dialog #modalPoliticas class="modal">
   <div
-    class="modal-box max-w-2xl border bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
+    class="modal-box max-w-2xl border border-[#e8f4fc] bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800"
   >
     <form method="dialog">
       <button
-        class="btn absolute top-3 right-3 btn-circle text-slate-600 btn-sm hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+        class="btn absolute top-3 right-3 btn-circle text-[#4a5d6f] btn-sm hover:bg-gray-100 hover:text-[#034D82] dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
       >
         ✕
       </button>
     </form>
 
     <div
-      class="-mx-6 -mt-6 mb-6 border-b border-slate-200 bg-gradient-to-r from-indigo-500 to-purple-600 p-6 dark:border-slate-700 dark:from-indigo-600 dark:to-purple-700"
+      class="-mx-6 -mt-6 mb-6 border-b border-[#e8f4fc] bg-[#034D82] p-6 dark:border-gray-700 dark:bg-[#1788EF]"
     >
       <h3 class="flex items-center gap-3 text-xl font-bold text-white">
-        <span class="icon-[hugeicons--bank] size-6 text-purple-200 dark:text-purple-300"></span>
+        <span class="icon-[hugeicons--bank] size-6 text-white/80"></span>
         Políticas del Banco
       </h3>
-      <p class="mt-2 text-sm font-medium text-indigo-100 dark:text-indigo-200">
+      <p class="mt-2 text-sm font-medium text-white/80">
         Normativas y procedimientos institucionales
       </p>
     </div>
 
-    <div class="max-h-96 space-y-4 overflow-y-auto pr-2">
+    <div
+      class="scrollbar-thin max-h-96 space-y-4 overflow-y-auto pr-2 scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500"
+    >
       <app-politicas-plataforma></app-politicas-plataforma>
     </div>
 
     <div class="modal-action mt-6">
       <button
         (click)="cerrarModalPoliticas()"
-        class="btn gap-2 rounded-lg border-0 bg-gradient-to-r from-indigo-500 to-purple-600 px-6 text-white shadow-md transition-all btn-sm hover:shadow-lg dark:from-indigo-600 dark:to-purple-700"
+        class="btn gap-2 rounded-lg border-0 bg-[#034D82] px-6 text-white shadow-sm transition-colors btn-sm hover:bg-[#023a5e] dark:bg-[#1788EF] dark:hover:bg-[#1270c7]"
       >
         <span class="icon-[hugeicons--tick-02] size-4"></span>
         Entendido
@@ -943,37 +1072,48 @@
 
 <!-- MODAL DE FINALIZAR -->
 <dialog #modalFinalizar class="modal">
-  <div class="modal-box dark:bg-slate-900">
-    <h3 class="text-lg font-bold dark:text-white">Finalizar simulación</h3>
-    <p class="py-4 dark:text-slate-300">
+  <div class="modal-box border border-[#e8f4fc] bg-white dark:border-gray-700 dark:bg-gray-800">
+    <h3 class="text-lg font-bold text-[#034D82] dark:text-white">Finalizar simulación</h3>
+    <p class="py-4 text-[#4a5d6f] dark:text-gray-300">
       ¿Estás seguro de que deseas finalizar la simulación? Se perderá el progreso actual.
     </p>
     <div class="modal-action">
-      <button (click)="cerrarModalFinalizar()" class="btn btn-ghost dark:text-slate-300">
+      <button
+        (click)="cerrarModalFinalizar()"
+        class="btn border-[#e8f4fc] bg-white text-[#4a5d6f] hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+      >
         Cancelar
       </button>
-      <button (click)="finalizarSimulacion()" class="btn ml-2 text-white btn-error">
+      <button
+        (click)="finalizarSimulacion()"
+        class="btn ml-2 border-0 bg-red-500 text-white hover:bg-red-600"
+      >
         Finalizar
       </button>
     </div>
   </div>
+  <form method="dialog" class="modal-backdrop bg-black/50">
+    <button>close</button>
+  </form>
 </dialog>
 
 <!-- MODAL DE ANÁLISIS DE DESEMPEÑO -->
 <dialog #modalAnalisis class="modal">
-  <div class="modal-box max-w-3xl dark:bg-slate-900">
+  <div
+    class="modal-box max-w-3xl border border-[#e8f4fc] bg-white dark:border-gray-700 dark:bg-gray-800"
+  >
     <!-- Botón de cerrar (X) -->
     <button
       type="button"
       (click)="volverAVerSimulacion()"
-      class="btn absolute top-3 right-3 btn-circle text-slate-600 btn-ghost btn-sm hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700"
+      class="btn absolute top-3 right-3 btn-circle text-[#4a5d6f] btn-ghost btn-sm hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
     >
       ✕
     </button>
 
     <!-- Título -->
-    <h3 class="mb-4 text-lg font-bold dark:text-white">
-      <span class="mr-2 icon-[hugeicons--audit-02] inline-block size-6"></span>
+    <h3 class="mb-4 text-lg font-bold text-[#034D82] dark:text-white">
+      <span class="mr-2 icon-[hugeicons--audit-02] inline-block size-6 text-[#8b5cf6]"></span>
       Análisis de Desempeño
     </h3>
 
@@ -986,7 +1126,7 @@
     >
       <div class="card-body">
         <div class="flex items-center justify-between">
-          <h4 class="card-title text-lg dark:text-white">Puntuación General</h4>
+          <h4 class="card-title text-lg text-[#034D82] dark:text-white">Puntuación General</h4>
           <div class="text-4xl">{{ configAnalisis.emoji }}</div>
         </div>
         <div class="badge badge-lg" [class]="'badge-' + configAnalisis.color">
@@ -996,22 +1136,26 @@
     </div>
 
     <!-- Resumen General -->
-    <div class="card mb-4 bg-base-200 dark:bg-slate-800">
+    <div
+      class="card mb-4 border border-[#e8f4fc] bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50"
+    >
       <div class="card-body">
-        <h4 class="card-title text-lg dark:text-white">
-          <span class="icon-[hugeicons--file-search] size-5"></span>
+        <h4 class="card-title text-lg text-[#034D82] dark:text-white">
+          <span class="icon-[hugeicons--file-search] size-5 text-[#1788EF]"></span>
           Resumen del Desempeño
         </h4>
-        <p class="text-sm leading-relaxed dark:text-slate-300">
+        <p class="text-sm leading-relaxed text-[#4a5d6f] dark:text-gray-300">
           {{ analisisDesempeno.resumen_general }}
         </p>
       </div>
     </div>
     } @else {
     <!-- Mensaje cuando no hay análisis de desempeño -->
-    <div class="card mb-4 bg-base-200 dark:bg-slate-800">
+    <div
+      class="card mb-4 border border-[#e8f4fc] bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50"
+    >
       <div class="card-body">
-        <p class="text-center text-sm dark:text-slate-300">
+        <p class="text-center text-sm text-[#4a5d6f] dark:text-gray-300">
           La simulación ha finalizado. Revisa las estadísticas a continuación.
         </p>
       </div>
@@ -1021,42 +1165,56 @@
     <!-- Estadísticas -->
     @if (datosFinalizacion) {
     <div class="mb-4 grid grid-cols-2 gap-4">
-      <div class="stat rounded-lg bg-base-200 dark:bg-slate-800">
-        <div class="stat-title dark:text-slate-400">Duración</div>
-        <div class="stat-value text-2xl dark:text-white">
+      <div
+        class="stat rounded-xl border border-[#e8f4fc] bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50"
+      >
+        <div class="stat-title text-[#4a5d6f] dark:text-gray-400">Duración</div>
+        <div class="stat-value text-2xl text-[#034D82] dark:text-white">
           {{ datosFinalizacion.duracion_formato || datosFinalizacion.simulacion?.duracion_formato ||
           'N/A' }}
         </div>
-        <div class="stat-desc dark:text-slate-500">
+        <div class="stat-desc text-[#4a5d6f]/70 dark:text-gray-500">
           {{ datosFinalizacion.duracion_segundos || datosFinalizacion.simulacion?.duracion_segundos
           || 0 }} segundos
         </div>
       </div>
-      <div class="stat rounded-lg bg-base-200 dark:bg-slate-800">
-        <div class="stat-title dark:text-slate-400">Etapas</div>
-        <div class="stat-value text-2xl dark:text-white">
+      <div
+        class="stat rounded-xl border border-[#e8f4fc] bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50"
+      >
+        <div class="stat-title text-[#4a5d6f] dark:text-gray-400">Etapas</div>
+        <div class="stat-value text-2xl text-[#034D82] dark:text-white">
           {{ datosFinalizacion.etapas_completadas ||
           datosFinalizacion.simulacion?.etapas_completadas || indiceEtapaActual }}/{{ totalEtapas ||
           datosFinalizacion.simulacion?.total_etapas }}
         </div>
-        <div class="stat-desc dark:text-slate-500">Completadas</div>
+        <div class="stat-desc text-[#4a5d6f]/70 dark:text-gray-500">Completadas</div>
       </div>
     </div>
 
     @if (datosFinalizacion.motivo_finalizacion === 'salida_contexto') {
-    <div class="mb-4 alert alert-warning dark:bg-amber-900 dark:text-amber-200">
+    <div
+      class="mb-4 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-amber-800 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
+    >
       <span class="icon-[hugeicons--alert-circle] size-5"></span>
-      <span>Simulación terminada por salida de contexto</span>
+      <span class="text-sm">Simulación terminada por salida de contexto</span>
     </div>
     } }
 
     <!-- Botones de acción -->
     <div class="modal-action flex gap-2">
-      <button type="button" (click)="volverAVerSimulacion()" class="btn flex-1 btn-ghost">
+      <button
+        type="button"
+        (click)="volverAVerSimulacion()"
+        class="btn flex-1 border-[#e8f4fc] bg-white text-[#4a5d6f] hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+      >
         <span class="icon-[hugeicons--eye] size-4"></span>
         Volver (solo lectura)
       </button>
-      <button type="button" (click)="iniciarNuevaSimulacion()" class="btn flex-1 btn-primary">
+      <button
+        type="button"
+        (click)="iniciarNuevaSimulacion()"
+        class="btn flex-1 border-0 bg-[#00A448] text-white hover:bg-[#008a3a]"
+      >
         <span class="icon-[hugeicons--refresh] size-4"></span>
         Finalizar y volver a configurar
       </button>
@@ -1064,7 +1222,7 @@
   </div>
 
   <!-- Backdrop del modal -->
-  <form method="dialog" class="modal-backdrop bg-black/60 backdrop-blur-sm">
+  <form method="dialog" class="modal-backdrop bg-black/50">
     <button type="button" (click)="salirDeSimulacion()">close</button>
   </form>
 </dialog>

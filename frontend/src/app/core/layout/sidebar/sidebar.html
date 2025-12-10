@@ -1,30 +1,29 @@
 <div class="drawer min-h-dvh overflow-hidden lg:drawer-open">
-  <input
-    id="my-drawer"
-    type="checkbox"
-    class="drawer-toggle"
-    checked
-    (change)="onDrawerChange()"
-  />
+  <input id="my-drawer" type="checkbox" class="drawer-toggle" checked (change)="onDrawerChange()" />
 
-  <div #mainContent class="drawer-content flex h-dvh flex-col overflow-y-auto overflow-x-hidden">
+  <div #mainContent class="drawer-content flex h-dvh flex-col overflow-x-hidden overflow-y-auto">
     <app-header-plataforma class="sticky top-0 z-30">
       <div class="p-2 lg:hidden">
         <label
           for="my-drawer"
-          class="drawer-button btn btn-square btn-ghost hover:bg-[#1788EF]/10 focus:ring-0 focus:outline-none transition-all duration-300"
+          class="drawer-button btn btn-square btn-ghost transition-all duration-300 hover:bg-[#1788EF]/10 focus:ring-0 focus:outline-none"
           tabindex="0"
           role="button"
           aria-label="Abrir menú de navegación"
           (keydown.enter)="toggleDrawer()"
           (keydown.space)="toggleDrawer()"
         >
-          <span class="icon-[hugeicons--sidebar-left-01] size-7 text-[#034D82] dark:text-white" aria-hidden="true"></span>
+          <span
+            class="icon-[hugeicons--sidebar-left-01] size-7 text-[#034D82] dark:text-white"
+            aria-hidden="true"
+          ></span>
         </label>
       </div>
     </app-header-plataforma>
 
-    <div class="relative flex-1 bg-[#F9F9FA] bg-geometria bg-repeat bg-size-[275px_275px] p-4 md:p-4 lg:p-4 dark:bg-gray-900">
+    <div
+      class="relative flex-1 bg-[#F9F9FA] bg-geometria bg-size-[275px_275px] bg-repeat p-4 md:p-4 lg:p-4 dark:bg-gray-900"
+    >
       <div class="pointer-events-none absolute inset-0 hidden bg-gray-900/50 dark:block"></div>
       <div class="relative h-full">
         <ng-content></ng-content>
@@ -68,14 +67,17 @@
             >
               <label
                 for="my-drawer"
-                class="drawer-button btn btn-square btn-ghost w-full hover:bg-[#1788EF]/10 focus:ring-0 focus:outline-none transition-all duration-300"
+                class="drawer-button btn btn-square w-full btn-ghost transition-all duration-300 hover:bg-[#1788EF]/10 focus:ring-0 focus:outline-none"
                 tabindex="0"
                 role="button"
                 aria-label="Mostrar barra lateral"
                 (keydown.enter)="toggleDrawer()"
                 (keydown.space)="toggleDrawer()"
               >
-                <span class="icon-[hugeicons--sidebar-left-01] text-2xl text-[#034D82] dark:text-white" aria-hidden="true"></span>
+                <span
+                  class="icon-[hugeicons--sidebar-left-01] text-2xl text-[#034D82] dark:text-white"
+                  aria-hidden="true"
+                ></span>
               </label>
             </div>
           </div>
@@ -95,21 +97,28 @@
           >
             <label
               for="my-drawer"
-              class="drawer-button btn btn-square btn-ghost hover:bg-[#1788EF]/10 focus:ring-0 focus:outline-none transition-all duration-300"
+              class="drawer-button btn btn-square btn-ghost transition-all duration-300 hover:bg-[#1788EF]/10 focus:ring-0 focus:outline-none"
               tabindex="0"
               role="button"
               aria-label="Ocultar barra lateral"
               (keydown.enter)="toggleDrawer()"
               (keydown.space)="toggleDrawer()"
             >
-              <span class="icon-[hugeicons--sidebar-left-01] text-2xl text-[#034D82] dark:text-white" aria-hidden="true"></span>
+              <span
+                class="icon-[hugeicons--sidebar-left-01] text-2xl text-[#034D82] dark:text-white"
+                aria-hidden="true"
+              ></span>
             </label>
           </div>
         </div>
 
         <!-- Menú de Navegación Principal -->
         <div class="w-full flex-1">
-          <ul class="nunito-sans-body menu w-full gap-[5px]" role="menubar" aria-label="Menú principal">
+          <ul
+            class="nunito-sans-body menu w-full gap-[5px]"
+            role="menubar"
+            aria-label="Menú principal"
+          >
             <!-- Inicio (solo para administrador) -->
             <li role="none" *ngIf="shouldShowMenuItem(['administrador'])">
               <button
@@ -296,7 +305,7 @@
 
         <!-- Menú de Usuario y Configuración -->
         <ul
-          class="nunito-sans-body menu w-full gap-[5px] shrink-0 border-t border-t-[#e8f4fc] bg-white dark:border-t-gray-700 dark:bg-gray-800"
+          class="nunito-sans-body menu w-full shrink-0 gap-[5px] border-t border-t-[#e8f4fc] bg-white dark:border-t-gray-700 dark:bg-gray-800"
           role="menubar"
           aria-label="Menú de usuario"
         >
